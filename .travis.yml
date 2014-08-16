@@ -5,4 +5,4 @@ install:
     - "pip install -r requirements.txt"
     - "pip install -r testing_requirements.txt"
 script:
-    - "flake8 ."
+    - "flake8 . --exclude=migrations"
