@@ -4,6 +4,6 @@ python:
 env:
     - DJANGO="https://www.djangoproject.com/download/1.7c1/tarball/"
 install:
-    - "pip install ${DJANGO}"
+    - "pip install flake8 ${DJANGO}"
 script:
     - "flake8 ."
