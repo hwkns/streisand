@@ -3,7 +3,7 @@
 from django.conf.urls import url, patterns
 # from django.contrib import admin
 
-from streisand.tracker.views import AnnounceView
+from tracker.views import AnnounceView
 
 urlpatterns = patterns(
     '',
