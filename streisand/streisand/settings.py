@@ -25,7 +25,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
-
+KEY_PREFIX = 'auth_key'
 
 # Application definition
 
@@ -81,6 +81,8 @@ CACHES = {
     'default': {
         'BACKEND': 'redis_cache.cache.RedisCache',
         'LOCATION': '127.0.0.1:6379:1',
+        'KEY_PREFIX': 'auth_Key',
+        'KEY_FUNCTION': 'tracker.cache.make_auth_key',
         'OPTIONS': {
             'CLIENT_CLASS': 'redis_cache.client.DefaultClient',
         }

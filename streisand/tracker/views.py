@@ -4,18 +4,17 @@ from django.views.generic import View
 from django.http import HttpResponse, HttpResponseNotFound
 from django.core.cache import cache
 
-class AnnounceView(View):
+from .cache import make_auth_key
+from streisand.streisand.settings import KEY_PREFIX
 
-    VALID_KEYS = {
-        'auth_key:1': 'qqqqqqqqqqqqqqqq',
-        'auth_ley:1 ': 'zzzzzzzzzzzzzzzz',
-    }
+class AnnounceView(View):
 
     def get(self, request, auth_key):
 
-        # if auth_key not in self.VALID_KEYS:
+        key = make_auth_key(auth_key, KEY_PREFIX)
+        print(key)
+        # if not cache.get(key):
         #     return HttpResponseNotFound
-        print(cache.keys('*'))
         # GET params to look for:
         #   info_hash
         #   peer_id
