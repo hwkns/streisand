@@ -1,3 +1,7 @@
 
-def make_auth_key(*args):
-    return ':'.join([args[1], args[0]])
+def make_auth_key(key, prefix, version):
+    return '{version}:{prefix}:{key}'.format(
+        prefix=prefix,
+        key=key,
+        version=version,
+    )
