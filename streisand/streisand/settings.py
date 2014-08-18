@@ -81,6 +81,7 @@ CACHES = {
     'default': {
         'BACKEND': 'redis_cache.cache.RedisCache',
         'LOCATION': '127.0.0.1:6379:1',
+        'TIMEOUT': None,
         'KEY_PREFIX': 'auth_key',
         'KEY_FUNCTION': 'tracker.cache.make_auth_key',
         'OPTIONS': {
