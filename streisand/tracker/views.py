@@ -128,7 +128,8 @@ class AnnounceView(View):
     def get(self, request, auth_key):
 
         # Fail fast if the auth_key is invalid
-        if not cache.get(auth_key):
+        user = cache.get(auth_key)
+        if not user:
             return self.failure('Invalid auth_key')
 
         # Fail fast if the client will not accept a compact response
@@ -194,7 +195,7 @@ class AnnounceView(View):
             '<br/>Params: <pre>{params}</pre><br/>'
             '<br/>Response: <pre>{response_dict}</pre><br/>'.format(
                 auth_key=auth_key,
-                user=cache.get(auth_key),
+                user=user,
                 ip=ip,
                 torrent=TORRENTS.get(info_hash),
                 params=pprint.pformat(params),

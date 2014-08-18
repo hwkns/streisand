@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# This file is sourced into vagrant's .bashrc file
+
+alias start_redis='screen -dmS redis redis-server'
+alias stop_redis='sudo killall redis-server'
+
+alias start_uwsgi='uwsgi --ini /home/vagrant/streisand/uwsgi.ini'
+alias stop_uwsgi='uwsgi --stop /tmp/project-master.pid'
+
+alias start_nginx='sudo service nginx start'
+alias stop_nginx='sudo service nginx stop'
+
+alias runserver='/home/vagrant/streisand/streisand/manage.py runserver_plus 0.0.0.0:8000'
+alias shell='/home/vagrant/streisand/streisand/manage.py shell_plus'
+
+export STREISAND_DEBUG=True
