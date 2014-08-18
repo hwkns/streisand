@@ -37,6 +37,12 @@ coverage.xml
 # Translations
 *.mo
 
+# OS X
+*.DS_Store
+
+# Vagrant
+.vagrant/
+
 # PyCharm
 .idea/
 
