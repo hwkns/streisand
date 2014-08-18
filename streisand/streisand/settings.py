@@ -8,10 +8,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+import json
 
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -20,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '4$91je#^q%*m*!g^y^webtfaw0k3(c4vz^9%w0^i4)l=inf&-#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = json.loads(os.environ.get('STREISAND_DEBUG', "False").lower())
 
 TEMPLATE_DEBUG = True
 
@@ -77,18 +79,25 @@ DATABASES = {
     }
 }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.cache.RedisCache',
-        'LOCATION': '127.0.0.1:6379:1',
-        'TIMEOUT': None,
-        'KEY_PREFIX': 'auth_key',
-        'KEY_FUNCTION': 'tracker.cache.make_auth_key',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'redis_cache.client.DefaultClient',
+if DEBUG:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'redis_cache.cache.RedisCache',
+            'LOCATION': '127.0.0.1:6379:1',
+            'TIMEOUT': None,
+            'KEY_PREFIX': 'auth_key',
+            'KEY_FUNCTION': 'tracker.cache.make_auth_key',
+            'OPTIONS': {
+                'CLIENT_CLASS': 'redis_cache.client.DefaultClient',
+            }
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
