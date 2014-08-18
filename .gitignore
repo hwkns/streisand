@@ -43,6 +43,9 @@ coverage.xml
 # Vagrant
 .vagrant/
 
+# Redis
+dump.rdb
+
 # PyCharm
 .idea/
 
