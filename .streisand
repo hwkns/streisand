@@ -11,7 +11,7 @@ alias stop_uwsgi='uwsgi --stop /tmp/project-master.pid'
 alias start_nginx='sudo service nginx start'
 alias stop_nginx='sudo service nginx stop'
 
-alias runserver='/home/vagrant/streisand/streisand/manage.py runserver_plus 0.0.0.0:8000'
+alias runserver='/home/vagrant/streisand/streisand/manage.py runserver_plus 0.0.0.0:7070'
 alias shell='/home/vagrant/streisand/streisand/manage.py shell_plus'
 
 export STREISAND_DEBUG=True
