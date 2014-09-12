@@ -63,5 +63,8 @@ dump.rdb
 *.pot
 streisand/db.sqlite3
 
+# Sockets
+*.sock
+
 # Sphinx documentation
 docs/_build/
