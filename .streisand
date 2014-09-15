@@ -17,6 +17,6 @@ alias stop_nginx='sudo service nginx stop'
 alias runserver='/home/vagrant/streisand/streisand/manage.py runserver_plus 0.0.0.0:8000 --settings=streisand.settings.www_settings'
 alias runtracker='/home/vagrant/streisand/streisand/manage.py runserver_plus 0.0.0.0:7070 --settings=streisand.settings.tracker_settings'
 alias shell='/home/vagrant/streisand/streisand/manage.py shell_plus --settings=streisand.settings.www_settings'
-alias m='/home/vagrant/streisand/streisand/manage.py --settings=streisand.settings.www_settings'
+alias m='/home/vagrant/streisand/streisand/manage.py'
 
 export STREISAND_DEBUG=True
