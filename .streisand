@@ -5,14 +5,15 @@
 alias start_redis='screen -dmS redis redis-server'
 alias stop_redis='sudo killall redis-server'
 
-alias start_uwsgi='uwsgi --ini /home/vagrant/streisand/uwsgi.ini'
-alias stop_uwsgi='uwsgi --stop /tmp/project-master.pid'
+alias start_tracker_uwsgi='uwsgi --ini /home/vagrant/streisand/uwsgi-tracker.ini'
+alias stop_tracker_uwsgi='uwsgi --stop /tmp/streisand-tracker-master.pid'
 
 alias start_nginx='sudo service nginx start'
 alias stop_nginx='sudo service nginx stop'
 
-alias runserver='/home/vagrant/streisand/streisand/manage.py runserver_plus 0.0.0.0:7070'
-alias shell='/home/vagrant/streisand/streisand/manage.py shell_plus'
-alias m='/home/vagrant/streisand/streisand/manage.py'
+alias runserver='/home/vagrant/streisand/streisand/manage.py runserver_plus 0.0.0.0:8000 --settings=streisand.settings.www_settings'
+alias runtracker='/home/vagrant/streisand/streisand/manage.py runserver_plus 0.0.0.0:7070 --settings=streisand.settings.tracker_settings'
+alias shell='/home/vagrant/streisand/streisand/manage.py shell_plus --settings=streisand.settings.www_settings'
+alias m='/home/vagrant/streisand/streisand/manage.py --settings=streisand.settings.www_settings'
 
 export STREISAND_DEBUG=True

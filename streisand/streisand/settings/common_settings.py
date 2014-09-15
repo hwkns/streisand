@@ -14,7 +14,7 @@ import json
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -40,8 +40,6 @@ if DEBUG:
     )
 
 MIDDLEWARE_CLASSES = ()
-
-WSGI_APPLICATION = 'streisand.wsgi.application'
 
 
 # Database

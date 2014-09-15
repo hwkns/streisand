@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from .site_settings import *
+from .www_settings import *

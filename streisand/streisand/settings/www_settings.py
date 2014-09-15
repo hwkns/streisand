@@ -13,6 +13,7 @@ INSTALLED_APPS += (
     'django.contrib.staticfiles',
 
     # Local apps
+    'www',
     'profiles',
     'tracker',
 
@@ -28,4 +29,12 @@ MIDDLEWARE_CLASSES += (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'streisand.urls'
+ROOT_URLCONF = 'www.urls'
+
+WSGI_APPLICATION = 'streisand.www_wsgi.application'
+
+# List of callables that know how to import templates from various sources.
+TEMPLATE_LOADERS = (
+    # 'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)

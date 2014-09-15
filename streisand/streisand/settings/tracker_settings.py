@@ -7,3 +7,5 @@ INSTALLED_APPS += (
 )
 
 ROOT_URLCONF = 'tracker.urls'
+
+WSGI_APPLICATION = 'streisand.tracker_wsgi.application'
