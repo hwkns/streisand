@@ -8,6 +8,9 @@ alias stop_redis='sudo killall redis-server'
 alias start_tracker_uwsgi='uwsgi --ini /home/vagrant/streisand/uwsgi-tracker.ini'
 alias stop_tracker_uwsgi='uwsgi --stop /tmp/streisand-tracker-master.pid'
 
+alias start_www_uwsgi='uwsgi --ini /home/vagrant/streisand/uwsgi-www.ini'
+alias stop_www_uwsgi='uwsgi --stop /tmp/streisand-www-master.pid'
+
 alias start_nginx='sudo service nginx start'
 alias stop_nginx='sudo service nginx stop'
 
