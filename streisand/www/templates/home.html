@@ -16,6 +16,11 @@
 </head>
 
 <body>
-  Torrents: {{ swarms }}
+  Torrents:
+  <pre>
+      {% for s in swarms %}
+          {{ s }} - {{ s.peers.all }}
+      {% endfor %}
+  </pre>
 </body>
 </html>
