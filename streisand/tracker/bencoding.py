@@ -1,7 +1,6 @@
-from __future__ import print_function, unicode_literals, division, absolute_import
+# -*- coding: utf-8 -*-
 
 import sys
-from io import BytesIO
 
 if sys.version_info[0] >= 3:
     unicode = str
@@ -114,7 +113,7 @@ class BDecoder(object):
         """
         Get char (byte) at current position.
         """
-        _res = self.data[self.index:self.index+1]
+        _res = self.data[self.index:self.index + 1]
 
         # why use slice syntax instead of ordinary random access?
         # because self.data[some_index] would return a byte,
@@ -151,7 +150,7 @@ class BDecoder(object):
         if _start == _end:
             raise DecodingError("Empty integer.")
 
-        self.index = _end+1
+        self.index = _end + 1
 
         _int = int(self.data[_start:_end])
 
@@ -239,7 +238,7 @@ class Decoder(object):
                 length = int(self.bytes[self.offset:end])
             except (ValueError, TypeError):
                 raise BencodeError("Bad string length at offset %d (%r...)" % (
-                    self.offset, self.bytes[self.offset:self.offset+32]
+                    self.offset, self.bytes[self.offset:self.offset + 32]
                 ))
 
             self.offset = end + length + 1
@@ -255,19 +254,19 @@ class Decoder(object):
         elif char == b'i':
             # Integer
             try:
-                end = self.bytes.find(b'e', self.offset+1)
-                obj = int(self.bytes[self.offset+1:end])
+                end = self.bytes.find(b'e', self.offset + 1)
+                obj = int(self.bytes[self.offset + 1:end])
             except (ValueError, TypeError):
                 raise BencodeError("Bad integer at offset %d (%r...)" % (
-                    self.offset, self.bytes[self.offset:self.offset+32]
+                    self.offset, self.bytes[self.offset:self.offset + 32]
                 ))
-            self.offset = end+1
+            self.offset = end + 1
 
         elif char == b'l':
             # List
             self.offset += 1
             obj = []
-            while self.bytes[self.offset:self.offset+1] != b'e':
+            while self.bytes[self.offset:self.offset + 1] != b'e':
                 obj.append(self.decode())
             self.offset += 1
 
@@ -275,19 +274,19 @@ class Decoder(object):
             # Dict
             self.offset += 1
             obj = {}
-            while self.bytes[self.offset:self.offset+1] != b'e':
+            while self.bytes[self.offset:self.offset + 1] != b'e':
                 key = self.decode()
                 obj[key] = self.decode()
             self.offset += 1
 
         else:
             raise BencodeError("Format error at offset %d (%r...)" % (
-                self.offset, self.bytes[self.offset:self.offset+32]
+                self.offset, self.bytes[self.offset:self.offset + 32]
             ))
 
         if check_trailer and self.offset != len(self.bytes):
             raise BencodeError("Trailing data at offset %d (%r...)" % (
-                self.offset, self.bytes[self.offset:self.offset+32]
+                self.offset, self.bytes[self.offset:self.offset + 32]
             ))
 
         return obj
