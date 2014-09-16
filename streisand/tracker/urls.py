@@ -6,8 +6,5 @@ from .views import AnnounceView
 
 urlpatterns = patterns(
     '',
-    url(
-        r'^(?P<auth_key>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/announce/?$',
-        AnnounceView.as_view(), name='announce'
-    ),
+    url(r'^(?P<auth_key>[0-9a-f\-]{36})/announce/?$', AnnounceView.as_view(), name='announce'),
 )
