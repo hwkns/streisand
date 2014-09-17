@@ -1,4 +1,6 @@
 flake8==2.2.3
 ipdb==0.8
 ipython==2.2.0
-requests==2.4.0
+requests==2.4.1
+django-dynamic-fixture==1.7.0
+django-nose==1.2
