@@ -10,6 +10,9 @@ from django.http import HttpResponse
 from django.utils.timezone import timedelta
 from django.views.generic import View
 
+from profiles.models import UserProfile
+from profiles.tasks import handle_announce
+
 from .bencoding import bencode
 from .models import Peer, Swarm
 
@@ -121,10 +124,6 @@ PEER_ID_WHITELIST = tuple(
     ]
 )
 
-USERS = {
-    '16fd2706-8baf-433b-82eb-8c7fada847da',
-}
-
 
 class AnnounceView(View):
 
@@ -144,17 +143,19 @@ class AnnounceView(View):
         #
 
         # Fail if the auth_key is invalid
-        if auth_key not in USERS:
-            return self.failure('Invalid auth_key')
-
-        # Fail if the client will not accept a compact response
-        compact = request.GET.get('compact', '1')
-        if compact == '0':
-            return self.failure('This tracker only sends compact responses')
+        try:
+            UserProfile.objects.get(auth_key=auth_key)
+        except UserProfile.DoesNotExist:
+            if auth_key != '16fd2706-8baf-433b-82eb-8c7fada847da':
+                return self.failure('Invalid auth_key')
 
         # Fail if any required parameters are missing
         if not self.REQUIRED_PARAMS <= request.GET.keys():
             return self.failure('Announce request was missing one or more required parameters')
+
+        # Fail if the client will not accept a compact response
+        if request.GET.get('compact') == '0':
+            return self.failure('This tracker only sends compact responses')
 
         # The `info_hash` and `peer_id` parameters include raw bytes, and
         # Django irreversibly encodes them into strings for request.GET,
@@ -164,7 +165,7 @@ class AnnounceView(View):
                 [param.split('=') for param in request.META['QUERY_STRING'].split('&')]
             )
         except Exception:
-            return self.failure('Announce request contained malformed GET parameters')
+            return self.failure('Tracker could not parse announce request')
         else:
             info_hash = b2a_hex(unquote_to_bytes(params['info_hash'])).decode('ascii')
             peer_id = b2a_hex(unquote_to_bytes(params['peer_id'])).decode('ascii')
@@ -175,29 +176,30 @@ class AnnounceView(View):
 
         # Fail if the torrent is not registered
         try:
-            torrent = Swarm.objects.get(torrent_info_hash=info_hash)
+            swarm = Swarm.objects.get(torrent_info_hash=info_hash)
         except Swarm.DoesNotExist:
-            torrent = Swarm.objects.create(torrent_info_hash=info_hash)
-            # return self.failure('Unregistered torrent')
+            if info_hash == b2a_hex(unquote_to_bytes('ffffffffffffffffffff')).decode('ascii'):
+                return self.failure('Unregistered torrent')
+            swarm = Swarm.objects.create(torrent_info_hash=info_hash)
 
         #
         # Get announce data
         #
 
         # The client's IP address
-        ip = request.META['REMOTE_ADDR']
+        ip_address = request.META['REMOTE_ADDR']
         # In debug mode, allow it to be specified as a GET param
         if settings.DEBUG:
-            ip = request.GET.get('ip', ip)
+            ip_address = request.GET.get('ip', ip_address)
 
         # The port number that the client is listening on
         port = request.GET['port']
 
         # The total number of bytes uploaded since the first 'started' event
-        bytes_uploaded = int(request.GET['uploaded'])
+        total_bytes_uploaded = int(request.GET['uploaded'])
 
         # The total number of bytes downloaded since the first 'started' event
-        bytes_downloaded = int(request.GET['downloaded'])
+        total_bytes_downloaded = int(request.GET['downloaded'])
 
         # The number of bytes remaining until 100% completion
         bytes_left = int(request.GET['left'])
@@ -221,49 +223,71 @@ class AnnounceView(View):
         #    key - This doesn't give us anything we don't already
         #        get from the auth_key
 
-        # print(params)
-        # print(cache.keys('*'))
-
         #
-        # Update the peer's stats, and send signals
+        # Update the peer's stats
         #
 
         try:
-            client = torrent.peers.get(ip_address=ip, port=port)
+
+            # Fetch the client from the current peer list
+            client = swarm.peers.get(
+                user_auth_key=auth_key,
+                ip_address=ip_address,
+                port=port,
+            )
 
         except Peer.DoesNotExist:
 
             # Add this client to the peer list
-            client = Peer.objects.create(
-                swarm=torrent,
-                ip_address=ip,
-                port=port,
+            client = swarm.peers.create(
+                user_auth_key=auth_key,
                 peer_id=peer_id,
+                ip_address=ip_address,
+                port=port,
                 complete=(event == 'completed') or (bytes_left == 0),
             )
 
-        if bytes_downloaded > client.bytes_downloaded:
-            # TODO: put a message in the queue that this auth_key downloaded
-            # (bytes_downloaded - client.bytes_downloaded) bytes on this torrent_hash
-            client.bytes_downloaded = bytes_downloaded
+        bytes_recently_downloaded = total_bytes_downloaded - client.bytes_downloaded
+        if bytes_recently_downloaded > 0:
+            client.bytes_downloaded = total_bytes_downloaded
+        elif bytes_recently_downloaded < 0:
+            raise Exception('Something strange is happening here...')
 
-        if bytes_uploaded > client.bytes_uploaded:
-            # TODO: put a message in the queue that this auth_key uploaded
-            # (bytes_uploaded - client.bytes_uploaded) bytes on this torrent_hash
-            client.bytes_uploaded = bytes_uploaded
+        bytes_recently_uploaded = total_bytes_uploaded - client.bytes_uploaded
+        if bytes_recently_uploaded > 0:
+            client.bytes_uploaded = total_bytes_uploaded
+        elif bytes_recently_uploaded < 0:
+            raise Exception('Something strange is happening here...')
 
         if event == 'started':
-            # TODO: put a 'started' message in the queue
+            # TODO: something?
             pass
         elif event == 'stopped':
-            # TODO: put a 'stopped' message in the queue
+            # TODO: something?
             pass
         elif event == 'completed':
-            # TODO: put a 'snatched' message in the queue
+            # TODO: something?
             pass
+        elif event:
+            return self.failure('Tracker could not parse announce request')
 
         #
-        # Respond to the client
+        # Queue a task to handle record keeping for the site
+        #
+
+        handle_announce.delay(
+            auth_key=auth_key,
+            info_hash=info_hash,
+            peer_id=peer_id,
+            ip_address=ip_address,
+            port=port,
+            new_bytes_uploaded=bytes_recently_uploaded,
+            new_bytes_downloaded=bytes_recently_downloaded,
+            event=event,
+        )
+
+        #
+        # Prepare the response for the client
         #
 
         # Get the peer list to send back
@@ -273,13 +297,13 @@ class AnnounceView(View):
         else:
             client.save()
             compact_peer_list_for_client = b''.join(
-                [bytes(peer) for peer in torrent.peers.all()][:num_want]
+                [bytes(peer) for peer in swarm.peers.all()][:num_want]
             )
             assert len(compact_peer_list_for_client) % 6 == 0
 
         # Get the number of seeders and leechers
-        complete = torrent.peers.filter(complete=True).count()
-        incomplete = torrent.peers.filter(complete=False).count()
+        complete = swarm.peers.filter(complete=True).count()
+        incomplete = swarm.peers.filter(complete=False).count()
 
         # Put everything in a dictionary
         response_dict = {
@@ -299,9 +323,9 @@ class AnnounceView(View):
                 '<br/>Request params: <pre>{params}</pre><br/>'
                 '<br/>Response: <pre>{response_dict}</pre><br/>'.format(
                     auth_key=auth_key,
-                    ip=ip,
-                    torrent=torrent,
-                    peers=torrent.peers.all(),
+                    ip=ip_address,
+                    torrent=swarm,
+                    peers=swarm.peers.all(),
                     params=pprint.pformat(params),
                     response_dict=pprint.pformat(response_dict),
                 )
