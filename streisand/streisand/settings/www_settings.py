@@ -15,6 +15,7 @@ INSTALLED_APPS += (
     # Local apps
     'www',
     'profiles',
+    'torrents',
     'tracker',
 
 )
@@ -38,3 +39,45 @@ TEMPLATE_LOADERS = (
     # 'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['null'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'streisand': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True
+        }
+    }
+}
