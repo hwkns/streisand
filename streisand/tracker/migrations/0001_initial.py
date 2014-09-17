@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Peer',
             fields=[
-                ('id', django_extensions.db.fields.UUIDField(serialize=False, primary_key=True, blank=True, name='id', editable=False)),
+                ('id', django_extensions.db.fields.UUIDField(blank=True, serialize=False, primary_key=True, editable=False, name='id')),
                 ('user_auth_key', models.CharField(max_length=36)),
                 ('peer_id', models.CharField(max_length=40)),
                 ('ip_address', models.GenericIPAddressField()),
@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Swarm',
             fields=[
-                ('torrent_info_hash', models.CharField(primary_key=True, serialize=False, max_length=40)),
+                ('torrent_info_hash', models.CharField(serialize=False, primary_key=True, max_length=40)),
             ],
             options={
             },
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='peer',
             name='swarm',
-            field=models.ForeignKey(to='tracker.Swarm', related_name='peers'),
+            field=models.ForeignKey(related_name='peers', to='tracker.Swarm'),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
