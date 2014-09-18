@@ -1,26 +1,10 @@
-<!doctype html>
+{% extends 'base.html' %}
 
-<html lang="en">
-<head>
-  <meta charset="utf-8">
+{% block title %}Job Details | Bellhops{% endblock %}
 
-  <title>Streisand</title>
-  <meta name="description" content="Streisand">
-  <meta name="author" content="hwkns">
-
-{#  <link rel="stylesheet" href="css/styles.css?v=1.0">#}
-
-  <!--[if lt IE 9]>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-</head>
-
-<body>
-  Torrents:
-  <pre>
-      {% for s in swarms %}
-          {{ s }} - {{ s.peers.all }}
-      {% endfor %}
-  </pre>
-</body>
-</html>
+{% block main %}
+      <div class="page-header">
+        <h1>News</h1>
+      </div>
+      <p>This is what happens when you find a stranger in the alps.</p>
+{% endblock %}
