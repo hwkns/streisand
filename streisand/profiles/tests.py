@@ -23,9 +23,12 @@ class TorrentStatsTests(TestCase):
             peer_id='baz',
             ip_address='0.0.0.0',
             port='1234',
+            user_agent='',
             new_bytes_uploaded=amount,
             new_bytes_downloaded=0,
-            event=None,
+            bytes_remaining=0,
+            event='',
+            time_stamp=0.0,
         )
 
     def test_announce_handler_tracks_uploaded_data(self):
