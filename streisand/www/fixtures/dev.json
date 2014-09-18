@@ -11,11 +11,28 @@
             "size": 4096,
             "info_hash": "894985f97cc25c246e37a07cd7c785993982a7cb",
             "group": 1,
-            "swarm": "894985f97cc25c246e37a07cd7c785993982a7cb"
+            "swarm": "894985f97cc25c246e37a07cd7c785993982a7cb",
+            "uploaded_by": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "torrents.torrent",
+        "fields": {
+            "size": 2048,
+            "info_hash": "884985f97cc25c246e37a07cd7c785993982a7cb",
+            "group": 1,
+            "swarm": "884985f97cc25c246e37a07cd7c785993982a7cb",
+            "uploaded_by": 1
         }
     },
     {
         "pk": "894985f97cc25c246e37a07cd7c785993982a7cb",
+        "model": "tracker.swarm",
+        "fields": {}
+    },
+    {
+        "pk": "884985f97cc25c246e37a07cd7c785993982a7cb",
         "model": "tracker.swarm",
         "fields": {}
     },
