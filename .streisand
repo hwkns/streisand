@@ -17,7 +17,7 @@ alias stop_nginx='sudo service nginx stop'
 alias start_celery='screen -dmS celery bash -c "cd /home/vagrant/streisand/streisand && STREISAND_DEBUG=False celery worker -A streisand -l info"'
 alias stop_celery='sudo killall celery'
 
-alias clean_slate='m reset_db --noinput; rm /home/vagrant/streisand/streisand/*/migrations/0001_initial.py; m makemigrations; m migrate; m loaddata dev'
+alias clean_slate='m reset_db --noinput; rm /home/vagrant/streisand/streisand/*/migrations/0*.py; m makemigrations; m migrate; m loaddata dev'
 
 alias runserver='/home/vagrant/streisand/streisand/manage.py runserver_plus 0.0.0.0:8000 --settings=streisand.settings.www_settings'
 alias runtracker='/home/vagrant/streisand/streisand/manage.py runserver_plus 0.0.0.0:7070 --settings=streisand.settings.tracker_settings'
