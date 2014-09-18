@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from urllib.parse import unquote_to_bytes
-from binascii import b2a_hex
 import pprint
 
 from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse
-from django.utils.timezone import timedelta
+from django.utils.timezone import timedelta, now
 from django.views.generic import View
 
 from profiles.models import UserProfile
 from profiles.tasks import handle_announce
 
 from .bencoding import bencode
-from .models import Peer, Swarm
+from .models import Peer, Swarm, TorrentClient
+from .utils import unquote_to_hex
 
 
 class BencodedResponse(HttpResponse):
@@ -28,101 +27,11 @@ class BencodedResponse(HttpResponse):
         super(BencodedResponse, self).__init__(content=data, **kwargs)
 
 
-cache.set('announce_interval_in_seconds', timedelta(minutes=40))
-announce_interval_timedelta = cache.get('announce_interval_in_seconds')
-ANNOUNCE_INTERVAL_IN_SECONDS = int(announce_interval_timedelta.total_seconds())
+cache.set('announce_interval', timedelta(minutes=40))
+announce_interval = cache.get('announce_interval')
+ANNOUNCE_INTERVAL_IN_SECONDS = int(announce_interval.total_seconds())
 
-PEER_ID_WHITELIST = (
-    b'-AZ25',
-    b'-BG10',
-    b'-KT22',
-    b'-lt0B',
-    b'-CD0302-',
-    b'-lt0C',
-    b'-lt0A4',
-    b'-AZ31',
-    b'-HL31',
-    b'-AZ41',
-    b'-KT32',
-    b'-UT161',
-    b'-AZ42',
-    b'-TR16',
-    b'-TR17',
-    b'-UT185',
-    b'-AZ43',
-    b'-KT33',
-    b'-DE12',
-    b'-TR1920-',
-    b'-AZ44',
-    b'-UT201',
-    b'-TR18',
-    b'-DE13',
-    b'-UT177',
-    b'btpd/0.15',
-    b'-UT182',
-    b'-TR1540-',
-    b'-TR1930-',
-    b'-UT202',
-    b'-TR20',
-    b'-KT40',
-    b'-TR210',
-    b'-UT203',
-    b'-AZ45',
-    b'-UT204',
-    b'-TR2110-',
-    b'btpd/0.16',
-    b'-UT220',
-    b'-TR212',
-    b'-TR213',
-    b'-TR220',
-    b'-TR221',
-    b'-AZ46',
-    b'-UM15',
-    b'-TR222',
-    b'-UT221',
-    b'-KT41',
-    b'-TR23',
-    b'-QB26',
-    b'-QB27',
-    b'-QB28',
-    b'-UT30',
-    b'-AZ47',
-    b'-TR24',
-    b'-QB29',
-    b'-UT31',
-    b'-TR25',
-    b'-KT42',
-    b'-lt0D',
-    b'-TR26',
-    b'-UT32',
-    b'-QB30',
-    b'-TR27',
-    b'-UM165',
-    b'-KT43',
-    b'-AZ48',
-    b'-UM180',
-    b'-UM181',
-    b'-UM182',
-    b'-UT33',
-    b'-AZ49',
-    b'-UM183',
-    b'-UM184',
-    b'-AZ50',
-    b'-TR28',
-    b'-UT331',
-    b'-AZ51',
-    b'-QB31',
-    b'-AZ52',
-    b'-AZ53',
-    b'-UT34',
-)
-PEER_ID_WHITELIST = tuple(
-    [
-        b2a_hex(prefix).decode('ascii')
-        for prefix
-        in PEER_ID_WHITELIST
-    ]
-)
+
 
 
 class AnnounceView(View):
@@ -146,8 +55,7 @@ class AnnounceView(View):
         try:
             UserProfile.objects.get(auth_key=auth_key)
         except UserProfile.DoesNotExist:
-            if auth_key != '16fd2706-8baf-433b-82eb-8c7fada847da':
-                return self.failure('Invalid auth_key')
+            return self.failure('Invalid auth_key')
 
         # Fail if any required parameters are missing
         if not self.REQUIRED_PARAMS <= request.GET.keys():
@@ -167,24 +75,28 @@ class AnnounceView(View):
         except Exception:
             return self.failure('Tracker could not parse announce request')
         else:
-            info_hash = b2a_hex(unquote_to_bytes(params['info_hash'])).decode('ascii')
-            peer_id = b2a_hex(unquote_to_bytes(params['peer_id'])).decode('ascii')
+            info_hash = unquote_to_hex(params['info_hash'])
+            peer_id = unquote_to_hex(params['peer_id'])
 
         # Fail if the client is not in the whitelist
-        if not peer_id.startswith(PEER_ID_WHITELIST):
+        whitelisted_prefixes = TorrentClient.objects.get_whitelist()
+        if not peer_id.startswith(whitelisted_prefixes):
             return self.failure('Your client is not in the whitelist')
 
         # Fail if the torrent is not registered
         try:
             swarm = Swarm.objects.get(torrent_info_hash=info_hash)
         except Swarm.DoesNotExist:
-            if info_hash == b2a_hex(unquote_to_bytes('ffffffffffffffffffff')).decode('ascii'):
+            if info_hash == unquote_to_hex('ffffffffffffffffffff'):
                 return self.failure('Unregistered torrent')
             swarm = Swarm.objects.create(torrent_info_hash=info_hash)
 
         #
         # Get announce data
         #
+
+        # The current time
+        time_stamp = now()
 
         # The client's IP address
         ip_address = request.META['REMOTE_ADDR']
@@ -193,7 +105,10 @@ class AnnounceView(View):
             ip_address = request.GET.get('ip', ip_address)
 
         # The port number that the client is listening on
-        port = request.GET['port']
+        port = int(request.GET['port'])
+
+        # The user agent string
+        user_agent = request.META.get('HTTP_USER_AGENT', '')
 
         # The total number of bytes uploaded since the first 'started' event
         total_bytes_uploaded = int(request.GET['uploaded'])
@@ -205,7 +120,7 @@ class AnnounceView(View):
         bytes_left = int(request.GET['left'])
 
         # Either 'started', 'completed', or 'stopped' (optional)
-        event = request.GET.get('event')
+        event = request.GET.get('event', '')
 
         # Number of peers the client would like to receive (optional)
         num_want = int(request.GET.get('numwant', '50'))
@@ -224,6 +139,14 @@ class AnnounceView(View):
         #        get from the auth_key
 
         #
+        # Delete peers after two announce intervals have passed with no announce
+        #
+
+        swarm.peers.filter(
+            last_announce__lt=time_stamp - (announce_interval * 2)
+        ).delete()
+
+        #
         # Update the peer's stats
         #
 
@@ -234,6 +157,7 @@ class AnnounceView(View):
                 user_auth_key=auth_key,
                 ip_address=ip_address,
                 port=port,
+                peer_id=peer_id,
             )
 
         except Peer.DoesNotExist:
@@ -241,10 +165,11 @@ class AnnounceView(View):
             # Add this client to the peer list
             client = swarm.peers.create(
                 user_auth_key=auth_key,
-                peer_id=peer_id,
                 ip_address=ip_address,
                 port=port,
-                complete=(event == 'completed') or (bytes_left == 0),
+                peer_id=peer_id,
+                user_agent=user_agent,
+                bytes_remaining=bytes_left,
             )
 
         bytes_recently_downloaded = total_bytes_downloaded - client.bytes_downloaded
@@ -258,6 +183,8 @@ class AnnounceView(View):
             client.bytes_uploaded = total_bytes_uploaded
         elif bytes_recently_uploaded < 0:
             raise Exception('Something strange is happening here...')
+
+        client.complete = (event == 'completed') or (bytes_left == 0)
 
         if event == 'started':
             # TODO: something?
@@ -278,12 +205,15 @@ class AnnounceView(View):
         handle_announce.delay(
             auth_key=auth_key,
             info_hash=info_hash,
-            peer_id=peer_id,
-            ip_address=ip_address,
-            port=port,
             new_bytes_uploaded=bytes_recently_uploaded,
             new_bytes_downloaded=bytes_recently_downloaded,
+            bytes_remaining=bytes_left,
             event=event,
+            ip_address=ip_address,
+            port=port,
+            peer_id=peer_id,
+            user_agent=user_agent,
+            time_stamp=time_stamp.timestamp(),
         )
 
         #
@@ -296,14 +226,15 @@ class AnnounceView(View):
             compact_peer_list_for_client = b''
         else:
             client.save()
-            compact_peer_list_for_client = b''.join(
-                [bytes(peer) for peer in swarm.peers.all()][:num_want]
-            )
-            assert len(compact_peer_list_for_client) % 6 == 0
+            if client.complete:
+                # Leave seeders out of the peer list
+                compact_peer_list_for_client = swarm.peers.leechers().compact(limit=num_want)
+            else:
+                compact_peer_list_for_client = swarm.peers.all().compact(limit=num_want)
 
         # Get the number of seeders and leechers
-        complete = swarm.peers.filter(complete=True).count()
-        incomplete = swarm.peers.filter(complete=False).count()
+        complete = swarm.peers.seeders().count()
+        incomplete = swarm.peers.leechers().count()
 
         # Put everything in a dictionary
         response_dict = {
