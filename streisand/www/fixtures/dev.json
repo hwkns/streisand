@@ -40,18 +40,36 @@
         "pk": 1,
         "model": "auth.user",
         "fields": {
-            "is_superuser": false,
-            "email": "come@me.bro",
-            "is_staff": false,
-            "date_joined": "2014-09-18T02:47:19.069Z",
-            "password": "streisand",
             "username": "hwkns",
+            "email": "come@me.bro",
+            "password": "pbkdf2_sha256$12000$0hX6vHywTbl9$Tb7ON+ez7t3+mADumo6woGj0fy7/pkN4H3gCjzI/Fao=",
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "date_joined": "2014-09-18T02:47:19.069Z",
+            "last_login": "2014-09-18T02:47:19.069Z",
             "groups": [],
             "last_name": "",
             "first_name": "",
-            "user_permissions": [],
-            "last_login": "2014-09-18T02:47:19.069Z",
-            "is_active": true
+            "user_permissions": []
+        }
+    },
+    {
+        "pk": 2,
+        "model": "auth.user",
+        "fields": {
+            "username": "admin",
+            "email": "dolan@gooby.pls",
+            "password": "pbkdf2_sha256$12000$0hX6vHywTbl9$Tb7ON+ez7t3+mADumo6woGj0fy7/pkN4H3gCjzI/Fao=",
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "date_joined": "2014-09-18T14:52:58.484Z",
+            "last_login": "2014-09-18T14:53:14.260Z",
+            "groups": [],
+            "first_name": "",
+            "last_name": "",
+            "user_permissions": []
         }
     },
     {
