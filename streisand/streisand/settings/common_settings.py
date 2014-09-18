@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 import os
+import sys
 import json
 
 
@@ -24,6 +25,7 @@ SECRET_KEY = '4$91je#^q%*m*!g^y^webtfaw0k3(c4vz^9%w0^i4)l=inf&-#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = json.loads(os.environ.get('STREISAND_DEBUG', "False").lower())
+TESTING = 'test' in sys.argv
 
 TEMPLATE_DEBUG = True
 
@@ -94,6 +96,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-CELERY_ALWAYS_EAGER = DEBUG
+CELERY_ALWAYS_EAGER = TESTING
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_ACCEPT_CONTENT = ['json']
