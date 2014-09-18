@@ -4,9 +4,10 @@ from django.db import models
 
 from django_extensions.db.fields import UUIDField
 
+from .managers import PeerQuerySet, TorrentClientManager
+
 
 class Swarm(models.Model):
-    # TODO: make a custom field type for this
     torrent_info_hash = models.CharField(max_length=40, primary_key=True)
 
     def __str__(self):
@@ -26,31 +27,35 @@ class Peer(models.Model):
     # we use an auto-generated UUIDField as the primary key.
     id = UUIDField(auto=True, primary_key=True, editable=False)
 
-    swarm = models.ForeignKey(Swarm, related_name='peers')
-    user_auth_key = models.CharField(max_length=36)
-    peer_id = models.CharField(max_length=40)
-    ip_address = models.GenericIPAddressField()
-    port = models.CharField(max_length=5)
+    swarm = models.ForeignKey(Swarm, null=False, db_index=True, related_name='peers')
+    user_auth_key = models.CharField(max_length=36, null=False)
+    ip_address = models.GenericIPAddressField(null=False)
+    port = models.IntegerField(null=False)
+    peer_id = models.CharField(max_length=40, null=False)
+    user_agent = models.TextField()
+    compact_bytes_repr = models.BinaryField(
+        null=False,
+        help_text="The compact representation of this peer, sent as "
+                  "bytes to announcing torrent clients"
+    )
 
-    # These are checked by the tracker when the client announces again,
-    # to decide whether the user's upload/download should be increased
-    bytes_uploaded = models.BigIntegerField(default=0)
-    bytes_downloaded = models.BigIntegerField(default=0)
+    # These are checked by the tracker when the client announces again, to decide
+    # whether the user has uploaded/downloaded bytes since the previous announce
+    bytes_uploaded = models.BigIntegerField(default=0, null=False)
+    bytes_downloaded = models.BigIntegerField(default=0, null=False)
 
-    complete = models.BooleanField(default=False)
+    bytes_remaining = models.BigIntegerField(null=False)
+    complete = models.BooleanField(default=False, null=False)
 
     first_announce = models.DateTimeField(auto_now_add=True)
     last_announce = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        # Two clients, sharing an IP address and seeding the same torrent for the
-        # same user, could swap ports between announces due to a restart.
-        unique_together = ['swarm', 'user_auth_key', 'ip_address', 'port']
+    objects = PeerQuerySet.as_manager()
 
-    def __bytes__(self):
-        compact_ip = bytes([int(s) for s in self.ip_address.split('.')])
-        compact_port = int(self.port).to_bytes(2, byteorder='big')
-        return compact_ip + compact_port
+    class Meta:
+        # If a client restarts, all of these might be the same, except for peer_id
+        unique_together = ['swarm', 'user_auth_key', 'ip_address', 'port', 'peer_id']
+        index_together = ['swarm', 'user_auth_key', 'ip_address', 'port', 'peer_id']
 
     def __str__(self):
         return '{ip}:{port}'.format(
@@ -59,4 +64,30 @@ class Peer(models.Model):
         )
 
     def __repr__(self):
-        return self.__str__()
+        return 'Peer <{peer}>'.format(peer=self.__str__())
+
+    def save(self, *args, **kwargs):
+
+        if not self.pk:
+            # Compute the compact byte representation once, upon creation
+            compact_ip = bytes([int(s) for s in self.ip_address.split('.')])
+            compact_port = self.port.to_bytes(2, byteorder='big')
+            self.compact_bytes_repr = compact_ip + compact_port
+
+        return super().save(*args, **kwargs)
+
+
+class TorrentClient(models.Model):
+
+    peer_id_prefix = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=128, null=False, blank=False)
+    whitelisted = models.NullBooleanField(db_index=True)
+    notes = models.TextField(null=True, blank=True)
+
+    objects = TorrentClientManager()
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return 'TorrentClient <{client}>'.format(client=self.__str__())
