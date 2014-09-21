@@ -2,5 +2,7 @@ flake8==2.2.3
 ipdb==0.8
 ipython==2.2.0
 requests==2.4.1
-django-dynamic-fixture==1.7.0
-django-nose==1.2
+django-dynamic-fixture==1.8.0
+# Getting rid of deprecation warnings; upgrade when the next PyPI release is out
+#django-nose==1.2
+-e git://github.com/django-nose/django-nose.git@154b663097e8f3131fe5d1cdd8a8df2e388450ac#egg=django_nose
