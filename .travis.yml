@@ -6,3 +6,4 @@ install:
     - "pip install -r testing_requirements.txt"
 script:
     - "flake8 . --exclude=migrations --ignore=E501,F403"
+    - "manage.py test"
