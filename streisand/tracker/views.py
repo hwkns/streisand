@@ -32,8 +32,6 @@ announce_interval = cache.get('announce_interval')
 ANNOUNCE_INTERVAL_IN_SECONDS = int(announce_interval.total_seconds())
 
 
-
-
 class AnnounceView(View):
 
     REQUIRED_PARAMS = {
