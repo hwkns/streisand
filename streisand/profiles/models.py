@@ -30,6 +30,10 @@ class UserProfile(models.Model):
     def email(self):
         return self.user.email
 
+    @property
+    def ratio(self):
+        return round(self.bytes_uploaded / self.bytes_downloaded, 3)
+
     def get_absolute_url(self):
         return reverse('user_profile', args=[self.id])
 
