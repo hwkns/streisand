@@ -10,7 +10,7 @@ class FilmList(models.Model):
     films = models.ManyToManyField(to='films.Film', through='film_lists.FilmListItem')
 
     def __str__(self):
-        return 'FilmList <{title}>'.format(title=self.title)
+        return self.title
 
     def get_absolute_url(self):
         return reverse('film_list_details', args=[self.id])
