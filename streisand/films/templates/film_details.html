@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ film.title }}{% endblock %}
+
+{% block main %}
+    <div class="page-header">
+      <h1>{{ film.title }}</h1>
+    </div>
+
+    <ul>
+      {% for t in film.torrents %}
+        <li><a href="{{ t.get_absolute_url }}">{{ t }}</a></li>
+      {% endfor %}
+    </ul>
+{% endblock %}

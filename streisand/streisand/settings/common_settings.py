@@ -39,9 +39,7 @@ INSTALLED_APPS = ()
 if DEBUG:
     INSTALLED_APPS += (
         'django_extensions',
-        'django_nose',
     )
-    TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 MIDDLEWARE_CLASSES = ()
 

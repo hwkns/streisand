@@ -14,6 +14,8 @@ INSTALLED_APPS += (
 
     # Local apps
     'www',
+    'films',
+    'film_lists',
     'profiles',
     'torrents',
     'tracker',
@@ -58,7 +60,7 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console':{
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
         },
@@ -80,4 +82,18 @@ LOGGING = {
             'propagate': True
         }
     }
+}
+
+if DEBUG:
+    INSTALLED_APPS += (
+        'django_nose',
+    )
+    TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+
+# http://django-dynamic-fixture.readthedocs.org/en/latest/data_fixtures.html#custom-field-fixture
+DDF_FIELD_FIXTURES = {
+    'picklefield.fields.PickledObjectField': {
+        'ddf_fixture': lambda: [],
+    },
 }

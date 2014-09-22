@@ -16,7 +16,7 @@ def index(request):
 
 
 def torrent_view(request, torrent_id):
-    torrent = Torrent.objects.filter(id=torrent_id).select_related('swarm').get()
+    torrent = Torrent.objects.filter(id=torrent_id).select_related('film').get()
     return render(
         request=request,
         template_name='torrent.html',
