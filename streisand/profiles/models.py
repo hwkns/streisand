@@ -32,7 +32,10 @@ class UserProfile(models.Model):
 
     @property
     def ratio(self):
-        return round(self.bytes_uploaded / self.bytes_downloaded, 3)
+        if self.bytes_downloaded == 0:
+            return 0.0
+        else:
+            return round(self.bytes_uploaded / self.bytes_downloaded, 3)
 
     def get_absolute_url(self):
         return reverse('user_profile', args=[self.id])
@@ -58,6 +61,10 @@ class TorrentStats(models.Model):
 
 
 class UserIPAddress(models.Model):
+    """
+    Used to keep a history of IP addresses used by a profile, including
+    both site and tracker interactions.
+    """
     profile = models.ForeignKey(
         'profiles.UserProfile',
         null=False,
