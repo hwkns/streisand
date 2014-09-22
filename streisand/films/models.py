@@ -15,5 +15,8 @@ class Film(models.Model):
     duration_in_minutes = models.IntegerField()
     description = models.TextField()
 
+    def __str__(self):
+        return self.title
+
     def get_absolute_url(self):
         return reverse('film_details', args=[self.id])
