@@ -8,11 +8,11 @@
     </div>
 
     <ul>
-      {% for f in films %}
-        <li><a href="{{ f.get_absolute_url }}">{{ f }}</a></li>
+      {% for film in films %}
+        <li><a href="{{ film.get_absolute_url }}">{{ film }}</a></li>
         <ul>
-          {% for t in f.torrents %}
-            <li>{{ t }}</li>
+          {% for torrent in film.torrents.all %}
+            <li>{{ torrent }}</li>
           {% endfor %}
         </ul>
       {% endfor %}

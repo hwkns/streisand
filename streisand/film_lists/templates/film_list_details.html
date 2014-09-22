@@ -8,7 +8,7 @@
     </div>
 
     <ul>
-      {% for f in film_list.films %}
+      {% for f in film_list.films.all %}
         <li><a href="{{ f.get_absolute_url }}">{{ f }}</a></li>
       {% endfor %}
     </ul>
