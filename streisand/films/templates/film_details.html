@@ -9,7 +9,7 @@
 
     <ul>
       {% for torrent in film.torrents.all %}
-        <li><a href="{{ torrent.get_absolute_url }}">{{ torrent }}</a></li>
+        <li><a name="torrent-{{ torrent.id }}" href="{{ torrent.get_absolute_url }}">{{ torrent }}</a></li>
       {% endfor %}
     </ul>
 {% endblock %}
