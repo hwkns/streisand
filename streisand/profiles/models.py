@@ -2,13 +2,21 @@
 
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.dispatch import receiver
 
 from django_extensions.db.fields import UUIDField
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField('auth.User', related_name='profile')
-    auth_key = UUIDField(auto=True, unique=True, editable=False, db_index=True)
+    auth_key = models.OneToOneField(
+        'profiles.UserAuthKey',
+        related_name='profile',
+        null=True,
+        default=None,
+        editable=False,
+        db_index=True,
+    )
     bytes_uploaded = models.BigIntegerField(default=0)
     bytes_downloaded = models.BigIntegerField(default=0)
     torrents = models.ManyToManyField(
@@ -39,6 +47,17 @@ class UserProfile(models.Model):
 
     def get_absolute_url(self):
         return reverse('user_profile', args=[self.id])
+
+    def reset_auth_key(self):
+        self.auth_key = self.auth_keys.create()
+        self.save()
+
+
+# Signal handler for new user profiles
+@receiver(models.signals.post_save, sender='profiles.UserProfile')
+def set_auth_key_for_new_user_profile(sender, instance, created=False, **kwargs):
+    if created is True and instance.auth_key is None:
+        instance.reset_auth_key()
 
 
 class TorrentStats(models.Model):
@@ -79,6 +98,25 @@ class UserIPAddress(models.Model):
     class Meta:
         unique_together = ['profile', 'ip_address', 'used_with']
         index_together = ['profile', 'ip_address', 'used_with']
+
+
+class UserAuthKey(models.Model):
+    """
+    Used to keep a history of auth keys used by a profile.
+    """
+    id = UUIDField(auto=True, primary_key=True)
+    used_with_profile = models.ForeignKey(
+        'profiles.UserProfile',
+        related_name='auth_keys',
+        db_index=True,
+    )
+    used_since = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.id
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class UserAnnounce(models.Model):
