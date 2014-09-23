@@ -72,7 +72,7 @@ class TorrentStats(models.Model):
     bytes_uploaded = models.BigIntegerField(default=0)
     bytes_downloaded = models.BigIntegerField(default=0)
     snatch_count = models.IntegerField(default=0)
-    last_announce = models.DateTimeField(auto_now=True)
+    last_seeded = models.DateTimeField(null=True)
 
     class Meta:
         unique_together = ['profile', 'torrent']

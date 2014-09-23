@@ -23,10 +23,11 @@ def handle_announce(auth_key, info_hash, new_bytes_uploaded, new_bytes_downloade
     this handler logs all the announce info.
     """
 
+    # De-serialize the timestamp into a UTC datetime object
     time_stamp = datetime.fromtimestamp(time_stamp).replace(tzinfo=UTC)
 
     # Get the profile and the torrent that correspond to this announce
-    profile = UserProfile.objects.get(auth_key=auth_key)
+    profile = UserProfile.objects.get(auth_key_id=auth_key)
     torrent = Torrent.objects.get(info_hash=info_hash)
 
     # Create or update the relevant TorrentStats object
@@ -36,16 +37,23 @@ def handle_announce(auth_key, info_hash, new_bytes_uploaded, new_bytes_downloade
     )
     torrent_stats.bytes_uploaded = F('bytes_uploaded') + new_bytes_uploaded
     torrent_stats.bytes_downloaded = F('bytes_downloaded') + new_bytes_downloaded
-    if event == 'completed':
-        torrent_stats.snatch_count = F('snatch_count') + 1
+    if bytes_remaining == 0:
+        torrent_stats.last_seeded = time_stamp
     torrent_stats.save()
+
+    # Update the torrent's timestamps
+    if bytes_remaining == 0:
+        torrent.last_seeded = time_stamp
+    if event == 'completed':
+        torrent.snatch_count = F('snatch_count') + 1
+    torrent.save()
 
     # Update the UserProfile
     profile.bytes_downloaded = F('bytes_downloaded') + new_bytes_downloaded
     profile.bytes_uploaded = F('bytes_uploaded') + new_bytes_uploaded
     profile.save()
 
-    # Update IP history
+    # Update the profile's IP history
     UserIPAddress.objects.update_or_create(
         profile=profile,
         ip_address=ip_address,

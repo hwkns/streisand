@@ -15,6 +15,7 @@ class Torrent(models.Model):
     size_in_bytes = models.BigIntegerField(null=False)
     file_list = PickledObjectField(null=False)
     last_seeded = models.DateTimeField(null=True)
+    snatch_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.info_hash
