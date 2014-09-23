@@ -13,13 +13,13 @@ from profiles.tasks import handle_announce
 class TorrentStatsTests(TestCase):
 
     def setUp(self):
-        self.profile = G(UserProfile, auth_key='foo')
-        self.torrent = G(Torrent, info_hash='bar')
+        self.profile = G(UserProfile)
+        self.torrent = G(Torrent)
 
     def upload(self, amount):
         handle_announce(
-            auth_key='foo',
-            info_hash='bar',
+            auth_key=self.profile.auth_key_id,
+            info_hash=self.torrent.info_hash,
             peer_id='baz',
             ip_address='0.0.0.0',
             port='1234',
