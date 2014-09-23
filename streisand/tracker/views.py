@@ -51,7 +51,7 @@ class AnnounceView(View):
 
         # Fail if the auth_key is invalid
         try:
-            UserProfile.objects.get(auth_key=auth_key)
+            UserProfile.objects.get(auth_key_id=auth_key)
         except UserProfile.DoesNotExist:
             return self.failure('Invalid auth_key')
 
