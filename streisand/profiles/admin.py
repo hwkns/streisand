@@ -1,0 +1,69 @@
+# -*- coding: utf-8 -*-
+
+from django.contrib import admin
+
+from .models import UserAuthKey, UserIPAddress
+
+
+class UserAuthKeyAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'id',
+        'profile_link',
+        'used_since',
+    )
+
+    fields = (
+        'id',
+        'profile_link',
+        'used_since',
+    )
+
+    readonly_fields = fields
+
+    search_fields = (
+        'id',
+        'used_with_profile__user__username',
+    )
+
+    def profile_link(self, user_auth_key):
+        return '<a href="{profile_url}">{username}</a>'.format(
+            profile_url=user_auth_key.used_with_profile.get_absolute_url(),
+            username=user_auth_key.used_with_profile.username,
+        )
+    profile_link.allow_tags = True
+
+
+class UserIPAddressAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'ip_address',
+        'profile_link',
+        'used_with',
+        'first_used',
+        'last_used',
+    )
+
+    fields = (
+        'ip_address',
+        'profile_link',
+        'used_with',
+    )
+
+    readonly_fields = fields
+
+    search_fields = (
+        'ip_address',
+        'profile__user__username',
+    )
+
+    def profile_link(self, user_ip_address):
+        return '<a href="{profile_url}">{username}</a>'.format(
+            profile_url=user_ip_address.profile.get_absolute_url(),
+            username=user_ip_address.profile.username,
+        )
+    profile_link.allow_tags = True
+
+
+admin.site.register(UserAuthKey, UserAuthKeyAdmin)
+admin.site.register(UserIPAddress, UserIPAddressAdmin)
