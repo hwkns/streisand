@@ -124,6 +124,14 @@
         }
     },
     {
+        "pk": "16fd2706-8baf-433b-82eb-8c7fada847da",
+        "model": "profiles.userauthkey",
+        "fields": {
+            "used_with_profile": 1,
+            "used_since": "2014-09-18T14:52:58.484Z"
+        }
+    },
+    {
         "pk": 1,
         "model": "profiles.userprofile",
         "fields": {
