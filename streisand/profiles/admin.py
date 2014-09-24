@@ -2,7 +2,18 @@
 
 from django.contrib import admin
 
-from .models import UserAuthKey, UserIPAddress
+from .models import UserProfile, UserAuthKey, UserIPAddress
+
+
+class UserProfileAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'user',
+    )
+
+    def get_queryset(self, request):
+        queryset = super(UserProfileAdmin, self).get_queryset(request)
+        return queryset.select_related('user')
 
 
 class UserAuthKeyAdmin(admin.ModelAdmin):
@@ -65,5 +76,6 @@ class UserIPAddressAdmin(admin.ModelAdmin):
     profile_link.allow_tags = True
 
 
+admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(UserAuthKey, UserAuthKeyAdmin)
 admin.site.register(UserIPAddress, UserIPAddressAdmin)
