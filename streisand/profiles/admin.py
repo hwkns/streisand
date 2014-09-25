@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from .models import UserProfile, UserAuthKey, UserIPAddress
+from .models import UserProfile, UserAuthKey, UserIPAddress, UserAnnounce
 
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -76,6 +76,23 @@ class UserIPAddressAdmin(admin.ModelAdmin):
     profile_link.allow_tags = True
 
 
+class UserAnnounceAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'time_stamp',
+        'auth_key',
+        'info_hash',
+        'ip_address',
+        'port',
+        'peer_id',
+        'new_bytes_uploaded',
+        'new_bytes_downloaded',
+        'bytes_remaining',
+        'event',
+    )
+
+
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(UserAuthKey, UserAuthKeyAdmin)
 admin.site.register(UserIPAddress, UserIPAddressAdmin)
+admin.site.register(UserAnnounce, UserAnnounceAdmin)
