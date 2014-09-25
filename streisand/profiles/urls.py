@@ -5,6 +5,6 @@ from django.conf.urls import url, patterns
 
 urlpatterns = patterns(
     'profiles.views',
-    url(r'^/?$', 'index', name='profile_index'),
-    url(r'^(?P<profile_id>\d+)/?$', 'profile_view', name='user_profile'),
+    url(r'^/?$', 'user_profile_redirect', name='user_profile_redirect'),
+    url(r'^(?P<profile_id>\d+)/?$', 'user_profile', name='user_profile'),
 )
