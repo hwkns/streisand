@@ -2,7 +2,15 @@
 
 from .common_settings import *
 
+INTERNAL_IPS = (
+    '10.0.2.2',
+)
+
 INSTALLED_APPS += (
+
+    # Third party apps
+    'django_su',
+    'grappelli',
 
     # Default apps
     'django.contrib.admin',
@@ -23,16 +31,34 @@ INSTALLED_APPS += (
 )
 
 MIDDLEWARE_CLASSES += (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'www.middleware.CachedUserAuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'www.middleware.LoginRequiredMiddleware',
 )
 
 ROOT_URLCONF = 'www.urls'
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_EXEMPT_URL_PREFIXES = {
+    '/logout/',
+    '/__debug__/',
+}
+
+AUTHENTICATION_BACKENDS = (
+    # Case insensitive version of built-in Django auth
+    "www.auth.CaseInsensitiveAuthBackend",
+    # django-su
+    "django_su.backends.SuBackend",
+)
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 WSGI_APPLICATION = 'streisand.www_wsgi.application'
 
@@ -41,6 +67,26 @@ TEMPLATE_LOADERS = (
     # 'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+)
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/dev/howto/static-files/
+STATIC_URL = '/static/'
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+)
+
 
 LOGGING = {
     'version': 1,
@@ -84,16 +130,25 @@ LOGGING = {
     }
 }
 
-if DEBUG:
+if TESTING:
     INSTALLED_APPS += (
         'django_nose',
     )
     TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
+    # http://django-dynamic-fixture.readthedocs.org/en/latest/data_fixtures.html#custom-field-fixture
+    DDF_FIELD_FIXTURES = {
+        'picklefield.fields.PickledObjectField': {
+            'ddf_fixture': lambda: [],
+        },
+    }
 
-# http://django-dynamic-fixture.readthedocs.org/en/latest/data_fixtures.html#custom-field-fixture
-DDF_FIELD_FIXTURES = {
-    'picklefield.fields.PickledObjectField': {
-        'ddf_fixture': lambda: [],
-    },
-}
+    # Make the tests faster by using a fast, insecure hashing algorithm
+    PASSWORD_HASHERS = (
+        'django.contrib.auth.hashers.MD5PasswordHasher',
+    )
+
+if DEBUG and not TESTING:
+    INSTALLED_APPS += (
+        'debug_toolbar.apps.DebugToolbarConfig',
+    )
