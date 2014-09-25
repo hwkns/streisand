@@ -12,7 +12,9 @@ class TorrentClientAdmin(admin.ModelAdmin):
         'peer_id_prefix',
         'whitelisted',
     )
-    inlines = ()
+    list_filter = (
+        'whitelisted',
+    )
 
 
 admin.site.register(TorrentClient, TorrentClientAdmin)
