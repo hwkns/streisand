@@ -38,8 +38,11 @@ INSTALLED_APPS = ()
 
 if DEBUG:
     INSTALLED_APPS += (
+        'bandit',
         'django_extensions',
     )
+    EMAIL_BACKEND = 'bandit.backends.smtp.HijackSMTPBackend'
+    BANDIT_EMAIL = os.environ.get('BANDIT_EMAIL')
 
 MIDDLEWARE_CLASSES = ()
 
