@@ -1,3 +1,4 @@
+{% load static from staticfiles %}
 <!doctype html>
 
 <html lang="en">
@@ -9,14 +10,14 @@
   <meta name="description" content="Streisand">
 
   <!-- Bootstrap 3.2.0 CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="{% static 'www/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'www/bootstrap-theme.min.css' %}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="{% static 'www/html5shiv.min.js' %}"></script>
+    <script src="{% static 'www/respond.min.js' %}"></script>
   <![endif]-->
 </head>
 
@@ -37,11 +38,11 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
-            <li><a href="/films/">Films</a></li>
-            <li><a href="/film-lists/">Lists</a></li>
+            <li><a href="{% url 'film_index' %}">Films</a></li>
+            <li><a href="{% url 'film_list_index' %}">Lists</a></li>
             {% if request.user.profile %}
-            <li><a href="/profile/">Profile ({{ request.user.profile.ratio }})</a></li>
-            <li><a href="/logout/">Log out</a></li>
+            <li><a href="{% url 'user_profile' profile_id=request.user.profile.id %}">Profile ({{ request.user.profile.ratio }})</a></li>
+            <li><a href="{% url 'logout' %}">Log out</a></li>
             {% endif %}
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
@@ -67,7 +68,7 @@
     </div>
 
   <!-- jQuery and Bootstrap 3.2.0 JS -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="{% static 'www/jquery.min.js' %}"></script>
+  <script src="{% static 'www/bootstrap.min.js' %}"></script>
 </body>
 </html>
