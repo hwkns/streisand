@@ -88,7 +88,8 @@ class CachedUserAuthenticationMiddleware(object):
                 # On a cache miss, get the user and cache it
                 if user is None:
                     user = get_user(request)
-                    user.profile
+                    if hasattr(user, 'profile'):
+                        user.profile
                     cache.set(key, user)
 
                 request._cached_user = user
