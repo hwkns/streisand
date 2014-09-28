@@ -11,6 +11,7 @@ INSTALLED_APPS += (
     # Third party apps
     'django_su',
     'grappelli',
+    'debreach',
 
     # Default apps
     'django.contrib.admin',
@@ -31,6 +32,9 @@ INSTALLED_APPS += (
 )
 
 MIDDLEWARE_CLASSES += (
+    'django.middleware.gzip.GZipMiddleware',
+    'debreach.middleware.RandomCommentMiddleware',
+    'debreach.middleware.CSRFCryptMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -77,6 +81,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
+    'debreach.context_processors.csrf',
 )
 
 # Static files (CSS, JavaScript, Images)
@@ -131,6 +136,7 @@ LOGGING = {
 }
 
 if TESTING:
+
     INSTALLED_APPS += (
         'django_nose',
     )
