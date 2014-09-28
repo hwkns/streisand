@@ -2,6 +2,9 @@
 
 from django.conf.urls import url, patterns, include
 from django.contrib import admin
+from django.contrib.auth.views import login
+
+from .decorators import https_required
 
 
 urlpatterns = patterns(
@@ -15,7 +18,7 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
 
     # Authentication
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name='login'),
+    url(r'^login/$', https_required(login), {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     url(r'^su/', include('django_su.urls')),
 )
