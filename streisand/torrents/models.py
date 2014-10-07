@@ -24,7 +24,10 @@ class Torrent(models.Model):
         return self.__str__()
 
     def get_absolute_url(self):
-        return '{film_url}#torrent-{torrent_id}'.format(
-            film_url=reverse('film_details', args=[self.film_id]),
-            torrent_id=self.id,
+        return reverse(
+            'torrent_details',
+            kwargs={
+                'film_id': self.film_id,
+                'torrent_id': self.id,
+            }
         )
