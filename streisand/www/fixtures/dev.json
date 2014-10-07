@@ -42,8 +42,7 @@
         "model": "film_lists.filmlistitem",
         "fields": {
             "film": 1,
-            "film_list": 1,
-            "sequence_number": 1
+            "film_list": 1
         }
     },
     {
@@ -51,8 +50,7 @@
         "model": "film_lists.filmlistitem",
         "fields": {
             "film": 2,
-            "film_list": 1,
-            "sequence_number": 2
+            "film_list": 1
         }
     },
     {
