@@ -9,9 +9,9 @@ INTERNAL_IPS = (
 INSTALLED_APPS += (
 
     # Third party apps
+    'debreach',
     'django_su',
     'grappelli',
-    'debreach',
 
     # Default apps
     'django.contrib.admin',
@@ -22,12 +22,13 @@ INSTALLED_APPS += (
     'django.contrib.staticfiles',
 
     # Local apps
-    'www',
     'films',
     'film_lists',
+    'invites',
     'profiles',
     'torrents',
     'tracker',
+    'www',
 
 )
 
@@ -51,6 +52,7 @@ ROOT_URLCONF = 'www.urls'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_EXEMPT_URL_PREFIXES = {
+    '/register/',
     '/logout/',
     '/__debug__/',
 }
@@ -96,6 +98,14 @@ STATICFILES_FINDERS = (
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'timestamped': {
+            'format': '%(levelname)-8s %(asctime)-24s %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)-8s %(message)s'
+        },
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -109,11 +119,12 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
+            'class': 'django.utils.log.AdminEmailHandler',
         },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
+            'formatter': 'timestamped',
         },
     },
     'loggers': {
