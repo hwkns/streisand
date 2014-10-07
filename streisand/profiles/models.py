@@ -17,6 +17,7 @@ class UserProfile(models.Model):
         editable=False,
         db_index=True,
     )
+    invited_by = models.ForeignKey('profiles.UserProfile', null=True)
     bytes_uploaded = models.BigIntegerField(default=0)
     bytes_downloaded = models.BigIntegerField(default=0)
     torrents = models.ManyToManyField(
@@ -27,8 +28,17 @@ class UserProfile(models.Model):
     log_successful_announces = models.BooleanField(
         default=False,
         help_text="Use sparingly! This logs data from all successful "
-                  "announces made by this user's torrent client(s)."
+                  "announces made by this user's torrent client(s).",
     )
+    watch_queue = models.ForeignKey(
+        'film_lists.FilmList',
+        null=True,
+        blank=True,
+        editable=False,
+    )
+
+    def __str__(self):
+        return self.username
 
     @property
     def username(self):
@@ -51,6 +61,13 @@ class UserProfile(models.Model):
     def reset_auth_key(self):
         self.auth_key = self.auth_keys.create()
         self.save()
+
+
+# Signal handler for new users
+@receiver(models.signals.post_save, sender='auth.User')
+def create_profile_for_new_user(sender, instance, created=False, **kwargs):
+    if created is True and not hasattr(instance, 'profile'):
+        UserProfile.objects.create(user=instance)
 
 
 # Signal handler for new user profiles
