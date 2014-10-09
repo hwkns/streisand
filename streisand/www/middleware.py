@@ -12,6 +12,19 @@ from django.utils.http import urlquote
 from profiles.models import UserProfile
 
 
+class XForwardedForMiddleware:
+
+    def process_request(self, request):
+        try:
+            real_ip = request.META['HTTP_X_FORWARDED_FOR']
+        except KeyError:
+            pass
+        else:
+            # HTTP_X_FORWARDED_FOR can be a comma-separated list of IPs.
+            # Take just the first one.
+            request.META['REMOTE_ADDR'] = real_ip.split(',')[0]
+
+
 class LoginRequiredMiddleware:
     """
     Middleware that requires a user to be authenticated to view any page other
@@ -32,13 +45,13 @@ class LoginRequiredMiddleware:
         if not request.user.is_authenticated():
             if not request.path_info.startswith(self.LOGIN_EXEMPT_URL_PREFIXES):
                 redirect_path = '{login_url}?next={next_url}'.format(
-                    login_url = settings.LOGIN_URL,
-                    next_url = urlquote(request.get_full_path()),
+                    login_url=settings.LOGIN_URL,
+                    next_url=urlquote(request.get_full_path()),
                 )
                 return HttpResponseRedirect(redirect_path)
 
 
-class CachedUserAuthenticationMiddleware(object):
+class CachedUserAuthenticationMiddleware:
     """
     Middleware that caches request.user for a session so it doesn't have to be
     looked up in the database for every page load.
@@ -88,8 +101,10 @@ class CachedUserAuthenticationMiddleware(object):
                 # On a cache miss, get the user and cache it
                 if user is None:
                     user = get_user(request)
-                    if hasattr(user, 'profile'):
+                    try:
                         user.profile
+                    except UserProfile.DoesNotExist:
+                        pass
                     cache.set(key, user)
 
                 request._cached_user = user
