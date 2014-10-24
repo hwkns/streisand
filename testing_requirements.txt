@@ -1,7 +1,7 @@
-flake8==2.2.3
+flake8==2.2.5
 ipdb==0.8
-ipython==2.2.0
-requests==2.4.1
+ipython==2.3.0
+requests==2.4.3
 django-dynamic-fixture==1.8.0
 # Getting rid of deprecation warnings; upgrade when the next PyPI release is out
 #django-nose==1.2
