@@ -2,19 +2,21 @@
 
 from django_dynamic_fixture import G
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 
 from torrents.models import Torrent
 
-from profiles.models import UserProfile, TorrentStats
-from profiles.tasks import handle_announce
+from .models import TorrentStats
+from .tasks import handle_announce
 
 
 class TorrentStatsTests(TestCase):
 
     def setUp(self):
-        self.profile = G(UserProfile)
-        self.torrent = G(Torrent)
+        self.user = G(User)
+        self.profile = self.user.profile
+        self.torrent = G(Torrent, uploaded_by=self.profile)
 
     def upload(self, amount):
         handle_announce(
