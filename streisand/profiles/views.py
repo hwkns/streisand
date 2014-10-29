@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 
 from .models import UserProfile
 
 
-def index(request):
+def user_profile_index(request):
     return render(
         request=request,
-        template_name='profiles.html',
+        template_name='user_profile_index.html',
         dictionary={
             'profiles': UserProfile.objects.all(),
         }
@@ -21,22 +21,16 @@ def user_profile_redirect(request):
     return HttpResponseRedirect(profile.get_absolute_url())
 
 
-def user_profile(request, profile_id):
+def user_profile_details(request, profile_id):
 
-    try:
-        profile = UserProfile.objects.filter(
-            id=profile_id
-        ).select_related(
-            'user'
-        ).prefetch_related(
-            'torrent_stats'
-        ).get()
-    except UserProfile.DoesNotExist:
-        raise Http404
+    profile = get_object_or_404(
+        UserProfile.objects.select_related('user').prefetch_related('torrent_stats'),
+        id=profile_id,
+    )
 
     return render(
         request=request,
-        template_name='profile.html',
+        template_name='user_profile_details.html',
         dictionary={
             'profile': profile,
         },
