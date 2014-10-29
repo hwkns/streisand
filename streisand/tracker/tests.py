@@ -7,11 +7,11 @@ from urllib.parse import urlencode
 from django_dynamic_fixture import G
 
 from django.test import TestCase, RequestFactory
+from django.contrib.auth.models import User
 
-from profiles.models import UserProfile
-from tracker.models import Swarm, TorrentClient
-from tracker.views import AnnounceView
-from tracker.utils import unquote_to_hex
+from .models import Swarm, TorrentClient
+from .views import AnnounceView
+from .utils import unquote_to_hex
 
 
 @patch('tracker.views.handle_announce.delay')
@@ -21,7 +21,8 @@ class AnnounceHandlerTests(TestCase):
         self.factory = RequestFactory()
         self.announce_view = AnnounceView.as_view()
         self.swarm = G(Swarm, torrent_info_hash='894985f97cc25c246e37a07cd7c785993982a7cb')
-        self.profile = G(UserProfile)
+        self.user = G(User)
+        self.profile = self.user.profile
         self.client = G(TorrentClient, peer_id_prefix='-DE1360-', whitelisted=True)
         self.announce_data = {
             'info_hash': a2b_hex(self.swarm.torrent_info_hash),

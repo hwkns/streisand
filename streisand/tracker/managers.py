@@ -6,6 +6,27 @@ from django.core.cache import cache
 from django.db import models
 
 
+class SwarmManager(models.Manager):
+
+    PEER_LIST_CACHE_KEY = 'swarm_peers_{info_hash}'
+
+    def get_peer_list(self, info_hash):
+
+        cache_key = self.PEER_LIST_CACHE_KEY.format(info_hash=info_hash)
+
+        # Try to fetch the queryset from cache
+        peer_list = cache.get(cache_key)
+
+        if peer_list is None:
+
+            # Get the peer list from the database, and cache it
+            swarm = self.get(torrent_info_hash=info_hash)
+            peer_list = swarm.peers.all()
+            cache.set(cache_key, peer_list)
+
+        return peer_list
+
+
 class PeerQuerySet(models.QuerySet):
 
     def seeders(self):
@@ -18,6 +39,7 @@ class PeerQuerySet(models.QuerySet):
         return b''.join(
             [peer.compact_bytes_repr for peer in self.all()[:limit]]
         )
+
 
 class TorrentClientManager(models.Manager):
 

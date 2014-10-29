@@ -4,11 +4,13 @@ from django.db import models
 
 from django_extensions.db.fields import UUIDField
 
-from .managers import PeerQuerySet, TorrentClientManager
+from .managers import PeerQuerySet, TorrentClientManager, SwarmManager
 
 
 class Swarm(models.Model):
     torrent_info_hash = models.CharField(max_length=40, primary_key=True)
+
+    objects = SwarmManager()
 
     def __str__(self):
         return self.torrent_info_hash
