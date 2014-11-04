@@ -1,5 +1,6 @@
 flake8==2.2.5
 ipdb==0.8
+ipdbplugin==1.4
 ipython==2.3.0
 requests==2.4.3
 django-dynamic-fixture==1.8.0
