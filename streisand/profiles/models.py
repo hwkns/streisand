@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from django_extensions.db.fields import UUIDField
+
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models.aggregates import Sum
 from django.dispatch import receiver
 
-from django_extensions.db.fields import UUIDField
+from tracker.models import Peer
 
 
 class UserProfile(models.Model):
@@ -54,6 +57,19 @@ class UserProfile(models.Model):
             return 0.0
         else:
             return round(self.bytes_uploaded / self.bytes_downloaded, 3)
+
+    @property
+    def seeding_size(self):
+        seeding_size = Peer.objects.seeders().filter(
+            user_auth_key=self.auth_key_id,
+        ).aggregate(
+            Sum('swarm__torrent__size_in_bytes')
+        )['swarm__torrent__size_in_bytes__sum']
+
+        if seeding_size:
+            return seeding_size
+        else:
+            return 0
 
     def get_absolute_url(self):
         return reverse('user_profile', args=[self.id])
