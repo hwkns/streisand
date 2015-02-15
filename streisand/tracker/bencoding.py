@@ -1,35 +1,21 @@
 # -*- coding: utf-8 -*-
 
-import sys
-
-if sys.version_info[0] >= 3:
-    unicode = str
+import hashlib
+from binascii import b2a_hex
 
 
-def _bytes(some_str):
+def sha1(data):
     """
-    Convert a string (unicode) into UTF-8 bytes.
-
-    @rtype: bytes
+    Return the SHA-1 hash of the given data.
     """
-    if isinstance(some_str, bytes):
-        return some_str
-    else:
-        return some_str.encode('utf-8')
+    assert isinstance(data, (bytes, bytearray))
+    sha1_hash = hashlib.sha1()
+    sha1_hash.update(data)
+    return sha1_hash.digest()
 
 
-def _str(some_bytes):
-    """
-    Attempt to decode bytes into a unicode string using UTF-8.
-
-    Decoding cannot be guaranteed, so be careful.
-
-    @rtype: unicode
-    """
-    if isinstance(some_bytes, unicode):
-        return some_bytes
-    else:
-        return some_bytes.decode('utf-8')
+def info_hash_from_metadata_dict(metadata_dict):
+    return b2a_hex(sha1(bencode(metadata_dict['info'])))
 
 
 def bencode(thing):
@@ -46,13 +32,13 @@ def bencode(thing):
     @rtype: bytes
     """
     if isinstance(thing, int):
-        result = _bytes('i{thing}e'.format(thing=thing))
+        result = 'i{thing}e'.format(thing=thing).encode('utf-8')
 
-    elif isinstance(thing, unicode):
-        result = bencode(_bytes(thing))
+    elif isinstance(thing, str):
+        result = bencode(thing.encode('utf-8'))
 
     elif isinstance(thing, bytes):
-        result = _bytes(unicode(len(thing)))
+        result = str(len(thing)).encode('utf-8')
         result += b':'
         result += thing
 
@@ -210,8 +196,8 @@ class BDecoder(object):
 
         _res = self.data[_colon + 1:_colon + 1 + _len]
 
-        if self.decode_strings:
-            return _str(_res)
+        if self.decode_strings and not isinstance(_res, str):
+            return _res.decode('utf-8')
         else:
             return _res
 
