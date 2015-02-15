@@ -1,16 +1,18 @@
-Django==1.7.1
-Werkzeug==0.9.6
-celery==3.1.16
+Django==1.7.4
+Werkzeug==0.10.1
+celery==3.1.17
 django-debreach==1.1.0
-django-debug-toolbar==1.2.1
+# django-debug-toolbar==1.2.2
+-e git://github.com/tim-schilling/django-debug-toolbar.git@2ab2c8361f893fc171bba06d53a66fa7dc6f26a2#egg=debug_toolbar
 django-email-bandit==1.0
-django-extensions==1.4.4
-django-grappelli==2.6.2
+django-extensions==1.5.0
+django-grappelli==2.6.3
 django-picklefield==0.3.1
-django-redis==3.7.1
+django-redis==3.8.2
 django-su==0.4.7
-jsonfield==1.0.0
-kombu==3.0.23
+jsonfield==1.0.2
+kombu==3.0.24
+pytz>=2014.10
 redis==2.10.3
-six==1.8.0
-uWSGI==2.0.7
+six==1.9.0
+uWSGI==2.0.9
