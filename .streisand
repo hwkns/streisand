@@ -1,6 +1,13 @@
-#!/bin/bash
+### This file is sourced when you run vagrant ssh
 
-# This file is sourced into vagrant's .bashrc file
+
+
+### Warnings to ignore
+export PYTHONWARNINGS="ignore::PendingDeprecationWarning"
+
+
+
+### Aliases
 
 alias start_redis='screen -dmS redis redis-server'
 alias stop_redis='sudo killall redis-server'
@@ -23,5 +30,9 @@ alias runserver='m runserver_plus 0.0.0.0:8000 --settings=streisand.settings.www
 alias runtracker='m runserver_plus 0.0.0.0:7070 --settings=streisand.settings.tracker_settings'
 alias delete_migrations='rm -f /home/vagrant/streisand/streisand/*/migrations/[0-9]*.py'
 alias clean_slate='m reset_db --noinput && delete_migrations && m makemigrations && m migrate && m loaddata dev'
+
+
+
+### Environment
 
 export STREISAND_DEBUG=True
