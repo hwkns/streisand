@@ -1,6 +1,5 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
 
 # C extensions
 *.so
@@ -13,7 +12,6 @@ build/
 develop-eggs/
 dist/
 eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -62,6 +60,7 @@ dump.rdb
 *.log
 *.pot
 streisand/db.sqlite3
+streisand/static/
 
 # Sockets
 *.sock
