@@ -25,6 +25,7 @@ INSTALLED_APPS += (
     'films',
     'film_lists',
     'invites',
+    'media_formats',
     'profiles',
     'torrents',
     'tracker',
@@ -159,6 +160,7 @@ if TESTING:
             'ddf_fixture': lambda: [],
         },
     }
+    DDF_FILL_NULLABLE_FIELDS = False
 
     # Make the tests faster by using a fast, insecure hashing algorithm
     PASSWORD_HASHERS = (
