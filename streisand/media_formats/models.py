@@ -3,33 +3,28 @@
 from django.db import models
 
 
-class Codec(models.Model):
+class MediaFormat(models.Model):
 
     name = models.CharField(max_length=64)
+
+    class Meta:
+        abstract = True
 
     def __str__(self):
         return '{name}'.format(name=self.name)
 
 
-class Container(models.Model):
-
-    name = models.CharField(max_length=64)
-
-    def __str__(self):
-        return '{name}'.format(name=self.name)
+class Codec(MediaFormat):
+    pass
 
 
-class Resolution(models.Model):
-
-    name = models.CharField(max_length=64)
-
-    def __str__(self):
-        return '{name}'.format(name=self.name)
+class Container(MediaFormat):
+    pass
 
 
-class SourceMedia(models.Model):
+class Resolution(MediaFormat):
+    pass
 
-    name = models.CharField(max_length=64)
 
-    def __str__(self):
-        return '{name}'.format(name=self.name)
+class SourceMedia(MediaFormat):
+    pass
