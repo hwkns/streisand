@@ -27,6 +27,7 @@ INSTALLED_APPS += (
     'invites',
     'media_formats',
     'profiles',
+    'torrent_requests',
     'torrents',
     'tracker',
     'www',

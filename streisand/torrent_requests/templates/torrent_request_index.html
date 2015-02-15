@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Requests{% endblock %}
+
+{% block main %}
+    <div class="page-header">
+      <h1>Requests</h1>
+    </div>
+
+    <ul>
+      {% for torrent_request in torrent_requests %}
+        <li><a href="{{ torrent_request.get_absolute_url }}">{{ torrent_request }}</a></li>
+      {% endfor %}
+    </ul>
+{% endblock %}

@@ -40,6 +40,7 @@
             <li><a href="/">Home</a></li>
             <li><a href="{% url 'film_index' %}">Films</a></li>
             <li><a href="{% url 'film_list_index' %}">Lists</a></li>
+            <li><a href="{% url 'torrent_request_index' %}">Torrent Requests</a></li>
             {% if request.user.profile %}
             <li><a href="{% url 'user_profile' profile_id=request.user.profile.id %}">Profile ({{ request.user.profile.ratio }})</a></li>
             <li><a href="{% url 'logout' %}">Log out</a></li>
