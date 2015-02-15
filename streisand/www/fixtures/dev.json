@@ -61,7 +61,11 @@
             "info_hash": "894985f97cc25c246e37a07cd7c785993982a7cb",
             "film": 1,
             "swarm": "894985f97cc25c246e37a07cd7c785993982a7cb",
-            "uploaded_by": 1
+            "uploaded_by": 1,
+            "codec": 1,
+            "container": 1,
+            "resolution": 1,
+            "source_media": 1
         }
     },
     {
@@ -72,7 +76,11 @@
             "info_hash": "884985f97cc25c246e37a07cd7c785993982a7cb",
             "film": 1,
             "swarm": "884985f97cc25c246e37a07cd7c785993982a7cb",
-            "uploaded_by": 1
+            "uploaded_by": 1,
+            "codec": 1,
+            "container": 1,
+            "resolution": 1,
+            "source_media": 1
         }
     },
     {
@@ -138,6 +146,174 @@
             "bytes_uploaded": 0,
             "bytes_downloaded": 0,
             "log_successful_announces": true
+        }
+    },
+    {
+        "pk": 1,
+        "model": "media_formats.container",
+        "fields": {
+            "name": "AVI"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "media_formats.container",
+        "fields": {
+            "name": "MKV"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "media_formats.resolution",
+        "fields": {
+            "name": "480p"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "media_formats.resolution",
+        "fields": {
+            "name": "576p"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "media_formats.resolution",
+        "fields": {
+            "name": "720p"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "media_formats.resolution",
+        "fields": {
+            "name": "1080p"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "media_formats.resolution",
+        "fields": {
+            "name": "1080i"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "media_formats.codec",
+        "fields": {
+            "name": "x264"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "media_formats.codec",
+        "fields": {
+            "name": "Xvid"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "media_formats.codec",
+        "fields": {
+            "name": "H.264"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "media_formats.codec",
+        "fields": {
+            "name": "DivX"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "media_formats.codec",
+        "fields": {
+            "name": "AVC"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "media_formats.codec",
+        "fields": {
+            "name": "VC-1"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "media_formats.codec",
+        "fields": {
+            "name": "MPEG-2"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "media_formats.codec",
+        "fields": {
+            "name": "DVDR"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "media_formats.sourcemedia",
+        "fields": {
+            "name": "Blu-ray"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "media_formats.sourcemedia",
+        "fields": {
+            "name": "HD-DVD"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "media_formats.sourcemedia",
+        "fields": {
+            "name": "HDTV"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "media_formats.sourcemedia",
+        "fields": {
+            "name": "WEB-DL"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "media_formats.sourcemedia",
+        "fields": {
+            "name": "DVD"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "media_formats.sourcemedia",
+        "fields": {
+            "name": "R5"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "media_formats.sourcemedia",
+        "fields": {
+            "name": "Screener"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "media_formats.sourcemedia",
+        "fields": {
+            "name": "CAM (TS)"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "media_formats.sourcemedia",
+        "fields": {
+            "name": "Other"
         }
     },
     {

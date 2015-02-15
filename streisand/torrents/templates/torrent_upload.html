@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Torrent Upload{% endblock %}
+
+{% block main %}
+    <div class="page-header">
+      <h1>Torrent Upload</h1>
+    </div>
+
+    <form action="{% url 'torrent_upload' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="Upload" /></p>
+    </form>
+{% endblock %}
