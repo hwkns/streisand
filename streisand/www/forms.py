@@ -14,13 +14,13 @@ class RegistrationForm(forms.ModelForm):
         'password_mismatch': "The two password fields didn't match.",
     }
 
-    username = forms.RegexField(label="Username", max_length=30,
+    username = forms.RegexField(
+        label="Username",
+        max_length=30,
         regex=r'^[\w.@+-]+$',
-        help_text="Required. 30 characters or fewer. Letters, digits and "
-                  "@/./+/-/_ only.",
+        help_text="Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.",
         error_messages={
-            'invalid': "This value may contain only letters, numbers and "
-                       "@/./+/-/_ characters."
+            'invalid': "This value may contain only letters, numbers and @/./+/-/_ characters."
         }
     )
     password1 = forms.CharField(
