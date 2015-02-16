@@ -3,8 +3,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
 
-from torrents.models import Torrent
-
 
 class TorrentRequest(models.Model):
 
