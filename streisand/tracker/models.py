@@ -90,6 +90,3 @@ class TorrentClient(models.Model):
 
     def __str__(self):
         return self.name
-
-    def __repr__(self):
-        return 'TorrentClient <{client}>'.format(client=self.__str__())
