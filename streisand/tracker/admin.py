@@ -12,8 +12,14 @@ class TorrentClientAdmin(admin.ModelAdmin):
         'peer_id_prefix',
         'whitelisted',
     )
+
     list_filter = (
         'whitelisted',
+    )
+
+    search_fields = (
+        'name',
+        'peer_id_prefix',
     )
 
 
