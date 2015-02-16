@@ -1,0 +1,2 @@
+app_path: /var/www/streisand
+virtualenv_path: /home/vagrant/.venv

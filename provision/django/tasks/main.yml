@@ -1,0 +1,38 @@
+- name: add redis repos
+  sudo: yes
+  apt_repository: repo='ppa:chris-lea/redis-server' state=present
+
+- name: source env setup on ssh
+  lineinfile: dest={{ userhome }}/.bashrc line=". {{ app_path }}/.streisand"
+
+- name: install system packages
+  sudo: yes
+  apt: pkg={{ item }} state=installed update_cache=yes
+  with_items:
+      - git                     # to check out code from github
+      - python-virtualenv       # to create the virtualenv
+      - python3-dev             # for compiling pip packages
+      - nginx-full              # nginx
+      - redis-server            # redis
+      - libpq-dev               # for psycopg2
+      - libpcre3                # for uWSGI
+      - libpcre3-dev            # for uWSGI
+
+- name: create virtualenv with python3
+  shell: virtualenv {{ virtualenv_path }} -p python3
+
+- name: install requirements to virtualenv
+  pip: virtualenv={{ virtualenv_path }} requirements={{ app_path }}/requirements.txt
+
+- name: install testing requirements to virtualenv
+  pip: virtualenv={{ virtualenv_path }} requirements={{ app_path }}/testing_requirements.txt
+
+- name: remove default nginx site
+  sudo: yes
+  file: path=/etc/nginx/sites-enabled/default state=absent force=yes
+
+- name: add streisand nginx site symlink
+  sudo: yes
+  file: src={{ app_path }}/nginx.conf dest=/etc/nginx/sites-enabled/streisand state=link force=yes
+  notify:
+      - Restart nginx

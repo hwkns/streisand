@@ -24,17 +24,24 @@ os = (
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.forward_agent = true
-  config.vm.box_check_update = true
-  config.vm.box = "streisand"
-  config.vm.box_url = "file://./trusty64.box"
+  config.vm.box = "ubuntu/trusty64"
   config.vm.network "private_network", ip: "10.1.2.200"
   config.vm.network :forwarded_port, host: 7070, guest: 7070
   config.vm.network :forwarded_port, host: 8000, guest: 8000
 
   if os == :macosx || os == :linux
-    config.vm.synced_folder ".", "/home/vagrant/streisand", :id => "vagrant-root", :nfs => true
+    config.vm.synced_folder ".", "/var/www/streisand", :id => "vagrant-root", :nfs => true
   else
-    config.vm.synced_folder ".", "/home/vagrant/streisand", :id => "vagrant-root"
+    config.vm.synced_folder ".", "/var/www/streisand", :id => "vagrant-root"
   end
   config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+    v.cpus = 4
+  end
+
+  config.vm.provision "ansible" do |ansible|
+        ansible.playbook = "provision/vagrant.yml"
+  end
 end
