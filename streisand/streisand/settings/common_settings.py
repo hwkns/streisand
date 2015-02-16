@@ -28,7 +28,9 @@ SECRET_KEY = os.environ.get('STREISAND_SECRET_KEY', 'you_deserve_to_be_pwned')
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+]
 KEY_PREFIX = 'auth_key'
 
 MIDDLEWARE_CLASSES = ()
