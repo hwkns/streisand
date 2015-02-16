@@ -6,4 +6,6 @@ install:
     - "pip install -r testing_requirements.txt"
 script:
     - "flake8 . --exclude=migrations --ignore=E501,F403"
+    - "./streisand/manage.py makemigrations"
+    - "./streisand/manage.py migrate"
     - "./streisand/manage.py test"
