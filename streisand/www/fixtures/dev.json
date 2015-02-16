@@ -12,6 +12,7 @@
         "model": "films.film",
         "fields": {
             "title": "Pulp Fiction",
+            "year": 1994,
             "imdb_id": "tt0110912",
             "tmdb_id": 680,
             "poster_url": "https://image.tmdb.org/t/p/w500/dM2w364MScsjFf8pfMbaWUcWrR.jpg",
@@ -27,6 +28,7 @@
         "model": "films.film",
         "fields": {
             "title": "Inglourious Basterds",
+            "year": 2009,
             "imdb_id": "tt0361748",
             "tmdb_id": 16869,
             "poster_url": "https://image.tmdb.org/t/p/w500/vDwqPyhkzFPRDmwz9KbzN2ouEPe.jpg",
