@@ -38,15 +38,20 @@ MIDDLEWARE_CLASSES += (
     'django.middleware.gzip.GZipMiddleware',
     'debreach.middleware.RandomCommentMiddleware',
     'debreach.middleware.CSRFCryptMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+)
+if DEBUG and not TESTING:
+    MIDDLEWARE_CLASSES += (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    )
+MIDDLEWARE_CLASSES += (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'www.middleware.CachedUserAuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'www.middleware.LoginRequiredMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'www.middleware.LoginRequiredMiddleware',
 )
 
 ROOT_URLCONF = 'www.urls'
