@@ -54,8 +54,8 @@ class TorrentUploadView(View):
 
     def get(self, request, *args, **kwargs):
 
-        form = TorrentUploadForm(uploader=request.user.profile)
-        return self._render(form)
+        torrent_upload_form = TorrentUploadForm(uploader=request.user.profile)
+        return self._render(torrent_upload_form)
 
     def post(self, request, *args, **kwargs):
 
