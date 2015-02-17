@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import json
 import logging
 
 from django.contrib.auth import authenticate, login
@@ -90,3 +91,7 @@ class RegistrationView(View):
             template_name=self.template_name,
             dictionary={'form': self.form},
         )
+
+
+def template_viewer(request, template_path):
+    return render(request, template_path, json.loads(request.GET.get('context', '{}')))

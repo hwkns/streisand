@@ -29,4 +29,6 @@ urlpatterns = patterns(
     url(r'^login/$', https_required(login), {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     url(r'^su/', include('django_su.urls')),
+
+    url(r'^templates/(?P<template_path>.*\.html)$', 'www.views.template_viewer', name='template_viewer')
 )
