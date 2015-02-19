@@ -11,6 +11,7 @@ from .managers import InviteManager
 class Invite(models.Model):
 
     owner = models.ForeignKey('profiles.UserProfile', related_name='invites')
+    email = models.EmailField(max_length=254, unique=True)
     key = UUIDField(auto=True, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
