@@ -63,8 +63,8 @@ DATABASE_URL = os.environ.get('DATABASE_URL', "sqlite:///{base_dir}/db.sqlite3".
 
 CELERY_ALWAYS_EAGER = TESTING
 CELERY_IGNORE_RESULT = True
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'pickle'
+CELERY_ACCEPT_CONTENT = ['pickle']
 BROKER_URL = REDIS_URL + '/0'
 BROKER_TRANSPORT_OPTIONS = {'fanout_patterns': True}
 
