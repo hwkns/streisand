@@ -2,8 +2,11 @@
 
 from django_extensions.db.fields import UUIDField
 
+from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import signals
 from django.db.models.aggregates import Sum
 from django.dispatch import receiver
 
@@ -11,6 +14,9 @@ from tracker.models import Peer
 
 
 class UserProfile(models.Model):
+
+    CACHE_KEY = 'user_profile:{user_id}'
+
     user = models.OneToOneField('auth.User', related_name='profile')
     auth_key = models.OneToOneField(
         'profiles.UserAuthKey',
@@ -179,3 +185,17 @@ class UserAnnounce(models.Model):
     new_bytes_downloaded = models.BigIntegerField(default=0, null=False)
     bytes_remaining = models.BigIntegerField(null=False)
     event = models.CharField(max_length=16, null=False)
+
+
+def invalidate_user_cache(sender, instance, **kwargs):
+    if sender == User:
+        key = UserProfile.CACHE_KEY.format(user_id=instance.id)
+    else:
+        key = UserProfile.CACHE_KEY.format(user_id=instance.user_id)
+    cache.delete(key)
+
+
+signals.post_save.connect(invalidate_user_cache, sender=User)
+signals.post_save.connect(invalidate_user_cache, sender=UserProfile)
+signals.post_delete.connect(invalidate_user_cache, sender=User)
+signals.post_delete.connect(invalidate_user_cache, sender=UserProfile)

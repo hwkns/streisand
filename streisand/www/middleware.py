@@ -3,9 +3,8 @@
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib.auth import SESSION_KEY, get_user
-from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
-from django.db.models import signals
 from django.utils.functional import SimpleLazyObject
 from django.utils.http import urlquote
 
@@ -59,33 +58,19 @@ class CachedUserAuthenticationMiddleware:
     Inspired by: https://github.com/ui/django-cached_authentication_middleware
     """
 
-    CACHE_KEY = 'cached_user_authentication_middleware:{user_id}'
-
-    def __init__(self):
-        signals.post_save.connect(self.invalidate_user_cache, sender=User)
-        signals.post_save.connect(self.invalidate_user_cache, sender=UserProfile)
-        signals.post_delete.connect(self.invalidate_user_cache, sender=User)
-        signals.post_delete.connect(self.invalidate_user_cache, sender=UserProfile)
-
     def process_request(self, request):
         request.user = SimpleLazyObject(
             lambda: self.get_cached_user_from_request(request)
         )
 
-    def invalidate_user_cache(self, sender, instance, **kwargs):
-        if isinstance(instance, User):
-            key = self.CACHE_KEY.format(user_id=instance.id)
-        else:
-            key = self.CACHE_KEY.format(user_id=instance.user_id)
-        cache.delete(key)
-
-    def get_cached_user_from_request(self, request):
+    @staticmethod
+    def get_cached_user_from_request(request):
 
         if not hasattr(request, '_cached_user'):
 
             try:
 
-                key = self.CACHE_KEY.format(
+                key = UserProfile.CACHE_KEY.format(
                     user_id=request.session[SESSION_KEY]
                 )
 
