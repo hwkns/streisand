@@ -18,6 +18,10 @@
       - libpcre3                # for uWSGI
       - libpcre3-dev            # for uWSGI
 
+- name: upgrade existing system packages
+  sudo: yes
+  apt: upgrade=yes
+
 - name: create virtualenv with python3
   shell: virtualenv {{ virtualenv_path }} -p python3
 
