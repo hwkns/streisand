@@ -49,6 +49,8 @@ def handle_announce(auth_key, info_hash, new_bytes_uploaded, new_bytes_downloade
     torrent.save()
 
     # Update the UserProfile
+    if bytes_remaining == 0:
+        profile.last_seeded = time_stamp
     profile.bytes_downloaded = F('bytes_downloaded') + new_bytes_downloaded
     profile.bytes_uploaded = F('bytes_uploaded') + new_bytes_uploaded
     profile.save()

@@ -26,7 +26,11 @@ class UserProfile(models.Model):
         editable=False,
         db_index=True,
     )
-    invited_by = models.ForeignKey('profiles.UserProfile', null=True)
+    invited_by = models.ForeignKey(
+        'profiles.UserProfile',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     bytes_uploaded = models.BigIntegerField(default=0)
     bytes_downloaded = models.BigIntegerField(default=0)
     torrents = models.ManyToManyField(
@@ -39,12 +43,19 @@ class UserProfile(models.Model):
         help_text="Use sparingly! This logs data from all successful "
                   "announces made by this user's torrent client(s).",
     )
+    last_seeded = models.DateTimeField(null=True)
     watch_queue = models.ForeignKey(
         'film_lists.FilmList',
         null=True,
         blank=True,
         editable=False,
+        on_delete=models.SET_NULL,
     )
+
+    class Meta:
+        permissions = (
+            ('can_invite', "Can invite new users"),
+        )
 
     def __str__(self):
         return self.username
@@ -106,8 +117,16 @@ class TorrentStats(models.Model):
     # we use an auto-generated UUIDField as the primary key.
     id = UUIDField(auto=True, primary_key=True, editable=False)
 
-    profile = models.ForeignKey('profiles.UserProfile', null=False, related_name='torrent_stats')
-    torrent = models.ForeignKey('torrents.Torrent', null=False)
+    profile = models.ForeignKey(
+        'profiles.UserProfile',
+        null=False,
+        related_name='torrent_stats',
+    )
+    torrent = models.ForeignKey(
+        'torrents.Torrent',
+        null=False,
+        related_name='torrent_stats',
+    )
     bytes_uploaded = models.BigIntegerField(default=0)
     bytes_downloaded = models.BigIntegerField(default=0)
     snatch_count = models.IntegerField(default=0)

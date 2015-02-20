@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Invites{% endblock %}
+
+{% block main %}
+    <div class="page-header">
+      <h1>Invites</h1>
+    </div>
+
+    <h2>Send an invite</h2>
+    <form action="." method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="Invite" /></p>
+    </form>
+
+    <hr/>
+
+    <h2>Outstanding invites</h2>
+    <ul>
+      {% for i in invites %}
+        <li>{{ i.key }} - {{ i.email }}</li>
+      {% endfor %}
+    </ul>
+{% endblock %}

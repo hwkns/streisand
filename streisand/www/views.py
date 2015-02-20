@@ -8,8 +8,6 @@ from django.http import Http404
 from django.views.generic import View
 from django.shortcuts import render, redirect
 
-from invites.models import Invite
-
 from .forms import RegistrationForm
 from .models import Feature
 
@@ -31,16 +29,7 @@ class RegistrationView(View):
 
     def dispatch(self, request, *args, **kwargs):
 
-        # Allow valid invite keys
-        if 'invite_key' in kwargs and Invite.objects.is_valid(kwargs['invite_key']):
-            self.invite_key = kwargs.pop('invite_key')
-
-        # Allow open registration with no invite key, when that feature is enabled
-        elif 'invite_key' not in kwargs and Feature.objects.is_enabled('open_registration'):
-            pass
-
-        # Everything else is a 404
-        else:
+        if not Feature.objects.is_enabled('open_registration'):
             raise Http404
 
         return super().dispatch(request, *args, **kwargs)
@@ -65,13 +54,7 @@ class RegistrationView(View):
                     )
                 )
 
-            new_user = self.form.save()
-
-            if self.invite_key:
-                invite = Invite.objects.get(key=self.invite_key)
-                new_user.profile.invited_by = invite.owner
-                new_user.profile.save()
-                invite.delete()
+            self.form.save()
 
             # Authenticate the newly registered user
             new_authenticated_user = authenticate(

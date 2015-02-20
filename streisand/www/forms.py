@@ -11,7 +11,7 @@ class RegistrationForm(forms.ModelForm):
 
     error_strings = {
         'duplicate_username': "A user with that username already exists.",
-        'password_mismatch': "The two password fields didn't match.",
+        'password_mismatch': "The two password fields did not match.",
     }
 
     username = forms.RegexField(
