@@ -71,11 +71,8 @@ class TorrentUploadView(View):
             try:
                 new_torrent = torrent_upload_form.save()
             except IntegrityError as e:
-                if all(word in str(e) for word in ('UNIQUE', 'info_hash')):
-                    torrent_upload_form.add_error(
-                        'torrent_file',
-                        'This torrent has already been uploaded'
-                    )
+                if 'unique' in str(e):
+                    torrent_upload_form.add_error('torrent_file', 'That torrent has already been uploaded')
                 else:
                     raise
             else:
