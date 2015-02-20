@@ -50,9 +50,7 @@ class AnnounceView(View):
         #
 
         # Fail if the auth_key is invalid
-        try:
-            UserProfile.objects.get(auth_key_id=auth_key)
-        except UserProfile.DoesNotExist:
+        if not UserProfile.objects.filter(auth_key_id=auth_key).exists():
             return self.failure('Invalid auth_key')
 
         # Fail if any required parameters are missing
@@ -245,12 +243,17 @@ class AnnounceView(View):
 
         if settings.DEBUG:
             return HttpResponse(
+                '<html>'
+                '<head><title>Announce</title></head>'
+                '<body>'
                 'Auth key: {auth_key}<br/>'
                 'IP: {ip}<br/>'
                 '<br/>Torrent: {torrent}<br/>'
                 '<br/>Peers: {peers}<br/>'
                 '<br/>Request params: <pre>{params}</pre><br/>'
-                '<br/>Response: <pre>{response_dict}</pre><br/>'.format(
+                '<br/>Response: <pre>{response_dict}</pre><br/>'
+                '</body>'
+                '</html>'.format(
                     auth_key=auth_key,
                     ip=ip_address,
                     torrent=swarm,

@@ -15,21 +15,11 @@ INSTALLED_APPS += (
 
     # Default apps
     'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
     # Local apps
-    'films',
-    'film_lists',
-    'invites',
-    'media_formats',
-    'profiles',
-    'torrent_requests',
-    'torrents',
-    'tracker',
     'www',
 
 )
@@ -58,17 +48,17 @@ ROOT_URLCONF = 'www.urls'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGIN_EXEMPT_URL_PREFIXES = {
+LOGIN_EXEMPT_URL_PREFIXES = (
     '/register/',
     '/logout/',
     '/__debug__/',
-}
+)
 
 AUTHENTICATION_BACKENDS = (
     # Case insensitive version of built-in Django auth
-    "www.auth.CaseInsensitiveAuthBackend",
+    'www.auth.CaseInsensitiveAuthBackend',
     # django-su
-    "django_su.backends.SuBackend",
+    'django_su.backends.SuBackend',
 )
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'

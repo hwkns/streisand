@@ -2,9 +2,19 @@
 
 from .common_settings import *
 
-INSTALLED_APPS += (
-    'tracker',
-)
+
+if DEBUG and not TESTING:
+    MIDDLEWARE_CLASSES += (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    )
+    INSTALLED_APPS += (
+        'django.contrib.staticfiles',
+        'debug_toolbar.apps.DebugToolbarConfig',
+    )
+    INTERNAL_IPS = (
+        '10.0.2.2',
+    )
+    STATIC_URL = '/static/'
 
 ROOT_URLCONF = 'tracker.urls'
 

@@ -35,14 +35,29 @@ KEY_PREFIX = 'auth_key'
 
 MIDDLEWARE_CLASSES = ()
 
-INSTALLED_APPS = ()
+INSTALLED_APPS = (
+
+    # Default apps
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+
+    # Local apps
+    'films',
+    'film_lists',
+    'invites',
+    'media_formats',
+    'profiles',
+    'torrent_requests',
+    'torrents',
+    'tracker',
+)
 
 if DEBUG and not TESTING:
     INSTALLED_APPS += (
         'bandit',
         'django_extensions',
     )
-    EMAIL_BACKEND = 'bandit.backends.smtp.HijackSMTPBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     BANDIT_EMAIL = os.environ.get('BANDIT_EMAIL')
 
 EMAIL_USE_TLS = True
@@ -50,18 +65,19 @@ EMAIL_PORT = 587
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'no-reply@localhost'
+DEFAULT_REPLY_TO_EMAIL = 'no-reply@localhost'
 
 LANGUAGE_CODE = 'en-us'
 USE_I18N = True
 USE_L10N = True
-
 USE_TZ = True
 TIME_ZONE = 'UTC'
 
 REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
 DATABASE_URL = os.environ.get('DATABASE_URL', "sqlite:///{base_dir}/db.sqlite3".format(base_dir=BASE_DIR))
 
-CELERY_ALWAYS_EAGER = TESTING
+CELERY_ALWAYS_EAGER = DEBUG
 CELERY_IGNORE_RESULT = True
 CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_ACCEPT_CONTENT = ['pickle']
@@ -92,3 +108,6 @@ else:
 DATABASES = {
     'default': dj_database_url.parse(DATABASE_URL)
 }
+
+SITE_NAME = 'streisand'
+BASE_URL = 'http://localhost:8000/'
