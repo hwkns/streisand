@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'torrent_requests',
     'torrents',
     'tracker',
+    'www',
 )
 
 if DEBUG and not TESTING:
