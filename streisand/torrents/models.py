@@ -25,10 +25,34 @@ class Torrent(models.Model):
 
     # Format information
     is_source = models.BooleanField(default=False)
-    source_media = models.ForeignKey('media_formats.SourceMedia', related_name='torrents')
-    resolution = models.ForeignKey('media_formats.Resolution', related_name='torrents')
-    codec = models.ForeignKey('media_formats.Codec', related_name='torrents')
-    container = models.ForeignKey('media_formats.Container', related_name='torrents')
+    source_media = models.ForeignKey(
+        'media_formats.SourceMedia',
+        related_name='torrents',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+    )
+    resolution = models.ForeignKey(
+        'media_formats.Resolution',
+        related_name='torrents',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+    )
+    codec = models.ForeignKey(
+        'media_formats.Codec',
+        related_name='torrents',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+    )
+    container = models.ForeignKey(
+        'media_formats.Container',
+        related_name='torrents',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+    )
 
     # BitTorrent information
     swarm = models.OneToOneField('tracker.Swarm', related_name='torrent')
