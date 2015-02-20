@@ -85,12 +85,12 @@ class CachedUserAuthenticationMiddleware:
 
                 # On a cache miss, get the user and cache it
                 if user is None:
+
                     user = get_user(request)
-                    try:
+
+                    if user.is_authenticated():
                         user.profile
-                    except UserProfile.DoesNotExist:
-                        pass
-                    cache.set(key, user)
+                        cache.set(key, user)
 
                 request._cached_user = user
 
