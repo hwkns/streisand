@@ -10,7 +10,7 @@ from django.utils.html import strip_tags
 
 
 def get_full_url(relative_url):
-    return urljoin(settings.BASE_URL, relative_url)
+    return urljoin(settings.SITE_URL, relative_url)
 
 
 def email(subject='', template='', context=None, from_email=None, reply_to=None, to=(), cc=(), bcc=()):

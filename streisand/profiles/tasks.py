@@ -12,7 +12,7 @@ from .models import UserProfile, TorrentStats, UserIPAddress
 
 
 @shared_task
-def handle_announce(auth_key, info_hash, new_bytes_uploaded, new_bytes_downloaded,
+def handle_announce(auth_key, swarm, new_bytes_uploaded, new_bytes_downloaded,
                     bytes_remaining, event, ip_address, port, peer_id, user_agent,
                     time_stamp):
     """
@@ -28,20 +28,34 @@ def handle_announce(auth_key, info_hash, new_bytes_uploaded, new_bytes_downloade
 
     # Get the profile and the torrent that correspond to this announce
     profile = UserProfile.objects.get(auth_key_id=auth_key)
-    torrent = Torrent.objects.get(info_hash=info_hash)
+    torrent = Torrent.objects.get(swarm=swarm)
 
-    # Create or update the relevant TorrentStats object
+    # Get the TorrentStats relationship, or create a new one
     (torrent_stats, created) = TorrentStats.objects.get_or_create(
         profile=profile,
         torrent=torrent,
     )
+
+    # Adjust upload and download based on multipliers
+    new_bytes_downloaded = int(
+        new_bytes_downloaded
+        * torrent.download_multiplier
+        * torrent_stats.download_multiplier
+    )
+    new_bytes_uploaded = int(
+        new_bytes_uploaded
+        * torrent.upload_multiplier
+        * torrent_stats.upload_multiplier
+    )
+
+    # Update the TorrentStats
     torrent_stats.bytes_uploaded = F('bytes_uploaded') + new_bytes_uploaded
     torrent_stats.bytes_downloaded = F('bytes_downloaded') + new_bytes_downloaded
     if bytes_remaining == 0:
         torrent_stats.last_seeded = time_stamp
     torrent_stats.save()
 
-    # Update the torrent's timestamps
+    # Update the Torrent
     if bytes_remaining == 0:
         torrent.last_seeded = time_stamp
     if event == 'completed':
@@ -66,8 +80,8 @@ def handle_announce(auth_key, info_hash, new_bytes_uploaded, new_bytes_downloade
     if profile.log_successful_announces:
         profile.logged_announces.create(
             time_stamp=time_stamp,
+            swarm=swarm,
             auth_key=auth_key,
-            info_hash=info_hash,
             ip_address=ip_address,
             port=port,
             peer_id=peer_id,

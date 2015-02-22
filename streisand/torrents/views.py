@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
-
-from tracker.bencoding import bencode
 
 from .models import Torrent
 from .forms import TorrentUploadForm
@@ -35,22 +34,21 @@ def torrent_details(request, torrent_id):
     )
 
 
-def torrent_download(request, torrent_id):
-    torrent = get_object_or_404(Torrent, id=torrent_id)
-    content = bencode(torrent.metadata_dict)
-    response = HttpResponse(content, content_type='application/x-bittorrent')
-    response['Content-Disposition'] = 'attachment; filename={name}.torrent'.format(name=torrent.release_name)
-    return response
+class TorrentDownloadView(View):
+
+    def get(self, request, *args, **kwargs):
+        torrent = get_object_or_404(Torrent, id=kwargs['torrent_id'])
+        response = HttpResponse(
+            content=torrent.metainfo.for_user_download(request.user),
+            content_type='application/x-bittorrent'
+        )
+        response['Content-Disposition'] = 'attachment; filename={file_name}.torrent'.format(
+            file_name=torrent.release_name
+        )
+        return response
 
 
 class TorrentUploadView(View):
-
-    def dispatch(self, request, *args, **kwargs):
-
-        if request.user.has_perm('torrents.upload'):
-            return super(TorrentUploadView, self).dispatch(request, *args, **kwargs)
-        else:
-            return HttpResponseForbidden("You cannot upload torrents.")
 
     def get(self, request, *args, **kwargs):
 
@@ -58,6 +56,9 @@ class TorrentUploadView(View):
         return self._render(torrent_upload_form)
 
     def post(self, request, *args, **kwargs):
+
+        if not request.user.has_perm('torrents.can_upload'):
+            raise PermissionDenied("You cannot upload torrents.")
 
         torrent_upload_form = TorrentUploadForm(
             request.POST,

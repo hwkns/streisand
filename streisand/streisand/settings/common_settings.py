@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 import sys
 import json
+from urllib.parse import urljoin
 
 import dj_database_url
 
@@ -111,4 +112,6 @@ DATABASES = {
 }
 
 SITE_NAME = 'streisand'
-BASE_URL = 'http://localhost:8000/'
+SITE_URL = 'http://localhost:8000/'
+TRACKER_URL = 'http://localhost:7070/'
+ANNOUNCE_URL = urljoin(TRACKER_URL, '{auth_key}/announce')

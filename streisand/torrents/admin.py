@@ -8,7 +8,8 @@ from .models import Torrent
 class TorrentAdmin(admin.ModelAdmin):
 
     list_display = (
-        'info_hash',
+        'id',
+        'swarm',
         'film',
         'codec',
         'container',
@@ -18,14 +19,10 @@ class TorrentAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = (
-        'info_hash',
+        'swarm',
         'file_list',
         'last_seeded',
         'uploaded_by',
-    )
-
-    exclude = (
-        'swarm',
     )
 
     def get_queryset(self, request):

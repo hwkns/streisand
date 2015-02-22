@@ -11,7 +11,7 @@ from .models import TorrentStats
 from .tasks import handle_announce
 
 
-class TorrentStatsTests(TestCase):
+class TorrentAnnounceTests(TestCase):
 
     def setUp(self):
         self.user = G(User)
@@ -21,7 +21,7 @@ class TorrentStatsTests(TestCase):
     def upload(self, amount):
         handle_announce(
             auth_key=self.profile.auth_key_id,
-            info_hash=self.torrent.info_hash,
+            swarm=self.torrent.swarm,
             peer_id='baz',
             ip_address='0.0.0.0',
             port='1234',
@@ -40,3 +40,14 @@ class TorrentStatsTests(TestCase):
         self.upload(100)
         stats = TorrentStats.objects.get(profile=self.profile, torrent=self.torrent)
         self.assertEqual(stats.bytes_uploaded, 200)
+
+    def test_successful_announce_is_logged(self):
+        self.profile.log_successful_announces = True
+        self.profile.save()
+        self.upload(100)
+        log = self.profile.logged_announces.get()
+        self.assertEqual(log.auth_key, self.profile.auth_key_id)
+        self.assertEqual(log.swarm_id, self.torrent.swarm_id)
+        self.assertEqual(log.new_bytes_uploaded, 100)
+        self.assertEqual(log.new_bytes_downloaded, 0)
+        self.assertEqual(log.bytes_remaining, 0)

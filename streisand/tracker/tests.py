@@ -54,7 +54,7 @@ class AnnounceHandlerTests(TestCase):
         self.announce_view(request, auth_key=self.profile.auth_key_id)
         handler_mock.assert_called_once_with(
             auth_key=self.profile.auth_key_id,
-            info_hash=self.swarm.torrent_info_hash,
+            swarm=self.swarm,
             new_bytes_uploaded=422,
             new_bytes_downloaded=381,
             bytes_remaining=0,

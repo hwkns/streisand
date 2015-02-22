@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from decimal import Decimal
+
 from django.core.urlresolvers import reverse
 from django.db import models
 
 from picklefield import PickledObjectField
+
+from tracker.bencoding import bencode
 
 
 class Torrent(models.Model):
@@ -17,6 +21,8 @@ class Torrent(models.Model):
     encoded_by = models.ForeignKey('profiles.UserProfile', null=True, blank=True, related_name='encodes')
     last_seeded = models.DateTimeField(null=True)
     snatch_count = models.IntegerField(default=0)
+    download_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
+    upload_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
 
     # Release information
     release_name = models.CharField(max_length=1024)
@@ -55,22 +61,18 @@ class Torrent(models.Model):
     )
 
     # BitTorrent information
-    swarm = models.OneToOneField('tracker.Swarm', related_name='torrent')
-    info_hash = models.CharField(max_length=40, db_index=True)
-    metadata_dict = PickledObjectField(null=False)
+    swarm = models.OneToOneField('tracker.Swarm', related_name='torrent', db_index=True)
+    metainfo = models.OneToOneField('torrents.TorrentMetaInfo', related_name='torrent')
     file_list = PickledObjectField(null=False)
     size_in_bytes = models.BigIntegerField(null=False)
 
     class Meta:
         permissions = (
-            ('upload', "Can upload new torrents"),
+            ('can_upload', "Can upload new torrents"),
         )
 
     def __str__(self):
-        return self.info_hash
-
-    def __repr__(self):
-        return self.__str__()
+        return self.swarm_id
 
     def get_absolute_url(self):
         return reverse(
@@ -80,3 +82,20 @@ class Torrent(models.Model):
                 'torrent_id': self.id,
             }
         )
+
+
+class TorrentMetaInfo(models.Model):
+
+    dictionary = PickledObjectField(null=False)
+
+    @property
+    def for_user_download(self, user):
+
+        # Make sure the private flag is set
+        self.dictionary['info']['private'] = 1
+
+        # Set the announce url
+        self.dictionary['announce'] = user.profile.announce_url
+
+        # Return the bencoded version
+        return bencode(self.dictionary)

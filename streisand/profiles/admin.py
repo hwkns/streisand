@@ -9,6 +9,17 @@ class UserProfileAdmin(admin.ModelAdmin):
 
     list_display = (
         'user',
+        'invited_by_link',
+    )
+
+    readonly_fields = (
+        'user',
+        'invited_by_link',
+        'last_seeded',
+    )
+
+    exclude = (
+        'invited_by',
     )
 
     def get_queryset(self, request):
@@ -17,6 +28,12 @@ class UserProfileAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+    def invited_by_link(self, profile):
+        if profile.invited_by is not None:
+            return profile.invited_by.admin_link
+    invited_by_link.allow_tags = True
+    invited_by_link.short_description = "Invited by"
 
 
 class UserAuthKeyAdmin(admin.ModelAdmin):
@@ -40,11 +57,10 @@ class UserAuthKeyAdmin(admin.ModelAdmin):
         'used_with_profile__user__username',
     )
 
+    ordering = ['-used_since']
+
     def profile_link(self, user_auth_key):
-        return '<a href="{profile_url}">{username}</a>'.format(
-            profile_url=user_auth_key.used_with_profile.get_absolute_url(),
-            username=user_auth_key.used_with_profile.username,
-        )
+        return user_auth_key.used_with_profile.admin_link
     profile_link.allow_tags = True
 
 
@@ -72,10 +88,7 @@ class UserIPAddressAdmin(admin.ModelAdmin):
     )
 
     def profile_link(self, user_ip_address):
-        return '<a href="{profile_url}">{username}</a>'.format(
-            profile_url=user_ip_address.profile.get_absolute_url(),
-            username=user_ip_address.profile.username,
-        )
+        return user_ip_address.profile.admin_link
     profile_link.allow_tags = True
 
 
@@ -84,7 +97,7 @@ class UserAnnounceAdmin(admin.ModelAdmin):
     list_display = (
         'time_stamp',
         'auth_key',
-        'info_hash',
+        'swarm',
         'ip_address',
         'port',
         'peer_id',
@@ -93,6 +106,8 @@ class UserAnnounceAdmin(admin.ModelAdmin):
         'bytes_remaining',
         'event',
     )
+
+    ordering = ['-time_stamp']
 
 
 admin.site.register(UserProfile, UserProfileAdmin)

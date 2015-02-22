@@ -7,7 +7,7 @@
       <h1>Torrent {{ torrent.id }} ({{ torrent.size_in_bytes }})</h1>
     </div>
 
-    <p>info_hash: {{ torrent.info_hash }}</p>
+    <p>info_hash: {{ torrent.swarm_id }}</p>
     <p>Files:</p>
     <ul>
       {% for f in torrent.file_list %}

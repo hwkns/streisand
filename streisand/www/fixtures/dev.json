@@ -57,12 +57,26 @@
     },
     {
         "pk": 1,
+        "model": "torrents.torrentmetainfo",
+        "fields": {
+            "dictionary": {}
+        }
+    },
+    {
+        "pk": 2,
+        "model": "torrents.torrentmetainfo",
+        "fields": {
+            "dictionary": {}
+        }
+    },
+    {
+        "pk": 1,
         "model": "torrents.torrent",
         "fields": {
             "size_in_bytes": 4096,
-            "info_hash": "894985f97cc25c246e37a07cd7c785993982a7cb",
             "film": 1,
             "swarm": "894985f97cc25c246e37a07cd7c785993982a7cb",
+            "metainfo": 1,
             "uploaded_by": 1,
             "codec": 1,
             "container": 1,
@@ -75,9 +89,9 @@
         "model": "torrents.torrent",
         "fields": {
             "size_in_bytes": 2048,
-            "info_hash": "884985f97cc25c246e37a07cd7c785993982a7cb",
             "film": 1,
             "swarm": "884985f97cc25c246e37a07cd7c785993982a7cb",
+            "metainfo": 2,
             "uploaded_by": 1,
             "codec": 1,
             "container": 1,
@@ -144,6 +158,7 @@
         "model": "profiles.userprofile",
         "fields": {
             "user": 1,
+            "invited_by": 2,
             "auth_key": "16fd2706-8baf-433b-82eb-8c7fada847da",
             "bytes_uploaded": 0,
             "bytes_downloaded": 0,

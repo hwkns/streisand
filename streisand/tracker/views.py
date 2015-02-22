@@ -180,7 +180,9 @@ class AnnounceView(View):
         elif bytes_recently_uploaded < 0:
             raise Exception('Something strange is happening here...')
 
-        client.complete = (event == 'completed') or (bytes_left == 0)
+        if event == 'completed' and bytes_left != 0:
+            raise Exception('Something strange is happening here...')
+        client.complete = bytes_left == 0
 
         if event == 'started':
             # TODO: something?
@@ -200,7 +202,7 @@ class AnnounceView(View):
 
         handle_announce.delay(
             auth_key=auth_key,
-            info_hash=info_hash,
+            swarm=swarm,
             new_bytes_uploaded=bytes_recently_uploaded,
             new_bytes_downloaded=bytes_recently_downloaded,
             bytes_remaining=bytes_left,

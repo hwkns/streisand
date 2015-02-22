@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from decimal import Decimal
+
 from django_extensions.db.fields import UUIDField
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
@@ -69,6 +72,10 @@ class UserProfile(models.Model):
         return self.user.email
 
     @property
+    def announce_url(self):
+        return settings.ANNOUNCE_URL.format(auth_key=self.auth_key_id)
+
+    @property
     def ratio(self):
         if self.bytes_downloaded == 0:
             return 0.0
@@ -87,6 +94,13 @@ class UserProfile(models.Model):
             return seeding_size
         else:
             return 0
+
+    @property
+    def admin_link(self):
+        return '<a href="{profile_url}">{username}</a>'.format(
+            profile_url=reverse('admin:profiles_userprofile_change', args=[self.id]),
+            username=self.username,
+        )
 
     def get_absolute_url(self):
         return reverse('user_profile', args=[self.id])
@@ -127,6 +141,8 @@ class TorrentStats(models.Model):
         null=False,
         related_name='torrent_stats',
     )
+    download_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
+    upload_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
     bytes_uploaded = models.BigIntegerField(default=0)
     bytes_downloaded = models.BigIntegerField(default=0)
     snatch_count = models.IntegerField(default=0)
@@ -193,9 +209,13 @@ class UserAnnounce(models.Model):
         db_index=True,
         related_name='logged_announces',
     )
+    swarm = models.ForeignKey(
+        'tracker.Swarm',
+        null=False,
+        db_index=True,
+    )
     time_stamp = models.DateTimeField(null=False)
     auth_key = UUIDField(auto=False, null=False)
-    info_hash = models.CharField(max_length=40, db_index=True, null=False)
     ip_address = models.GenericIPAddressField(null=False)
     port = models.IntegerField(null=False)
     peer_id = models.CharField(max_length=40, null=False)

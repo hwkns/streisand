@@ -57,7 +57,6 @@ class TorrentUploadForm(forms.ModelForm):
             raise ValidationError('This is not a valid torrent file')
 
         self.instance.metadata_dict = self._scrub_metadata(metadata_dict)
-        self.instance.info_hash = info_hash_from_metadata_dict(self.instance.metadata_dict)
         self.instance.size_in_bytes = self._get_size()
         self.instance.file_list = self._get_file_list()
 
@@ -100,6 +99,8 @@ class TorrentUploadForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
 
+        info_hash = info_hash_from_metadata_dict(self.instance.metadata_dict)
+
         with transaction.atomic():
-            self.instance.swarm = Swarm.objects.create(torrent_info_hash=self.instance.info_hash)
+            self.instance.swarm = Swarm.objects.create(torrent_info_hash=info_hash)
             return super(TorrentUploadForm, self).save(*args, **kwargs)
