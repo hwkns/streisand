@@ -2,7 +2,7 @@
 
 from django.conf.urls import url, patterns
 
-from .views import TorrentUploadView
+from .views import TorrentUploadView, TorrentDownloadView
 
 
 urlpatterns = patterns(
@@ -10,5 +10,5 @@ urlpatterns = patterns(
     url(r'^$', 'torrent_index', name='torrent_index'),
     url(r'^(?P<torrent_id>\d+)/$', 'torrent_details', name='torrent_details'),
     url(r'^upload/$', TorrentUploadView.as_view(), name='torrent_upload'),
-    url(r'^download/(?P<torrent_id>\d+)/$', 'torrent_download', name='torrent_download'),
+    url(r'^download/(?P<torrent_id>\d+)/$', TorrentDownloadView.as_view(), name='torrent_download'),
 )
