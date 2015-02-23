@@ -2,11 +2,17 @@
 
 import json
 import logging
+import uuid
 
 from django.contrib.auth import authenticate, login
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.views.generic import View
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+
+from films.models import Film
+from film_lists.models import FilmList
+from profiles.models import UserProfile
+from torrents.models import Torrent
 
 from .forms import RegistrationForm
 from .models import Feature
@@ -74,6 +80,109 @@ class RegistrationView(View):
             template_name=self.template_name,
             dictionary={'form': self.form},
         )
+
+
+class LegacyURLView(View):
+    """
+    This view provides support for old URLs so users have time to
+    update their bookmarks.
+
+    Each section of the old site has its own method, which will
+    return a permanent redirect to the equivalent part of the new site.
+    """
+
+    def get(self, request, section):
+        if hasattr(self, section):
+            return getattr(self, section)(request)
+        else:
+            return redirect('home')
+
+    def forums(self, request):
+        pass
+
+    def inbox(self, request):
+        pass
+
+    def montage(self, request):
+
+        if 'id' not in request.GET:
+            return redirect('film_list_index')
+
+        film_list = get_object_or_404(FilmList, old_id=request.GET['id'])
+        return redirect(film_list)
+
+    def peoples(self, request):
+        pass
+
+    def queue(self, request):
+
+        if 'user' in request.GET:
+            profile = get_object_or_404(UserProfile, old_id=request.GET['user'])
+        else:
+            profile = request.user.profile
+        return redirect(profile.watch_queue)
+
+    def register(self, request):
+
+        if 'invite' not in request.GET:
+            return redirect('open_registration')
+
+        try:
+            invite_key = uuid.UUID(request.GET['invite'])
+        except ValueError:
+            raise Http404
+        else:
+            return redirect('invite_registration', invite_key=invite_key)
+
+    def requests(self, request):
+        pass
+
+    def reseed(self, request):
+        pass
+
+    def rules(self, request):
+        pass
+
+    def staffpm(self, request):
+        pass
+
+    def top10(self, request):
+        pass
+
+    def torrents(self, request):
+
+        if 'id' not in request.GET:
+            return redirect('film_index')
+
+        # Torrents
+        if 'torrentid' in request.GET:
+            try:
+                torrent = Torrent.objects.get(old_id=request.GET['torrentid'])
+            except Torrent.DoesNotExist:
+                pass
+            else:
+                return redirect(torrent)
+
+        # FilmLists
+        elif 'montage' in request.GET:
+            get_object_or_404(FilmList, old_id=request.GET['montage'])
+
+        # Films
+        film = get_object_or_404(Film, old_id=request.GET['id'])
+        return redirect(film)
+
+    def user(self, request):
+
+        if 'id' not in request.GET:
+            # TODO: torrent notifications?  https://tehconnection.eu/user.php?action=notify
+            return redirect('profile_index')
+
+        # UserProfiles
+        profile = get_object_or_404(UserProfile, old_id=request.GET['id'])
+        return redirect(profile)
+
+    def wiki(self, request):
+        pass
 
 
 def template_viewer(request, template_path):

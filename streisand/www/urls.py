@@ -7,12 +7,12 @@ from django.contrib.auth.views import login
 from invites.views import InviteRegistrationView
 
 from .decorators import https_required
-from .views import RegistrationView
+from .views import RegistrationView, LegacyURLView, template_viewer, home
 
 
 urlpatterns = patterns(
     '',
-    url(r'^$', 'www.views.home', name='home'),
+    url(r'^$', home, name='home'),
     url(r'^films/', include('films.urls')),
     url(r'^film-lists/', include('film_lists.urls')),
     url(r'^invites/', include('invites.urls')),
@@ -34,5 +34,8 @@ urlpatterns = patterns(
     url(r'^su/', include('django_su.urls')),
 
     # Utils
-    url(r'^templates/(?P<template_path>.*\.html)$', 'www.views.template_viewer', name='template_viewer')
+    url(r'^templates/(?P<template_path>.*\.html)$', template_viewer, name='template_viewer'),
+
+    # Legacy
+    url(r'^(?P<section>.+)\.php$', LegacyURLView.as_view(), name='legacy_url')
 )
