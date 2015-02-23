@@ -40,8 +40,7 @@ def film_details(request, film_id, torrent_id=None):
     if torrent_id is not None:
         torrent_id = int(torrent_id)
 
-    return render(
-        request=request,
+    return render_to_response(
         template_name='film_details.html',
         dictionary={
             'film': film,
