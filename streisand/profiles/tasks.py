@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from celery import shared_task
-from pytz import UTC
 
 from django.db.models import F
-from django.utils.timezone import datetime
 
 from torrents.models import Torrent
 
@@ -22,9 +20,6 @@ def handle_announce(auth_key, swarm, new_bytes_uploaded, new_bytes_downloaded,
     avoid concurrency problems.  If announce logging is turned on for this profile,
     this handler logs all the announce info.
     """
-
-    # De-serialize the timestamp into a UTC datetime object
-    time_stamp = datetime.fromtimestamp(time_stamp).replace(tzinfo=UTC)
 
     # Get the profile and the torrent that correspond to this announce
     profile = UserProfile.objects.get(auth_key_id=auth_key)

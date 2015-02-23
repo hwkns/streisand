@@ -211,7 +211,7 @@ class AnnounceView(View):
             port=port,
             peer_id=peer_id,
             user_agent=user_agent,
-            time_stamp=time_stamp.timestamp(),
+            time_stamp=time_stamp,
         )
 
         #
