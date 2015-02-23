@@ -20,6 +20,7 @@ class UserProfile(models.Model):
 
     CACHE_KEY = 'user_profile:{user_id}'
 
+    old_id = models.PositiveIntegerField(null=True, db_index=True)
     user = models.OneToOneField('auth.User', related_name='profile')
     auth_key = models.OneToOneField(
         'profiles.UserAuthKey',

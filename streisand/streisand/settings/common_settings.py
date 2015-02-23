@@ -52,6 +52,9 @@ INSTALLED_APPS = (
     'torrents',
     'tracker',
     'www',
+
+    # Import scripts
+    'import_scripts',
 )
 
 if DEBUG and not TESTING:
