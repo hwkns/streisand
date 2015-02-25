@@ -4,6 +4,7 @@ from django_dynamic_fixture import G
 
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.utils.timezone import now
 
 from torrents.models import Torrent
 
@@ -30,7 +31,7 @@ class TorrentAnnounceTests(TestCase):
             new_bytes_downloaded=0,
             bytes_remaining=0,
             event='',
-            time_stamp=0.0,
+            time_stamp=now(),
         )
 
     def test_announce_handler_tracks_uploaded_data(self):
