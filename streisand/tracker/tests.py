@@ -46,14 +46,14 @@ class AnnounceHandlerTests(TestCase):
 
     def test_announce_handler_called__proper_announce(self, handler_mock):
         request = self.announce_request()
-        self.announce_view(request, auth_key=self.profile.auth_key_id)
+        self.announce_view(request, announce_key=self.profile.announce_key_id)
         self.assertTrue(handler_mock.called)
 
     def test_announce_handler_called_with_correct_arguments(self, handler_mock):
         request = self.announce_request()
-        self.announce_view(request, auth_key=self.profile.auth_key_id)
+        self.announce_view(request, announce_key=self.profile.announce_key_id)
         handler_mock.assert_called_once_with(
-            auth_key=self.profile.auth_key_id,
+            announce_key=self.profile.announce_key_id,
             swarm=self.swarm,
             new_bytes_uploaded=422,
             new_bytes_downloaded=381,
@@ -66,61 +66,61 @@ class AnnounceHandlerTests(TestCase):
             time_stamp=ANY,
         )
 
-    def test_announce_handler_not_called__bad_auth_key(self, handler_mock):
+    def test_announce_handler_not_called__bad_announce_key(self, handler_mock):
         request = self.announce_request()
-        self.announce_view(request, auth_key='ffffffff-ffff-ffff-ffff-ffffffffffff')
+        self.announce_view(request, announce_key='ffffffff-ffff-ffff-ffff-ffffffffffff')
         self.assertFalse(handler_mock.called)
 
     def test_announce_handler_not_called__bad_info_hash(self, handler_mock):
         self.announce_data.update({'info_hash': 'ffffffffffffffffffff'})
         request = self.announce_request()
-        self.announce_view(request, auth_key=self.profile.auth_key_id)
+        self.announce_view(request, announce_key=self.profile.announce_key_id)
         self.assertFalse(handler_mock.called)
 
     def test_announce_handler_not_called__non_compact(self, handler_mock):
         self.announce_data.update({'compact': '0'})
         request = self.announce_request()
-        self.announce_view(request, auth_key=self.profile.auth_key_id)
+        self.announce_view(request, announce_key=self.profile.announce_key_id)
         self.assertFalse(handler_mock.called)
 
     def test_announce_handler_not_called__non_whitelisted_peer_id(self, handler_mock):
         self.announce_data.update({'peer_id': '-FFFFFF-FFFFFFFFFFFF'})
         request = self.announce_request()
-        self.announce_view(request, auth_key=self.profile.auth_key_id)
+        self.announce_view(request, announce_key=self.profile.announce_key_id)
         self.assertFalse(handler_mock.called)
 
     def test_announce_handler_not_called__missing_info_hash(self, handler_mock):
         del self.announce_data['info_hash']
         request = self.announce_request()
-        self.announce_view(request, auth_key=self.profile.auth_key_id)
+        self.announce_view(request, announce_key=self.profile.announce_key_id)
         self.assertFalse(handler_mock.called)
 
     def test_announce_handler_not_called__missing_peer_id(self, handler_mock):
         del self.announce_data['peer_id']
         request = self.announce_request()
-        self.announce_view(request, auth_key=self.profile.auth_key_id)
+        self.announce_view(request, announce_key=self.profile.announce_key_id)
         self.assertFalse(handler_mock.called)
 
     def test_announce_handler_not_called__missing_port(self, handler_mock):
         del self.announce_data['port']
         request = self.announce_request()
-        self.announce_view(request, auth_key=self.profile.auth_key_id)
+        self.announce_view(request, announce_key=self.profile.announce_key_id)
         self.assertFalse(handler_mock.called)
 
     def test_announce_handler_not_called__missing_uploaded(self, handler_mock):
         del self.announce_data['uploaded']
         request = self.announce_request()
-        self.announce_view(request, auth_key=self.profile.auth_key_id)
+        self.announce_view(request, announce_key=self.profile.announce_key_id)
         self.assertFalse(handler_mock.called)
 
     def test_announce_handler_not_called__missing_downloaded(self, handler_mock):
         del self.announce_data['downloaded']
         request = self.announce_request()
-        self.announce_view(request, auth_key=self.profile.auth_key_id)
+        self.announce_view(request, announce_key=self.profile.announce_key_id)
         self.assertFalse(handler_mock.called)
 
     def test_announce_handler_not_called__missing_left(self, handler_mock):
         del self.announce_data['left']
         request = self.announce_request()
-        self.announce_view(request, auth_key=self.profile.auth_key_id)
+        self.announce_view(request, announce_key=self.profile.announce_key_id)
         self.assertFalse(handler_mock.called)

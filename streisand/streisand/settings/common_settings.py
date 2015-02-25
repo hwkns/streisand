@@ -32,7 +32,6 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
 ]
-KEY_PREFIX = 'auth_key'
 
 MIDDLEWARE_CLASSES = ()
 
@@ -102,8 +101,6 @@ else:
             'BACKEND': 'django_redis.cache.RedisCache',
             'LOCATION': REDIS_URL + '/1',
             'TIMEOUT': None,
-            'KEY_PREFIX': 'auth_key',
-            'KEY_FUNCTION': 'tracker.cache.make_auth_key',
             'OPTIONS': {
                 'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             }
@@ -117,4 +114,3 @@ DATABASES = {
 SITE_NAME = 'streisand'
 SITE_URL = 'http://localhost:8000/'
 TRACKER_URL = 'http://localhost:7070/'
-ANNOUNCE_URL = urljoin(TRACKER_URL, '{auth_key}/announce')

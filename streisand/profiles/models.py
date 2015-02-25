@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from decimal import Decimal
+from urllib.parse import urljoin
 
 from django_extensions.db.fields import UUIDField
 
@@ -22,8 +23,8 @@ class UserProfile(models.Model):
 
     old_id = models.PositiveIntegerField(null=True, db_index=True)
     user = models.OneToOneField('auth.User', related_name='profile')
-    auth_key = models.OneToOneField(
-        'profiles.UserAuthKey',
+    announce_key = models.OneToOneField(
+        'profiles.UserAnnounceKey',
         related_name='profile',
         null=True,
         default=None,
@@ -74,7 +75,10 @@ class UserProfile(models.Model):
 
     @property
     def announce_url(self):
-        return settings.ANNOUNCE_URL.format(auth_key=self.auth_key_id)
+        return urljoin(
+            settings.TRACKER_URL,
+            reverse('announce', kwargs={'announce_key': self.announce_key_id})
+        )
 
     @property
     def ratio(self):
@@ -86,7 +90,7 @@ class UserProfile(models.Model):
     @property
     def seeding_size(self):
         seeding_size = Peer.objects.seeders().filter(
-            user_auth_key=self.auth_key_id,
+            user_announce_key=self.announce_key_id,
         ).aggregate(
             Sum('swarm__torrent__size_in_bytes')
         )['swarm__torrent__size_in_bytes__sum']
@@ -106,8 +110,8 @@ class UserProfile(models.Model):
     def get_absolute_url(self):
         return reverse('user_profile', args=[self.id])
 
-    def reset_auth_key(self):
-        self.auth_key = self.auth_keys.create()
+    def reset_announce_key(self):
+        self.announce_key = self.announce_keys.create()
         self.save()
 
 
@@ -120,9 +124,9 @@ def create_profile_for_new_user(sender, instance, created=False, **kwargs):
 
 # Signal handler for new user profiles
 @receiver(models.signals.post_save, sender='profiles.UserProfile')
-def set_auth_key_for_new_user_profile(sender, instance, created=False, **kwargs):
-    if created is True and instance.auth_key is None:
-        instance.reset_auth_key()
+def set_announce_key_for_new_user_profile(sender, instance, created=False, **kwargs):
+    if created is True and instance.announce_key is None:
+        instance.reset_announce_key()
 
 
 class TorrentStats(models.Model):
@@ -175,23 +179,20 @@ class UserIPAddress(models.Model):
         index_together = ['profile', 'ip_address', 'used_with']
 
 
-class UserAuthKey(models.Model):
+class UserAnnounceKey(models.Model):
     """
     Used to keep a history of auth keys used by a profile.
     """
     id = UUIDField(auto=True, primary_key=True)
     used_with_profile = models.ForeignKey(
         'profiles.UserProfile',
-        related_name='auth_keys',
+        related_name='announce_keys',
         db_index=True,
     )
     used_since = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.id
-
-    def __repr__(self):
-        return self.__str__()
 
 
 class UserAnnounce(models.Model):
@@ -216,7 +217,7 @@ class UserAnnounce(models.Model):
         db_index=True,
     )
     time_stamp = models.DateTimeField(null=False)
-    auth_key = UUIDField(auto=False, null=False)
+    announce_key = UUIDField(auto=False, null=False)
     ip_address = models.GenericIPAddressField(null=False)
     port = models.IntegerField(null=False)
     peer_id = models.CharField(max_length=40, null=False)

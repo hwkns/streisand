@@ -30,7 +30,7 @@ class Peer(models.Model):
     id = UUIDField(auto=True, primary_key=True, editable=False)
 
     swarm = models.ForeignKey(Swarm, null=False, db_index=True, related_name='peers')
-    user_auth_key = models.CharField(max_length=36, null=False)
+    user_announce_key = models.CharField(max_length=36, null=False)
     ip_address = models.GenericIPAddressField(null=False)
     port = models.IntegerField(null=False)
     peer_id = models.CharField(max_length=40, null=False)
@@ -56,8 +56,8 @@ class Peer(models.Model):
 
     class Meta:
         # If a client restarts, all of these might be the same, except for peer_id
-        unique_together = ['swarm', 'user_auth_key', 'ip_address', 'port', 'peer_id']
-        index_together = ['swarm', 'user_auth_key', 'ip_address', 'port', 'peer_id']
+        unique_together = ['swarm', 'user_announce_key', 'ip_address', 'port', 'peer_id']
+        index_together = ['swarm', 'user_announce_key', 'ip_address', 'port', 'peer_id']
 
     def __str__(self):
         return '{ip}:{port}'.format(

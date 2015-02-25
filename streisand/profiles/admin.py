@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from .models import UserProfile, UserAuthKey, UserIPAddress, UserAnnounce
+from .models import UserProfile, UserAnnounceKey, UserIPAddress, UserAnnounce
 
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -36,7 +36,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     invited_by_link.short_description = "Invited by"
 
 
-class UserAuthKeyAdmin(admin.ModelAdmin):
+class UserAnnounceKeyAdmin(admin.ModelAdmin):
 
     list_display = (
         'id',
@@ -59,8 +59,8 @@ class UserAuthKeyAdmin(admin.ModelAdmin):
 
     ordering = ['-used_since']
 
-    def profile_link(self, user_auth_key):
-        return user_auth_key.used_with_profile.admin_link
+    def profile_link(self, announce_key):
+        return announce_key.used_with_profile.admin_link
     profile_link.allow_tags = True
 
 
@@ -96,7 +96,7 @@ class UserAnnounceAdmin(admin.ModelAdmin):
 
     list_display = (
         'time_stamp',
-        'auth_key',
+        'announce_key',
         'swarm',
         'ip_address',
         'port',
@@ -111,6 +111,6 @@ class UserAnnounceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(UserAuthKey, UserAuthKeyAdmin)
+admin.site.register(UserAnnounceKey, UserAnnounceKeyAdmin)
 admin.site.register(UserIPAddress, UserIPAddressAdmin)
 admin.site.register(UserAnnounce, UserAnnounceAdmin)

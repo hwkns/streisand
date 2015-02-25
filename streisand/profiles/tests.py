@@ -21,7 +21,7 @@ class TorrentAnnounceTests(TestCase):
 
     def upload(self, amount):
         handle_announce(
-            auth_key=self.profile.auth_key_id,
+            announce_key=self.profile.announce_key_id,
             swarm=self.torrent.swarm,
             peer_id='baz',
             ip_address='0.0.0.0',
@@ -47,7 +47,7 @@ class TorrentAnnounceTests(TestCase):
         self.profile.save()
         self.upload(100)
         log = self.profile.logged_announces.get()
-        self.assertEqual(log.auth_key, self.profile.auth_key_id)
+        self.assertEqual(log.announce_key, self.profile.announce_key_id)
         self.assertEqual(log.swarm_id, self.torrent.swarm_id)
         self.assertEqual(log.new_bytes_uploaded, 100)
         self.assertEqual(log.new_bytes_downloaded, 0)

@@ -147,7 +147,7 @@
     },
     {
         "pk": "16fd2706-8baf-433b-82eb-8c7fada847da",
-        "model": "profiles.userauthkey",
+        "model": "profiles.userannouncekey",
         "fields": {
             "used_with_profile": 1,
             "used_since": "2014-09-18T14:52:58.484Z"
@@ -159,7 +159,7 @@
         "fields": {
             "user": 1,
             "invited_by": 2,
-            "auth_key": "16fd2706-8baf-433b-82eb-8c7fada847da",
+            "announce_key": "16fd2706-8baf-433b-82eb-8c7fada847da",
             "bytes_uploaded": 0,
             "bytes_downloaded": 0,
             "log_successful_announces": true

@@ -43,15 +43,15 @@ class AnnounceView(View):
         'left',
     }
 
-    def get(self, request, auth_key):
+    def get(self, request, announce_key):
 
         #
         # Short circuit bad requests
         #
 
-        # Fail if the auth_key is invalid
-        if not UserProfile.objects.filter(auth_key_id=auth_key).exists():
-            return self.failure('Invalid auth_key')
+        # Fail if the announce_key is invalid
+        if not UserProfile.objects.filter(announce_key_id=announce_key).exists():
+            return self.failure('Invalid announce_key')
 
         # Fail if any required parameters are missing
         if not self.REQUIRED_PARAMS <= request.GET.keys():
@@ -132,7 +132,7 @@ class AnnounceView(View):
         #        have no use for it
         #
         #    key - This doesn't give us anything we don't already
-        #        get from the auth_key
+        #        get from the announce_key
 
         #
         # Delete peers after two announce intervals have passed with no announce
@@ -150,7 +150,7 @@ class AnnounceView(View):
 
             # Fetch the client from the current peer list
             client = swarm.peers.get(
-                user_auth_key=auth_key,
+                user_announce_key=announce_key,
                 ip_address=ip_address,
                 port=port,
                 peer_id=peer_id,
@@ -160,7 +160,7 @@ class AnnounceView(View):
 
             # Add this client to the peer list
             client = swarm.peers.create(
-                user_auth_key=auth_key,
+                user_announce_key=announce_key,
                 ip_address=ip_address,
                 port=port,
                 peer_id=peer_id,
@@ -201,7 +201,7 @@ class AnnounceView(View):
         #
 
         handle_announce.delay(
-            auth_key=auth_key,
+            announce_key=announce_key,
             swarm=swarm,
             new_bytes_uploaded=bytes_recently_uploaded,
             new_bytes_downloaded=bytes_recently_downloaded,
@@ -248,7 +248,7 @@ class AnnounceView(View):
                 '<html>'
                 '<head><title>Announce</title></head>'
                 '<body>'
-                'Auth key: {auth_key}<br/>'
+                'Auth key: {announce_key}<br/>'
                 'IP: {ip}<br/>'
                 '<br/>Torrent: {torrent}<br/>'
                 '<br/>Peers: {peers}<br/>'
@@ -256,7 +256,7 @@ class AnnounceView(View):
                 '<br/>Response: <pre>{response_dict}</pre><br/>'
                 '</body>'
                 '</html>'.format(
-                    auth_key=auth_key,
+                    announce_key=announce_key,
                     ip=ip_address,
                     torrent=swarm,
                     peers=swarm.peers.all(),

@@ -10,7 +10,7 @@ from .models import UserProfile, TorrentStats, UserIPAddress
 
 
 @shared_task
-def handle_announce(auth_key, swarm, new_bytes_uploaded, new_bytes_downloaded,
+def handle_announce(announce_key, swarm, new_bytes_uploaded, new_bytes_downloaded,
                     bytes_remaining, event, ip_address, port, peer_id, user_agent,
                     time_stamp):
     """
@@ -22,7 +22,7 @@ def handle_announce(auth_key, swarm, new_bytes_uploaded, new_bytes_downloaded,
     """
 
     # Get the profile and the torrent that correspond to this announce
-    profile = UserProfile.objects.get(auth_key_id=auth_key)
+    profile = UserProfile.objects.get(announce_key_id=announce_key)
     torrent = Torrent.objects.get(swarm=swarm)
 
     # Get the TorrentStats relationship, or create a new one
@@ -76,7 +76,7 @@ def handle_announce(auth_key, swarm, new_bytes_uploaded, new_bytes_downloaded,
         profile.logged_announces.create(
             time_stamp=time_stamp,
             swarm=swarm,
-            auth_key=auth_key,
+            announce_key=announce_key,
             ip_address=ip_address,
             port=port,
             peer_id=peer_id,
