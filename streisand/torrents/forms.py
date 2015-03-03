@@ -4,10 +4,10 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
-from tracker.bencoding import bdecode, BencodeError, info_hash_from_metadata_dict
+from tracker.bencoding import bdecode, BencodeError, info_hash_from_metainfo_dict
 from tracker.models import Swarm
 
-from .models import Torrent
+from .models import Torrent, TorrentMetaInfo
 
 
 class TorrentUploadForm(forms.ModelForm):
@@ -43,6 +43,7 @@ class TorrentUploadForm(forms.ModelForm):
         uploader = kwargs.pop('uploader')
         super(TorrentUploadForm, self).__init__(*args, **kwargs)
         self.instance.uploaded_by = uploader
+        self.metainfo_dict = None
 
     def clean_torrent_file(self):
 
@@ -52,26 +53,26 @@ class TorrentUploadForm(forms.ModelForm):
             raise ValidationError('This is not a valid torrent file')
 
         try:
-            metadata_dict = bdecode(torrent_file.read())
+            metainfo_dict = bdecode(torrent_file.read())
         except BencodeError:
             raise ValidationError('This is not a valid torrent file')
 
-        self.instance.metadata_dict = self._scrub_metadata(metadata_dict)
+        self.metainfo_dict = self._scrub_metainfo(metainfo_dict)
         self.instance.size_in_bytes = self._get_size()
         self.instance.file_list = self._get_file_list()
 
         return torrent_file
 
-    def _scrub_metadata(self, metadata_dict):
+    def _scrub_metainfo(self, metainfo_dict):
 
         # Make sure the private flag is set
-        metadata_dict['info']['private'] = 1
+        metainfo_dict['info']['private'] = 1
 
         # Only save whitelisted fields
         return {
             k: v
             for (k, v)
-            in metadata_dict.items()
+            in metainfo_dict.items()
             if k in self.METADATA_KEY_WHITELIST
         }
 
@@ -80,7 +81,7 @@ class TorrentUploadForm(forms.ModelForm):
             [
                 file['length']
                 for file
-                in self.instance.metadata_dict['info']['files']
+                in self.metainfo_dict['info']['files']
             ]
         )
         if size_in_bytes == 0:
@@ -91,16 +92,17 @@ class TorrentUploadForm(forms.ModelForm):
         file_list = [
             '/'.join(file['path'])
             for file
-            in self.instance.metadata_dict['info']['files']
+            in self.metainfo_dict['info']['files']
         ]
-        if any([name.endswith(self.EXT_BLACKLIST) for name in file_list]):
+        if any(name.endswith(self.EXT_BLACKLIST) for name in file_list):
             raise ValidationError('This torrent includes files with blacklisted extensions')
         return file_list
 
     def save(self, *args, **kwargs):
 
-        info_hash = info_hash_from_metadata_dict(self.instance.metadata_dict)
+        info_hash = info_hash_from_metainfo_dict(self.metainfo_dict)
 
         with transaction.atomic():
             self.instance.swarm = Swarm.objects.create(torrent_info_hash=info_hash)
+            self.instance.metainfo = TorrentMetaInfo.objects.create(dictionary=self.metainfo_dict)
             return super(TorrentUploadForm, self).save(*args, **kwargs)

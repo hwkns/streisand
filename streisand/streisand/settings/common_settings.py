@@ -115,4 +115,4 @@ if not DEBUG:
 
 SITE_NAME = 'streisand'
 SITE_URL = 'http://localhost:8000/'
-TRACKER_URL = 'http://localhost:7070/'
+ANNOUNCE_URL_TEMPLATE = 'http://localhost:7070/{announce_key}/announce'

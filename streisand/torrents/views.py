@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 
+from profiles.models import UserProfile
+
 from .models import Torrent
 from .forms import TorrentUploadForm
 
@@ -36,14 +38,31 @@ def torrent_details(request, torrent_id):
 
 class TorrentDownloadView(View):
 
-    def get(self, request, *args, **kwargs):
-        torrent = get_object_or_404(Torrent, id=kwargs['torrent_id'])
+    def get(self, *args, **kwargs):
+
+        # Make sure we have a valid announce key
+        try:
+            profile = UserProfile.objects.get(announce_key_id=kwargs['announce_key'])
+        except UserProfile.DoesNotExist:
+            raise PermissionDenied
+
+        # Make sure the user can download torrents
+        if not profile.user.has_perm('torrents.can_download'):
+            raise PermissionDenied
+
+        # Make sure we have a valid torrent id
+        torrent = get_object_or_404(
+            Torrent.objects.select_related('metainfo'),
+            id=kwargs['torrent_id'],
+        )
+
+        # Respond with the customized torrent
         response = HttpResponse(
-            content=torrent.metainfo.for_user_download(request.user),
+            content=torrent.metainfo.for_user_download(profile),
             content_type='application/x-bittorrent'
         )
-        response['Content-Disposition'] = 'attachment; filename={file_name}.torrent'.format(
-            file_name=torrent.release_name
+        response['Content-Disposition'] = 'attachment; filename={release_name}.torrent'.format(
+            release_name=torrent.release_name
         )
         return response
 

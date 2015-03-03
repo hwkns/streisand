@@ -14,7 +14,7 @@ def sha1(data):
     return sha1_hash.digest()
 
 
-def info_hash_from_metadata_dict(metadata_dict):
+def info_hash_from_metainfo_dict(metadata_dict):
     return b2a_hex(sha1(bencode(metadata_dict['info'])))
 
 

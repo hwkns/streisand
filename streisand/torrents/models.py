@@ -68,6 +68,7 @@ class Torrent(models.Model):
 
     class Meta:
         permissions = (
+            ('can_leech', "Can leech torrents"),
             ('can_upload', "Can upload new torrents"),
         )
 
@@ -88,14 +89,16 @@ class TorrentMetaInfo(models.Model):
 
     dictionary = PickledObjectField(null=False)
 
-    @property
-    def for_user_download(self, user):
+    def __str__(self):
+        return str(self.torrent)
+
+    def for_user_download(self, user_profile):
 
         # Make sure the private flag is set
         self.dictionary['info']['private'] = 1
 
         # Set the announce url
-        self.dictionary['announce'] = user.profile.announce_url
+        self.dictionary['announce'] = user_profile.announce_url
 
         # Return the bencoded version
         return bencode(self.dictionary)
