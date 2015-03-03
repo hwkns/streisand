@@ -110,6 +110,9 @@ DATABASES = {
     'default': dj_database_url.parse(DATABASE_URL)
 }
 
+if not DEBUG:
+    DATABASES['default']['CONN_MAX_AGE'] = None
+
 SITE_NAME = 'streisand'
 SITE_URL = 'http://localhost:8000/'
 TRACKER_URL = 'http://localhost:7070/'
