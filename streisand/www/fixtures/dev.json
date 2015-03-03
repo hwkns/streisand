@@ -113,24 +113,6 @@
         "pk": 1,
         "model": "auth.user",
         "fields": {
-            "username": "hwkns",
-            "email": "come@me.bro",
-            "password": "pbkdf2_sha256$12000$0hX6vHywTbl9$Tb7ON+ez7t3+mADumo6woGj0fy7/pkN4H3gCjzI/Fao=",
-            "is_active": true,
-            "is_staff": true,
-            "is_superuser": true,
-            "date_joined": "2014-09-18T02:47:19.069Z",
-            "last_login": "2014-09-18T02:47:19.069Z",
-            "groups": [],
-            "last_name": "",
-            "first_name": "",
-            "user_permissions": []
-        }
-    },
-    {
-        "pk": 2,
-        "model": "auth.user",
-        "fields": {
             "username": "admin",
             "email": "dolan@gooby.pls",
             "password": "pbkdf2_sha256$12000$hWesB60GnByT$7aArajTou74uwGbkYJsscsrizBo9U9yqbQvwR4c/hB4=",
@@ -158,7 +140,6 @@
         "model": "profiles.userprofile",
         "fields": {
             "user": 1,
-            "invited_by": 2,
             "announce_key": "16fd2706-8baf-433b-82eb-8c7fada847da",
             "bytes_uploaded": 0,
             "bytes_downloaded": 0,
