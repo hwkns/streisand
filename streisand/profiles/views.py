@@ -21,11 +21,11 @@ def user_profile_redirect(request):
     return HttpResponseRedirect(profile.get_absolute_url())
 
 
-def user_profile_details(request, profile_id):
+def user_profile_details(request, username):
 
     profile = get_object_or_404(
         UserProfile.objects.select_related('user').prefetch_related('torrent_stats'),
-        id=profile_id,
+        user__username__iexact=username,
     )
 
     return render(

@@ -31,6 +31,7 @@ class UserProfile(models.Model):
         editable=False,
         db_index=True,
     )
+    irc_key = models.CharField(max_length=128)
     invited_by = models.ForeignKey(
         'profiles.UserProfile',
         null=True,
@@ -108,7 +109,7 @@ class UserProfile(models.Model):
         )
 
     def get_absolute_url(self):
-        return reverse('user_profile', args=[self.id])
+        return reverse('user_profile', args=[self.username])
 
     def reset_announce_key(self):
         self.announce_key = self.announce_keys.create()
