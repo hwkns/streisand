@@ -12,6 +12,11 @@ class Swarm(models.Model):
 
     objects = SwarmManager()
 
+    class Meta:
+        permissions = (
+            ('can_leech', "Can receive peer lists from the tracker"),
+        )
+
     def __str__(self):
         return self.torrent_info_hash
 

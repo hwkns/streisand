@@ -68,7 +68,6 @@ class Torrent(models.Model):
 
     class Meta:
         permissions = (
-            ('can_leech', "Can leech torrents"),
             ('can_upload', "Can upload new torrents"),
         )
 
