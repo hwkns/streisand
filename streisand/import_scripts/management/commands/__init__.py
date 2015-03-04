@@ -32,14 +32,11 @@ class MySQLCommand(BaseCommand):
 
         self.post_sql()
 
-    @staticmethod
-    def pre_sql():
+    def pre_sql(self):
         pass
 
-    @staticmethod
-    def handle_row(row):
+    def handle_row(self, row):
         pass
 
-    @staticmethod
-    def post_sql():
+    def post_sql(self):
         pass

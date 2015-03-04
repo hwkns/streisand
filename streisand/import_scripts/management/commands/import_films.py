@@ -11,8 +11,7 @@ class Command(MySQLCommand):
 
     help = "Imports films from the MySQL db"
 
-    @staticmethod
-    def handle_row(row):
+    def handle_row(self, row):
 
         tags = row['TagList'].strip('|').split('|')
 
