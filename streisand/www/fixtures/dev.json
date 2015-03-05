@@ -315,750 +315,163 @@
         }
     },
     {
-        "pk": "-AZ25",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 1,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "1_SiteOp",
+            "permissions": []
         }
     },
     {
-        "pk": "-AZ25",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 2,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "3_Member",
+            "permissions": []
         }
     },
     {
-        "pk": "-BG10",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 3,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "4_Actor",
+            "permissions": []
         }
     },
     {
-        "pk": "-KT22",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 4,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "5_Legend",
+            "permissions": []
         }
     },
     {
-        "pk": "-lt0B",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 5,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "7_Executive Producer",
+            "permissions": []
         }
     },
     {
-        "pk": "-CD0302-",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 6,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "8_Encoder",
+            "permissions": []
         }
     },
     {
-        "pk": "-lt0C",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 7,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "9_Community Staff",
+            "permissions": []
         }
     },
     {
-        "pk": "-lt0A4",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 8,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "11_Moderator",
+            "permissions": []
         }
     },
     {
-        "pk": "-AZ31",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 9,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "14_Developer",
+            "permissions": []
         }
     },
     {
-        "pk": "-HL31",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 10,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "15_SysAdmin",
+            "permissions": []
         }
     },
     {
-        "pk": "-AZ41",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 11,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "20_Producer",
+            "permissions": []
         }
     },
     {
-        "pk": "-KT32",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 12,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "21_Administrator",
+            "permissions": []
         }
     },
     {
-        "pk": "-UT161",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 13,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "23_User",
+            "permissions": []
         }
     },
     {
-        "pk": "-AZ42",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 14,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "24_Fanatic",
+            "permissions": []
         }
     },
     {
-        "pk": "-TR16",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 15,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "25_Director",
+            "permissions": []
         }
     },
     {
-        "pk": "-TR17",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 16,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "26_Director of Torrentography",
+            "permissions": []
         }
     },
     {
-        "pk": "-UT185",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 17,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "28_Designer",
+            "permissions": []
         }
     },
     {
-        "pk": "-AZ43",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 18,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "30_mfer",
+            "permissions": []
         }
     },
     {
-        "pk": "-KT33",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 19,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "31_Uploader",
+            "permissions": []
         }
     },
     {
-        "pk": "-DE12",
-        "model": "tracker.torrentclient",
+        "model": "auth.group",
+        "pk": 20,
         "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR1920-",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-AZ44",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT201",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR18",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-DE13",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT177",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "btpd/0.15",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT182",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR1540-",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR1930-",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT202",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR20",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-KT40",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR210",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT203",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-AZ45",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT204",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR2110-",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "btpd/0.16",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT220",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR212",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR213",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR220",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR221",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-AZ46",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UM15",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR222",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT221",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-KT41",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR23",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-QB26",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-QB27",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-QB28",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT30",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-AZ47",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR24",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-QB29",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT31",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR25",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-KT42",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-lt0D",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR26",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT32",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-QB30",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR27",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UM165",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-KT43",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-AZ48",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UM180",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UM181",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UM182",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT33",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-AZ49",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UM183",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UM184",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-AZ50",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-TR28",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT331",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-AZ51",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-QB31",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-AZ52",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-AZ53",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
-        }
-    },
-    {
-        "pk": "-UT34",
-        "model": "tracker.torrentclient",
-        "fields": {
-            "name": "Some Client 1.0.0",
-            "notes": "YOLO",
-            "whitelisted": true
+            "name": "33_Archivist",
+            "permissions": []
         }
     }
 ]
