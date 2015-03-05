@@ -2,7 +2,6 @@
 
 import json
 import logging
-import uuid
 
 from django.contrib.auth import authenticate, login
 from django.http import Http404
@@ -121,18 +120,6 @@ class LegacyURLView(View):
         else:
             profile = request.user.profile
         return redirect(profile.watch_queue)
-
-    def register(self, request):
-
-        if 'invite' not in request.GET:
-            return redirect('open_registration')
-
-        try:
-            invite_key = uuid.UUID(request.GET['invite'])
-        except ValueError:
-            raise Http404
-        else:
-            return redirect('invite_registration', invite_key=invite_key)
 
     def requests(self, request):
         pass
