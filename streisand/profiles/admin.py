@@ -22,12 +22,30 @@ class UserProfileAdmin(admin.ModelAdmin):
         'invited_by',
     )
 
+    actions = (
+        'reset_announce_key',
+    )
+
     def get_queryset(self, request):
         queryset = super(UserProfileAdmin, self).get_queryset(request)
         return queryset.select_related('user')
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+    def reset_announce_key(self, request, queryset):
+        count = 0
+        for profile in queryset:
+            profile.reset_announce_key()
+            count += 1
+        self.message_user(
+            request,
+            "{n} announce key{s} successfully reset.".format(
+                n=count,
+                s='' if count == 1 else 's',
+            )
+        )
+    reset_announce_key.short_description = "Reset announce key for selected profile(s)"
 
     def invited_by_link(self, profile):
         if profile.invited_by is not None:
