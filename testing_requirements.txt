@@ -2,7 +2,7 @@
 flake8==2.3.0
 ipdb==0.8
 ipdbplugin==1.4.1
-ipython==2.4.1
+ipython==3.0.0
 requests==2.5.1
 django-dynamic-fixture==1.8.1
 django-nose==1.3
