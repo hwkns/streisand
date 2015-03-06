@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from decimal import Decimal
-from urllib.parse import urljoin
 
 from django_extensions.db.fields import UUIDField
 
@@ -21,8 +20,15 @@ class UserProfile(models.Model):
 
     CACHE_KEY = 'user_profile:{user_id}'
 
+    STATUS_CHOICES = (
+        ('unconfirmed', 'Unconfirmed'),
+        ('enabled', 'Enabled'),
+        ('disabled', 'Disabled'),
+    )
+
     old_id = models.PositiveIntegerField(null=True, db_index=True)
     user = models.OneToOneField('auth.User', related_name='profile')
+    account_status = models.CharField(max_length=32, choices=STATUS_CHOICES, db_index=True)
     announce_key = models.OneToOneField(
         'profiles.UserAnnounceKey',
         related_name='profile',
@@ -30,7 +36,11 @@ class UserProfile(models.Model):
         default=None,
         editable=False,
         db_index=True,
+        on_delete=models.SET_NULL,
     )
+    avatar_url = models.URLField()
+    custom_title = models.CharField(max_length=256, null=True)
+    staff_notes = models.TextField()
     irc_key = models.CharField(max_length=128)
     invited_by = models.ForeignKey(
         'profiles.UserProfile',
@@ -76,10 +86,7 @@ class UserProfile(models.Model):
 
     @property
     def announce_url(self):
-        return urljoin(
-            settings.TRACKER_URL,
-            reverse('announce', kwargs={'announce_key': self.announce_key_id})
-        )
+        return settings.ANNOUNCE_URL_TEMPLATE.format(announce_key=self.announce_key_id)
 
     @property
     def ratio(self):
