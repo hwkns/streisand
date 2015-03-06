@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+from hashlib import md5, sha1
 from urllib.parse import urljoin
 
 from django.conf import settings
@@ -46,3 +47,12 @@ def email(subject='', template='', context=None, from_email=None, reply_to=None,
             subject=subject,
             recipients=to,
         ))
+
+
+def old_site_password_hash(string, secret):
+    old_site_salt = settings.OLD_SITE_HASH
+    secret = secret.encode('utf-8')
+    secret_md5 = md5(secret).hexdigest()
+    secret_sha1 = sha1(secret).hexdigest()
+    things = (secret_md5 + string + secret_sha1 + old_site_salt).encode('utf-8')
+    return sha1(things).hexdigest()

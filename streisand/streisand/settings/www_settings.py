@@ -49,11 +49,16 @@ LOGIN_EXEMPT_URL_PREFIXES = (
     '/register/',
     '/logout/',
     '/__debug__/',
+    '/torrents/download/',
 )
 
+OLD_SITE_HASH = os.environ.get('OLD_SITE_HASH', '')
+
 AUTHENTICATION_BACKENDS = (
-    # Case insensitive version of built-in Django auth
+    # Case insensitive version of built-in Django authentication
     'www.auth.CaseInsensitiveAuthBackend',
+    # The old site's authentication system
+    'www.auth.OldSiteAuthBackend',
     # django-su
     'django_su.backends.SuBackend',
 )
