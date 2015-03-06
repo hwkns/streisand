@@ -86,7 +86,7 @@ class Peer(models.Model):
 
 class TorrentClient(models.Model):
 
-    peer_id_prefix = models.CharField(max_length=20, primary_key=True)
+    peer_id_prefix = models.CharField(max_length=20, primary_key=True, null=False, blank=False)
     name = models.CharField(max_length=128, null=False, blank=False)
     whitelisted = models.NullBooleanField(db_index=True)
     notes = models.TextField(null=True, blank=True)
