@@ -12,13 +12,15 @@ INSTALLED_APPS += [
     'debreach',
     'django_su',
     'grappelli',
-    'debug_toolbar.apps.DebugToolbarConfig',
 
     # Default apps
     'django.contrib.admin',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Debug Toolbar
+    'debug_toolbar.apps.DebugToolbarConfig',
 
 ]
 
