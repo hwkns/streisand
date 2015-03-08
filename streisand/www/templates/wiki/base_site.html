@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load staticfiles i18n wiki_tags sekizai_tags %}
+
+{% block title %}{% block wiki_pagetitle %}{% endblock %}{% endblock %}
+
+{% block css %}
+<link href="{% static 'wiki/bootstrap/css/wiki-bootstrap.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+
+    {% block wiki_body %}
+
+      {% if messages %}
+        <!-- Messages for this instance -->
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <!-- Reserved for breadcrumbs -->
+      {% block wiki_breadcrumbs %}{% endblock %}
+
+      <!-- Main page contents go here -->
+      {% block wiki_contents %}{% endblock %}
+
+      <footer id="wiki-footer">
+        <hr />
+        {% block wiki_footer_prepend %}
+        {% endblock %}
+        <div style="clear: both"></div>
+      </footer>
+
+    {% endblock %}
+
+    {% addtoblock 'js' %}
+    <script src="{% static 'wiki/js/core.js' %}"></script>
+    {% endaddtoblock %}
+
+{% endblock %}

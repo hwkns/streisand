@@ -1,3 +1,4 @@
+{% load sekizai_tags %}
 {% load static from staticfiles %}
 <!doctype html>
 
@@ -6,12 +7,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>{% block title %}Streisand{% endblock %}</title>
+  <title>{% block title %}{% endblock %} :: Streisand</title>
   <meta name="description" content="Streisand">
 
   <!-- Bootstrap 3.2.0 CSS -->
+  {% block css %}
   <link rel="stylesheet" href="{% static 'www/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'www/bootstrap-theme.min.css' %}">
+  {% endblock %}
+  <!-- django-wiki CSS via sekizai -->
+  {% render_block 'css' %}
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,13 +32,7 @@
   <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Streisand</a>
+        <a class="navbar-brand" href="/">Streisand</a>
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
@@ -41,28 +40,33 @@
           <li><a href="{% url 'film_index' %}">Films</a></li>
           <li><a href="{% url 'film_list_index' %}">Lists</a></li>
           <li><a href="{% url 'torrent_request_index' %}">Torrent Requests</a></li>
-          {% if request.user.profile %}
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ request.user.username }} ({{ request.user.profile.ratio }}) <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="{% url 'user_profile' username=request.user.username %}">Profile</a></li>
-                <li><a href="{% url 'invite_index' %}">Invite ({# request.user.profile.invite_count #})</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-                <li class="divider"></li>
-                <li><a href="{% url 'logout' %}">Log out</a></li>
-              </ul>
-            </li>
-          {% endif %}
+          <li><a href="{% url 'wiki:root' %}">Wiki</a></li>
         </ul>
+          <div class="navbar-right">
+            <ul class="nav navbar-nav">
+              {% if request.user.profile %}
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ request.user.username }} ({{ request.user.profile.ratio }}) <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="{% url 'user_profile' username=request.user.username %}">Profile</a></li>
+                    <li><a href="{% url 'invite_index' %}">Invite ({# request.user.profile.invite_count #})</a></li>
+                    <li class="divider"></li>
+                    <li class="dropdown-header">Nav header</li>
+                    <li><a href="#">Separated link</a></li>
+                    <li><a href="#">One more separated link</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{% url 'logout' %}">Log out</a></li>
+                  </ul>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
       </div><!--/.nav-collapse -->
     </div>
   </div>
 {% endblock %}
 
-<div class="container theme-showcase" role="main">
+<div class="container theme-showcase" role="main" style="padding-top: 20px;">
   {% block main %}
   {% endblock %}
 </div>
@@ -70,5 +74,8 @@
 <!-- jQuery and Bootstrap 3.2.0 JS -->
 <script src="{% static 'www/jquery.min.js' %}"></script>
 <script src="{% static 'www/bootstrap.min.js' %}"></script>
+<!-- django-wiki js via sekizai -->
+{% render_block 'js' %}
+
 </body>
 </html>

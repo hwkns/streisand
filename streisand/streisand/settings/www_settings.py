@@ -22,7 +22,17 @@ INSTALLED_APPS += [
     # Debug Toolbar
     'debug_toolbar.apps.DebugToolbarConfig',
 
+    # django-wiki
+    'django.contrib.sites',
+    'django.contrib.humanize',
+    'mptt',
+    'sekizai',
+    'wiki',
+
 ]
+
+WIKI_ACCOUNT_HANDLING = False
+SITE_ID = 2
 
 MIDDLEWARE_CLASSES += [
     'django.middleware.gzip.GZipMiddleware',
@@ -45,6 +55,7 @@ if PRODUCTION or TESTING:
 
 ROOT_URLCONF = 'www.urls'
 
+LOGOUT_URL = '/logout/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_EXEMPT_URL_PREFIXES = (
@@ -84,6 +95,7 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
+    'sekizai.context_processors.sekizai',
     'debreach.context_processors.csrf',
 ]
 

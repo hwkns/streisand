@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from wiki.urls import get_pattern as get_wiki_pattern
+
 from django.conf.urls import url, patterns, include
 from django.contrib import admin
 from django.contrib.auth.views import login
@@ -19,6 +21,7 @@ urlpatterns = patterns(
     url(r'^profile/', include('profiles.urls')),
     url(r'^torrent-requests/', include('torrent_requests.urls')),
     url(r'^torrents/', include('torrents.urls')),
+    url(r'^wiki/', get_wiki_pattern()),
 
     # Admin
     url(r'^grappelli/', include('grappelli.urls')),
@@ -37,5 +40,5 @@ urlpatterns = patterns(
     url(r'^templates/(?P<template_path>.*\.html)$', template_viewer, name='template_viewer'),
 
     # Legacy
-    url(r'^(?P<section>.+)\.php$', LegacyURLView.as_view(), name='legacy_url')
+    url(r'^(?P<section>.+)\.php$', LegacyURLView.as_view(), name='legacy_url'),
 )

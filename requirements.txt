@@ -22,3 +22,4 @@ redis==2.10.3
 requests==2.5.3
 six==1.9.0
 uWSGI==2.0.9
+-e git://github.com/django-wiki/django-wiki.git@master#egg=wiki

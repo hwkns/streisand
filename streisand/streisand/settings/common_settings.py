@@ -106,6 +106,6 @@ DATABASES = {
 if PRODUCTION:
     DATABASES['default']['CONN_MAX_AGE'] = None
 
-SITE_NAME = 'streisand'
+SITE_NAME = 'Streisand'
 SITE_URL = 'http://localhost:8000/'
 ANNOUNCE_URL_TEMPLATE = 'http://localhost:7070/{announce_key}/announce'
