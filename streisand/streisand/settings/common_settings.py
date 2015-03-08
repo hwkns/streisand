@@ -21,6 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = json.loads(os.environ.get('STREISAND_DEBUG', "False").lower())
+PRODUCTION = not DEBUG
 TESTING = 'test' in sys.argv
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -32,9 +33,9 @@ ALLOWED_HOSTS = [
     'localhost',
 ]
 
-MIDDLEWARE_CLASSES = ()
+MIDDLEWARE_CLASSES = []
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
 
     # Default apps
     'django.contrib.auth',
@@ -53,13 +54,13 @@ INSTALLED_APPS = (
 
     # Import scripts
     'import_scripts',
-)
+]
 
 if DEBUG and not TESTING:
-    INSTALLED_APPS += (
+    INSTALLED_APPS += [
         'bandit',
         'django_extensions',
-    )
+    ]
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     BANDIT_EMAIL = os.environ.get('BANDIT_EMAIL')
 
@@ -87,30 +88,22 @@ CELERY_ACCEPT_CONTENT = ['pickle']
 BROKER_URL = REDIS_URL + '/0'
 BROKER_TRANSPORT_OPTIONS = {'fanout_patterns': True}
 
-if TESTING:
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'TIMEOUT': None,
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL + '/1',
+        'TIMEOUT': None,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
-else:
-    CACHES = {
-        'default': {
-            'BACKEND': 'django_redis.cache.RedisCache',
-            'LOCATION': REDIS_URL + '/1',
-            'TIMEOUT': None,
-            'OPTIONS': {
-                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            }
-        }
-    }
+}
 
 DATABASES = {
     'default': dj_database_url.parse(DATABASE_URL)
 }
 
-if not DEBUG:
+if PRODUCTION:
     DATABASES['default']['CONN_MAX_AGE'] = None
 
 SITE_NAME = 'streisand'

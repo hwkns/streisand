@@ -2,16 +2,17 @@
 
 from .common_settings import *
 
-INTERNAL_IPS = (
+INTERNAL_IPS = [
     '10.0.2.2',
-)
+]
 
-INSTALLED_APPS += (
+INSTALLED_APPS += [
 
     # Third party apps
     'debreach',
     'django_su',
     'grappelli',
+    'debug_toolbar.apps.DebugToolbarConfig',
 
     # Default apps
     'django.contrib.admin',
@@ -19,18 +20,13 @@ INSTALLED_APPS += (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-)
+]
 
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE_CLASSES += [
     'django.middleware.gzip.GZipMiddleware',
     'debreach.middleware.RandomCommentMiddleware',
     'debreach.middleware.CSRFCryptMiddleware',
-)
-if DEBUG and not TESTING:
-    MIDDLEWARE_CLASSES += (
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    )
-MIDDLEWARE_CLASSES += (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -39,7 +35,11 @@ MIDDLEWARE_CLASSES += (
     'www.middleware.LoginRequiredMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
+
+if PRODUCTION or TESTING:
+    INSTALLED_APPS.remove('debug_toolbar.apps.DebugToolbarConfig')
+    MIDDLEWARE_CLASSES.remove('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 ROOT_URLCONF = 'www.urls'
 
@@ -54,26 +54,26 @@ LOGIN_EXEMPT_URL_PREFIXES = (
 
 OLD_SITE_HASH = os.environ.get('OLD_SITE_HASH', '')
 
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = [
     # Case insensitive version of built-in Django authentication
     'www.auth.CaseInsensitiveAuthBackend',
     # The old site's authentication system
     'www.auth.OldSiteAuthBackend',
     # django-su
     'django_su.backends.SuBackend',
-)
+]
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 WSGI_APPLICATION = 'streisand.www_wsgi.application'
 
 # List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
+TEMPLATE_LOADERS = [
     # 'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-)
+]
 
-TEMPLATE_CONTEXT_PROCESSORS = (
+TEMPLATE_CONTEXT_PROCESSORS = [
     'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
@@ -83,16 +83,16 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'debreach.context_processors.csrf',
-)
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_FINDERS = (
+STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
-)
+]
 
 
 LOGGING = {
@@ -148,9 +148,9 @@ LOGGING = {
 
 if TESTING:
 
-    INSTALLED_APPS += (
+    INSTALLED_APPS += [
         'django_nose',
-    )
+    ]
     TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
     # http://django-dynamic-fixture.readthedocs.org/en/latest/data_fixtures.html#custom-field-fixture
@@ -162,11 +162,13 @@ if TESTING:
     DDF_FILL_NULLABLE_FIELDS = False
 
     # Make the tests faster by using a fast, insecure hashing algorithm
-    PASSWORD_HASHERS = (
+    PASSWORD_HASHERS = [
         'django.contrib.auth.hashers.MD5PasswordHasher',
-    )
+    ]
 
-if DEBUG and not TESTING:
-    INSTALLED_APPS += (
-        'debug_toolbar.apps.DebugToolbarConfig',
-    )
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'TIMEOUT': None,
+        }
+    }
