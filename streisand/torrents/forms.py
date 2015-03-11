@@ -94,8 +94,12 @@ class TorrentUploadForm(forms.ModelForm):
             for file
             in self.metainfo_dict['info']['files']
         ]
-        if any(name.endswith(self.EXT_BLACKLIST) for name in file_list):
-            raise ValidationError('This torrent includes files with blacklisted extensions')
+        for name in file_list:
+            if name.endswith(self.EXT_BLACKLIST):
+                raise ValidationError(
+                    'Your torrent may not contain files with the following '
+                    'extensions: {blacklist}'.format(blacklist=self.EXT_BLACKLIST)
+                )
         return file_list
 
     def save(self, *args, **kwargs):
