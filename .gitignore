@@ -61,6 +61,7 @@ dump.rdb
 *.pot
 streisand/db.sqlite3
 streisand/static/
+torrents/
 
 # Sockets
 *.sock

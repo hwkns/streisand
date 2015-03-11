@@ -7,7 +7,10 @@ from films.models import Film
 
 class Command(MySQLCommand):
 
-    SQL = """SELECT * FROM torrents_group LIMIT 100"""
+    SQL = """
+        SELECT * FROM torrents_group
+        WHERE torrents_group.ID IN (SELECT DISTINCT GroupID FROM torrents WHERE ID < 1000)
+    """
 
     help = "Imports films from the MySQL db"
 
