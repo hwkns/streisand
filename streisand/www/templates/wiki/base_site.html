@@ -21,6 +21,18 @@
         {% endfor %}
       {% endif %}
 
+      <!-- Search -->
+      <form class="navbar-form navbar-right" id="wiki-search-form" method="GET" action="{% url 'wiki:search' %}">
+        <div class="input-group">
+          <input type="search" class="form-control search-query" name="q" placeholder="{% trans "Search..." %}" />
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+              <span class="fa fa-search"></span>
+            </button>
+          </span>
+        </div><!-- /input-group -->
+      </form>
+
       <!-- Reserved for breadcrumbs -->
       {% block wiki_breadcrumbs %}{% endblock %}
 
