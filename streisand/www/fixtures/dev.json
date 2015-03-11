@@ -85,11 +85,12 @@
             "film": 1,
             "swarm": "894985f97cc25c246e37a07cd7c785993982a7cb",
             "metainfo": 1,
+            "uploaded_at": "2014-09-19T14:52:58.484Z",
             "uploaded_by": 1,
-            "codec": 1,
-            "container": 1,
-            "resolution": 1,
-            "source_media": 1
+            "codec": "x264",
+            "container": "MKV",
+            "resolution": "720p",
+            "source_media": "Blu-ray"
         }
     },
     {
@@ -100,11 +101,12 @@
             "film": 1,
             "swarm": "884985f97cc25c246e37a07cd7c785993982a7cb",
             "metainfo": 2,
+            "uploaded_at": "2014-09-18T14:52:58.484Z",
             "uploaded_by": 1,
-            "codec": 1,
-            "container": 1,
-            "resolution": 1,
-            "source_media": 1
+            "codec": "x264",
+            "container": "MKV",
+            "resolution": "720p",
+            "source_media": "Blu-ray"
         }
     },
     {
@@ -155,172 +157,144 @@
         }
     },
     {
-        "pk": 1,
+        "pk": "AVI",
         "model": "media_formats.container",
-        "fields": {
-            "name": "AVI"
-        }
+        "fields": {}
     },
     {
-        "pk": 2,
+        "pk": "MKV",
         "model": "media_formats.container",
-        "fields": {
-            "name": "MKV"
-        }
+        "fields": {}
     },
     {
-        "pk": 1,
+        "pk": "Matroska",
+        "model": "media_formats.container",
+        "fields": {}
+    },
+    {
+        "pk": "DVDR NTSC",
+        "model": "media_formats.container",
+        "fields": {}
+    },
+    {
+        "pk": "DVDR PAL",
+        "model": "media_formats.container",
+        "fields": {}
+    },
+    {
+        "pk": "Standard Def",
         "model": "media_formats.resolution",
-        "fields": {
-            "name": "480p"
-        }
+        "fields": {}
     },
     {
-        "pk": 2,
+        "pk": "480p",
         "model": "media_formats.resolution",
-        "fields": {
-            "name": "576p"
-        }
+        "fields": {}
     },
     {
-        "pk": 3,
+        "pk": "576p",
         "model": "media_formats.resolution",
-        "fields": {
-            "name": "720p"
-        }
+        "fields": {}
     },
     {
-        "pk": 4,
+        "pk": "720p",
         "model": "media_formats.resolution",
-        "fields": {
-            "name": "1080p"
-        }
+        "fields": {}
     },
     {
-        "pk": 5,
+        "pk": "1080p",
         "model": "media_formats.resolution",
-        "fields": {
-            "name": "1080i"
-        }
+        "fields": {}
     },
     {
-        "pk": 1,
+        "pk": "1080i",
+        "model": "media_formats.resolution",
+        "fields": {}
+    },
+    {
+        "pk": "x264",
         "model": "media_formats.codec",
-        "fields": {
-            "name": "x264"
-        }
+        "fields": {}
     },
     {
-        "pk": 2,
+        "pk": "XviD",
         "model": "media_formats.codec",
-        "fields": {
-            "name": "Xvid"
-        }
+        "fields": {}
     },
     {
-        "pk": 3,
+        "pk": "H.264",
         "model": "media_formats.codec",
-        "fields": {
-            "name": "H.264"
-        }
+        "fields": {}
     },
     {
-        "pk": 4,
+        "pk": "DivX",
         "model": "media_formats.codec",
-        "fields": {
-            "name": "DivX"
-        }
+        "fields": {}
     },
     {
-        "pk": 5,
+        "pk": "AVC",
         "model": "media_formats.codec",
-        "fields": {
-            "name": "AVC"
-        }
+        "fields": {}
     },
     {
-        "pk": 6,
+        "pk": "VC-1",
         "model": "media_formats.codec",
-        "fields": {
-            "name": "VC-1"
-        }
+        "fields": {}
     },
     {
-        "pk": 7,
+        "pk": "MPEG-2",
         "model": "media_formats.codec",
-        "fields": {
-            "name": "MPEG-2"
-        }
+        "fields": {}
     },
     {
-        "pk": 8,
+        "pk": "DVDR",
         "model": "media_formats.codec",
-        "fields": {
-            "name": "DVDR"
-        }
+        "fields": {}
     },
     {
-        "pk": 1,
+        "pk": "Blu-ray",
         "model": "media_formats.sourcemedia",
-        "fields": {
-            "name": "Blu-ray"
-        }
+        "fields": {}
     },
     {
-        "pk": 2,
+        "pk": "HD-DVD",
         "model": "media_formats.sourcemedia",
-        "fields": {
-            "name": "HD-DVD"
-        }
+        "fields": {}
     },
     {
-        "pk": 3,
+        "pk": "HDTV",
         "model": "media_formats.sourcemedia",
-        "fields": {
-            "name": "HDTV"
-        }
+        "fields": {}
     },
     {
-        "pk": 4,
+        "pk": "WEB-DL",
         "model": "media_formats.sourcemedia",
-        "fields": {
-            "name": "WEB-DL"
-        }
+        "fields": {}
     },
     {
-        "pk": 5,
+        "pk": "DVD",
         "model": "media_formats.sourcemedia",
-        "fields": {
-            "name": "DVD"
-        }
+        "fields": {}
     },
     {
-        "pk": 6,
+        "pk": "R5",
         "model": "media_formats.sourcemedia",
-        "fields": {
-            "name": "R5"
-        }
+        "fields": {}
     },
     {
-        "pk": 7,
+        "pk": "Screener",
         "model": "media_formats.sourcemedia",
-        "fields": {
-            "name": "Screener"
-        }
+        "fields": {}
     },
     {
-        "pk": 8,
+        "pk": "CAM (TS)",
         "model": "media_formats.sourcemedia",
-        "fields": {
-            "name": "CAM (TS)"
-        }
+        "fields": {}
     },
     {
-        "pk": 9,
+        "pk": "Other",
         "model": "media_formats.sourcemedia",
-        "fields": {
-            "name": "Other"
-        }
+        "fields": {}
     },
     {
         "model": "auth.group",

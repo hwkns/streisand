@@ -27,6 +27,7 @@ class UserProfile(models.Model):
     )
 
     old_id = models.PositiveIntegerField(null=True, db_index=True)
+
     user = models.OneToOneField('auth.User', related_name='profile')
     account_status = models.CharField(max_length=32, choices=STATUS_CHOICES, db_index=True)
     announce_key = models.OneToOneField(

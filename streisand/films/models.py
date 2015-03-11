@@ -7,6 +7,7 @@ from django.db import models
 class Film(models.Model):
 
     old_id = models.PositiveIntegerField(null=True, db_index=True)
+
     title = models.CharField(max_length=1024)
     year = models.PositiveSmallIntegerField(null=False)
     imdb_id = models.CharField(max_length=16, null=True, unique=True)

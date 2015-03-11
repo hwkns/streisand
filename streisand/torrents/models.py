@@ -12,11 +12,14 @@ from tracker.bencoding import bencode
 
 class Torrent(models.Model):
 
+    old_id = models.PositiveIntegerField(null=True, db_index=True)
+
     # Film information
     film = models.ForeignKey('films.Film', null=False, db_index=True, related_name='torrents')
     cut = models.CharField(max_length=128, default='Theatrical')
 
     # Site information
+    uploaded_at = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey('profiles.UserProfile', null=False, related_name='uploaded_torrents')
     encoded_by = models.ForeignKey('profiles.UserProfile', null=True, blank=True, related_name='encodes')
     last_seeded = models.DateTimeField(null=True)
@@ -28,6 +31,9 @@ class Torrent(models.Model):
     release_name = models.CharField(max_length=1024)
     release_group = models.CharField(max_length=32)
     is_scene = models.NullBooleanField(default=False)
+    description = models.TextField()
+    nfo = models.TextField()
+    mediainfo = models.TextField()
 
     # Format information
     is_source = models.BooleanField(default=False)
