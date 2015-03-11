@@ -5,7 +5,7 @@ from django.db import models
 
 class MediaFormat(models.Model):
 
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, primary_key=True)
 
     class Meta:
         abstract = True
