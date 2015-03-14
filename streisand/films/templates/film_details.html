@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ film.title }}{% endblock %}
+{% block title %}{{ film }}{% endblock %}
 
 {% block main %}
     <div class="page-header">
-      <h1>{{ film.title }}</h1>
+      <h1>{{ film }}</h1>
       <img src="{{ film.poster_url }}" width="250px" />
     </div>
 
