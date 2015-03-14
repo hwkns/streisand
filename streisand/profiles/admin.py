@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from .models import UserProfile, UserAnnounceKey, UserIPAddress, UserAnnounce
+from .models import UserProfile, UserAnnounceKey, UserIPAddress, UserAnnounce, WatchedUser
 
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -128,7 +128,24 @@ class UserAnnounceAdmin(admin.ModelAdmin):
     ordering = ['-time_stamp']
 
 
+class WatchedUserAdmin(admin.ModelAdmin):
+
+    fields = (
+        'profile',
+        'last_checked',
+        'checked_by',
+        'notes',
+        'added_at',
+    )
+
+    readonly_fields = (
+        'added_at',
+        'last_checked',
+    )
+
+
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(UserAnnounceKey, UserAnnounceKeyAdmin)
 admin.site.register(UserIPAddress, UserIPAddressAdmin)
 admin.site.register(UserAnnounce, UserAnnounceAdmin)
+admin.site.register(WatchedUser, WatchedUserAdmin)
