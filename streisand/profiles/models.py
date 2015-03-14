@@ -237,6 +237,15 @@ class UserAnnounce(models.Model):
     event = models.CharField(max_length=16, null=False)
 
 
+class WatchedUser(models.Model):
+
+    profile = models.ForeignKey('profiles.UserProfile')
+    notes = models.TextField()
+    added_at = models.DateTimeField(auto_now_add=True)
+    last_checked = models.DateTimeField(auto_now=True)
+    checked_by = models.ForeignKey('auth.User')
+
+
 def invalidate_user_cache(sender, instance, **kwargs):
     if sender == User:
         key = UserProfile.CACHE_KEY.format(user_id=instance.id)
