@@ -107,3 +107,10 @@ class TorrentMetaInfo(models.Model):
 
         # Return the bencoded version
         return bencode(self.dictionary)
+
+
+class ReseedRequest(models.Model):
+
+    torrent = models.ForeignKey('torrents.Torrent')
+    created_by = models.ForeignKey('profiles.UserProfile')
+    created_at = models.DateTimeField(auto_now_add=True)
