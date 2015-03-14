@@ -11,3 +11,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         call_command('import_tags')
         call_command('import_films')
+        call_command('import_users')
+        call_command('import_torrents')

@@ -12,7 +12,7 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM users_main
         JOIN users_info ON users_info.UserID = users_main.ID
-        WHERE ID IN (SELECT UserID FROM users_history_passkeys)
+        WHERE ID IN (SELECT UserID FROM torrents WHERE ID < 1000)
     """
 
     help = "Imports users from the MySQL db"

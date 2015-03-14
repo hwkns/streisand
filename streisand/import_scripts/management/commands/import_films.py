@@ -42,4 +42,4 @@ class Command(MySQLCommand):
 
         f.tags = tags
 
-        print(f.old_id)
+        print(f)

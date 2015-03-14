@@ -20,8 +20,18 @@ class Torrent(models.Model):
 
     # Site information
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    uploaded_by = models.ForeignKey('profiles.UserProfile', null=False, related_name='uploaded_torrents')
-    encoded_by = models.ForeignKey('profiles.UserProfile', null=True, blank=True, related_name='encodes')
+    uploaded_by = models.ForeignKey(
+        'profiles.UserProfile',
+        null=True,
+        blank=False,
+        related_name='uploaded_torrents',
+    )
+    encoded_by = models.ForeignKey(
+        'profiles.UserProfile',
+        null=True,
+        blank=True,
+        related_name='encodes',
+    )
     last_seeded = models.DateTimeField(null=True)
     snatch_count = models.IntegerField(default=0)
     download_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
