@@ -89,11 +89,16 @@ class TorrentUploadForm(forms.ModelForm):
         return size_in_bytes
 
     def _get_file_list(self):
-        file_list = [
-            '/'.join(file['path'])
-            for file
-            in self.metainfo_dict['info']['files']
-        ]
+        if 'files' in self.metainfo_dict['info']:
+            file_list = [
+                '/'.join(file['path'])
+                for file
+                in self.metainfo_dict['info']['files']
+            ]
+        else:
+            file_list = [
+                self.metainfo_dict['info']['name']
+            ]
         for name in file_list:
             if name.endswith(self.EXT_BLACKLIST):
                 raise ValidationError(
