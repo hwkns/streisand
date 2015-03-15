@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load humanize %}
+{% load comments humanize %}
 
 {% block title %}{{ film }}{% endblock %}
 
@@ -8,12 +8,22 @@
       <h1>{{ film }}</h1>
       <img src="{{ film.poster_url }}" width="250px" />
     </div>
+    {% for tag in film.tags.all %}
+      <span class="label label-default">{{ tag }}</span>
+    {% endfor %}
 
-    <ul>
+    <h2>Torrents</h2>
+    <div class="list-group">
       {% for torrent in film.torrents.all %}
-        <li>
-              <span{% if torrent.id == torrent_id %} style="font-weight: bold"{% endif %}>{{ torrent.codec }} / {{ torrent.container }} / {{ torrent.resolution }} / {{ torrent.source_media }} ({{ torrent.size_in_bytes|filesizeformat }})</span><br/>
-          uploaded by <a href="{{ torrent.uploaded_by.get_absolute_url }}">{{ torrent.uploaded_by.username }}</a> <span title="{{ torrent.uploaded_at }}">{{ torrent.uploaded_at|naturaltime }}</span>
+        <span class="list-group-item{% if torrent.id == torrent_id %} active{% endif %}">
+          <h4 class="list-group-item-heading">
+            {{ torrent.codec }} / {{ torrent.container }} / {{ torrent.resolution }} / {{ torrent.source_media }} ({{ torrent.size_in_bytes|filesizeformat }})
+          </h4>
+          uploaded
+          {% if torrent.uploaded_by %}
+            by <a href="{{ torrent.uploaded_by.get_absolute_url }}">{{ torrent.uploaded_by.username }}</a>
+          {% endif %}
+          <span title="{{ torrent.uploaded_at }}">{{ torrent.uploaded_at|naturaltime }}</span>
           | <a name="torrent-pl-{{ torrent.id }}" href="{{ torrent.get_absolute_url }}">PL</a>
           | <a name="torrent-dl-{{ torrent.id }}" href="{% url 'torrent_download' torrent_id=torrent.id announce_key=request.user.profile.announce_key_id %}">DL</a>
           | {{ torrent.release_name }}<br/>
@@ -22,7 +32,24 @@
               <li>{{ file }}</li>
             {% endfor %}
           </ul>
-        </li>
+          <div class="well"><pre>{{ torrent.description }}</pre></div>
+        </span>
       {% endfor %}
-    </ul>
+      </div>
+
+    {% get_comment_list for film as comment_list %}
+    <h2>Comments</h2>
+    <div class="col-sm-8">
+      <div class="list-group">
+        {% for comment in comment_list reversed %}
+          <span class="list-group-item">
+            <h4 class="list-group-item-heading">
+              <a href="{{ comment.user.profile.get_absolute_url }}">{{ comment.user_name }}</a>
+              {{ comment.submit_date|naturaltime }}
+            </h4>
+            <p class="list-group-item-text">{{ comment.comment }}</p>
+          </span>
+        {% endfor %}
+      </div>
+    </div>
 {% endblock %}
