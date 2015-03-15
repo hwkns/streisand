@@ -48,6 +48,7 @@ class UserProfile(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
+    invite_count = models.PositiveIntegerField(default=0)
     bytes_uploaded = models.BigIntegerField(default=0)
     bytes_downloaded = models.BigIntegerField(default=0)
     torrents = models.ManyToManyField(
