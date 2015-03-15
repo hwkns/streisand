@@ -13,6 +13,7 @@ class Command(MySQLCommand):
         SELECT * FROM users_main
         JOIN users_info ON users_info.UserID = users_main.ID
         WHERE ID IN (SELECT UserID FROM torrents WHERE ID < 1000)
+            OR ID IN (SELECT AuthorID FROM torrents_comments WHERE GroupID IN (SELECT GroupID FROM torrents WHERE ID < 1000))
     """
 
     help = "Imports users from the MySQL db"
