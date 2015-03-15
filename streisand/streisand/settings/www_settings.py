@@ -30,12 +30,15 @@ INSTALLED_APPS += [
     'sekizai',
     'wiki',
 
+    # Import scripts
+    'import_scripts',
+
 ]
 
 WIKI_ACCOUNT_HANDLING = False
 SITE_ID = 2
 
-MIDDLEWARE_CLASSES += [
+MIDDLEWARE_CLASSES = [
     'django.middleware.gzip.GZipMiddleware',
     'debreach.middleware.RandomCommentMiddleware',
     'debreach.middleware.CSRFCryptMiddleware',
@@ -44,7 +47,6 @@ MIDDLEWARE_CLASSES += [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'www.middleware.CachedUserAuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'www.middleware.LoginRequiredMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

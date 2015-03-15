@@ -33,8 +33,6 @@ ALLOWED_HOSTS = [
     'localhost',
 ]
 
-MIDDLEWARE_CLASSES = []
-
 INSTALLED_APPS = [
 
     # Default apps
@@ -52,8 +50,6 @@ INSTALLED_APPS = [
     'tracker',
     'www',
 
-    # Import scripts
-    'import_scripts',
 ]
 
 if DEBUG and not TESTING:
