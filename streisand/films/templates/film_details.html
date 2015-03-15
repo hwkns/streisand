@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block title %}{{ film }}{% endblock %}
 
@@ -10,7 +11,18 @@
 
     <ul>
       {% for torrent in film.torrents.all %}
-        <li><a name="torrent-{{ torrent.id }}" href="{{ torrent.get_absolute_url }}">{{ torrent }}</a>{% if torrent.id == torrent_id %} *{% endif %}</li>
+        <li>
+              <span{% if torrent.id == torrent_id %} style="font-weight: bold"{% endif %}>{{ torrent.codec }} / {{ torrent.container }} / {{ torrent.resolution }} / {{ torrent.source_media }} ({{ torrent.size_in_bytes|filesizeformat }})</span><br/>
+          uploaded by <a href="{{ torrent.uploaded_by.get_absolute_url }}">{{ torrent.uploaded_by.username }}</a> <span title="{{ torrent.uploaded_at }}">{{ torrent.uploaded_at|naturaltime }}</span>
+          | <a name="torrent-pl-{{ torrent.id }}" href="{{ torrent.get_absolute_url }}">PL</a>
+          | <a name="torrent-dl-{{ torrent.id }}" href="{% url 'torrent_download' torrent_id=torrent.id announce_key=request.user.profile.announce_key_id %}">DL</a>
+          | {{ torrent.release_name }}<br/>
+          <ul>
+            {% for file in torrent.file_list %}
+              <li>{{ file }}</li>
+            {% endfor %}
+          </ul>
+        </li>
       {% endfor %}
     </ul>
 {% endblock %}

@@ -12,30 +12,6 @@ from .models import Torrent
 from .forms import TorrentUploadForm
 
 
-def torrent_index(request):
-    return render(
-        request=request,
-        template_name='torrent_index.html',
-        dictionary={
-            'torrents': Torrent.objects.all(),
-        }
-    )
-
-
-def torrent_details(request, torrent_id):
-    torrent = get_object_or_404(
-        Torrent.objects.select_related('film'),
-        id=torrent_id,
-    )
-    return render(
-        request=request,
-        template_name='torrent_details.html',
-        dictionary={
-            'torrent': torrent,
-        }
-    )
-
-
 class TorrentDownloadView(View):
 
     def get(self, *args, **kwargs):
@@ -59,10 +35,10 @@ class TorrentDownloadView(View):
         # Respond with the customized torrent
         response = HttpResponse(
             content=torrent.metainfo.for_user_download(profile),
-            content_type='application/x-bittorrent'
+            content_type='application/x-bittorrent',
         )
         response['Content-Disposition'] = 'attachment; filename={release_name}.torrent'.format(
-            release_name=torrent.release_name
+            release_name=torrent.release_name,
         )
         return response
 
@@ -96,7 +72,7 @@ class TorrentUploadView(View):
                 else:
                     raise
             else:
-                return redirect(new_torrent.get_absolute_url())
+                return redirect(new_torrent)
 
         # Render the form with errors
         return self._render(torrent_upload_form)
