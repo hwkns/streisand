@@ -12,19 +12,20 @@ INSTALLED_APPS += [
     'debreach',
     'django_su',
     'grappelli',
+    'django_comments',
 
-    # Default apps
+    # Contrib apps
     'django.contrib.admin',
-    'django.contrib.sessions',
+    'django.contrib.humanize',
     'django.contrib.messages',
+    'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
 
     # Debug Toolbar
     'debug_toolbar.apps.DebugToolbarConfig',
 
     # django-wiki
-    'django.contrib.sites',
-    'django.contrib.humanize',
     'mptt',
     'sekizai',
     'wiki',

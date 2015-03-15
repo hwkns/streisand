@@ -5,6 +5,7 @@ amqp==1.4.6
 billiard==3.3.0.19
 celery==3.1.17
 dj-database-url==0.3.0
+django-contrib-comments==1.5
 django-debreach==1.2.1
 # django-debug-toolbar==1.2.2
 -e git://github.com/tim-schilling/django-debug-toolbar.git@2ab2c8361f893fc171bba06d53a66fa7dc6f26a2#egg=debug_toolbar
