@@ -8,8 +8,8 @@
     </div>
 
     <ul>
-      <li>Uploaded: {{ profile.bytes_uploaded }}</li>
-      <li>Downloaded: {{ profile.bytes_downloaded }}</li>
+      <li>Uploaded: {{ profile.bytes_uploaded|filesizeformat }}</li>
+      <li>Downloaded: {{ profile.bytes_downloaded|filesizeformat }}</li>
       <li>Ratio: {{ profile.ratio }}</li>
       <li>Torrents:
         <ul>
