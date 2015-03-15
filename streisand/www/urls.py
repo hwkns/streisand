@@ -18,7 +18,7 @@ urlpatterns = patterns(
     url(r'^films/', include('films.urls')),
     url(r'^film-lists/', include('film_lists.urls')),
     url(r'^invites/', include('invites.urls')),
-    url(r'^profile/', include('profiles.urls')),
+    url(r'^profiles/', include('profiles.urls')),
     url(r'^torrent-requests/', include('torrent_requests.urls')),
     url(r'^torrents/', include('torrents.urls')),
     url(r'^wiki/', get_wiki_pattern()),
