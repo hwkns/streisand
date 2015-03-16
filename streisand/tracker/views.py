@@ -184,6 +184,8 @@ class AnnounceView(View):
             raise Exception('Something strange is happening here...')
         client.complete = bytes_left == 0
 
+        client.save()
+
         if event == 'started':
             # TODO: something?
             pass
