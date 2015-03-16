@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 from binascii import b2a_hex
 
 from pytz import UTC
@@ -40,7 +41,6 @@ class Command(MySQLCommand):
         is_scene = (row['Scene'] == '1')
         # scene_title = row['SceneTitle']
         bbcode_description = row['Description']
-        nfo_text = row['nfo']
         release_name = row['ReleaseName']
         size_in_bytes = row['Size']
         # last_action = row['last_action']
@@ -63,6 +63,25 @@ class Command(MySQLCommand):
                 metainfo_dict['info']['name']
             ]
 
+        nfo_text = ''
+        if bbcode_description:
+            description = bbcode_description.encode('latin-1').decode('utf-8').strip()
+            nfo_match = re.search(
+                r'\[spoiler=NFO\](?:\[size=\d\])?\[pre\](.*)\[/pre\](?:\[/size\])?\[/spoiler\]',
+                string=description,
+                flags=re.IGNORECASE + re.DOTALL,
+            )
+            if nfo_match:
+                nfo_text = nfo_match.group(1).strip()
+                spoiler_match = re.search(
+                    r'(\[spoiler=NFO\](?:\[size=\d\])?\[pre\].*\[/pre\](?:\[/size\])?\[/spoiler\])',
+                    string=description,
+                    flags=re.IGNORECASE + re.DOTALL,
+                )
+                description = description.replace(spoiler_match.group(1), '')
+        else:
+            description = ''
+
         swarm = Swarm.objects.create(torrent_info_hash=info_hash)
         metainfo = TorrentMetaInfo.objects.create(dictionary=metainfo_dict)
         uploader = UserProfile.objects.filter(old_id=uploader_id).first()
@@ -71,8 +90,8 @@ class Command(MySQLCommand):
             old_id=torrent_id,
             film=Film.objects.get(old_id=torrent_group_id),
             cut=special_edition_title if is_special_edition else 'Theatrical',
-            description=bbcode_description.encode('latin-1').decode('utf-8') if bbcode_description else '',
-            nfo=nfo_text.encode('latin-1').decode('utf-8') if nfo_text else '',
+            description=description,
+            nfo=nfo_text,
             mediainfo=mediainfo.encode('latin-1').decode('utf-8') if mediainfo else '',
             swarm=swarm,
             metainfo=metainfo,
