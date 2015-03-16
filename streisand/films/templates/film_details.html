@@ -8,6 +8,7 @@
       <h1>{{ film }}</h1>
       <img src="{{ film.poster_url }}" width="250px" />
     </div>
+    <div class="well">IMDb rating: <strong>{{ film.imdb.rating }}</strong> ({{ film.imdb.rating_vote_count|intcomma }} votes)</div>
     {% for tag in film.tags.all %}
       <span class="label label-default">{{ tag }}</span>
     {% endfor %}
@@ -19,11 +20,13 @@
           <h4 class="list-group-item-heading">
             {{ torrent.codec }} / {{ torrent.container }} / {{ torrent.resolution }} / {{ torrent.source_media }} ({{ torrent.size_in_bytes|filesizeformat }})
           </h4>
-          uploaded
-          {% if torrent.uploaded_by %}
-            by <a href="{{ torrent.uploaded_by.get_absolute_url }}">{{ torrent.uploaded_by.username }}</a>
-          {% endif %}
-          <span title="{{ torrent.uploaded_at }}">{{ torrent.uploaded_at|naturaltime }}</span>
+          <div class="well">
+            uploaded
+            {% if torrent.uploaded_by %}
+              by <a href="{{ torrent.uploaded_by.get_absolute_url }}">{{ torrent.uploaded_by.username }}</a>
+            {% endif %}
+            <span title="{{ torrent.uploaded_at }}">{{ torrent.uploaded_at|naturaltime }}</span>
+          </div>
           | <a name="torrent-pl-{{ torrent.id }}" href="{{ torrent.get_absolute_url }}">PL</a>
           | <a name="torrent-dl-{{ torrent.id }}" href="{% url 'torrent_download' torrent_id=torrent.id announce_key=request.user.profile.announce_key_id %}">DL</a>
           | {{ torrent.release_name }}<br/>
@@ -32,7 +35,7 @@
               <li>{{ file }}</li>
             {% endfor %}
           </ul>
-          <div class="well"><pre>{{ torrent.description }}</pre></div>
+          <pre>{{ torrent.description }}</pre>
         </span>
       {% endfor %}
       </div>

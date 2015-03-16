@@ -10,7 +10,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         call_command('import_tags')
+        call_command('import_imdb')
         call_command('import_films')
         call_command('import_users')
         call_command('import_torrents')
         call_command('import_film_comments')
+        call_command('import_client_whitelist')

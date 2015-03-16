@@ -21,7 +21,6 @@
         "fields": {
             "title": "Pulp Fiction",
             "year": 1994,
-            "imdb_id": "tt0110912",
             "tmdb_id": 680,
             "poster_url": "https://image.tmdb.org/t/p/w500/dM2w364MScsjFf8pfMbaWUcWrR.jpg",
             "fanart_url": "https://image.tmdb.org/t/p/original/9rZg1J6vMQoDVSgRyWcpJa8IAGy.jpg",
@@ -37,7 +36,7 @@
         "fields": {
             "title": "Inglourious Basterds",
             "year": 2009,
-            "imdb_id": "tt0361748",
+            "imdb": 361748,
             "tmdb_id": 16869,
             "poster_url": "https://image.tmdb.org/t/p/w500/vDwqPyhkzFPRDmwz9KbzN2ouEPe.jpg",
             "fanart_url": "https://image.tmdb.org/t/p/original/bk0GylJLneaSbpQZXpgTwleYigq.jpg",
@@ -45,6 +44,17 @@
             "trailer_url": "https://www.youtube.com/watch?v=KnrRy6kSFF0",
             "duration_in_minutes": 153,
             "description": "In Nazi-occupied France during World War II, a plan to assassinate Nazi leaders by a group of Jewish U.S. soldiers coincides with a theatre owner's vengeful plans for the same."
+        }
+    },
+    {
+        "pk": 361748,
+        "model": "imdb.FilmIMDb",
+        "fields": {
+            "title": "Inglourious Basterds",
+            "year": 2009,
+            "rating": 8.3,
+            "rating_vote_count": 521392,
+            "runtime_in_minutes": 153
         }
     },
     {

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # Local apps
     'films',
     'film_lists',
+    'imdb',
     'invites',
     'media_formats',
     'profiles',

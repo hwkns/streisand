@@ -14,8 +14,10 @@ class Command(MySQLCommand):
 
         peer_id_prefix = row['peer_id']
         name = row['vstring'].encode('latin-1').decode('utf-8')
-        TorrentClient.objects.create(
+        c = TorrentClient.objects.create(
             peer_id_prefix=peer_id_prefix,
             name=name,
             whitelisted=True,
         )
+
+        print(c)

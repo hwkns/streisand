@@ -10,7 +10,7 @@ class Film(models.Model):
 
     title = models.CharField(max_length=1024)
     year = models.PositiveSmallIntegerField(null=False)
-    imdb_id = models.CharField(max_length=16, null=True, unique=True)
+    imdb = models.ForeignKey('imdb.FilmIMDb', null=True)
     tmdb_id = models.IntegerField(null=True, unique=True)
     poster_url = models.URLField()
     fanart_url = models.URLField()

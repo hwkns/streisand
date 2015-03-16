@@ -10,7 +10,6 @@ class FilmAdmin(admin.ModelAdmin):
     fields = (
         'title',
         'year',
-        'imdb_id',
         'tmdb_id',
         'poster',
         'fanart_url',
@@ -25,7 +24,6 @@ class FilmAdmin(admin.ModelAdmin):
     list_display = (
         'title',
         'year',
-        'imdb_id',
         'duration_in_minutes',
     )
 
