@@ -48,3 +48,4 @@ class FilmIMDb(models.Model):
         self.rating_vote_count = metadata['rating_vote_count']
         self.runtime_in_minutes = metadata['runtime_in_minutes']
         self.last_updated = now()
+        self.save()
