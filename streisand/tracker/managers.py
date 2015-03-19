@@ -61,7 +61,7 @@ class TorrentClientManager(models.Manager):
                     # the comparison will be faster.
                     b2a_hex(client.peer_id_prefix.encode('ascii')).decode('ascii')
                     for client
-                    in self.filter(whitelisted=True)
+                    in self.filter(is_whitelisted=True)
                 ]
             )
             cache.set(self.WHITELIST_CACHE_KEY, client_whitelist)

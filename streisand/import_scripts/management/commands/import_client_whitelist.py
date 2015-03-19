@@ -17,7 +17,7 @@ class Command(MySQLCommand):
         c = TorrentClient.objects.create(
             peer_id_prefix=peer_id_prefix,
             name=name,
-            whitelisted=True,
+            is_whitelisted=True,
         )
 
         print(c)

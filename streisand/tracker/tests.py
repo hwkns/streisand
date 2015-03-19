@@ -23,7 +23,7 @@ class AnnounceHandlerTests(TestCase):
         self.swarm = G(Swarm, torrent_info_hash='894985f97cc25c246e37a07cd7c785993982a7cb')
         self.user = G(User)
         self.profile = self.user.profile
-        self.client = G(TorrentClient, peer_id_prefix='-DE1360-', whitelisted=True)
+        self.client = G(TorrentClient, peer_id_prefix='-DE1360-', is_whitelisted=True)
         self.announce_data = {
             'info_hash': a2b_hex(self.swarm.torrent_info_hash),
             'peer_id': '-DE1360-m8vgv0uzHUF0',
