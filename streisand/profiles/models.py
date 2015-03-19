@@ -8,10 +8,11 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.db import models, transaction
 from django.db.models import signals
 from django.db.models.aggregates import Sum
 from django.dispatch import receiver
+from django.utils.timezone import now
 
 from tracker.models import Peer
 
@@ -121,8 +122,18 @@ class UserProfile(models.Model):
         return reverse('user_profile', args=[self.username])
 
     def reset_announce_key(self):
-        self.announce_key = self.announce_keys.create()
-        self.save()
+
+        with transaction.atomic():
+
+            # Revoke old key
+            if self.announce_key_id:
+                old_key = self.announce_key
+                old_key.revoked_at = now()
+                old_key.save()
+
+            # Issue new key
+            self.announce_key = self.announce_keys.create()
+            self.save()
 
 
 # Signal handler for new users
@@ -199,7 +210,8 @@ class UserAnnounceKey(models.Model):
         related_name='announce_keys',
         db_index=True,
     )
-    used_since = models.DateTimeField(auto_now_add=True)
+    issued_at = models.DateTimeField(auto_now_add=True)
+    revoked_at = models.DateTimeField(null=True)
 
     def __str__(self):
         return self.id

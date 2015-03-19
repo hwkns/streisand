@@ -152,7 +152,7 @@
         "model": "profiles.userannouncekey",
         "fields": {
             "used_with_profile": 1,
-            "used_since": "2014-09-18T14:52:58.484Z"
+            "issued_at": "2014-09-18T14:52:58.484Z"
         }
     },
     {

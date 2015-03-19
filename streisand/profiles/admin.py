@@ -59,13 +59,15 @@ class UserAnnounceKeyAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'profile_link',
-        'used_since',
+        'issued_at',
+        'revoked_at',
     )
 
     fields = (
         'id',
         'profile_link',
-        'used_since',
+        'issued_at',
+        'revoked_at',
     )
 
     readonly_fields = fields
@@ -75,7 +77,7 @@ class UserAnnounceKeyAdmin(admin.ModelAdmin):
         'used_with_profile__user__username',
     )
 
-    ordering = ['-used_since']
+    ordering = ['-issued_at']
 
     def profile_link(self, announce_key):
         return announce_key.used_with_profile.admin_link
