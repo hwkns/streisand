@@ -67,14 +67,16 @@ class Command(MySQLCommand):
         if bbcode_description:
             description = bbcode_description.encode('latin-1').decode('utf-8').strip()
             nfo_match = re.search(
-                r'\[spoiler=NFO\](?:\[size=\d\])?\[pre\](.*)\[/pre\](?:\[/size\])?\[/spoiler\]',
+                r'\[spoiler=NFO\]\s*(?:\[size=\d\])?\s*\[pre\](.*)\[/pre\]\s*(?:\[/size\])?\s*\[/spoiler\]',
                 string=description,
                 flags=re.IGNORECASE + re.DOTALL,
             )
             if nfo_match:
-                nfo_text = nfo_match.group(1).strip()
+                nfo_text = nfo_match.group(1).rstrip()
+                if 'Ü' in nfo_text:
+                    nfo_text = nfo_text.encode('cp1252').decode('cp437')
                 spoiler_match = re.search(
-                    r'(\[spoiler=NFO\](?:\[size=\d\])?\[pre\].*\[/pre\](?:\[/size\])?\[/spoiler\])',
+                    r'(\[spoiler=NFO\]\s*(?:\[size=\d\])?\s*\[pre\].*\[/pre\]\s*(?:\[/size\])?\s*\[/spoiler\])',
                     string=description,
                     flags=re.IGNORECASE + re.DOTALL,
                 )
@@ -96,7 +98,6 @@ class Command(MySQLCommand):
             swarm=swarm,
             metainfo=metainfo,
             file_list=file_list,
-            uploaded_at=uploaded_at.replace(tzinfo=UTC),
             uploaded_by=uploader,
             source_media_id=source_media,
             resolution_id=resolution,
@@ -106,6 +107,8 @@ class Command(MySQLCommand):
             is_scene=is_scene,
             size_in_bytes=size_in_bytes,
         )
+        torrent.uploaded_at = uploaded_at.replace(tzinfo=UTC)
+        torrent.save()
 
         print(torrent)
 
