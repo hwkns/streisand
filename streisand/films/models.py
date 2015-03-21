@@ -3,6 +3,8 @@
 from django.core.urlresolvers import reverse
 from django.db import models
 
+from rotten_tomatoes.managers import FilmRottenTomatoesManager
+
 
 class Film(models.Model):
 
@@ -10,7 +12,16 @@ class Film(models.Model):
 
     title = models.CharField(max_length=1024)
     year = models.PositiveSmallIntegerField(null=False)
-    imdb = models.ForeignKey('imdb.FilmIMDb', null=True)
+    imdb = models.ForeignKey(
+        'imdb.FilmIMDb',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    rotten_tomatoes = models.ForeignKey(
+        'rotten_tomatoes.FilmRottenTomatoes',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     tmdb_id = models.IntegerField(null=True, unique=True)
     poster_url = models.URLField()
     fanart_url = models.URLField()
@@ -33,6 +44,13 @@ class Film(models.Model):
         return (
             "title__icontains",
         )
+
+    def fetch_rotten_tomatoes_info(self):
+        if self.rotten_tomatoes:
+            self.rotten_tomatoes.refresh_from_api()
+        elif self.imdb:
+            self.rotten_tomatoes = FilmRottenTomatoesManager.create_from_imdb_tt_id(self.imdb.tt_id)
+            self.save()
 
 
 class Tag(models.Model):

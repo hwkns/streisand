@@ -8,10 +8,17 @@
       <h1>{{ film }}</h1>
       <img src="{{ film.poster_url }}" width="250px" />
     </div>
-    <div class="well">IMDb rating: <strong>{{ film.imdb.rating }}</strong> ({{ film.imdb.rating_vote_count|intcomma }} votes)</div>
     {% for tag in film.tags.all %}
       <span class="label label-default">{{ tag }}</span>
     {% endfor %}
+    <p></p>
+    <div class="well">
+      {% if film.rotten_tomatoes %}
+      <p>RT critics rating: <strong>{{ film.rotten_tomatoes.critics_rating }}</strong> ({{ film.rotten_tomatoes.critics_rating_string }})</p>
+      <p>RT audience rating: <strong>{{ film.rotten_tomatoes.audience_rating }}</strong> ({{ film.rotten_tomatoes.audience_rating_string }})</p>
+      {% endif %}
+      <p>IMDb rating: <strong>{{ film.imdb.rating }}</strong> ({{ film.imdb.rating_vote_count|intcomma }} votes)</p>
+    </div>
 
     <h2>Torrents</h2>
     <div class="list-group">
@@ -35,7 +42,9 @@
               <li>{{ file }}</li>
             {% endfor %}
           </ul>
-          <pre>{{ torrent.nfo }}</pre>
+          {% if torrent.nfo %}
+            <pre>{{ torrent.nfo }}</pre>
+          {% endif %}
           {% if torrent.description %}
             <div class="well">{{ torrent.description }}</div>
           {% endif %}

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'invites',
     'media_formats',
     'profiles',
+    'rotten_tomatoes',
     'torrent_requests',
     'torrents',
     'tracker',
