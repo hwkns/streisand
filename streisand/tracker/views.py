@@ -51,7 +51,7 @@ class AnnounceView(View):
 
         # Fail if the announce_key is invalid
         if not UserProfile.objects.filter(announce_key_id=announce_key).exists():
-            return self.failure('Invalid announce_key')
+            return self.failure('Invalid announce key')
 
         # Fail if any required parameters are missing
         if not self.REQUIRED_PARAMS <= request.GET.keys():

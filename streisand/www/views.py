@@ -5,8 +5,8 @@ import logging
 
 from django.contrib.auth import authenticate, login
 from django.http import Http404
-from django.views.generic import View
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import View
 
 from films.models import Film
 from film_lists.models import FilmList
