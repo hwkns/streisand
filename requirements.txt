@@ -1,4 +1,4 @@
-Django==1.7.6
+Django==1.7.7
 Markdown==2.6.1
 Werkzeug==0.10.1
 anyjson==0.3.3
@@ -23,5 +23,5 @@ pytz>=2014.10
 redis==2.10.3
 requests==2.6.0
 six==1.9.0
-uWSGI==2.0.9
+uWSGI==2.0.10
 -e git://github.com/django-wiki/django-wiki.git@master#egg=wiki
