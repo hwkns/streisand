@@ -15,10 +15,10 @@ def https_required(view_func):
 
     @wraps(view_func, assigned=available_attrs(view_func))
     def _wrapped_view(request, *args, **kwargs):
-        if not any([settings.DEBUG, request.is_secure()]):
+        if request.is_secure() or settings.DEBUG:
+            return view_func(request, *args, **kwargs)
+        else:
             url = request.build_absolute_uri(request.get_full_path())
             secure_url = url.replace('http://', 'https://')
             return HttpResponseRedirect(secure_url)
-        else:
-            return view_func(request, *args, **kwargs)
     return _wrapped_view
