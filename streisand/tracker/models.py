@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from django.db import models
+from uuid import uuid4
 
-from django_extensions.db.fields import UUIDField
+from django.db import models
 
 from .managers import PeerQuerySet, TorrentClientManager, SwarmManager
 
@@ -32,7 +32,7 @@ class Peer(models.Model):
     # Because Django does not support compound primary keys, and because this
     # table might actually hit the max limit of an auto-incrementing integer ID,
     # we use an auto-generated UUIDField as the primary key.
-    id = UUIDField(auto=True, primary_key=True, editable=False)
+    id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
 
     swarm = models.ForeignKey(Swarm, null=False, db_index=True, related_name='peers')
     user_announce_key = models.CharField(max_length=36, null=False)

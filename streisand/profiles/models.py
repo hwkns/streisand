@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from decimal import Decimal
-
-from django_extensions.db.fields import UUIDField
+from uuid import uuid4
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
-from django.db.models import signals
-from django.db.models.aggregates import Sum
-from django.dispatch import receiver
+from django.db.models import Sum
 from django.utils.timezone import now
 
 from tracker.models import Peer
@@ -31,6 +27,7 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField('auth.User', related_name='profile')
     account_status = models.CharField(max_length=32, choices=STATUS_CHOICES, db_index=True)
+    failed_login_attempts = models.PositiveIntegerField(default=0)
     announce_key = models.OneToOneField(
         'profiles.UserAnnounceKey',
         related_name='profile',
@@ -136,26 +133,12 @@ class UserProfile(models.Model):
             self.save()
 
 
-# Signal handler for new users
-@receiver(models.signals.post_save, sender='auth.User')
-def create_profile_for_new_user(sender, instance, created=False, **kwargs):
-    if created is True and not hasattr(instance, 'profile'):
-        UserProfile.objects.create(user=instance)
-
-
-# Signal handler for new user profiles
-@receiver(models.signals.post_save, sender='profiles.UserProfile')
-def set_announce_key_for_new_user_profile(sender, instance, created=False, **kwargs):
-    if created is True and instance.announce_key is None:
-        instance.reset_announce_key()
-
-
 class TorrentStats(models.Model):
 
     # Because Django does not support compound primary keys, and because this
     # table might actually hit the max limit of an auto-incrementing integer ID,
     # we use an auto-generated UUIDField as the primary key.
-    id = UUIDField(auto=True, primary_key=True, editable=False)
+    id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
 
     profile = models.ForeignKey(
         'profiles.UserProfile',
@@ -204,7 +187,7 @@ class UserAnnounceKey(models.Model):
     """
     Used to keep a history of auth keys used by a profile.
     """
-    id = UUIDField(auto=True, primary_key=True)
+    id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
     used_with_profile = models.ForeignKey(
         'profiles.UserProfile',
         related_name='announce_keys',
@@ -225,7 +208,7 @@ class UserAnnounce(models.Model):
     # Because Django does not support compound primary keys, and because this
     # table might actually hit the max limit of an auto-incrementing integer ID,
     # we use an auto-generated UUIDField as the primary key.
-    id = UUIDField(auto=True, primary_key=True, editable=False)
+    id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
 
     profile = models.ForeignKey(
         'profiles.UserProfile',
@@ -239,7 +222,7 @@ class UserAnnounce(models.Model):
         db_index=True,
     )
     time_stamp = models.DateTimeField(null=False)
-    announce_key = UUIDField(auto=False, null=False)
+    announce_key = models.UUIDField(null=False)
     ip_address = models.GenericIPAddressField(null=False)
     port = models.IntegerField(null=False)
     peer_id = models.CharField(max_length=40, null=False)
@@ -256,18 +239,25 @@ class WatchedUser(models.Model):
     notes = models.TextField()
     added_at = models.DateTimeField(auto_now_add=True)
     last_checked = models.DateTimeField(auto_now=True)
-    checked_by = models.ForeignKey('auth.User')
+    checked_by = models.ForeignKey(
+        'auth.User',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
 
 
-def invalidate_user_cache(sender, instance, **kwargs):
-    if sender == User:
-        key = UserProfile.CACHE_KEY.format(user_id=instance.id)
-    else:
-        key = UserProfile.CACHE_KEY.format(user_id=instance.user_id)
-    cache.delete(key)
+class LoginAttempt(models.Model):
+    user = models.ForeignKey('auth.User', related_name='login_attempts')
+    ip_address = models.GenericIPAddressField(null=True)
+    success = models.BooleanField()
+    time_stamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        get_latest_by = 'time_stamp'
 
-signals.post_save.connect(invalidate_user_cache, sender=User)
-signals.post_save.connect(invalidate_user_cache, sender=UserProfile)
-signals.post_delete.connect(invalidate_user_cache, sender=User)
-signals.post_delete.connect(invalidate_user_cache, sender=UserProfile)
+    def __str__(self):
+        return '[{status}] {time_stamp} - {user}'.format(
+            status='success' if self.success else 'failure',
+            time_stamp=self.time_stamp,
+            user=self.user,
+        )

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from uuid import uuid4
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
-
-from django_extensions.db.fields import UUIDField
 
 from www.tasks import async_email
 from www.utils import get_full_url
@@ -16,7 +16,7 @@ class Invite(models.Model):
 
     offered_by = models.ForeignKey('profiles.UserProfile', related_name='invites')
     email = models.EmailField(max_length=254, unique=True)
-    key = UUIDField(auto=True, primary_key=True)
+    key = models.UUIDField(default=uuid4, primary_key=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     objects = InviteManager()
