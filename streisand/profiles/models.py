@@ -255,8 +255,8 @@ class LoginAttempt(models.Model):
         get_latest_by = 'time_stamp'
 
     def __str__(self):
-        return '[{status}] {time_stamp} - {user}'.format(
-            status='success' if self.success else 'failure',
-            time_stamp=self.time_stamp,
+        return '{status} {time_stamp} - {user}'.format(
+            status='Success' if self.success else 'Failure',
+            time_stamp=self.time_stamp.strftime('%Y-%m-%d %H:%M:%S'),
             user=self.user,
         )
