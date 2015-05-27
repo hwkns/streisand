@@ -19,7 +19,6 @@ urlpatterns = patterns(
         view=home,
         name='home'
     ),
-    url(r'^comments/', include('django_comments.urls')),
     url(r'^films/', include('films.urls')),
     url(r'^film-lists/', include('film_lists.urls')),
     url(r'^invites/', include('invites.urls')),

@@ -34,7 +34,7 @@ def film_index(request):
 def film_details(request, film_id, torrent_id=None):
 
     try:
-        film = Film.objects.filter(id=film_id).prefetch_related('torrents').get()
+        film = Film.objects.filter(id=film_id).prefetch_related('torrents', 'comments').get()
     except Film.DoesNotExist:
         raise Http404
 

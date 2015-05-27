@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load comments humanize %}
+{% load humanize %}
 
 {% block title %}{{ film }}{% endblock %}
 
@@ -52,18 +52,17 @@
       {% endfor %}
       </div>
 
-    {% get_comment_list for film as comment_list %}
     <h2>Comments</h2>
     <div class="col-sm-8">
       <div class="list-group">
-        {% for comment in comment_list reversed %}
-          <span class="list-group-item">
+        {% for comment in film.comments.all %}
+          <div class="list-group-item">
             <h4 class="list-group-item-heading">
-              <a href="{{ comment.user.profile.get_absolute_url }}">{{ comment.user_name }}</a>
-              {{ comment.submit_date|naturaltime }}
+              <a href="{{ comment.author.get_absolute_url }}">{{ comment.author.username }}</a>
+              <span title="{{ comment.created_at }}">{{ comment.created_at|naturaltime }}</span>
             </h4>
-            <p class="list-group-item-text">{{ comment.comment }}</p>
-          </span>
+            <p class="list-group-item-text">{{ comment.text }}</p>
+          </div>
         {% endfor %}
       </div>
     </div>

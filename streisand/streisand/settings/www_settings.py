@@ -12,7 +12,6 @@ INSTALLED_APPS += [
     'debreach',
     'django_su',
     'grappelli',
-    'django_comments',
 
     # Contrib apps
     'django.contrib.admin',

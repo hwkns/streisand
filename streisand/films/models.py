@@ -53,6 +53,18 @@ class Film(models.Model):
             self.save()
 
 
+class FilmComment(models.Model):
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey('profiles.UserProfile', related_name='film_comments')
+    film = models.ForeignKey('films.Film', related_name='comments')
+    text = models.TextField()
+
+    def __str__(self):
+        return self.text
+
+
 class Tag(models.Model):
 
     name = models.CharField(max_length=32, primary_key=True)
