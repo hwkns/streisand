@@ -11,6 +11,16 @@ from django.utils.http import urlquote
 from profiles.models import UserProfile
 
 
+class ExtraExceptionInfoMiddleware:
+    """
+    This middleware adds relevant information to the request when there is an exception
+    """
+    @staticmethod
+    def process_exception(request, exception):
+        if request.user.is_authenticated():
+            request.META[b'USER'] = request.user.username
+
+
 class XForwardedForMiddleware:
 
     def process_request(self, request):
