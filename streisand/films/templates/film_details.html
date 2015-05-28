@@ -25,7 +25,13 @@
       {% for torrent in film.torrents.all %}
         <span class="list-group-item{% if torrent.id == torrent_id %} active{% endif %}">
           <h4 class="list-group-item-heading">
-            {{ torrent.codec }} / {{ torrent.container }} / {{ torrent.resolution }} / {{ torrent.source_media }} ({{ torrent.size_in_bytes|filesizeformat }})
+            {{ torrent.codec }}
+            /
+            {{ torrent.container }}
+            /
+            {{ torrent.resolution }}
+            /
+            {{ torrent.source_media }} ({{ torrent.size_in_bytes|filesizeformat }})
           </h4>
           <div class="well">
             uploaded
@@ -33,6 +39,22 @@
               by <a href="{{ torrent.uploaded_by.get_absolute_url }}">{{ torrent.uploaded_by.username }}</a>
             {% endif %}
             <span title="{{ torrent.uploaded_at }}">{{ torrent.uploaded_at|naturaltime }}</span>
+            <br />
+            {% if torrent.is_approved == True %}
+              approved by {{ torrent.moderated_by }}
+            {% elif torrent.is_approved == False %}
+              work in progress
+            {% else %}
+              not yet moderated
+            {% endif %}
+            {% if not torrent.is_approved %}
+            <br />
+            <form action="{% url 'torrent_moderation' torrent_id=torrent.id %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="moderation_status" value="approved" />
+              <input type="submit" value="Approve" />
+            </form>
+            {% endif %}
           </div>
           | <a name="torrent-pl-{{ torrent.id }}" href="{{ torrent.get_absolute_url }}">PL</a>
           | <a name="torrent-dl-{{ torrent.id }}" href="{% url 'torrent_download' torrent_id=torrent.id announce_key=request.user.profile.announce_key_id %}">DL</a>

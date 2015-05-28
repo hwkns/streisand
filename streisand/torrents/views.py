@@ -86,3 +86,26 @@ class TorrentUploadView(View):
             template_name='torrent_upload.html',
             dictionary={'form': form},
         )
+
+class TorrentModerationView(View):
+
+    def post(self, request, *args, **kwargs):
+
+        if not request.user.has_perm('torrents.can_moderate'):
+            raise PermissionDenied("You cannot moderate torrents.")
+
+        torrent = get_object_or_404(Torrent, id=kwargs['torrent_id'])
+
+        moderation_status = request.POST['moderation_status']
+
+        if moderation_status == 'approved':
+            torrent.is_approved = True
+        elif moderation_status == 'needs_work':
+            torrent.is_approved = False
+        else:
+            torrent.is_approved = None
+
+        torrent.moderated_by = request.user.profile
+        torrent.save()
+
+        return redirect(torrent)

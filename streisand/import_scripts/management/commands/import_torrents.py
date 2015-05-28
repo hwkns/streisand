@@ -24,6 +24,12 @@ class Command(MySQLCommand):
 
     torrent_ids = set()
 
+    moderation_values = {
+        0: None,
+        1: True,
+        2: False,
+    }
+
     def handle_row(self, row):
 
         torrent_id = row['ID']
@@ -45,8 +51,8 @@ class Command(MySQLCommand):
         size_in_bytes = row['Size']
         # last_action = row['last_action']
         # imdb_id = row['imdb']
-        # is_moderated = (row['Moderated'] == 1)
-        # last_moderated_by_username = row['LastModeratedBy']
+        is_approved = self.moderation_values[row['Moderated']]
+        last_moderated_by_username = row['LastModeratedBy']
         # tc_original = (row['Exclusive'] == '1')
         # reseed_requested_at = row['ReseedRequested']
         mediainfo = row['MediaInfo']
@@ -87,6 +93,7 @@ class Command(MySQLCommand):
         swarm = Swarm.objects.create(torrent_info_hash=info_hash)
         metainfo = TorrentMetaInfo.objects.create(dictionary=metainfo_dict)
         uploader = UserProfile.objects.filter(old_id=uploader_id).first()
+        moderator = UserProfile.objects.filter(user__username=last_moderated_by_username).first()
 
         torrent = Torrent.objects.create(
             old_id=torrent_id,
@@ -106,6 +113,8 @@ class Command(MySQLCommand):
             release_name=release_name.encode('latin-1').decode('utf-8') if release_name else '',
             is_scene=is_scene,
             size_in_bytes=size_in_bytes,
+            approved=is_approved,
+            moderated_by=moderator,
         )
         torrent.uploaded_at = uploaded_at.replace(tzinfo=UTC)
         torrent.save()

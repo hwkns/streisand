@@ -32,6 +32,19 @@ class Torrent(models.Model):
         blank=True,
         related_name='encodes',
     )
+    moderated_by = models.ForeignKey(
+        'profiles.UserProfile',
+        null=True,
+        blank=True,
+        related_name='moderated_torrents',
+    )
+    is_approved = models.NullBooleanField(
+        choices=(
+            (None, 'Not Yet Moderated'),
+            (True, 'Approved'),
+            (False, 'Work In Progress'),
+        )
+    )
     last_seeded = models.DateTimeField(null=True)
     snatch_count = models.IntegerField(default=0)
     download_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
@@ -85,6 +98,7 @@ class Torrent(models.Model):
     class Meta:
         permissions = (
             ('can_upload', "Can upload new torrents"),
+            ('can_moderate', "Can moderate torrents"),
         )
 
     def __str__(self):
