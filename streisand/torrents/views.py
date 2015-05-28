@@ -87,6 +87,7 @@ class TorrentUploadView(View):
             dictionary={'form': form},
         )
 
+
 class TorrentModerationView(View):
 
     def post(self, request, *args, **kwargs):
