@@ -24,7 +24,7 @@ class BencodedResponse(HttpResponse):
     def __init__(self, data, **kwargs):
         kwargs.setdefault('content_type', 'text/plain')
         data = bencode(data)
-        super(BencodedResponse, self).__init__(content=data, **kwargs)
+        super().__init__(content=data, **kwargs)
 
 
 cache.set('announce_interval', timedelta(minutes=40))

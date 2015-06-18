@@ -19,7 +19,7 @@ class InviteView(View):
 
     def dispatch(self, request, *args, **kwargs):
         self.invites = Invite.objects.filter(offered_by=request.user.profile)
-        return super(InviteView, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
 

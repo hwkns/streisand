@@ -29,8 +29,7 @@ class InviteAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
-        queryset = super(InviteAdmin, self).get_queryset(request)
-        return queryset.select_related('offered_by__user')
+        return super().get_queryset(request).select_related('offered_by__user')
 
     def offered_by_profile_link(self, invite):
         return '<a href="{profile_url}">{username}</a>'.format(

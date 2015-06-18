@@ -27,8 +27,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
-        queryset = super(UserProfileAdmin, self).get_queryset(request)
-        return queryset.select_related('user')
+        return super().get_queryset(request).select_related('user')
 
     def has_delete_permission(self, request, obj=None):
         return False

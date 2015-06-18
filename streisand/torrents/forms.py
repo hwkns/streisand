@@ -41,7 +41,7 @@ class TorrentUploadForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         uploader = kwargs.pop('uploader')
-        super(TorrentUploadForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.instance.uploaded_by = uploader
         self.metainfo_dict = None
 
@@ -114,4 +114,4 @@ class TorrentUploadForm(forms.ModelForm):
         with transaction.atomic():
             self.instance.swarm = Swarm.objects.create(torrent_info_hash=info_hash)
             self.instance.metainfo = TorrentMetaInfo.objects.create(dictionary=self.metainfo_dict)
-            return super(TorrentUploadForm, self).save(*args, **kwargs)
+            return super().save(*args, **kwargs)

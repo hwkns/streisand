@@ -17,7 +17,7 @@ class InviteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         offered_by = kwargs.pop('offered_by')
-        super(InviteForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.instance.offered_by = offered_by
 
     def clean_email(self):
