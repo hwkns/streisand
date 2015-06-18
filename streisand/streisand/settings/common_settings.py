@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'imdb',
     'invites',
     'media_formats',
+    'mediainfo',
     'profiles',
     'rotten_tomatoes',
     'torrent_requests',

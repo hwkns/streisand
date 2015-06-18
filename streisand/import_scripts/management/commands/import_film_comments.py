@@ -37,7 +37,7 @@ class Command(MySQLCommand):
         comment = FilmComment.objects.create(
             film=film,
             author=author,
-            text=body,
+            text=body.encode('latin-1').decode('utf-8') if body else '',
         )
         comment.created_at = submit_date.replace(tzinfo=UTC)
         if edit_date:

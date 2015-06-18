@@ -56,7 +56,7 @@ class Torrent(models.Model):
     is_scene = models.NullBooleanField(default=False)
     description = models.TextField()
     nfo = models.TextField()
-    mediainfo = models.TextField()
+    mediainfo = models.OneToOneField('mediainfo.Mediainfo', null=True)
 
     # Format information
     is_source = models.BooleanField(default=False)

@@ -10,6 +10,7 @@ from django.conf import settings
 
 from import_scripts.management.commands import MySQLCommand
 from films.models import Film
+from mediainfo.models import Mediainfo
 from profiles.models import UserProfile
 from torrents.models import Torrent, TorrentMetaInfo
 from tracker.models import Swarm
@@ -95,13 +96,23 @@ class Command(MySQLCommand):
         uploader = UserProfile.objects.filter(old_id=uploader_id).first()
         moderator = UserProfile.objects.filter(user__username=last_moderated_by_username).first()
 
+        mediainfo_text = mediainfo.encode('latin-1').decode('utf-8').strip() if mediainfo else ''
+        if mediainfo_text:
+            try:
+                mediainfo = Mediainfo.objects.create(text=mediainfo_text)
+            except Exception:
+                print(mediainfo_text)
+                raise
+        else:
+            mediainfo = None
+
         torrent = Torrent.objects.create(
             old_id=torrent_id,
             film=Film.objects.get(old_id=torrent_group_id),
             cut=special_edition_title if is_special_edition else 'Theatrical',
             description=description,
             nfo=nfo_text,
-            mediainfo=mediainfo.encode('latin-1').decode('utf-8') if mediainfo else '',
+            mediainfo=mediainfo,
             swarm=swarm,
             metainfo=metainfo,
             file_list=file_list,
@@ -113,7 +124,7 @@ class Command(MySQLCommand):
             release_name=release_name.encode('latin-1').decode('utf-8') if release_name else '',
             is_scene=is_scene,
             size_in_bytes=size_in_bytes,
-            approved=is_approved,
+            is_approved=is_approved,
             moderated_by=moderator,
         )
         torrent.uploaded_at = uploaded_at.replace(tzinfo=UTC)
