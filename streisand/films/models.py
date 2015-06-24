@@ -3,6 +3,7 @@
 from django.core.urlresolvers import reverse
 from django.db import models
 
+from comments.models import Comment
 from rotten_tomatoes.managers import FilmRottenTomatoesManager
 
 
@@ -53,16 +54,9 @@ class Film(models.Model):
             self.save()
 
 
-class FilmComment(models.Model):
+class FilmComment(Comment):
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey('profiles.UserProfile', related_name='film_comments')
     film = models.ForeignKey('films.Film', related_name='comments')
-    text = models.TextField()
-
-    def __str__(self):
-        return self.text
 
 
 class Tag(models.Model):

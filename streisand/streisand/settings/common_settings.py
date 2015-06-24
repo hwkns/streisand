@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
 
     # Local apps
+    'comments',
     'films',
     'film_lists',
     'imdb',
