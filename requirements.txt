@@ -11,16 +11,15 @@ django-debreach==1.2.1
 django-debug-toolbar==1.3.0
 django-email-bandit==1.0
 django-extensions==1.5.5
-django-grappelli==2.6.4
-#dajngo-mptt==0.7.1
--e git://github.com/django-mptt/django-mptt.git@master#egg=mptt
+django-grappelli==2.6.5
+django-mptt==0.7.4
 django-picklefield==0.3.1
-django-redis==4.0.0
--e git://github.com/ojii/django-sekizai.git@master#egg=sekizai
+django-redis==4.1.0
+django-sekizai==0.8.2
 django-su==0.4.7
 jsonfield==1.0.3
 kombu==3.0.26
-psycopg2==2.6
+psycopg2==2.6.1
 pytz>=2015.4
 redis==2.10.3
 requests==2.7.0
