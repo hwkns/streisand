@@ -30,6 +30,7 @@ class FeatureManager(models.Manager):
     def _is_enabled(self, feature_name):
         return self.filter(name=feature_name, is_enabled=True).exists()
 
-    def invalidate_cache(self, feature_name):
-        cache_key = self.FEATURE_CACHE_KEY.format(feature_name=feature_name)
+    @classmethod
+    def invalidate_cache(cls, feature_name):
+        cache_key = cls.FEATURE_CACHE_KEY.format(feature_name=feature_name)
         cache.delete(cache_key)
