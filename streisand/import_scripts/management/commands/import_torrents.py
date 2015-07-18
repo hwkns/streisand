@@ -23,8 +23,6 @@ class Command(MySQLCommand):
 
     help = "Imports torrents from files and the MySQL db"
 
-    torrent_ids = set()
-
     moderation_values = {
         0: None,
         1: True,
@@ -57,6 +55,9 @@ class Command(MySQLCommand):
         # tc_original = (row['Exclusive'] == '1')
         # reseed_requested_at = row['ReseedRequested']
         mediainfo = row['MediaInfo']
+
+        if container == 'Matroska':
+            container = 'MKV'
 
         metainfo_dict = self.get_metainfo(torrent_id)
         if 'files' in metainfo_dict['info']:

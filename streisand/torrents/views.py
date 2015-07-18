@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from profiles.models import UserProfile
@@ -14,11 +16,11 @@ from .forms import TorrentUploadForm
 
 class TorrentDownloadView(View):
 
-    def get(self, *args, **kwargs):
+    def get(self, request, torrent_id, announce_key):
 
         # Make sure we have a valid announce key
         try:
-            profile = UserProfile.objects.get(announce_key_id=kwargs['announce_key'])
+            profile = UserProfile.objects.get(announce_key_id=announce_key)
         except UserProfile.DoesNotExist:
             raise PermissionDenied
 
@@ -29,7 +31,7 @@ class TorrentDownloadView(View):
         # Make sure we have a valid torrent id
         torrent = get_object_or_404(
             Torrent.objects.select_related('metainfo'),
-            id=kwargs['torrent_id'],
+            id=torrent_id,
         )
 
         # Respond with the customized torrent
@@ -45,20 +47,18 @@ class TorrentDownloadView(View):
 
 class TorrentUploadView(View):
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
 
-        torrent_upload_form = TorrentUploadForm(uploader=request.user.profile)
+        torrent_upload_form = TorrentUploadForm(uploader_profile=request.user.profile)
         return self._render(torrent_upload_form)
 
-    def post(self, request, *args, **kwargs):
-
-        if not request.user.has_perm('torrents.can_upload'):
-            raise PermissionDenied("You cannot upload torrents.")
+    @method_decorator(permission_required('torrents.can_upload', raise_exception=True))
+    def post(self, request):
 
         torrent_upload_form = TorrentUploadForm(
             request.POST,
             request.FILES,
-            uploader=request.user.profile,
+            uploader_profile=request.user.profile,
         )
 
         if torrent_upload_form.is_valid():
@@ -90,12 +90,10 @@ class TorrentUploadView(View):
 
 class TorrentModerationView(View):
 
-    def post(self, request, *args, **kwargs):
+    @method_decorator(permission_required('torrents.can_moderate', raise_exception=True))
+    def post(self, request, torrent_id):
 
-        if not request.user.has_perm('torrents.can_moderate'):
-            raise PermissionDenied("You cannot moderate torrents.")
-
-        torrent = get_object_or_404(Torrent, id=kwargs['torrent_id'])
+        torrent = get_object_or_404(Torrent, id=torrent_id)
 
         moderation_status = request.POST['moderation_status']
 

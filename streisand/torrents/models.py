@@ -21,19 +21,19 @@ class Torrent(models.Model):
     # Site information
     uploaded_at = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey(
-        'profiles.UserProfile',
+        to='profiles.UserProfile',
         null=True,
         blank=False,
         related_name='uploaded_torrents',
     )
     encoded_by = models.ForeignKey(
-        'profiles.UserProfile',
+        to='profiles.UserProfile',
         null=True,
         blank=True,
         related_name='encodes',
     )
     moderated_by = models.ForeignKey(
-        'profiles.UserProfile',
+        to='profiles.UserProfile',
         null=True,
         blank=True,
         related_name='moderated_torrents',
@@ -61,28 +61,28 @@ class Torrent(models.Model):
     # Format information
     is_source = models.BooleanField(default=False)
     source_media = models.ForeignKey(
-        'media_formats.SourceMedia',
+        to='media_formats.SourceMedia',
         related_name='torrents',
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
     )
     resolution = models.ForeignKey(
-        'media_formats.Resolution',
+        to='media_formats.Resolution',
         related_name='torrents',
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
     )
     codec = models.ForeignKey(
-        'media_formats.Codec',
+        to='media_formats.Codec',
         related_name='torrents',
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
     )
     container = models.ForeignKey(
-        'media_formats.Container',
+        to='media_formats.Container',
         related_name='torrents',
         null=True,
         blank=False,

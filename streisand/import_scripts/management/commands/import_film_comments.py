@@ -2,8 +2,6 @@
 
 from pytz import UTC
 
-from films.models import FilmComment
-
 from import_scripts.management.commands import MySQLCommand
 from films.models import Film
 from profiles.models import UserProfile
@@ -17,8 +15,6 @@ class Command(MySQLCommand):
     """
 
     help = "Imports film comments from the MySQL db"
-
-    torrent_ids = set()
 
     def handle_row(self, row):
 
@@ -34,14 +30,15 @@ class Command(MySQLCommand):
             return
         film = Film.objects.get(old_id=torrent_group_id)
 
-        comment = FilmComment.objects.create(
-            film=film,
+        comment = film.comments.create(
             author=author,
             text=body.encode('latin-1').decode('utf-8') if body else '',
         )
         comment.created_at = submit_date.replace(tzinfo=UTC)
         if edit_date:
             comment.modified_at = edit_date.replace(tzinfo=UTC)
+        else:
+            comment.modified_at = comment.created_at
         comment.save()
 
         print(comment)

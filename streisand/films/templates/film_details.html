@@ -49,7 +49,7 @@
             {% endif %}
             {% if not torrent.is_approved %}
             <br />
-            <form action="{% url 'torrent_moderation' torrent_id=torrent.id %}" method="POST">
+            <form action="{% url 'torrent_moderation' torrent_id=torrent.id %}" method="post">
               {% csrf_token %}
               <input type="hidden" name="moderation_status" value="approved" />
               <input type="submit" value="Approve" />

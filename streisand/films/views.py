@@ -10,7 +10,9 @@ from .models import Film
 def film_index(request):
 
     all_films = Film.objects.all()
-    paginator = Paginator(all_films, 50)  # Show 50 films per page
+
+    # Show 50 films per page
+    paginator = Paginator(all_films, 50)
 
     page = request.GET.get('page')
     try:

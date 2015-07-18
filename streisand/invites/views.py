@@ -3,8 +3,10 @@
 import logging
 
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import permission_required
 from django.http import Http404
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from www.forms import RegistrationForm
@@ -21,12 +23,13 @@ class InviteView(View):
         self.invites = Invite.objects.filter(offered_by=request.user.profile)
         return super().dispatch(request, *args, **kwargs)
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
 
         invite_form = InviteForm(offered_by=request.user.profile)
         return self._render(invite_form)
 
-    def post(self, request, *args, **kwargs):
+    @method_decorator(permission_required('profiles.can_invite', raise_exception=True))
+    def post(self, request):
 
         invite_form = InviteForm(
             request.POST,

@@ -5,7 +5,7 @@ from pytz import UTC
 from import_scripts.management.commands import MySQLCommand
 from films.models import Film
 from profiles.models import UserProfile
-from torrent_requests.models import TorrentRequest, Vote
+from torrent_requests.models import TorrentRequest
 from torrents.models import Torrent
 
 

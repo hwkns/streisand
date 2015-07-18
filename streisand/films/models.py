@@ -14,12 +14,12 @@ class Film(models.Model):
     title = models.CharField(max_length=1024)
     year = models.PositiveSmallIntegerField(null=False)
     imdb = models.ForeignKey(
-        'imdb.FilmIMDb',
+        to='imdb.FilmIMDb',
         null=True,
         on_delete=models.SET_NULL,
     )
     rotten_tomatoes = models.ForeignKey(
-        'rotten_tomatoes.FilmRottenTomatoes',
+        to='rotten_tomatoes.FilmRottenTomatoes',
         null=True,
         on_delete=models.SET_NULL,
     )

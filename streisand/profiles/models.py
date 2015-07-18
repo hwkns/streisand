@@ -70,6 +70,7 @@ class UserProfile(models.Model):
     class Meta:
         permissions = (
             ('can_invite', "Can invite new users"),
+            ('unlimited_invites', "Can invite unlimited new users"),
         )
 
     def __str__(self):

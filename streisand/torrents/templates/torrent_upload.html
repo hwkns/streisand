@@ -10,7 +10,7 @@
     {% if 'torrents.can_upload' not in perms %}
         <h2>You do not have torrent upload privileges.</h2>
     {% else %}
-        <form action="{% url 'torrent_upload' %}" method="post" enctype="multipart/form-data">
+        <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <p><input type="submit" value="Upload" /></p>
