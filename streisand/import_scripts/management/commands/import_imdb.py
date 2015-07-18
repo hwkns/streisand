@@ -16,6 +16,7 @@ class Command(MySQLCommand):
                 SELECT DISTINCT GroupID FROM torrents WHERE ID < 1000
             )
         )
+        OR imdbID IN (SELECT imdbID FROM requests WHERE ID < 1000)
     """
 
     help = "Imports IMDb information from the MySQL db"

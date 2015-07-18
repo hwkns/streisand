@@ -1,31 +1,152 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import permission_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.decorators import method_decorator
+from django.views.generic import View
 
+from .forms import TorrentRequestForm, VoteForm
 from .models import TorrentRequest
 
 
+class NewTorrentRequestView(View):
+
+    def get(self, request):
+
+        torrent_request_form = TorrentRequestForm(requester_profile=request.user.profile)
+        return self._render(torrent_request_form)
+
+    @method_decorator(permission_required('torrent_requests.can_request', raise_exception=True))
+    def post(self, request):
+
+        torrent_request_form = TorrentRequestForm(
+            request.POST,
+            requester_profile=request.user.profile,
+        )
+
+        if torrent_request_form.is_valid():
+
+            # Save the new TorrentRequest object
+            new_torrent_request = torrent_request_form.save()
+            return redirect(new_torrent_request)
+
+        else:
+
+            # Render the form with errors
+            return self._render(torrent_request_form)
+
+    def _render(self, form):
+        """
+        Render the page with the given form.
+        """
+        return render(
+            request=self.request,
+            template_name='new_torrent_request.html',
+            dictionary={'form': form},
+        )
+
+
 def torrent_request_index(request):
+
+    all_torrent_requests = TorrentRequest.objects.select_related(
+        'created_by__user',
+        'filling_torrent',
+        'source_media',
+        'resolution',
+        'codec',
+        'container',
+    )
+
+    order_by = request.GET.get('order_by')
+
+    if order_by == 'bounty':
+        all_torrent_requests = all_torrent_requests.annotate(
+            Count('votes__bounty_in_bytes')
+        ).order_by('votes__bounty_in_bytes__count')
+    elif order_by == 'created_at':
+        all_torrent_requests = all_torrent_requests.order_by('created_at')
+
+    # Show 50 requests per page
+    paginator = Paginator(all_torrent_requests, 50)
+
+    page = request.GET.get('page')
+    try:
+        torrent_requests = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        torrent_requests = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        torrent_requests = paginator.page(paginator.num_pages)
+
     return render(
         request=request,
         template_name='torrent_request_index.html',
         dictionary={
-            'torrent_requests': TorrentRequest.objects.all(),
+            'torrent_requests': torrent_requests,
         }
     )
 
 
-def torrent_request_details(request, torrent_request_id):
+class TorrentRequestView(View):
 
-    torrent_request = get_object_or_404(
-        TorrentRequest.objects.select_related('film'),
-        id=torrent_request_id,
-    )
+    def get(self, request, torrent_request_id):
 
-    return render(
-        request=request,
-        template_name='torrent_request_details.html',
-        dictionary={
-            'torrent_request': torrent_request,
-        }
-    )
+        torrent_request = self._get_torrent_request(torrent_request_id)
+
+        vote_form = VoteForm(
+            voter_profile=request.user.profile,
+            torrent_request=torrent_request,
+        )
+
+        return self._render(torrent_request=torrent_request, vote_form=vote_form)
+
+    @method_decorator(permission_required('torrent_requests.can_vote', raise_exception=True))
+    def post(self, request, torrent_request_id):
+
+        torrent_request = self._get_torrent_request(torrent_request_id)
+
+        vote_form = VoteForm(
+            request.POST,
+            voter_profile=request.user.profile,
+            torrent_request=torrent_request,
+        )
+
+        if vote_form.is_valid():
+            vote_form.save()
+            vote_form = VoteForm(
+                voter_profile=request.user.profile,
+                torrent_request=torrent_request,
+            )
+
+        return self._render(torrent_request=torrent_request, vote_form=vote_form)
+
+    @staticmethod
+    def _get_torrent_request(torrent_request_id):
+
+        return get_object_or_404(
+            TorrentRequest.objects.select_related(
+                'created_by__user',
+                'filling_torrent',
+                'source_media',
+                'resolution',
+                'codec',
+                'container',
+            ),
+            id=torrent_request_id,
+        )
+
+    def _render(self, torrent_request, vote_form):
+        """
+        Render the page with the given form.
+        """
+        return render(
+            request=self.request,
+            template_name='torrent_request_details.html',
+            dictionary={
+                'torrent_request': torrent_request,
+                'vote_form': vote_form,
+            },
+        )

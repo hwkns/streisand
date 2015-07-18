@@ -13,7 +13,10 @@ class Command(MySQLCommand):
         SELECT * FROM users_main
         JOIN users_info ON users_info.UserID = users_main.ID
         WHERE ID IN (SELECT UserID FROM torrents WHERE ID < 1000)
+            OR ID IN (SELECT UserID FROM requests WHERE ID < 1000)
+            OR ID IN (SELECT UserID FROM requests_votes WHERE RequestID < 1000)
             OR ID IN (SELECT AuthorID FROM torrents_comments WHERE GroupID IN (SELECT GroupID FROM torrents WHERE ID < 1000))
+            OR ID IN (SELECT AuthorID FROM requests_comments WHERE RequestID IN (SELECT RequestID FROM requests WHERE ID < 1000))
             OR Username IN (SELECT LastModeratedBy FROM torrents WHERE ID < 1000)
     """
 

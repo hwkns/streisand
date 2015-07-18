@@ -177,17 +177,22 @@
         "fields": {}
     },
     {
-        "pk": "Matroska",
-        "model": "media_formats.container",
-        "fields": {}
-    },
-    {
         "pk": "DVDR NTSC",
         "model": "media_formats.container",
         "fields": {}
     },
     {
         "pk": "DVDR PAL",
+        "model": "media_formats.container",
+        "fields": {}
+    },
+    {
+        "pk": "Blu-ray",
+        "model": "media_formats.container",
+        "fields": {}
+    },
+    {
+        "pk": "HD-DVD",
         "model": "media_formats.container",
         "fields": {}
     },

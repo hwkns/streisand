@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block title %}Requests{% endblock %}
 
@@ -7,9 +8,26 @@
       <h1>Requests</h1>
     </div>
 
-    <ul>
+    <p>Don't see what you're looking for?  <a href="{% url 'new_torrent_request' %}">Make a new request</a>.</p>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <td>Request</td>
+          <td>Format</td>
+          <td><a href="{% url 'torrent_request_index' %}?order_by=bounty">Bounty</a></td>
+          <td>Author</td>
+          <td><a href="{% url 'torrent_request_index' %}?order_by=created_at">Created</a></td>
+        </tr>
+      </thead>
       {% for torrent_request in torrent_requests %}
-        <li><a href="{{ torrent_request.get_absolute_url }}">{{ torrent_request }}</a></li>
+        <tr>
+          <td><a href="{{ torrent_request.get_absolute_url }}">{{ torrent_request.film_title }} ({{ torrent_request.film_year }})</a></td>
+          <td>{{ torrent_request.format }}</td>
+          <td>{{ torrent_request.total_bounty_in_bytes|filesizeformat }}</td>
+          <td><a href="{{ torrent_request.created_by.get_absolute_url }}">{{ torrent_request.created_by }}</a></td>
+          <td><span title="{{ torrent_request.created_at }}">{{ torrent_request.created_at|naturaltime }}</span></td>
+        </tr>
       {% endfor %}
-    </ul>
+    </table>
 {% endblock %}
