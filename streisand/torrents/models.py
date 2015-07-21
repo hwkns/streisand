@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.timezone import now, timedelta
 
 from picklefield import PickledObjectField
 
@@ -46,6 +47,11 @@ class Torrent(models.Model):
         )
     )
     last_seeded = models.DateTimeField(null=True)
+    reseed_request = models.OneToOneField(
+        to='torrents.ReseedRequest',
+        null=True,
+        related_name='active_on_torrent',
+    )
     snatch_count = models.IntegerField(default=0)
     download_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
     upload_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
@@ -56,7 +62,7 @@ class Torrent(models.Model):
     is_scene = models.NullBooleanField(default=False)
     description = models.TextField()
     nfo = models.TextField()
-    mediainfo = models.OneToOneField('mediainfo.Mediainfo', null=True)
+    mediainfo = models.OneToOneField(to='mediainfo.Mediainfo', null=True)
 
     # Format information
     is_source = models.BooleanField(default=False)
@@ -99,6 +105,7 @@ class Torrent(models.Model):
         permissions = (
             ('can_upload', "Can upload new torrents"),
             ('can_moderate', "Can moderate torrents"),
+            ('can_request_reseed', "Can request a reseed"),
         )
 
     def __str__(self):
@@ -112,6 +119,31 @@ class Torrent(models.Model):
                 'torrent_id': self.id,
             }
         )
+
+    @property
+    def format(self):
+        return '{codec} / {container} / {resolution} / {source_media}'.format(
+            codec=self.codec,
+            container=self.container,
+            resolution=self.resolution,
+            source_media=self.source_media,
+        )
+
+    @property
+    def is_accepting_reseed_requests(self):
+        one_day_ago = now() - timedelta(days=1)
+        one_week_ago = now() - timedelta(days=7)
+        return all((
+            self.uploaded_at < one_day_ago,
+            self.last_seeded is None or self.last_seeded < one_day_ago,
+            self.reseed_request is None or self.reseed_request.created_at < one_week_ago,
+        ))
+
+    def request_reseed(self, user_profile):
+        self.reseed_request = self.reseed_requests.create(
+            created_by=user_profile,
+        )
+        self.save()
 
 
 class TorrentMetaInfo(models.Model):
@@ -135,6 +167,14 @@ class TorrentMetaInfo(models.Model):
 
 class ReseedRequest(models.Model):
 
-    torrent = models.ForeignKey('torrents.Torrent')
-    created_by = models.ForeignKey('profiles.UserProfile')
+    torrent = models.ForeignKey(
+        to='torrents.Torrent',
+        related_name='reseed_requests',
+    )
+    created_by = models.ForeignKey(
+        to='profiles.UserProfile',
+        related_name='reseed_requests',
+        null=True,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
+    fulfilled_at = models.DateTimeField(null=True)

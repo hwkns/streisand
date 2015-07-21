@@ -58,7 +58,13 @@
           </div>
           | <a name="torrent-pl-{{ torrent.id }}" href="{{ torrent.get_absolute_url }}">PL</a>
           | <a name="torrent-dl-{{ torrent.id }}" href="{% url 'torrent_download' torrent_id=torrent.id announce_key=request.user.profile.announce_key_id %}">DL</a>
+          {% if torrent.is_accepting_reseed_requests and 'torrents.can_request_reseed' in perms %}
+          | <a name="torrent-rr-{{ torrent.id }}" href="{% url 'reseed_request' torrent_id=torrent.id %}">RR</a>
+          {% endif %}
           | {{ torrent.release_name }}<br/>
+          {% if torrent.reseed_request %}
+          Reseed requested <span title="{{ torrent.reseed_request.created_at }}">{{ torrent.reseed_request.created_at|naturaltime }}</span>
+          {% endif %}
           <ul>
             {% for file in torrent.file_list %}
               <li>{{ file }}</li>

@@ -48,11 +48,19 @@ def handle_announce(announce_key, swarm, new_bytes_uploaded, new_bytes_downloade
     torrent_stats.bytes_downloaded = F('bytes_downloaded') + new_bytes_downloaded
     if bytes_remaining == 0:
         torrent_stats.last_seeded = time_stamp
+    if event == 'completed':
+        torrent_stats.snatch_count = F('snatch_count') + 1
     torrent_stats.save()
 
     # Update the Torrent
     if bytes_remaining == 0:
         torrent.last_seeded = time_stamp
+
+        # Resolve reseed request
+        if torrent.reseed_request_id:
+            torrent.reseed_requests.filter(id=torrent.reseed_request_id).update(fulfilled_at=time_stamp)
+            torrent.reseed_request = None
+
     if event == 'completed':
         torrent.snatch_count = F('snatch_count') + 1
     torrent.save()

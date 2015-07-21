@@ -53,7 +53,6 @@ class Command(MySQLCommand):
         is_approved = self.moderation_values[row['Moderated']]
         last_moderated_by_username = row['LastModeratedBy']
         # tc_original = (row['Exclusive'] == '1')
-        # reseed_requested_at = row['ReseedRequested']
         mediainfo = row['MediaInfo']
 
         if container == 'Matroska':

@@ -3,14 +3,14 @@
 from django.conf.urls import url, patterns
 from django.shortcuts import redirect
 
-from .views import TorrentUploadView, TorrentDownloadView, TorrentModerationView
+from .views import TorrentUploadView, TorrentDownloadView, TorrentModerationView, new_reseed_request, reseed_request_index
 
 
 urlpatterns = patterns(
     'torrents.views',
     url(r'^$', lambda r: redirect('film_index')),
     url(
-        regex=r'^upload/$',
+        regex=r'^upload/?$',
         view=TorrentUploadView.as_view(),
         name='torrent_upload',
     ),
@@ -23,5 +23,15 @@ urlpatterns = patterns(
         regex=r'^(?P<torrent_id>\d+)/moderate/?$',
         view=TorrentModerationView.as_view(),
         name='torrent_moderation',
+    ),
+    url(
+        regex=r'^(?P<torrent_id>\d+)/request-reseed/?$',
+        view=new_reseed_request,
+        name='reseed_request',
+    ),
+    url(
+        regex=r'^reseed-requests/?$',
+        view=reseed_request_index,
+        name='reseed_request_index',
     ),
 )

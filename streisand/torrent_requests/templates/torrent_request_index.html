@@ -13,11 +13,11 @@
     <table class="table">
       <thead>
         <tr>
-          <td>Request</td>
-          <td>Format</td>
-          <td><a href="{% url 'torrent_request_index' %}?order_by=bounty">Bounty</a></td>
-          <td>Author</td>
-          <td><a href="{% url 'torrent_request_index' %}?order_by=created_at">Created</a></td>
+          <th>Request</th>
+          <th>Format</th>
+          <th><a href="{% url 'torrent_request_index' %}?order_by=bounty">Bounty</a></th>
+          <th>Author</th>
+          <th><a href="{% url 'torrent_request_index' %}?order_by=created_at">Created</a></th>
         </tr>
       </thead>
       {% for torrent_request in torrent_requests %}

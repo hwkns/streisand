@@ -2,6 +2,7 @@
 
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -10,7 +11,7 @@ from django.views.generic import View
 
 from profiles.models import UserProfile
 
-from .models import Torrent
+from .models import Torrent, ReseedRequest
 from .forms import TorrentUploadForm
 
 
@@ -108,3 +109,49 @@ class TorrentModerationView(View):
         torrent.save()
 
         return redirect(torrent)
+
+
+def reseed_request_index(request):
+
+    all_reseed_requests = ReseedRequest.objects.filter(
+        active_on_torrent__isnull=False,
+    ).select_related(
+        'created_by__user',
+        'torrent',
+    ).order_by(
+        '-created_at',
+    )
+
+    # Show 50 requests per page
+    paginator = Paginator(all_reseed_requests, 50)
+
+    page = request.GET.get('page')
+    try:
+        reseed_requests = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        reseed_requests = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        reseed_requests = paginator.page(paginator.num_pages)
+
+    return render(
+        request=request,
+        template_name='reseed_request_index.html',
+        dictionary={
+            'reseed_requests': reseed_requests,
+        }
+    )
+
+
+@permission_required('torrents.can_request_reseed', raise_exception=True)
+def new_reseed_request(request, torrent_id):
+
+    torrent = get_object_or_404(Torrent, id=torrent_id)
+
+    if not torrent.is_accepting_reseed_requests:
+        raise PermissionDenied
+
+    torrent.request_reseed(request.user.profile)
+
+    return redirect(torrent)
