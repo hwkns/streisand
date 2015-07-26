@@ -49,7 +49,6 @@ class Command(MySQLCommand):
         release_name = row['ReleaseName']
         size_in_bytes = row['Size']
         # last_action = row['last_action']
-        # imdb_id = row['imdb']
         is_approved = self.moderation_values[row['Moderated']]
         last_moderated_by_username = row['LastModeratedBy']
         # tc_original = (row['Exclusive'] == '1')

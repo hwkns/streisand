@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 
-from .views import InviteView
+from . import views
 
 
-urlpatterns = patterns(
-    'invites.views',
-    url(r'^$', InviteView.as_view(), name='invite_index'),
-)
+urlpatterns = [
+    url(r'^$', views.InviteView.as_view(), name='invite_index'),
+]

@@ -2,7 +2,7 @@
 
 from wiki.urls import get_pattern as get_wiki_pattern
 
-from django.conf.urls import url, patterns, include
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import login, logout_then_login
 
@@ -12,8 +12,7 @@ from .decorators import https_required
 from .views import RegistrationView, LegacyURLView, template_viewer, home
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(
         regex=r'^$',
         view=home,
@@ -22,7 +21,7 @@ urlpatterns = patterns(
     url(r'^films/', include('films.urls')),
     url(r'^film-lists/', include('film_lists.urls')),
     url(r'^invites/', include('invites.urls')),
-    url(r'^profiles/', include('profiles.urls')),
+    url(r'^users/', include('profiles.urls')),
     url(r'^torrent-requests/', include('torrent_requests.urls')),
     url(r'^torrents/', include('torrents.urls')),
     url(r'^wiki/', get_wiki_pattern()),
@@ -72,4 +71,4 @@ urlpatterns = patterns(
         view=LegacyURLView.as_view(),
         name='legacy_url',
     ),
-)
+]

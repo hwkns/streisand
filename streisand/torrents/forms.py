@@ -32,6 +32,7 @@ class TorrentUploadForm(forms.ModelForm):
             'release_name',
             'release_group',
             'is_scene',
+            'is_3d',
             'is_source',
             'source_media',
             'resolution',

@@ -65,6 +65,7 @@ class Torrent(models.Model):
     mediainfo = models.OneToOneField(to='mediainfo.Mediainfo', null=True)
 
     # Format information
+    is_3d = models.BooleanField(default=False)
     is_source = models.BooleanField(default=False)
     source_media = models.ForeignKey(
         to='media_formats.SourceMedia',
