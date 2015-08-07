@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'torrent_requests',
     'torrents',
     'tracker',
+    'user_classes',
     'www',
 
 ]

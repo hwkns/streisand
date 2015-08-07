@@ -312,163 +312,168 @@
         "fields": {}
     },
     {
-        "model": "auth.group",
-        "pk": 1,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "1_SiteOp",
-            "permissions": []
+            "old_id": 23,
+            "name": "User",
+            "rank": 1
         }
     },
     {
-        "model": "auth.group",
-        "pk": 2,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "3_Member",
-            "permissions": []
+            "old_id": 3,
+            "name": "Member",
+            "rank": 2
         }
     },
     {
-        "model": "auth.group",
-        "pk": 3,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "4_Actor",
-            "permissions": []
+            "old_id": 30,
+            "name": "mfer",
+            "rank": 2
         }
     },
     {
-        "model": "auth.group",
-        "pk": 4,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "5_Legend",
-            "permissions": []
+            "old_id": 24,
+            "name": "Fanatic",
+            "rank": 3
         }
     },
     {
-        "model": "auth.group",
-        "pk": 5,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "7_Executive Producer",
-            "permissions": []
+            "old_id": 4,
+            "name": "Actor",
+            "rank": 4
         }
     },
     {
-        "model": "auth.group",
-        "pk": 6,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "8_Encoder",
-            "permissions": []
+            "old_id": 25,
+            "name": "Director",
+            "rank": 5
         }
     },
     {
-        "model": "auth.group",
-        "pk": 7,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "9_Community Staff",
-            "permissions": []
+            "old_id": 20,
+            "name": "Producer",
+            "rank": 6
         }
     },
     {
-        "model": "auth.group",
-        "pk": 8,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "11_Moderator",
-            "permissions": []
+            "old_id": 33,
+            "name": "Archivist",
+            "rank": 7
         }
     },
     {
-        "model": "auth.group",
-        "pk": 9,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "14_Developer",
-            "permissions": []
+            "old_id": 31,
+            "name": "Uploader",
+            "rank": 7
         }
     },
     {
-        "model": "auth.group",
-        "pk": 10,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "15_SysAdmin",
-            "permissions": []
+            "old_id": 8,
+            "name": "Encoder",
+            "rank": 7
         }
     },
     {
-        "model": "auth.group",
-        "pk": 11,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "20_Producer",
-            "permissions": []
+            "old_id": 7,
+            "name": "Executive Producer",
+            "rank": 7
         }
     },
     {
-        "model": "auth.group",
-        "pk": 12,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "21_Administrator",
-            "permissions": []
+            "old_id": 5,
+            "name": "Legend",
+            "rank": 8
         }
     },
     {
-        "model": "auth.group",
-        "pk": 13,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "23_User",
-            "permissions": []
+            "old_id": 9,
+            "name": "Community Staff",
+            "rank": 8
         }
     },
     {
-        "model": "auth.group",
-        "pk": 14,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "24_Fanatic",
-            "permissions": []
+            "old_id": 26,
+            "name": "Director of Torrentography",
+            "rank": 9
         }
     },
     {
-        "model": "auth.group",
-        "pk": 15,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "25_Director",
-            "permissions": []
+            "old_id": 28,
+            "name": "Designer",
+            "rank": 9
         }
     },
     {
-        "model": "auth.group",
-        "pk": 16,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "26_Director of Torrentography",
-            "permissions": []
+            "old_id": 11,
+            "name": "Moderator",
+            "is_staff": true,
+            "rank": 10
         }
     },
     {
-        "model": "auth.group",
-        "pk": 17,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "28_Designer",
-            "permissions": []
+            "old_id": 14,
+            "name": "Developer",
+            "is_staff": true,
+            "rank": 11
         }
     },
     {
-        "model": "auth.group",
-        "pk": 18,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "30_mfer",
-            "permissions": []
+            "old_id": 21,
+            "name": "Administrator",
+            "is_staff": true,
+            "rank": 12
         }
     },
     {
-        "model": "auth.group",
-        "pk": 19,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "31_Uploader",
-            "permissions": []
+            "old_id": 1,
+            "name": "SiteOp",
+            "is_staff": true,
+            "rank": 13
         }
     },
     {
-        "model": "auth.group",
-        "pk": 20,
+        "model": "user_classes.userclass",
         "fields": {
-            "name": "33_Archivist",
-            "permissions": []
+            "old_id": 15,
+            "name": "SysAdmin",
+            "is_staff": true,
+            "rank": 14
         }
     }
 ]

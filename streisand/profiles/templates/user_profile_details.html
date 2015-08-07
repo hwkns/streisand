@@ -4,7 +4,8 @@
 
 {% block main %}
     <div class="page-header">
-      <h1>{{ profile.username }}</h1>
+      <img src="{{ profile.avatar_url }}" width="150">
+      <h1>{{ profile.username }} ({{ profile.user_class.name }})</h1>
     </div>
 
     <ul>
@@ -14,7 +15,10 @@
       <li>Torrents:
         <ul>
           {% for ts in profile.torrent_stats.all %}
-            <li><a href="{{ ts.torrent.get_absolute_url }}">Torrent {{ ts.torrent.id }}</a> ({{ ts.bytes_uploaded }} / {{ ts.bytes_downloaded }})</li>
+            <li>
+              <a href="{{ ts.torrent.get_absolute_url }}">Torrent {{ ts.torrent.id }}</a>
+              ({{ ts.bytes_uploaded }} / {{ ts.bytes_downloaded }})
+            </li>
           {% endfor %}
         </ul>
       </li>

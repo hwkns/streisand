@@ -6,6 +6,6 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^/?$', views.user_profile_redirect, name='user_profile_redirect'),
+    url(r'^/?$', views.user_profile_index, name='user_profile_index'),
     url(r'^(?P<username>.+)/?$', views.user_profile_details, name='user_profile'),
 ]

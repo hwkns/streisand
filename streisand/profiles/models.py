@@ -24,11 +24,19 @@ class UserProfile(models.Model):
 
     old_id = models.PositiveIntegerField(null=True, db_index=True)
 
-    user = models.OneToOneField('auth.User', related_name='profile')
+    user = models.OneToOneField(
+        to='auth.User',
+        related_name='profile',
+    )
+    user_class = models.ForeignKey(
+        to='user_classes.UserClass',
+        related_name='user_profiles',
+        default='User',
+    )
     account_status = models.CharField(max_length=32, choices=STATUS_CHOICES, db_index=True)
     failed_login_attempts = models.PositiveIntegerField(default=0)
     announce_key = models.OneToOneField(
-        'profiles.UserAnnounceKey',
+        to='profiles.UserAnnounceKey',
         related_name='profile',
         null=True,
         default=None,
@@ -71,6 +79,7 @@ class UserProfile(models.Model):
         permissions = (
             ('can_invite', "Can invite new users"),
             ('unlimited_invites', "Can invite unlimited new users"),
+            ('custom_title', "Can edit own custom title"),
         )
 
     def __str__(self):

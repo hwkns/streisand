@@ -71,8 +71,8 @@ RT_API_KEY = os.environ.get('RT_API_KEY', '')
 OLD_SITE_HASH = os.environ.get('OLD_SITE_HASH', '')
 
 AUTHENTICATION_BACKENDS = [
-    # Case insensitive version of built-in Django authentication
-    'www.auth.CaseInsensitiveAuthBackend',
+    # Case insensitive authentication, custom permissions
+    'www.auth.CustomAuthBackend',
     # The old site's authentication system
     'www.auth.OldSiteAuthBackend',
     # django-su

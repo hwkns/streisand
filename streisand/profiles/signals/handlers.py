@@ -79,7 +79,7 @@ def create_profile_for_new_user(**kwargs):
 
 # Signal handler for new user profiles
 @receiver(post_save, sender='profiles.UserProfile')
-def set_announce_key_for_new_user_profile(**kwargs):
+def set_defaults_for_new_user_profile(**kwargs):
     if kwargs['created']:
         instance = kwargs['instance']
         if instance.announce_key is None:

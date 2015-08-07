@@ -99,9 +99,17 @@ class CachedUserAuthenticationMiddleware:
                     user = get_user(request)
 
                     if user.is_authenticated():
+                        # Cache the profile and the permissions too
                         user.profile
+                        user.get_all_permissions()
                         cache.set(key, user)
 
                 request._cached_user = user
 
         return request._cached_user
+
+    @staticmethod
+    def clear_all_cached_users():
+        for user_id in UserProfile.objects.values_list('user_id', flat=True).iterator():
+            key = UserProfile.CACHE_KEY.format(user_id=user_id)
+            cache.delete(key)

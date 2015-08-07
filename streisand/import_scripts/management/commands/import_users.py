@@ -2,7 +2,9 @@
 
 from pytz import UTC
 
-from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.models import User, Permission
+
+from user_classes.models import UserClass
 
 from import_scripts.management.commands import MySQLCommand
 
@@ -44,7 +46,6 @@ class Command(MySQLCommand):
         # description = row['Info'].encode('latin-1').decode('utf-8')
         staff_notes = row['AdminComment'].encode('latin-1').decode('utf-8')
         # paranoia = int(row['Paranoia'])
-        # user_class = row['']
         # invites = row['Invites']
         # invited_by_id = row['Inviter']
         join_date = row['JoinDate']
@@ -71,13 +72,12 @@ class Command(MySQLCommand):
             u.last_login = join_date.replace(tzinfo=UTC)
         u.save()
 
-        group = Group.objects.get(name__startswith=str(user_class_id) + '_')
-        u.groups.add(group)
         if can_leech:
             u.user_permissions.add(self.leech_perm)
 
         profile = u.profile
         profile.old_id = old_id
+        profile.user_class = UserClass.objects.get(old_id=user_class_id)
         profile.avatar_url = avatar_url
         profile.custom_title = custom_title.encode('latin-1').decode('utf-8') if custom_title else None
         profile.staff_notes = staff_notes
