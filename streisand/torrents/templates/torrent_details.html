@@ -1,0 +1,60 @@
+{% load timestamp_formatting %}
+
+<div class="list-group-item">
+  <a class="btn" data-toggle="collapse" data-target="#{{ torrent.id }}_details">
+  {{ torrent.codec }}
+  /
+  {{ torrent.container }}
+  /
+  {{ torrent.resolution }}
+  /
+  {{ torrent.source_media }} ({{ torrent.size_in_bytes|filesizeformat }})
+  </a>
+  <div class="btn pull-right">
+    {% if torrent.is_accepting_reseed_requests and 'torrents.can_request_reseed' in perms %}
+    | <a name="torrent-rr-{{ torrent.id }}" href="{% url 'reseed_request' torrent_id=torrent.id %}">RR</a>
+    {% endif %}
+    | <a name="torrent-dl-{{ torrent.id }}" href="{% url 'torrent_download' torrent_id=torrent.id announce_key=user.profile.announce_key_id %}">DL</a>
+    | <a name="torrent-pl-{{ torrent.id }}" href="{{ torrent.get_absolute_url }}">PL</a>
+  </div>
+  <div class="collapse{% if torrent.id == torrent_id %} in{% endif %}" id="{{ torrent.id }}_details">
+    <div class="well">
+      Uploaded
+      {% if torrent.uploaded_by %}
+        by <a href="{{ torrent.uploaded_by.get_absolute_url }}">{{ torrent.uploaded_by.username }}</a>
+      {% endif %}
+      {{ torrent.uploaded_at|timestamp }}
+      <br />
+      {% if torrent.reseed_request %}
+        Reseed requested {{ torrent.reseed_request.created_at|timestamp }}<br />
+      {% endif %}
+      {% if torrent.is_approved == True %}
+        approved by {{ torrent.moderated_by }}
+      {% elif torrent.is_approved == False %}
+        work in progress
+      {% else %}
+        not yet moderated
+      {% endif %}
+      {% if not torrent.is_approved %}
+      <br />
+      <form action="{% url 'torrent_moderation' torrent_id=torrent.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="moderation_status" value="approved" />
+        <input type="submit" value="Approve" />
+      </form>
+      {% endif %}
+    </div>
+    <p>{{ torrent.release_name }}</p>
+    <ul>
+      {% for file in torrent.file_list %}
+        <li>{{ file }}</li>
+      {% endfor %}
+    </ul>
+    {% if torrent.nfo %}
+      <pre>{{ torrent.nfo }}</pre>
+    {% endif %}
+    {% if torrent.description %}
+      <div class="well">{{ torrent.description }}</div>
+    {% endif %}
+  </div>
+</div>

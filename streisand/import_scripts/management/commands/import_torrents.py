@@ -54,6 +54,11 @@ class Command(MySQLCommand):
         # tc_original = (row['Exclusive'] == '1')
         mediainfo = row['MediaInfo']
 
+        try:
+            film = Film.objects.get(old_id=torrent_group_id)
+        except Film.DoesNotExist:
+            return
+
         if container == 'Matroska':
             container = 'MKV'
 
@@ -107,7 +112,7 @@ class Command(MySQLCommand):
 
         torrent = Torrent.objects.create(
             old_id=torrent_id,
-            film=Film.objects.get(old_id=torrent_group_id),
+            film=film,
             cut=special_edition_title if is_special_edition else 'Theatrical',
             description=description,
             nfo=nfo_text,
