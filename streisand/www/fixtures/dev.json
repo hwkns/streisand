@@ -160,6 +160,7 @@
         "model": "profiles.userprofile",
         "fields": {
             "user": 1,
+            "user_class": "Administrator",
             "announce_key": "16fd2706-8baf-433b-82eb-8c7fada847da",
             "bytes_uploaded": 0,
             "bytes_downloaded": 0,
