@@ -111,6 +111,8 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
 ]
 
+ITEMS_PER_PAGE = 50
+
 
 LOGGING = {
     'version': 1,

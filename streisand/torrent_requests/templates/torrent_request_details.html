@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load humanize %}
+{% load timestamp_formatting %}
 
 {% block title %}Requests - {{ torrent_request.film.title }}{% endblock %}
 
@@ -32,7 +32,7 @@
           <div class="list-group-item">
             <h4 class="list-group-item-heading">
               <a href="{{ comment.author.get_absolute_url }}">{{ comment.author.username }}</a>
-              <span title="{{ comment.created_at }}">{{ comment.created_at|naturaltime }}</span>
+              {{ comment.created_at|timestamp }}
             </h4>
             <p class="list-group-item-text">{{ comment.text }}</p>
           </div>

@@ -5,12 +5,31 @@ from urllib.parse import urljoin
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 
 def get_full_url(relative_url):
     return urljoin(settings.SITE_URL, relative_url)
+
+
+def paginate(request, queryset):
+
+    paginator = Paginator(queryset, settings.ITEMS_PER_PAGE)
+
+    page = request.GET.get('page')
+
+    try:
+        objects = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        objects = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        objects = paginator.page(paginator.num_pages)
+
+    return objects
 
 
 def email(subject='', template='', context=None, from_email=None, reply_to=None, to=(), cc=(), bcc=()):

@@ -1,28 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import render
+
+from www.utils import paginate
 
 from .models import Film
 
 
 def film_index(request):
 
-    all_films = Film.objects.all()
-
-    # Show 50 films per page
-    paginator = Paginator(all_films, 50)
-
-    page = request.GET.get('page')
-    try:
-        films = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        films = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        films = paginator.page(paginator.num_pages)
+    films = paginate(
+        request=request,
+        queryset=Film.objects.all(),
+    )
 
     return render(
         request=request,

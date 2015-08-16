@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load pagination %}
 
 {% block title %}Film Lists{% endblock %}
 
@@ -12,4 +13,6 @@
         <li><a href="{{ l.get_absolute_url }}">{{ l.title }}</a></li>
       {% endfor %}
     </ul>
+
+    {% pagination film_lists %}
 {% endblock %}

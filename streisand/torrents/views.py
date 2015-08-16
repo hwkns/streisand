@@ -2,7 +2,6 @@
 
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -10,6 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from profiles.models import UserProfile
+from www.utils import paginate
 
 from .models import Torrent, ReseedRequest
 from .forms import TorrentUploadForm
@@ -117,23 +117,15 @@ def reseed_request_index(request):
         active_on_torrent__isnull=False,
     ).select_related(
         'created_by__user',
-        'torrent',
+        'torrent__film',
     ).order_by(
         '-created_at',
     )
 
-    # Show 50 requests per page
-    paginator = Paginator(all_reseed_requests, 50)
-
-    page = request.GET.get('page')
-    try:
-        reseed_requests = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        reseed_requests = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        reseed_requests = paginator.page(paginator.num_pages)
+    reseed_requests = paginate(
+        request=request,
+        queryset=all_reseed_requests,
+    )
 
     return render(
         request=request,

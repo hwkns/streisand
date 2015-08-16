@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load pagination %}
 
 {% block title %}Films{% endblock %}
 
@@ -18,19 +19,5 @@
       {% endfor %}
     </ul>
 
-    <div class="pagination">
-      <span class="step-links">
-        {% if films.has_previous %}
-          <a href="?page={{ films.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-          Page {{ films.number }} of {{ films.paginator.num_pages }}.
-        </span>
-
-        {% if films.has_next %}
-          <a href="?page={{ films.next_page_number }}">next</a>
-        {% endif %}
-      </span>
-    </div>
+    {% pagination films %}
 {% endblock %}

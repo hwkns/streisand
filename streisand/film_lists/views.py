@@ -2,15 +2,23 @@
 
 from django.shortcuts import render
 
+from www.utils import paginate
+
 from .models import FilmList
 
 
 def film_list_index(request):
+
+    film_lists = paginate(
+        request=request,
+        queryset=FilmList.objects.all(),
+    )
+
     return render(
         request=request,
         template_name='film_list_index.html',
         dictionary={
-            'film_lists': FilmList.objects.all(),
+            'film_lists': film_lists,
         }
     )
 

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.decorators import permission_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import View
+
+from www.utils import paginate
 
 from .forms import TorrentRequestForm, VoteForm
 from .models import TorrentRequest
@@ -59,6 +60,11 @@ def torrent_request_index(request):
         'container',
     )
 
+    created_by = request.GET.get('created_by')
+
+    if created_by:
+        all_torrent_requests = all_torrent_requests.filter(created_by__user__username=created_by)
+
     order_by = request.GET.get('order_by')
 
     if order_by == 'bounty':
@@ -68,18 +74,10 @@ def torrent_request_index(request):
     elif order_by == 'created_at':
         all_torrent_requests = all_torrent_requests.order_by('created_at')
 
-    # Show 50 requests per page
-    paginator = Paginator(all_torrent_requests, 50)
-
-    page = request.GET.get('page')
-    try:
-        torrent_requests = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        torrent_requests = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        torrent_requests = paginator.page(paginator.num_pages)
+    torrent_requests = paginate(
+        request=request,
+        queryset=all_torrent_requests,
+    )
 
     return render(
         request=request,
