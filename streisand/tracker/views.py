@@ -3,9 +3,8 @@
 import pprint
 
 from django.conf import settings
-from django.core.cache import cache
 from django.http import HttpResponse
-from django.utils.timezone import timedelta, now
+from django.utils.timezone import now
 from django.views.generic import View
 
 from profiles.models import UserProfile
@@ -14,6 +13,9 @@ from profiles.tasks import handle_announce
 from .bencoding import bencode
 from .models import Peer, Swarm, TorrentClient
 from .utils import unquote_to_hex
+
+
+ANNOUNCE_INTERVAL_IN_SECONDS = int(settings.TRACKER_ANNOUNCE_INTERVAL.total_seconds())
 
 
 class BencodedResponse(HttpResponse):
@@ -25,11 +27,6 @@ class BencodedResponse(HttpResponse):
         kwargs.setdefault('content_type', 'text/plain')
         data = bencode(data)
         super().__init__(content=data, **kwargs)
-
-
-cache.set('announce_interval', timedelta(minutes=40))
-announce_interval = cache.get('announce_interval')
-ANNOUNCE_INTERVAL_IN_SECONDS = int(announce_interval.total_seconds())
 
 
 class AnnounceView(View):

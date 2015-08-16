@@ -25,7 +25,7 @@ class FilmList(models.Model):
 
 class FilmListItem(models.Model):
     film_list = models.ForeignKey(
-        'film_lists.FilmList',
+        to='film_lists.FilmList',
         related_name='items',
         db_index=True,
     )
