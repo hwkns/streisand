@@ -120,10 +120,10 @@ class Torrent(models.Model):
     @property
     def format(self):
         return '{codec} / {container} / {resolution} / {source_media}'.format(
-            codec=self.codec,
-            container=self.container,
-            resolution=self.resolution,
-            source_media=self.source_media,
+            codec=self.codec_id,
+            container=self.container_id,
+            resolution=self.resolution_id,
+            source_media=self.source_media_id,
         )
 
     @property
