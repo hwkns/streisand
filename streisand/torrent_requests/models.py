@@ -88,10 +88,10 @@ class TorrentRequest(models.Model):
     @property
     def format(self):
         return '{codec} / {container} / {resolution} / {source_media}'.format(
-            codec=self.codec or 'ANY',
-            container=self.container or 'ANY',
-            resolution=self.resolution or 'ANY',
-            source_media=self.source_media or 'ANY',
+            codec=self.codec_id or 'ANY',
+            container=self.container_id or 'ANY',
+            resolution=self.resolution_id or 'ANY',
+            source_media=self.source_media_id or 'ANY',
         )
 
     @property
