@@ -50,7 +50,7 @@ class Command(MySQLCommand):
         # invited_by_id = row['Inviter']
         join_date = row['JoinDate']
         last_login = row['LastLogin']
-        last_access = row['LastAccess'].replace(tzinfo=UTC)
+        last_access = row['LastAccess']
         last_seeded = row['LastSeed']
         can_leech = row['can_leech'] == 1
         ip_address = row['IP']
@@ -108,13 +108,15 @@ class Command(MySQLCommand):
 
         profile.save()
 
-        last_ip = profile.ip_addresses.create(
-            ip_address=ip_address,
-            used_with='site',
-        )
-        profile.ip_addresses.filter(id=last_ip.id).update(
-            first_used=last_access,
-            last_used=last_access,
-        )
+        if last_access:
+            last_access = last_access.replace(tzinfo=UTC)
+            last_ip = profile.ip_addresses.create(
+                ip_address=ip_address,
+                used_with='site',
+            )
+            profile.ip_addresses.filter(id=last_ip.id).update(
+                first_used=last_access,
+                last_used=last_access,
+            )
 
         print(username)
