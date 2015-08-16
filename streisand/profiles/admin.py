@@ -14,12 +14,17 @@ class UserProfileAdmin(admin.ModelAdmin):
 
     readonly_fields = (
         'user',
+        'old_id',
         'invited_by_link',
         'last_seeded',
     )
 
     exclude = (
         'invited_by',
+    )
+
+    search_fields = (
+        'user__username',
     )
 
     actions = (
@@ -143,6 +148,12 @@ class WatchedUserAdmin(admin.ModelAdmin):
         'added_at',
         'last_checked',
     )
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related(
+            'profile__user',
+            'checked_by',
+        )
 
 
 admin.site.register(UserProfile, UserProfileAdmin)
