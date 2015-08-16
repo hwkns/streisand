@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from decimal import Decimal
 from uuid import uuid4
 
 from django.conf import settings
@@ -33,7 +32,13 @@ class UserProfile(models.Model):
         related_name='user_profiles',
         default='User',
     )
-    account_status = models.CharField(max_length=32, choices=STATUS_CHOICES, db_index=True)
+    is_donor = models.BooleanField(default=False)
+    account_status = models.CharField(
+        max_length=32,
+        choices=STATUS_CHOICES,
+        default='enabled',
+        db_index=True,
+    )
     failed_login_attempts = models.PositiveIntegerField(default=0)
     announce_key = models.OneToOneField(
         to='profiles.UserAnnounceKey',
@@ -46,10 +51,11 @@ class UserProfile(models.Model):
     )
     avatar_url = models.URLField()
     custom_title = models.CharField(max_length=256, null=True)
+    description = models.TextField()
     staff_notes = models.TextField()
     irc_key = models.CharField(max_length=128)
     invited_by = models.ForeignKey(
-        'profiles.UserProfile',
+        to='profiles.UserProfile',
         null=True,
         on_delete=models.SET_NULL,
     )
@@ -57,8 +63,8 @@ class UserProfile(models.Model):
     bytes_uploaded = models.BigIntegerField(default=0)
     bytes_downloaded = models.BigIntegerField(default=0)
     torrents = models.ManyToManyField(
-        'torrents.Torrent',
-        through='profiles.TorrentStats',
+        to='torrents.Torrent',
+        through='torrent_stats.TorrentStats',
         related_name='profiles',
     )
     log_successful_announces = models.BooleanField(
@@ -68,7 +74,7 @@ class UserProfile(models.Model):
     )
     last_seeded = models.DateTimeField(null=True)
     watch_queue = models.ForeignKey(
-        'film_lists.FilmList',
+        to='film_lists.FilmList',
         null=True,
         blank=True,
         editable=False,
@@ -94,8 +100,25 @@ class UserProfile(models.Model):
         return self.user.email
 
     @property
+    def last_seen(self):
+
+        try:
+            ip_address = self.ip_addresses.filter(used_with='site').latest()
+        except UserIPAddress.DoesNotExist:
+            return None
+        else:
+            return ip_address.last_used
+
+    @property
+    def invite_tree(self):
+        tree = dict()
+        for profile in UserProfile.objects.filter(invited_by=self).select_related('user'):
+            tree[profile.username] = profile.invite_tree
+        return tree
+
+    @property
     def announce_url(self):
-        return settings.ANNOUNCE_URL_TEMPLATE.format(announce_key=self.announce_key_id)
+        return settings.TRACKER_ANNOUNCE_URL_TEMPLATE.format(announce_key=self.announce_key_id)
 
     @property
     def ratio(self):
@@ -103,6 +126,14 @@ class UserProfile(models.Model):
             return 0.0
         else:
             return round(self.bytes_uploaded / self.bytes_downloaded, 3)
+
+    @property
+    def recent_snatches(self, limit=5):
+        return self.torrents.filter(
+            torrent_stats__snatch_count__gt=0
+        ).select_related(
+            'film',
+        ).order_by('-torrent_stats__last_snatched')[:limit]
 
     @property
     def seeding_size(self):
@@ -142,35 +173,6 @@ class UserProfile(models.Model):
             self.save()
 
 
-class TorrentStats(models.Model):
-
-    # Because Django does not support compound primary keys, and because this
-    # table might actually hit the max limit of an auto-incrementing integer ID,
-    # we use an auto-generated UUIDField as the primary key.
-    id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
-
-    profile = models.ForeignKey(
-        'profiles.UserProfile',
-        null=False,
-        related_name='torrent_stats',
-    )
-    torrent = models.ForeignKey(
-        'torrents.Torrent',
-        null=False,
-        related_name='torrent_stats',
-    )
-    download_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
-    upload_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
-    bytes_uploaded = models.BigIntegerField(default=0)
-    bytes_downloaded = models.BigIntegerField(default=0)
-    snatch_count = models.IntegerField(default=0)
-    last_seeded = models.DateTimeField(null=True)
-
-    class Meta:
-        unique_together = ['profile', 'torrent']
-        index_together = ['profile', 'torrent']
-
-
 class UserIPAddress(models.Model):
     """
     Used to keep a history of IP addresses used by a profile, including
@@ -188,6 +190,7 @@ class UserIPAddress(models.Model):
     last_used = models.DateTimeField(auto_now=True)
 
     class Meta:
+        get_latest_by = 'last_used'
         unique_together = ['profile', 'ip_address', 'used_with']
         index_together = ['profile', 'ip_address', 'used_with']
 

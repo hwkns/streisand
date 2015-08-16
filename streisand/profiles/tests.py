@@ -7,8 +7,8 @@ from django.test import TestCase
 from django.utils.timezone import now
 
 from torrents.models import Torrent
+from torrent_stats.models import TorrentStats
 
-from .models import TorrentStats
 from .tasks import handle_announce
 
 

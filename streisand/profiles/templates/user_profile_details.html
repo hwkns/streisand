@@ -1,17 +1,27 @@
 {% extends 'base.html' %}
 
+{% load timestamp_formatting %}
+
 {% block title %}User Profile{% endblock %}
 
 {% block main %}
     <div class="page-header">
       <img src="{{ profile.avatar_url }}" width="150">
-      <h1>{{ profile.username }} ({{ profile.user_class.name }})</h1>
+      <h1>{{ profile.username }} ({{ profile.user_class }})</h1>
+      {% if profile.custom_title %}
+        <h6>{{ profile.custom_title }}</h6>
+      {% endif %}
     </div>
 
     <ul>
+      <li>Joined: {{ profile.user.date_joined|timestamp }}</li>
+      <li>Last Seen: {{ profile.last_seen|timestamp }}</li>
       <li>Uploaded: {{ profile.bytes_uploaded|filesizeformat }}</li>
       <li>Downloaded: {{ profile.bytes_downloaded|filesizeformat }}</li>
       <li>Ratio: {{ profile.ratio }}</li>
+      <li>Invites: {{ profile.invite_count }}</li>
+      <li>Requests: {{ profile.torrent_requests.count }}</li>
+      <li>Film comments: {{ profile.filmcomments.count }}</li>
       <li>Torrents:
         <ul>
           {% for ts in profile.torrent_stats.all %}
@@ -23,4 +33,23 @@
         </ul>
       </li>
     </ul>
+
+    <div>
+      <pre>{{ profile.description }}</pre>
+    </div>
+    <div>
+      <h3>Recent Snatches</h3>
+      {% for torrent in profile.recent_snatches %}
+        <img src="{{ torrent.film.poster_url }}" width="150">
+      {% endfor %}
+      <p>
+        <a href="{% url 'torrent_stats' username=profile.username %}">View all snatches</a>
+      </p>
+    </div>
+    {% if user.is_staff %}
+    <div>
+      <h3>Staff Notes</h3>
+      <pre>{{ profile.staff_notes }}</pre>
+    </div>
+    {% endif %}
 {% endblock %}

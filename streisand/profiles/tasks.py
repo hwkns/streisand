@@ -2,11 +2,14 @@
 
 from celery import shared_task
 
+from django.conf import settings
 from django.db.models import F
+from django.utils.timezone import timedelta
 
 from torrents.models import Torrent
+from torrent_stats.models import TorrentStats
 
-from .models import UserProfile, TorrentStats, UserIPAddress
+from .models import UserProfile, UserIPAddress
 
 
 @shared_task
@@ -21,55 +24,74 @@ def handle_announce(announce_key, swarm, new_bytes_uploaded, new_bytes_downloade
     this handler logs all the announce info.
     """
 
-    # Get the profile and the torrent that correspond to this announce
-    profile = UserProfile.objects.get(announce_key_id=announce_key)
-    torrent = Torrent.objects.get(swarm=swarm)
+    try:
+        # Get everything in one query, if it exists
+        torrent_stats = TorrentStats.objects.filter(
+            profile__announce_key_id=announce_key,
+            torrent__swarm=swarm,
+        ).select_related(
+            'profile',
+            'torrent',
+        ).get()
+    except TorrentStats.DoesNotExist:
+        profile = UserProfile.objects.get(announce_key_id=announce_key)
+        torrent = Torrent.objects.get(swarm=swarm)
+        torrent_stats = TorrentStats.objects.create(
+            profile=profile,
+            torrent=torrent,
+        )
+    else:
+        profile = torrent_stats.profile
+        torrent = torrent_stats.torrent
 
-    # Get the TorrentStats relationship, or create a new one
-    (torrent_stats, created) = TorrentStats.objects.get_or_create(
-        profile=profile,
-        torrent=torrent,
-    )
+    if bytes_remaining == 0 and event != 'stopped':
 
-    # Adjust upload and download based on multipliers
-    new_bytes_downloaded = int(
-        new_bytes_downloaded
-        * torrent.download_multiplier
-        * torrent_stats.download_multiplier
-    )
-    new_bytes_uploaded = int(
-        new_bytes_uploaded
-        * torrent.upload_multiplier
-        * torrent_stats.upload_multiplier
-    )
+        # Track seeding times
+        threshold = time_stamp - (settings.TRACKER_ANNOUNCE_INTERVAL * 1.1)
+        if torrent_stats.last_seeded and time_stamp > torrent_stats.last_seeded >= threshold:
+            torrent_stats.seed_time += (time_stamp - torrent_stats.last_seeded)
 
-    # Update the TorrentStats
-    torrent_stats.bytes_uploaded = F('bytes_uploaded') + new_bytes_uploaded
-    torrent_stats.bytes_downloaded = F('bytes_downloaded') + new_bytes_downloaded
-    if bytes_remaining == 0:
+        # Track last seeded timestamp
         torrent_stats.last_seeded = time_stamp
-    if event == 'completed':
-        torrent_stats.snatch_count = F('snatch_count') + 1
-    torrent_stats.save()
-
-    # Update the Torrent
-    if bytes_remaining == 0:
         torrent.last_seeded = time_stamp
+        profile.last_seeded = time_stamp
 
-        # Resolve reseed request
+        # Resolve reseed requests
         if torrent.reseed_request_id:
             torrent.reseed_requests.filter(id=torrent.reseed_request_id).update(fulfilled_at=time_stamp)
             torrent.reseed_request = None
 
+    if bytes_remaining == 0:
+        percent_completed = 100
+    else:
+        percent_completed = 100 * (torrent.size_in_bytes - bytes_remaining) / torrent.size_in_bytes
+
+    # Track HNRs
+    if (torrent_stats.is_hit_and_run is not False) and (percent_completed >= 90):
+        two_weeks_ago = time_stamp - timedelta(days=14)
+        if torrent_stats.hnr_countdown_started_at is None:
+            torrent_stats.hnr_countdown_started_at = time_stamp
+        elif torrent_stats.hnr_countdown_started_at < two_weeks_ago:
+            torrent_stats.is_hit_and_run = torrent_stats.seed_time < timedelta(hours=96)
+
+    # Track snatches
     if event == 'completed':
         torrent.snatch_count = F('snatch_count') + 1
-    torrent.save()
+        torrent_stats.snatch_count = F('snatch_count') + 1
+        torrent_stats.last_snatched = time_stamp
 
-    # Update the UserProfile
-    if bytes_remaining == 0:
-        profile.last_seeded = time_stamp
+        if torrent_stats.first_snatched is None:
+            torrent_stats.first_snatched = time_stamp
+
+    # Track upload/download stats
+    torrent_stats.bytes_uploaded = F('bytes_uploaded') + new_bytes_uploaded
+    torrent_stats.bytes_downloaded = F('bytes_downloaded') + new_bytes_downloaded
     profile.bytes_downloaded = F('bytes_downloaded') + new_bytes_downloaded
     profile.bytes_uploaded = F('bytes_uploaded') + new_bytes_uploaded
+
+    # Save changes
+    torrent_stats.save()
+    torrent.save()
     profile.save()
 
     # Update the profile's IP history

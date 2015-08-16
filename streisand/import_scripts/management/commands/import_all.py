@@ -14,6 +14,7 @@ class Command(BaseCommand):
         call_command('import_films')
         call_command('import_users')
         call_command('import_torrents')
+        call_command('import_torrent_stats')
         call_command('import_film_comments')
         call_command('import_requests')
         call_command('import_request_comments')

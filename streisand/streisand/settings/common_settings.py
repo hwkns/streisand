@@ -12,8 +12,11 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 import sys
 import json
+from urllib.parse import urljoin
 
 import dj_database_url
+
+from django.utils.timezone import timedelta
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -50,6 +53,7 @@ INSTALLED_APPS = [
     'profiles',
     'rotten_tomatoes',
     'torrent_requests',
+    'torrent_stats',
     'torrents',
     'tracker',
     'user_classes',
@@ -70,8 +74,8 @@ EMAIL_PORT = 587
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = 'no-reply@localhost'
-DEFAULT_REPLY_TO_EMAIL = 'no-reply@localhost'
+DEFAULT_FROM_EMAIL = 'streisand.tracker@gmail.com'
+DEFAULT_REPLY_TO_EMAIL = 'streisand.tracker@gmail.com'
 
 LANGUAGE_CODE = 'en-us'
 USE_I18N = True
@@ -80,7 +84,7 @@ USE_TZ = True
 TIME_ZONE = 'UTC'
 
 REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
-DATABASE_URL = os.environ.get('DATABASE_URL', "sqlite:///{base_dir}/db.sqlite3".format(base_dir=BASE_DIR))
+DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///{base_dir}/db.sqlite3'.format(base_dir=BASE_DIR))
 
 CELERY_ALWAYS_EAGER = DEBUG
 CELERY_IGNORE_RESULT = True
@@ -109,4 +113,6 @@ if PRODUCTION:
 
 SITE_NAME = 'Streisand'
 SITE_URL = 'http://localhost:8000/'
-ANNOUNCE_URL_TEMPLATE = 'http://localhost:7070/{announce_key}/announce'
+TRACKER_URL = 'http://localhot:7070/'
+TRACKER_ANNOUNCE_INTERVAL = timedelta(minutes=40)
+TRACKER_ANNOUNCE_URL_TEMPLATE = urljoin(TRACKER_URL, '{announce_key}/announce')
