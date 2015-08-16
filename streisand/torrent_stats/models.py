@@ -48,5 +48,16 @@ class TorrentStats(models.Model):
         )
 
     @property
+    def ratio(self):
+        if self.bytes_downloaded == 0:
+            return 0.0
+        else:
+            return round(self.bytes_uploaded / self.bytes_downloaded, 3)
+
+    @property
     def seed_time_remaining(self):
-        return timedelta(hours=96) - self.seed_time
+        quota = timedelta(hours=96)
+        if self.seed_time < quota:
+            return quota - self.seed_time
+        else:
+            return None
