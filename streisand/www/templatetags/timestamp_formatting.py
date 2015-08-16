@@ -27,6 +27,9 @@ DURATION_UNITS = (
 @register.filter
 def duration(value):
 
+    if not value:
+        return None
+
     components = [''] * len(DURATION_UNITS)
 
     remainder = int(value.total_seconds())
