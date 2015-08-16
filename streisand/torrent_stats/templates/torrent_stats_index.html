@@ -12,16 +12,24 @@
       <thead>
         <tr>
           <th>Torrent</th>
+          <th>Uploaded</th>
+          <th>Downloaded</th>
+          <th>Ratio</th>
           <th>Seed Time</th>
           <th>Seed Time Remaining</th>
+          <th>Last Seeded</th>
           <th>H&R</th>
         </tr>
       </thead>
       {% for ts in torrent_stats %}
         <tr>
           <td><a href="{{ ts.torrent.get_absolute_url }}">{{ ts.torrent.film }}</a></td>
+          <td>{{ ts.bytes_uploaded }}</td>
+          <td>{{ ts.bytes_downloaded }}</td>
+          <td>{{ ts.ratio }}</td>
           <td>{{ ts.seed_time|duration }}</td>
           <td>{{ ts.seed_time_remaining|duration }}</td>
+          <td>{{ ts.last_seeded }}</td>
           <td>{{ ts.is_hit_and_run }}</td>
         </tr>
       {% endfor %}

@@ -12,7 +12,7 @@ def torrent_stats_index(request, username):
     torrent_stats = TorrentStats.objects.filter(
         profile__user__username=username,
     ).select_related(
-        'torrent',
+        'torrent__film',
         'profile__user',
     )
 
