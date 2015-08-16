@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from decimal import Decimal
-
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.timezone import now, timedelta
