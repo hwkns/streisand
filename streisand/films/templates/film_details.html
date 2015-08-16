@@ -14,8 +14,8 @@
     <p></p>
     <div class="well">
       {% if film.rotten_tomatoes %}
-      <p>RT critics rating: <strong>{{ film.rotten_tomatoes.critics_rating }}</strong> ({{ film.rotten_tomatoes.critics_rating_string }})</p>
-      <p>RT audience rating: <strong>{{ film.rotten_tomatoes.audience_rating }}</strong> ({{ film.rotten_tomatoes.audience_rating_string }})</p>
+        <p>RT critics rating: <strong>{{ film.rotten_tomatoes.critics_rating }}</strong> ({{ film.rotten_tomatoes.critics_rating_string }})</p>
+        <p>RT audience rating: <strong>{{ film.rotten_tomatoes.audience_rating }}</strong> ({{ film.rotten_tomatoes.audience_rating_string }})</p>
       {% endif %}
       <p>IMDb rating: <strong>{{ film.imdb.rating }}</strong> ({{ film.imdb.rating_vote_count|intcomma }} votes)</p>
     </div>
