@@ -113,6 +113,6 @@ if PRODUCTION:
 
 SITE_NAME = 'Streisand'
 SITE_URL = 'http://localhost:8000/'
-TRACKER_URL = 'http://localhot:7070/'
+TRACKER_URL = 'http://localhost:7070/'
 TRACKER_ANNOUNCE_INTERVAL = timedelta(minutes=40)
 TRACKER_ANNOUNCE_URL_TEMPLATE = urljoin(TRACKER_URL, '{announce_key}/announce')
