@@ -21,7 +21,7 @@ class Command(MySQLCommand):
         torrent_id = row['fid']
         user_id = row['uid']
         timestamp = datetime.fromtimestamp(row['tstamp'], UTC)
-        seed_time_in_seconds = row['seedtime']
+        seed_time_in_minutes = row['seedtime']
 
         try:
             profile = UserProfile.objects.get(old_id=user_id)
@@ -37,7 +37,7 @@ class Command(MySQLCommand):
         torrent_stats.last_snatched = timestamp
         if torrent_stats.first_snatched is None:
             torrent_stats.first_snatched = timestamp
-        torrent_stats.seed_time = timedelta(seconds=seed_time_in_seconds)
+        torrent_stats.seed_time = timedelta(minutes=seed_time_in_minutes)
         torrent_stats.save()
 
         print(torrent_stats)
