@@ -15,9 +15,6 @@ from .models import Peer, Swarm, TorrentClient
 from .utils import unquote_to_hex
 
 
-ANNOUNCE_INTERVAL_IN_SECONDS = int(settings.TRACKER_ANNOUNCE_INTERVAL.total_seconds())
-
-
 class BencodedResponse(HttpResponse):
     """
     An HTTP response class that consumes data to be serialized using bencoding.
@@ -30,6 +27,9 @@ class BencodedResponse(HttpResponse):
 
 
 class AnnounceView(View):
+
+    ANNOUNCE_INTERVAL = settings.TRACKER_ANNOUNCE_INTERVAL
+    ANNOUNCE_INTERVAL_IN_SECONDS = int(ANNOUNCE_INTERVAL.total_seconds())
 
     REQUIRED_PARAMS = {
         'info_hash',
@@ -136,7 +136,7 @@ class AnnounceView(View):
         #
 
         swarm.peers.filter(
-            last_announce__lt=time_stamp - (announce_interval * 2)
+            last_announce__lt=time_stamp - (self.ANNOUNCE_INTERVAL * 2)
         ).delete()
 
         #
@@ -235,8 +235,8 @@ class AnnounceView(View):
 
         # Put everything in a dictionary
         response_dict = {
-            'interval': ANNOUNCE_INTERVAL_IN_SECONDS,
-            'min interval': ANNOUNCE_INTERVAL_IN_SECONDS,
+            'interval': self.ANNOUNCE_INTERVAL_IN_SECONDS,
+            'min interval': self.ANNOUNCE_INTERVAL_IN_SECONDS,
             'complete': complete,
             'incomplete': incomplete,
             'peers': compact_peer_list_for_client,
