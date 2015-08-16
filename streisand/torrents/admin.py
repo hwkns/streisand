@@ -26,6 +26,13 @@ class TorrentAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('film')
+        return super().get_queryset(request).select_related(
+            'swarm',
+            'film',
+            'codec',
+            'container',
+            'resolution',
+            'source_media',
+        )
 
 admin.site.register(Torrent, TorrentAdmin)
