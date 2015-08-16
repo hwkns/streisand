@@ -53,8 +53,6 @@ class Torrent(models.Model):
         related_name='active_on_torrent',
     )
     snatch_count = models.IntegerField(default=0)
-    download_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
-    upload_multiplier = models.DecimalField(default=Decimal(1.0), decimal_places=2, max_digits=6)
 
     # Release information
     release_name = models.CharField(max_length=1024)
@@ -167,6 +165,8 @@ class TorrentMetaInfo(models.Model):
 
 
 class ReseedRequest(models.Model):
+
+    # TODO: notify the torrent's uploader and the snatch list when one of these is created
 
     torrent = models.ForeignKey(
         to='torrents.Torrent',
