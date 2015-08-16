@@ -16,5 +16,8 @@ class UserClass(models.Model):
         blank=True,
     )
 
+    class Meta:
+        ordering = ['rank']
+
     def __str__(self):
         return self.name
