@@ -18,9 +18,11 @@ pip install -r requirements.txt > /dev/null &
 
 alias start_tracker_uwsgi='uwsgi --ini /var/www/streisand/uwsgi-tracker.ini'
 alias stop_tracker_uwsgi='uwsgi --stop /tmp/streisand-tracker-master.pid'
+alias reload_tracker_uwsgi='uwsgi --reload /tmp/streisand-tracker-master.pid'
 
 alias start_www_uwsgi='uwsgi --ini /var/www/streisand/uwsgi-www.ini'
 alias stop_www_uwsgi='uwsgi --stop /tmp/streisand-www-master.pid'
+alias reload_www_uwsgi='uwsgi --reload /tmp/streisand-www-master.pid'
 
 alias start_celery='screen -dmS celery bash -c "cd /var/www/streisand/streisand && STREISAND_DEBUG=False celery worker -A streisand -l info"'
 alias stop_celery='sudo killall celery'
