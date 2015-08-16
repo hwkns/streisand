@@ -26,7 +26,7 @@ class Command(MySQLCommand):
         imdb_id = row['IMDB']
 
         film_id = row['ID']
-        if film_id == 14457 or film_id == 14458:
+        if film_id in (14457, 14458, 1390):
             imdb_id = None
 
         f = Film.objects.create(
