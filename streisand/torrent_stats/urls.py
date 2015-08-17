@@ -7,7 +7,7 @@ from . import views
 
 urlpatterns = [
     url(
-        regex=r'^(?P<username>.+)/?$',
+        regex=r'^(?P<username>.+)/$',
         view=views.torrent_stats_index,
         name='torrent_stats',
     ),
