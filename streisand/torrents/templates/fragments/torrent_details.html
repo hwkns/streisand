@@ -2,14 +2,12 @@
 
 <div class="list-group-item">
   <a class="btn" data-toggle="collapse" data-target="#{{ torrent.id }}_details">
-  {{ torrent.codec }}
-  /
-  {{ torrent.container }}
-  /
-  {{ torrent.resolution }}
-  /
-  {{ torrent.source_media }} ({{ torrent.size_in_bytes|filesizeformat }})
+    {{ torrent.format }}
+    ({{ torrent.size_in_bytes|filesizeformat }})
   </a>
+  {% if torrent.is_scene %}
+    <span class="small">Scene</span>
+  {% endif %}
   <div class="btn pull-right">
     {% if torrent.is_accepting_reseed_requests and 'torrents.can_request_reseed' in perms %}
     | <a name="torrent-rr-{{ torrent.id }}" href="{% url 'reseed_request' torrent_id=torrent.id %}">RR</a>
@@ -29,11 +27,11 @@
         Reseed requested {{ torrent.reseed_request.created_at|timestamp }}<br />
       {% endif %}
       {% if torrent.is_approved == True %}
-        approved by {{ torrent.moderated_by }}
+        Approved by {{ torrent.moderated_by }}
       {% elif torrent.is_approved == False %}
-        work in progress
+        Work in progress
       {% else %}
-        not yet moderated
+        Not yet moderated
       {% endif %}
       {% if not torrent.is_approved %}
       <br />
