@@ -117,7 +117,7 @@ class OldSiteAuthBackend(ModelBackend):
 
     @staticmethod
     def old_site_password_hash(string, secret):
-        old_site_salt = settings.OLD_SITE_HASH
+        old_site_salt = settings.OLD_SITE_SECRET_KEY
         secret = secret.encode('utf-8')
         secret_md5 = md5(secret).hexdigest()
         secret_sha1 = sha1(secret).hexdigest()

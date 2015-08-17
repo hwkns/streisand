@@ -68,7 +68,7 @@ LOGIN_EXEMPT_URL_PREFIXES = (
 )
 
 RT_API_KEY = os.environ.get('RT_API_KEY', '')
-OLD_SITE_HASH = os.environ.get('OLD_SITE_HASH', '')
+OLD_SITE_SECRET_KEY = os.environ.get('OLD_SITE_HASH', '')
 
 AUTHENTICATION_BACKENDS = [
     # Case insensitive authentication, custom permissions
