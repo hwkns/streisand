@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from www.utils import paginate
 
@@ -26,18 +25,13 @@ def film_index(request):
 
 def film_details(request, film_id, torrent_id=None):
 
-    try:
-        film = Film.objects.filter(
-            id=film_id,
-        ).prefetch_related(
-            'torrents',
-            'comments',
-        ).get()
-    except Film.DoesNotExist:
-        raise Http404
+    film = get_object_or_404(Film, id=film_id)
 
     if torrent_id is not None:
         torrent_id = int(torrent_id)
+
+    torrents = film.torrents.select_related('moderated_by__user', 'uploaded_by__user')
+    comments = film.comments.select_related('author__user')
 
     return render(
         request=request,
@@ -45,5 +39,7 @@ def film_details(request, film_id, torrent_id=None):
         dictionary={
             'film': film,
             'torrent_id': torrent_id,
+            'torrents': torrents,
+            'comments': comments,
         }
     )
