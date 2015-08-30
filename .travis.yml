@@ -5,8 +5,10 @@ python:
 install:
     - "pip install -r requirements.txt"
     - "pip install -r testing_requirements.txt"
+    - "pip install coveralls"
 script:
     - "flake8 . --exclude=migrations --ignore=E501,F403,W503"
     - "./streisand/manage.py makemigrations"
     - "./streisand/manage.py migrate"
-    - "./streisand/manage.py test streisand"
+#    - "./streisand/manage.py test streisand"
+    - "coverage run ./streisand/manage.py test streisand"
