@@ -58,6 +58,13 @@ class TorrentUploadForm(forms.ModelForm):
         except BencodeError:
             raise ValidationError('This is not a valid torrent file')
 
+        try:
+            private = (metainfo_dict['info']['private'] == 1)
+        except KeyError:
+            private = False
+        if not private:
+            raise ValidationError('This torrent is not marked private')
+
         self.metainfo_dict = self._scrub_metainfo(metainfo_dict)
         self.instance.size_in_bytes = self._get_size()
         self.instance.file_list = self._get_file_list()
