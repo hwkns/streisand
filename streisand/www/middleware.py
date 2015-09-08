@@ -100,7 +100,7 @@ class CachedUserAuthenticationMiddleware:
 
                     if user.is_authenticated():
                         # Cache the profile and the permissions too
-                        user.profile
+                        user.profile.user_class
                         user.get_all_permissions()
                         cache.set(key, user)
 

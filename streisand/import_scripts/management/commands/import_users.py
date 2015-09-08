@@ -19,6 +19,7 @@ class Command(MySQLCommand):
             OR ID IN (SELECT UserID FROM requests_votes WHERE RequestID < 1000)
             OR ID IN (SELECT AuthorID FROM torrents_comments WHERE GroupID IN (SELECT GroupID FROM torrents WHERE ID < 1000))
             OR ID IN (SELECT AuthorID FROM requests_comments WHERE RequestID IN (SELECT RequestID FROM requests WHERE ID < 1000))
+            OR ID IN (SELECT AuthorID FROM forums_posts)
             OR Username IN (SELECT LastModeratedBy FROM torrents WHERE ID < 1000)
     """
 
@@ -41,7 +42,7 @@ class Command(MySQLCommand):
 
         irc_key = row['IRCKey']
         avatar_url = row['Avatar']
-        user_class_id = row['PermissionID']
+        user_class = UserClass.objects.get(old_id=row['PermissionID'])
         custom_title = row['Title']
         description = row['Info'].encode('latin-1').decode('utf-8')
         staff_notes = row['AdminComment'].encode('latin-1').decode('utf-8')
@@ -70,6 +71,10 @@ class Command(MySQLCommand):
             u.last_login = last_login.replace(tzinfo=UTC)
         else:
             u.last_login = join_date.replace(tzinfo=UTC)
+        if user_class.rank >= 10:
+            u.is_staff = True
+        if user_class.rank >= 11:
+            u.is_superuser = True
         u.save()
 
         if can_leech:
@@ -77,7 +82,7 @@ class Command(MySQLCommand):
 
         profile = u.profile
         profile.old_id = old_id
-        profile.user_class = UserClass.objects.get(old_id=user_class_id)
+        profile.user_class = user_class
         profile.is_donor = is_donor
         profile.invite_count = invite_count
         profile.avatar_url = avatar_url
@@ -108,15 +113,15 @@ class Command(MySQLCommand):
 
         profile.save()
 
-        if last_access:
-            last_access = last_access.replace(tzinfo=UTC)
-            last_ip = profile.ip_addresses.create(
-                ip_address=ip_address,
-                used_with='site',
-            )
-            profile.ip_addresses.filter(id=last_ip.id).update(
-                first_used=last_access,
-                last_used=last_access,
-            )
+        # if last_access:
+        #     last_access = last_access.replace(tzinfo=UTC)
+        #     last_ip = profile.ip_addresses.create(
+        #         ip_address=ip_address,
+        #         used_with='site',
+        #     )
+        #     profile.ip_addresses.filter(id=last_ip.id).update(
+        #         first_used=last_access,
+        #         last_used=last_access,
+        #     )
 
         print(username)

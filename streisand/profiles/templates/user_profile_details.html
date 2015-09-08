@@ -22,6 +22,7 @@
       <li>Invites: {{ profile.invite_count }}</li>
       <li>Requests: {{ profile.torrent_requests.count }}</li>
       <li>Film comments: {{ profile.filmcomments.count }}</li>
+      <li>Forum posts: {{ profile.forum_posts.count }}</li>
       <li>Torrents:
         <ul>
           {% for ts in profile.torrent_stats.all %}

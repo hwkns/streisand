@@ -20,6 +20,7 @@ urlpatterns = [
     ),
     url(r'^films/', include('films.urls')),
     url(r'^film-lists/', include('film_lists.urls')),
+    url(r'^forums/', include('forums.urls')),
     url(r'^invites/', include('invites.urls')),
     url(r'^users/', include('profiles.urls')),
     url(r'^torrent-requests/', include('torrent_requests.urls')),

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'comments',
     'films',
     'film_lists',
+    'forums',
     'imdb',
     'invites',
     'media_formats',

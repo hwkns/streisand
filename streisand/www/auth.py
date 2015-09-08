@@ -14,7 +14,12 @@ class CustomAuthBackend(ModelBackend):
 
     def get_user(self, user_id):
         try:
-            profile = UserProfile.objects.filter(user_id=user_id).select_related('user').get()
+            profile = UserProfile.objects.filter(
+                user_id=user_id
+            ).select_related(
+                'user',
+                'user_class',
+            ).get()
         except User.DoesNotExist:
             user = None
         else:

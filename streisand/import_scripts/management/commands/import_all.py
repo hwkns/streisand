@@ -19,4 +19,8 @@ class Command(BaseCommand):
         call_command('import_requests')
         call_command('import_request_comments')
         call_command('import_request_votes')
+        call_command('import_forum_groups')
+        call_command('import_forum_topics')
+        call_command('import_forum_threads')
+        call_command('import_forum_posts')
         call_command('import_client_whitelist')

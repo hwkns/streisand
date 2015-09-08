@@ -14,9 +14,9 @@ def get_full_url(relative_url):
     return urljoin(settings.SITE_URL, relative_url)
 
 
-def paginate(request, queryset):
+def paginate(request, queryset, items_per_page=None):
 
-    paginator = Paginator(queryset, settings.ITEMS_PER_PAGE)
+    paginator = Paginator(queryset, items_per_page or settings.ITEMS_PER_PAGE)
 
     page = request.GET.get('page')
 
