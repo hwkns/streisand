@@ -51,10 +51,10 @@ class Command(MySQLCommand):
         # invited_by_id = row['Inviter']
         join_date = row['JoinDate']
         last_login = row['LastLogin']
-        last_access = row['LastAccess']
+        # last_access = row['LastAccess']
         last_seeded = row['LastSeed']
         can_leech = row['can_leech'] == 1
-        ip_address = row['IP']
+        # ip_address = row['IP']
         bytes_uploaded = row['Uploaded']
         bytes_downloaded = row['Downloaded']
         # bounty_spent = row['BountySpent']
