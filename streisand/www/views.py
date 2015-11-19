@@ -28,7 +28,6 @@ def home(request):
 
 class RegistrationView(View):
 
-    template_name = 'register.html'
     form = RegistrationForm()
     invite_key = None
 
@@ -76,7 +75,7 @@ class RegistrationView(View):
     def render_form(self):
         return render(
             request=self.request,
-            template_name=self.template_name,
+            template_name='register.html',
             dictionary={'form': self.form},
         )
 

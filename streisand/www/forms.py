@@ -35,7 +35,9 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username',)
+        fields = (
+            'username',
+        )
 
     def clean_username(self):
         username = self.cleaned_data['username']

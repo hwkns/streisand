@@ -124,6 +124,9 @@ class ForumPost(models.Model):
             thread=self.thread,
         )
 
+    def get_absolute_url(self):
+        return self.thread.get_absolute_url() + '#{}'.format(self.id)
+
 
 class ForumThreadSubscription(models.Model):
     profile = models.ForeignKey(

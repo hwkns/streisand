@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.contrib.auth.signals import user_logged_in, user_login_failed
 from django.core.cache import cache
 from django.db.models.signals import post_save, post_delete
@@ -74,7 +74,10 @@ def invalidate_user_cache(**kwargs):
 @receiver(post_save, sender='auth.User')
 def create_profile_for_new_user(**kwargs):
     if kwargs['created']:
-        UserProfile.objects.create(user=kwargs['instance'])
+        user = kwargs['instance']
+        UserProfile.objects.create(user=user)
+        can_leech = Permission.objects.get(codename='can_leech')
+        user.user_permissions.add(can_leech)
 
 
 # Signal handler for new user profiles

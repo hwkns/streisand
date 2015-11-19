@@ -2,11 +2,13 @@
 
 from collections import OrderedDict
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import View
 
 from www.utils import paginate
 
-from .models import ForumTopic, ForumThread
+from .forms import ForumPostForm
+from .models import ForumTopic, ForumThread, ForumPost
 
 
 def forum_index(request):
@@ -59,26 +61,80 @@ def forum_topic_details(request, topic_id):
     )
 
 
-def forum_thread_details(request, thread_id):
+def forum_post_delete(request, post_id):
 
-    thread = get_object_or_404(
-        ForumThread.objects.accessible_to_user(request.user),
-        id=thread_id
+    post = get_object_or_404(
+        ForumPost,
+        id=post_id
     )
 
-    posts = paginate(
-        request=request,
-        queryset=thread.posts.select_related(
-            'author__user',
-        ),
-        items_per_page=25,
-    )
+    thread = post.thread
 
-    return render(
-        request=request,
-        template_name='forum_thread_details.html',
-        dictionary={
-            'thread': thread,
-            'posts': posts,
-        }
-    )
+    post.delete()
+
+    return redirect(thread)
+
+
+class ForumThreadView(View):
+
+    def dispatch(self, request, *args, **kwargs):
+
+        self.thread = get_object_or_404(
+            ForumThread.objects.accessible_to_user(request.user),
+            id=kwargs.pop('thread_id'),
+        )
+
+        self.posts = paginate(
+            request=request,
+            queryset=self.thread.posts.select_related(
+                'author__user',
+            ),
+            items_per_page=25,
+        )
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+
+        form = ForumPostForm(
+            thread=self.thread,
+            author=request.user.profile,
+        )
+
+        return self._render(
+            thread=self.thread,
+            posts=self.posts,
+            form=form,
+        )
+
+    def post(self, request):
+
+        form = ForumPostForm(
+            request.POST,
+            thread=self.thread,
+            author=request.user.profile,
+        )
+
+        if form.is_valid():
+
+            forum_post = form.save()
+            return redirect(forum_post)
+
+        else:
+
+            return self._render(
+                thread=self.thread,
+                posts=self.posts,
+                form=form,
+            )
+
+    def _render(self, thread, posts, form):
+        return render(
+            request=self.request,
+            template_name='forum_thread_details.html',
+            dictionary={
+                'thread': thread,
+                'posts': posts,
+                'form': form,
+            },
+        )
