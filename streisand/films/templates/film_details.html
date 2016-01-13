@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load humanize timestamp_formatting %}
+{% load humanize timestamp_formatting bbcode %}
 
 {% block title %}{{ film }}{% endblock %}
 
@@ -36,7 +36,7 @@
               <a href="{{ comment.author.get_absolute_url }}">{{ comment.author.username }}</a>
               {{ comment.created_at|timestamp }}
             </h4>
-            <p class="list-group-item-text">{{ comment.text }}</p>
+            <p class="list-group-item-text">{{ comment.text|bbcode }}</p>
           </div>
         {% endfor %}
       </div>

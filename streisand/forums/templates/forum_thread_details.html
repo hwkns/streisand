@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load timestamp_formatting pagination %}
+{% load timestamp_formatting pagination bbcode %}
 
 {% block title %}{{ thread }}{% endblock %}
 
@@ -24,7 +24,7 @@
               <a href="#{{ post.id }}">{{ post.created_at|timestamp }}</a>
               <span class="pull-right"><a href="{% url 'forum_post_delete' post_id=post.id %}">x</a></span>
             </h5>
-            <p class="list-group-item-text">{{ post.body }}</p>
+            <p class="list-group-item-text">{{ post.body|bbcode }}</p>
           </div>
         {% endfor %}
       </div>

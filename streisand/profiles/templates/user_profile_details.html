@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load timestamp_formatting %}
+{% load timestamp_formatting bbcode %}
 
 {% block title %}User Profile{% endblock %}
 
@@ -35,8 +35,8 @@
       </li>
     </ul>
 
-    <div>
-      <pre>{{ profile.description }}</pre>
+    <div class="well">
+      {{ profile.description|bbcode }}
     </div>
     <div>
       <h3>Recent Snatches</h3>

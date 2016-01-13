@@ -1,4 +1,4 @@
-{% load sekizai_tags %}
+{% load static sekizai_tags %}
 <!doctype html>
 
 <html lang="en">
@@ -9,10 +9,12 @@
   <title>{% block title %}{% endblock %} :: Streisand</title>
   <meta name="description" content="Streisand">
 
-  <!-- Bootstrap 3.2.0 CSS -->
   {% block css %}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <!-- Bootstrap 3.3.6 CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+  <!-- bbcode CSS -->
+  <link rel="stylesheet" href="{% static 'www/bbcode.css' %}">
   {% endblock %}
   <!-- django-wiki CSS via sekizai -->
   {% render_block 'css' %}

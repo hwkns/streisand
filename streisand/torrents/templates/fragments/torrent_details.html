@@ -1,4 +1,4 @@
-{% load timestamp_formatting %}
+{% load timestamp_formatting bbcode %}
 
 <div class="list-group-item">
   <a class="btn" data-toggle="collapse" data-target="#{{ torrent.id }}_details">
@@ -52,7 +52,7 @@
       <pre>{{ torrent.nfo }}</pre>
     {% endif %}
     {% if torrent.description %}
-      <div class="well">{{ torrent.description }}</div>
+      <div class="well">{{ torrent.description|bbcode }}</div>
     {% endif %}
   </div>
 </div>

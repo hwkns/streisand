@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load timestamp_formatting %}
+{% load timestamp_formatting bbcode %}
 
 {% block title %}Requests - {{ torrent_request.film.title }}{% endblock %}
 
@@ -10,7 +10,7 @@
       <h2>Total Bounty: {{ torrent_request.total_bounty_in_bytes|filesizeformat }}</h2>
     </div>
 
-    <p>{{ torrent_request.description }}</p>
+    <p>{{ torrent_request.description|bbcode }}</p>
 
     <h2>Votes</h2>
     {% for vote in torrent_request.votes.all %}
@@ -34,7 +34,7 @@
               <a href="{{ comment.author.get_absolute_url }}">{{ comment.author.username }}</a>
               {{ comment.created_at|timestamp }}
             </h4>
-            <p class="list-group-item-text">{{ comment.text }}</p>
+            <p class="list-group-item-text">{{ comment.text|bbcode }}</p>
           </div>
         {% endfor %}
       </div>
