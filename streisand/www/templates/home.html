@@ -1,10 +1,18 @@
 {% extends 'base.html' %}
+{% load timestamp_formatting bbcode %}
 
 {% block title %}Home{% endblock %}
 
 {% block main %}
-      <div class="page-header">
-        <h1>News</h1>
-      </div>
-      <p>This is what happens when you find a stranger in the alps.</p>
+  <div class="page-header">
+    <h1>News</h1>
+  </div>
+  <div>
+    <h3>{{ news_post.thread.title }}</h3>
+    <h6>{{ news_post.created_at|timestamp }}</h6>
+    {{ news_post.body|bbcode }}
+  </div>
+  <div>
+    <a href="{{ news_post.thread.topic.get_absolute_url }}">Older news posts</a>
+  </div>
 {% endblock %}

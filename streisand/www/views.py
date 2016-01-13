@@ -10,6 +10,7 @@ from django.views.generic import View
 
 from films.models import Film
 from film_lists.models import FilmList
+from forums.models import ForumThread
 from profiles.models import UserProfile
 from torrents.models import Torrent
 
@@ -18,10 +19,13 @@ from .models import Feature
 
 
 def home(request):
+    news_thread = ForumThread.objects.filter(topic__name='Announcements').latest()
+    news_post = news_thread.posts.earliest()
     return render(
         request=request,
         template_name='home.html',
         dictionary={
+            'news_post': news_post,
         }
     )
 

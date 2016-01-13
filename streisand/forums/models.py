@@ -87,6 +87,9 @@ class ForumThread(models.Model):
         related_name='forum_threads_subscribed',
     )
 
+    class Meta:
+        get_latest_by = 'created_at'
+
     objects = ForumThreadManager()
 
     def __str__(self):
@@ -117,6 +120,9 @@ class ForumPost(models.Model):
         to='forums.ForumThread',
         related_name='posts',
     )
+
+    class Meta:
+        get_latest_by = 'created_at'
 
     def __str__(self):
         return 'Forum post by {author} in thread {thread}'.format(
