@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.decorators import permission_required
-from django.db.models import Count
+from django.db.models import Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import View
@@ -69,8 +69,8 @@ def torrent_request_index(request):
 
     if order_by == 'bounty':
         all_torrent_requests = all_torrent_requests.annotate(
-            Count('votes__bounty_in_bytes')
-        ).order_by('votes__bounty_in_bytes__count')
+            Sum('votes__bounty_in_bytes')
+        ).order_by('-votes__bounty_in_bytes__sum')
     elif order_by == 'created_at':
         all_torrent_requests = all_torrent_requests.order_by('created_at')
 
