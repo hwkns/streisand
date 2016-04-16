@@ -3,10 +3,17 @@
 import json
 import logging
 
-from django.contrib.auth import authenticate, login
-from django.http import Http404
+from django.contrib.auth import REDIRECT_FIELD_NAME, authenticate, login as auth_login
+from django.contrib.auth.forms import AuthenticationForm
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.http import is_safe_url
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View
+
+from ratelimit.decorators import ratelimit
 
 from films.models import Film
 from film_lists.models import FilmList
@@ -16,16 +23,81 @@ from torrents.models import Torrent
 
 from .forms import RegistrationForm
 from .models import Feature
+from .signals.signals import successful_login, failed_login
 
 
 def home(request):
-    news_thread = ForumThread.objects.filter(topic__name='Announcements').latest()
-    news_post = news_thread.posts.earliest()
+
+    # Get the latest news post
+    try:
+        news_thread = ForumThread.objects.filter(topic__name='Announcements').latest()
+    except ForumThread.DoesNotExist:
+        news_post = None
+    else:
+        news_post = news_thread.posts.earliest()
+
     return render(
         request=request,
         template_name='home.html',
         dictionary={
             'news_post': news_post,
+        }
+    )
+
+
+@ratelimit(key='ip', rate='6/2h', method='POST', group='login')
+@sensitive_post_parameters()
+@csrf_protect
+@never_cache
+def login(request):
+    """
+    Displays the login form and handles the login action.
+    """
+    redirect_to = request.POST.get(REDIRECT_FIELD_NAME,
+                                   request.GET.get(REDIRECT_FIELD_NAME, ''))
+
+    if request.method == 'POST' and not request.limited:
+
+        form = AuthenticationForm(request, data=request.POST)
+        ip_address = request.META['REMOTE_ADDR']
+
+        if form.is_valid():
+
+            # Ensure the user-originating redirection url is safe.
+            if not is_safe_url(url=redirect_to, host=request.get_host()):
+                redirect_to = '/'
+
+            # Okay, security check complete. Log the user in.
+            auth_login(request, form.get_user())
+
+            # Signal a successful login attempt
+            successful_login.send(
+                sender=login,
+                user=form.get_user(),
+                ip_address=ip_address,
+            )
+
+            return HttpResponseRedirect(redirect_to)
+
+        else:
+
+            # Signal a failed login attempt
+            failed_login.send(
+                sender=login,
+                username=form.cleaned_data.get('username'),
+                ip_address=ip_address,
+            )
+
+    else:
+
+        form = AuthenticationForm(request)
+
+    return render(
+        request=request,
+        template_name='login.html',
+        context={
+            'form': form,
+            REDIRECT_FIELD_NAME: redirect_to,
         }
     )
 
@@ -69,7 +141,7 @@ class RegistrationView(View):
                 username=self.form.cleaned_data['username'],
                 password=self.form.cleaned_data['password1'],
             )
-            login(request, new_authenticated_user)
+            auth_login(request, new_authenticated_user)
             return redirect('home')
 
         else:

@@ -179,7 +179,7 @@ class UserIPAddress(models.Model):
     both site and tracker interactions.
     """
     profile = models.ForeignKey(
-        'profiles.UserProfile',
+        to='profiles.UserProfile',
         null=False,
         db_index=True,
         related_name='ip_addresses',
@@ -201,7 +201,7 @@ class UserAnnounceKey(models.Model):
     """
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
     used_with_profile = models.ForeignKey(
-        'profiles.UserProfile',
+        to='profiles.UserProfile',
         related_name='announce_keys',
         db_index=True,
     )
@@ -223,13 +223,13 @@ class UserAnnounce(models.Model):
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
 
     profile = models.ForeignKey(
-        'profiles.UserProfile',
+        to='profiles.UserProfile',
         null=False,
         db_index=True,
         related_name='logged_announces',
     )
     swarm = models.ForeignKey(
-        'tracker.Swarm',
+        to='tracker.Swarm',
         null=False,
         db_index=True,
     )
@@ -247,29 +247,12 @@ class UserAnnounce(models.Model):
 
 class WatchedUser(models.Model):
 
-    profile = models.ForeignKey('profiles.UserProfile')
+    profile = models.ForeignKey(to='profiles.UserProfile')
     notes = models.TextField()
     added_at = models.DateTimeField(auto_now_add=True)
     last_checked = models.DateTimeField(auto_now=True)
     checked_by = models.ForeignKey(
-        'auth.User',
+        to='auth.User',
         null=True,
         on_delete=models.SET_NULL,
     )
-
-
-class LoginAttempt(models.Model):
-    user = models.ForeignKey('auth.User', related_name='login_attempts')
-    ip_address = models.GenericIPAddressField(null=True)
-    success = models.BooleanField()
-    time_stamp = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        get_latest_by = 'time_stamp'
-
-    def __str__(self):
-        return '{status} {time_stamp} - {user}'.format(
-            status='Success' if self.success else 'Failure',
-            time_stamp=self.time_stamp.strftime('%Y-%m-%d %H:%M:%S'),
-            user=self.user,
-        )

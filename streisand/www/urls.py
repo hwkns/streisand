@@ -2,12 +2,12 @@
 
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.contrib.auth.views import login, logout_then_login
+from django.contrib.auth.views import logout_then_login
 
 from invites.views import InviteRegistrationView
 
 from .decorators import https_required
-from .views import RegistrationView, LegacyURLView, template_viewer, home
+from .views import RegistrationView, LegacyURLView, template_viewer, home, login
 
 
 urlpatterns = [
@@ -46,9 +46,6 @@ urlpatterns = [
     url(
         regex=r'^login/$',
         view=https_required(login),
-        kwargs={
-            'template_name': 'login.html',
-        },
         name='login',
     ),
     url(
