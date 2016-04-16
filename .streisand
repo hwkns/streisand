@@ -32,7 +32,7 @@ alias shell='m shell_plus --settings=streisand.settings.www_settings'
 alias runserver='m runserver_plus 0.0.0.0:8000 --settings=streisand.settings.www_settings'
 alias runtracker='m runserver_plus 0.0.0.0:7070 --settings=streisand.settings.tracker_settings'
 alias delete_migrations='rm -f /var/www/streisand/streisand/*/migrations/[0-9]*.py'
-alias clean_slate='m reset_db --noinput && delete_migrations && m makemigrations && m migrate'
+alias clean_slate='m reset_db --noinput && delete_migrations && m makemigrations && m migrate && m loaddata foundation'
 alias fixtures='m loaddata dev'
 
 
