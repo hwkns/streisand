@@ -57,7 +57,7 @@ def timestamp(value):
     """
     Humanizes a timestamp, with a tooltip displaying the actual time.
     """
-    if value is None:
+    if not value:
         return 'Never'
 
     now = datetime.now(utc if is_aware(value) else None)
