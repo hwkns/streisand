@@ -44,7 +44,10 @@ class Command(MySQLCommand):
         avatar_url = row['Avatar']
         user_class = UserClass.objects.get(old_id=row['PermissionID'])
         custom_title = row['Title']
-        description = row['Info'].encode('latin-1').decode('utf-8')
+        try:
+            description = row['Info'].encode('latin-1').decode('utf-8')
+        except UnicodeDecodeError:
+            description = row['Info']
         staff_notes = row['AdminComment'].encode('latin-1').decode('utf-8')
         # paranoia = int(row['Paranoia'])
         invite_count = row['Invites']
