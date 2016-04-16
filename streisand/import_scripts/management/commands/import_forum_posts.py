@@ -35,7 +35,7 @@ class Command(MySQLCommand):
 
         forum_post = forum_thread.posts.create(
             old_id=old_id,
-            body=body,
+            body=body.encode('latin-1').decode('utf-8'),
             author=author,
         )
 
