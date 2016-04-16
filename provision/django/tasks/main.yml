@@ -17,6 +17,7 @@
       - libpq-dev               # for psycopg2
       - libpcre3                # for uWSGI
       - libpcre3-dev            # for uWSGI
+      - libjpeg8-dev            # for Pillow
 
 - name: upgrade existing system packages
   sudo: yes

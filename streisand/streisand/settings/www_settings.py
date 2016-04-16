@@ -18,24 +18,15 @@ INSTALLED_APPS += [
     'django.contrib.humanize',
     'django.contrib.messages',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.staticfiles',
 
     # Debug Toolbar
     'debug_toolbar.apps.DebugToolbarConfig',
 
-    # django-wiki
-    'mptt',
-    'sekizai',
-    'wiki',
-
     # Import scripts
     'import_scripts',
 
 ]
-
-WIKI_ACCOUNT_HANDLING = False
-SITE_ID = 2
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.gzip.GZipMiddleware',
@@ -98,7 +89,6 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
-    'sekizai.context_processors.sekizai',
     'debreach.context_processors.csrf',
 ]
 
@@ -166,11 +156,6 @@ LOGGING = {
 }
 
 if TESTING:
-
-    INSTALLED_APPS += [
-        'django_nose',
-    ]
-    TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
     # http://django-dynamic-fixture.readthedocs.org/en/latest/data_fixtures.html#custom-field-fixture
     DDF_FIELD_FIXTURES = {

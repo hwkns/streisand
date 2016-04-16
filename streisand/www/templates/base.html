@@ -1,4 +1,4 @@
-{% load static sekizai_tags %}
+{% load static %}
 <!doctype html>
 
 <html lang="en">
@@ -16,8 +16,6 @@
   <!-- bbcode CSS -->
   <link rel="stylesheet" href="{% static 'www/bbcode.css' %}">
   {% endblock %}
-  <!-- django-wiki CSS via sekizai -->
-  {% render_block 'css' %}
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -44,7 +42,7 @@
           <li><a href="{% url 'forum_index' %}">Forums</a></li>
           <li><a href="{% url 'torrent_request_index' %}">Torrent Requests</a></li>
           <li><a href="{% url 'reseed_request_index' %}">Reseed</a></li>
-          <li><a href="{% url 'wiki:root' %}">Wiki</a></li>
+          <li><a href="{% url 'wiki_index' %}">Wiki</a></li>
         </ul>
           <div class="navbar-right">
             <ul class="nav navbar-nav">
@@ -78,8 +76,6 @@
 <!-- jQuery and Bootstrap 3.2.0 JS -->
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<!-- django-wiki js via sekizai -->
-{% render_block 'js' %}
 
 </body>
 </html>

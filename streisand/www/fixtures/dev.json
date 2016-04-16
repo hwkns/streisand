@@ -1,13 +1,5 @@
 [
     {
-        "pk": 2,
-        "model": "sites.site",
-        "fields": {
-            "name": "Streisand",
-            "domain": "localhost:8000"
-        }
-    },
-    {
         "pk": 1,
         "model": "film_lists.filmlist",
         "fields": {

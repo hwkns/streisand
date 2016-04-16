@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from wiki.urls import get_pattern as get_wiki_pattern
-
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import login, logout_then_login
@@ -26,7 +24,7 @@ urlpatterns = [
     url(r'^torrent-requests/', include('torrent_requests.urls')),
     url(r'^torrent-stats/', include('torrent_stats.urls')),
     url(r'^torrents/', include('torrents.urls')),
-    url(r'^wiki/', get_wiki_pattern()),
+    url(r'^wiki/', include('wiki.urls')),
 
     # Admin
     url(r'^grappelli/', include('grappelli.urls')),
