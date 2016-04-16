@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import mysql.connector
+import MySQLdb
+from MySQLdb.cursors import SSDictCursor
 
 from django.core.management.base import BaseCommand
 
@@ -10,7 +11,8 @@ class MySQLCommand(BaseCommand):
     DB_CONFIG = {
         'user': 'root',
         'host': '10.0.2.2',
-        'database': 'tc',
+        'db': 'tc',
+        'cursorclass': SSDictCursor,
         'charset': 'latin1',
     }
 
@@ -22,10 +24,10 @@ class MySQLCommand(BaseCommand):
 
         self.pre_sql()
 
-        cnx = mysql.connector.connect(**self.DB_CONFIG)
-        cursor = cnx.cursor(dictionary=True)
+        cnx = MySQLdb.connect(**self.DB_CONFIG)
+        cursor = cnx.cursor()
         cursor.execute(self.SQL)
-        for row in cursor:
+        for row in cursor.fetchall():
             self.handle_row(row)
         cursor.close()
         cnx.close()
