@@ -49,7 +49,7 @@ class UserProfile(models.Model):
         db_index=True,
         on_delete=models.SET_NULL,
     )
-    avatar_url = models.URLField()
+    avatar_url = models.URLField(max_length=512, null=True, blank=True)
     custom_title = models.CharField(max_length=256, null=True)
     description = models.TextField()
     staff_notes = models.TextField()
