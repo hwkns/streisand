@@ -62,10 +62,13 @@ class Command(MySQLCommand):
         if container == 'Matroska':
             container = 'MKV'
 
+        if codec == 'h.264':
+            codec = 'H.264'
+
         metainfo_dict = self.get_metainfo(torrent_id)
         if 'files' in metainfo_dict['info']:
             file_list = [
-                '/'.join(file['path'])
+                '/'.join([p if isinstance(p, str) else p.decode('latin-1') for p in file['path']])
                 for file
                 in metainfo_dict['info']['files']
             ]
