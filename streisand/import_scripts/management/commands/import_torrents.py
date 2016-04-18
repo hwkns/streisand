@@ -19,7 +19,7 @@ from tracker.bencoding import bdecode
 
 class Command(MySQLCommand):
 
-    SQL = """SELECT * FROM torrents WHERE ID < 1000"""
+    SQL = """SELECT * FROM torrents"""
 
     help = "Imports torrents from files and the MySQL db"
 
@@ -28,6 +28,11 @@ class Command(MySQLCommand):
         1: True,
         2: False,
     }
+
+    def pre_sql(self):
+        last_torrent = Torrent.objects.order_by('old_id').last()
+        last_old_id = last_torrent.old_id if last_torrent else 0
+        self.SQL += ' WHERE ID > {id} ORDER BY ID LIMIT 1000'.format(id=last_old_id)
 
     def handle_row(self, row):
 
@@ -88,7 +93,10 @@ class Command(MySQLCommand):
             if nfo_match:
                 nfo_text = nfo_match.group(1).rstrip()
                 if 'Ü' in nfo_text:
-                    nfo_text = nfo_text.encode('cp1252').decode('cp437')
+                    try:
+                        nfo_text = nfo_text.encode('cp1252').decode('cp437')
+                    except UnicodeEncodeError:
+                        nfo_text = nfo_text.encode('latin-1').decode('cp437')
                 spoiler_match = re.search(
                     r'(\[spoiler=NFO\]\s*(?:\[size=\d\])?\s*\[pre\].*\[/pre\]\s*(?:\[/size\])?\s*\[/spoiler\])',
                     string=description,
