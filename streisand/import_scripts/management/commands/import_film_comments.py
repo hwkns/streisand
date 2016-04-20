@@ -28,7 +28,10 @@ class Command(MySQLCommand):
             author = UserProfile.objects.get(old_id=author_id)
         except UserProfile.DoesNotExist:
             return
-        film = Film.objects.get(old_id=torrent_group_id)
+        try:
+            film = Film.objects.get(old_id=torrent_group_id)
+        except Film.DoesNotExist:
+            return
 
         comment = film.comments.create(
             author=author,
