@@ -92,7 +92,7 @@ class Command(MySQLCommand):
             )
             if nfo_match:
                 nfo_text = nfo_match.group(1).rstrip()
-                if 'Ü' in nfo_text:
+                if 'Ü' in nfo_text and torrent_id not in (68325, 73858, 77698):
                     try:
                         nfo_text = nfo_text.encode('cp1252').decode('cp437')
                     except UnicodeEncodeError:
