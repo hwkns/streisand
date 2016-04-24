@@ -49,7 +49,9 @@ def track_successful_login_attempts(**kwargs):
     try:
         last_successful_login = user.login_attempts.filter(success=True).latest()
     except LoginAttempt.DoesNotExist:
-        failed_login_attempts = user.login_attempts.filter(success=False)
+        failed_login_attempts = user.login_attempts.filter(
+            success=False,
+        )
     else:
         failed_login_attempts = user.login_attempts.filter(
             success=False,
