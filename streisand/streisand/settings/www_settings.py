@@ -27,8 +27,9 @@ INSTALLED_APPS += [
 
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -42,7 +43,7 @@ MIDDLEWARE_CLASSES = [
 
 if PRODUCTION or TESTING:
     INSTALLED_APPS.remove('debug_toolbar')
-    MIDDLEWARE_CLASSES.remove('debug_toolbar.middleware.DebugToolbarMiddleware')
+    MIDDLEWARE.remove('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 ROOT_URLCONF = 'www.urls'
 
@@ -56,14 +57,17 @@ LOGIN_EXEMPT_URL_PREFIXES = (
     '/torrents/download/',
 )
 
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'www.auth.OldSitePasswordHasher',
+]
+
 RT_API_KEY = os.environ.get('RT_API_KEY', '')
 OLD_SITE_SECRET_KEY = os.environ.get('OLD_SITE_HASH', '')
 
 AUTHENTICATION_BACKENDS = [
     # Case insensitive authentication, custom permissions
     'www.auth.CustomAuthBackend',
-    # The old site's authentication system
-    'www.auth.OldSiteAuthBackend',
     # django-su
     'django_su.backends.SuBackend',
 ]

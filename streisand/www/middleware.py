@@ -5,25 +5,28 @@ from django.conf import settings
 from django.contrib.auth import SESSION_KEY, get_user
 from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
+from django.utils.deprecation import MiddlewareMixin
 from django.utils.functional import SimpleLazyObject
 from django.utils.http import urlquote
 
 from profiles.models import UserProfile
 
 
-class ExtraExceptionInfoMiddleware:
+class ExtraExceptionInfoMiddleware(MiddlewareMixin):
     """
     This middleware adds relevant information to the request when there is an exception
     """
+
     @staticmethod
     def process_exception(request, exception):
         if request.user.is_authenticated():
             request.META[b'USER'] = request.user.username
 
 
-class XForwardedForMiddleware:
+class XForwardedForMiddleware(MiddlewareMixin):
 
-    def process_request(self, request):
+    @staticmethod
+    def process_request(request):
         try:
             real_ip = request.META['HTTP_X_FORWARDED_FOR']
         except KeyError:
@@ -34,7 +37,7 @@ class XForwardedForMiddleware:
             request.META['REMOTE_ADDR'] = real_ip.split(',')[0]
 
 
-class LoginRequiredMiddleware:
+class LoginRequiredMiddleware(MiddlewareMixin):
     """
     Middleware that requires a user to be authenticated to view any page other
     than LOGIN_URL. Exemptions to this requirement can optionally be specified
@@ -60,7 +63,7 @@ class LoginRequiredMiddleware:
                 return HttpResponseRedirect(redirect_path)
 
 
-class CachedUserAuthenticationMiddleware:
+class CachedUserAuthenticationMiddleware(MiddlewareMixin):
     """
     Middleware that caches request.user for a session so it doesn't have to be
     looked up in the database for every page load.

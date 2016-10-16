@@ -1,4 +1,4 @@
-Django==1.10.2
+Django[argon2]==1.10.2
 Markdown==2.6.7
 Pillow==3.4.1
 Werkzeug==0.11.11

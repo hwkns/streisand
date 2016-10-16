@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
+from collections import OrderedDict
 from hashlib import md5, sha1
 
 from django.conf import settings
 from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.hashers import BasePasswordHasher, mask_hash
 from django.contrib.auth.models import User, Permission
 from django.db.models import Q
+from django.utils.crypto import constant_time_compare
 
 from profiles.models import UserProfile
 
@@ -115,40 +118,54 @@ class CustomAuthBackend(ModelBackend):
         return getattr(user, perm_cache_name)
 
 
-class OldSiteAuthBackend(ModelBackend):
-    """
-    The old site used md5 and sha1 with a salt to store passwords.
-    """
+class OldSitePasswordHasher(BasePasswordHasher):
 
-    @staticmethod
-    def old_site_password_hash(string, secret):
-        old_site_salt = settings.OLD_SITE_SECRET_KEY
-        secret = secret.encode('utf-8')
-        secret_md5 = md5(secret).hexdigest()
-        secret_sha1 = sha1(secret).hexdigest()
-        things = (secret_md5 + string + secret_sha1 + old_site_salt).encode('utf-8')
-        return sha1(things).hexdigest()
+    algorithm = 'old_hash'
 
-    def authenticate(self, username=None, password=None, **kwargs):
-        try:
-            user = User.objects.get(username__iexact=username)
-        except User.DoesNotExist:
-            # Calculate a password hash to reduce the timing difference
-            # between an existing and a non-existing user.
-            self.old_site_password_hash('password', 'salt')
-        else:
-            # User does exist; check if they have an old-style hash
-            if user.password.startswith('old_hash$'):
-                # Check the old hash against the provided password
-                (prefix, password_hash, salt) = user.password.split('$')
-                if self.old_site_password_hash(password, salt) == password_hash:
-                    # Update the password hash and authenticate the user
-                    user.set_password(password)
-                    user.save()
-                    return user
-            else:
-                # Calculate a password hash to reduce the timing difference
-                # between an existing and a non-existing user.
-                self.old_site_password_hash('password', 'salt')
+    def encode(self, password, salt):
+        """
+        Creates an encoded database value
 
-        return None
+        The result is normally formatted as "algorithm$salt$hash" and
+        must be fewer than 128 characters.
+        """
+        assert password is not None
+        assert salt and '$' not in salt
+        old_site_secret = settings.OLD_SITE_SECRET_KEY
+        salt = salt.encode('utf-8')
+        secret_md5 = md5(salt).hexdigest()
+        secret_sha1 = sha1(salt).hexdigest()
+        things = (secret_md5 + password + secret_sha1 + old_site_secret).encode('utf-8')
+        password_hash = sha1(things).hexdigest()
+        return '{algorithm}${salt}${hash}'.format(
+            algorithm=self.algorithm,
+            salt=salt.decode('utf-8'),
+            hash=password_hash,
+        )
+
+    def verify(self, password, encoded):
+        """
+        Checks if the given password is correct
+        """
+        algorithm, salt, password_hash = encoded.split('$', 2)
+        assert algorithm == self.algorithm
+        hashed_input = self.encode(password, salt)
+        return constant_time_compare(hashed_input, encoded)
+
+    def safe_summary(self, encoded):
+        """
+        Returns a summary of safe values
+
+        The result is a dictionary and will be used where the password field
+        must be displayed to construct a safe representation of the password.
+        """
+        algorithm, salt, password_hash = encoded.split('$', 2)
+        assert algorithm == self.algorithm
+        return OrderedDict([
+            ('algorithm', algorithm),
+            ('salt', mask_hash(salt)),
+            ('hash', mask_hash(password_hash)),
+        ])
+
+    def harden_runtime(self, password, encoded):
+        pass

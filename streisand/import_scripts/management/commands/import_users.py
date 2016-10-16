@@ -67,7 +67,7 @@ class Command(MySQLCommand):
         u = User.objects.create(
             username=username,
             email=email,
-            password='old_hash${hash}${salt}'.format(hash=password_hash, salt=salt),
+            password='old_hash${salt}${password_hash}'.format(salt=salt, password_hash=password_hash),
             date_joined=join_date.replace(tzinfo=UTC),
         )
         if last_login:

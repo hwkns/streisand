@@ -8,7 +8,7 @@ ROOT_URLCONF = 'tracker.urls'
 WSGI_APPLICATION = 'streisand.tracker_wsgi.application'
 
 if DEBUG:
-    MIDDLEWARE_CLASSES = [
+    MIDDLEWARE = [
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ]
     INSTALLED_APPS += [

@@ -15,6 +15,7 @@
       - python3-dev             # for compiling pip packages
       - nginx-full              # nginx
       - redis-server            # redis
+      - libffi-dev              # for argon2
       - libpq-dev               # for psycopg2
       - libpcre3                # for uWSGI
       - libpcre3-dev            # for uWSGI
