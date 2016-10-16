@@ -9,7 +9,6 @@ INTERNAL_IPS = [
 INSTALLED_APPS += [
 
     # Third party apps
-    'debreach',
     'django_su',
     'grappelli',
 
@@ -21,7 +20,7 @@ INSTALLED_APPS += [
     'django.contrib.staticfiles',
 
     # Debug Toolbar
-    'debug_toolbar.apps.DebugToolbarConfig',
+    'debug_toolbar',
 
     # Import scripts
     'import_scripts',
@@ -30,8 +29,6 @@ INSTALLED_APPS += [
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.gzip.GZipMiddleware',
-    'debreach.middleware.RandomCommentMiddleware',
-    'debreach.middleware.CSRFCryptMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -40,10 +37,11 @@ MIDDLEWARE_CLASSES = [
     'www.middleware.LoginRequiredMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'profiles.middleware.IPHistoryMiddleware',
 ]
 
 if PRODUCTION or TESTING:
-    INSTALLED_APPS.remove('debug_toolbar.apps.DebugToolbarConfig')
+    INSTALLED_APPS.remove('debug_toolbar')
     MIDDLEWARE_CLASSES.remove('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 ROOT_URLCONF = 'www.urls'
@@ -74,22 +72,26 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 WSGI_APPLICATION = 'streisand.www_wsgi.application'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = [
-    # 'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-]
-
-TEMPLATE_CONTEXT_PROCESSORS = [
-    'django.core.context_processors.request',
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.contrib.messages.context_processors.messages',
-    'debreach.context_processors.csrf',
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            # insert your TEMPLATE_DIRS here
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]
 
 # Static files (CSS, JavaScript, Images)

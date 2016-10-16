@@ -17,7 +17,7 @@ def film_list_index(request):
     return render(
         request=request,
         template_name='film_list_index.html',
-        dictionary={
+        context={
             'film_lists': film_lists,
         }
     )
@@ -28,7 +28,7 @@ def film_list_details(request, film_list_id):
     return render(
         request=request,
         template_name='film_list_details.html',
-        dictionary={
+        context={
             'film_list': film_list,
         }
     )

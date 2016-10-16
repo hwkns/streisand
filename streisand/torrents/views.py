@@ -85,7 +85,7 @@ class TorrentUploadView(View):
         return render(
             request=self.request,
             template_name='torrent_upload.html',
-            dictionary={'form': form},
+            context={'form': form},
         )
 
 
@@ -130,7 +130,7 @@ def reseed_request_index(request):
     return render(
         request=request,
         template_name='reseed_request_index.html',
-        dictionary={
+        context={
             'reseed_requests': reseed_requests,
         }
     )

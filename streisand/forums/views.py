@@ -30,7 +30,7 @@ def forum_index(request):
     return render(
         request=request,
         template_name='forum_index.html',
-        dictionary={
+        context={
             'forum_groups': forum_groups,
         }
     )
@@ -54,7 +54,7 @@ def forum_topic_details(request, topic_id):
     return render(
         request=request,
         template_name='forum_topic_details.html',
-        dictionary={
+        context={
             'topic': topic,
             'threads': threads,
         }
@@ -132,7 +132,7 @@ class ForumThreadView(View):
         return render(
             request=self.request,
             template_name='forum_thread_details.html',
-            dictionary={
+            context={
                 'thread': thread,
                 'posts': posts,
                 'form': form,

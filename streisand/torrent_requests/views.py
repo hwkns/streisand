@@ -45,7 +45,7 @@ class NewTorrentRequestView(View):
         return render(
             request=self.request,
             template_name='new_torrent_request.html',
-            dictionary={'form': form},
+            context={'form': form},
         )
 
 
@@ -82,7 +82,7 @@ def torrent_request_index(request):
     return render(
         request=request,
         template_name='torrent_request_index.html',
-        dictionary={
+        context={
             'torrent_requests': torrent_requests,
         }
     )
@@ -143,7 +143,7 @@ class TorrentRequestView(View):
         return render(
             request=self.request,
             template_name='torrent_request_details.html',
-            dictionary={
+            context={
                 'torrent_request': torrent_request,
                 'vote_form': vote_form,
             },

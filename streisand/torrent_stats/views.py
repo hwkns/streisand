@@ -24,7 +24,7 @@ def torrent_stats_index(request, username):
     return render(
         request=request,
         template_name='torrent_stats_index.html',
-        dictionary={
+        context={
             'torrent_stats': torrent_stats,
         }
     )

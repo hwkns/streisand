@@ -51,7 +51,7 @@ class InviteView(View):
         return render(
             request=self.request,
             template_name='invite_index.html',
-            dictionary={
+            context={
                 'invites': self.invites,
                 'form': form,
             },
@@ -116,5 +116,5 @@ class InviteRegistrationView(View):
         return render(
             request=self.request,
             template_name=self.template_name,
-            dictionary={'form': self.form},
+            context={'form': self.form},
         )

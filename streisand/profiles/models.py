@@ -30,7 +30,8 @@ class UserProfile(models.Model):
     user_class = models.ForeignKey(
         to='user_classes.UserClass',
         related_name='user_profiles',
-        default='User',
+        null=True,
+        on_delete=models.SET_NULL,
     )
     is_donor = models.BooleanField(default=False)
     account_status = models.CharField(

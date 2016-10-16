@@ -39,7 +39,7 @@ def home(request):
     return render(
         request=request,
         template_name='home.html',
-        dictionary={
+        context={
             'news_post': news_post,
         }
     )
@@ -62,6 +62,10 @@ def login(request):
         ip_address = request.META['REMOTE_ADDR']
 
         if form.is_valid():
+
+            if request.user.is_authenticated():
+                # this user has more than one account
+                pass
 
             # Ensure the user-originating redirection url is safe.
             if not is_safe_url(url=redirect_to, host=request.get_host()):
@@ -152,7 +156,7 @@ class RegistrationView(View):
         return render(
             request=self.request,
             template_name='register.html',
-            dictionary={'form': self.form},
+            context={'form': self.form},
         )
 
 

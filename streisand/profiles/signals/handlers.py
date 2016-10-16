@@ -6,6 +6,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
 from profiles.models import UserProfile
+from user_classes.models import UserClass
 
 
 @receiver([post_save, post_delete], sender=User)
@@ -24,7 +25,10 @@ def invalidate_user_cache(**kwargs):
 def create_profile_for_new_user(**kwargs):
     if kwargs['created']:
         user = kwargs['instance']
-        UserProfile.objects.create(user=user)
+        UserProfile.objects.create(
+            user=user,
+            user_class=UserClass.objects.get(name='User'),
+        )
         can_leech = Permission.objects.get(codename='can_leech')
         user.user_permissions.add(can_leech)
 

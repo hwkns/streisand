@@ -21,7 +21,7 @@ def user_profile_index(request):
     return render(
         request=request,
         template_name='user_profile_index.html',
-        dictionary={
+        context={
             'profiles': user_profiles,
         }
     )
@@ -30,14 +30,14 @@ def user_profile_index(request):
 def user_profile_details(request, username):
 
     profile = get_object_or_404(
-        UserProfile.objects.select_related('user').prefetch_related('torrent_stats'),
+        UserProfile.objects.select_related('user'),
         user__username__iexact=username,
     )
 
     return render(
         request=request,
         template_name='user_profile_details.html',
-        dictionary={
+        context={
             'profile': profile,
         },
     )
