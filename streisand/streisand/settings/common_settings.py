@@ -26,11 +26,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 DEBUG = json.loads(os.environ.get('STREISAND_DEBUG', "False").lower())
 PRODUCTION = not DEBUG
 TESTING = 'test' in sys.argv
+TEST_RUNNER = 'streisand.test_utils.CustomTestSuiteRunner'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('STREISAND_SECRET_KEY', 'you_deserve_to_be_pwned')
-
-TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
