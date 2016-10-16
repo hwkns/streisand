@@ -7,7 +7,7 @@ install:
     - "pip install -r testing_requirements.txt"
     - "pip install coveralls"
 script:
-    - "flake8 .
+    - "flake8 ."
     - "./streisand/manage.py makemigrations"
     - "./streisand/manage.py migrate"
     - "coverage run ./streisand/manage.py test streisand"
