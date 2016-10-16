@@ -24,7 +24,7 @@ os = (
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.forward_agent = true
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/xenial64"
   config.vm.network "private_network", ip: "10.1.2.200"
   config.vm.network :forwarded_port, host: 7070, guest: 7070
   config.vm.network :forwarded_port, host: 8000, guest: 8000

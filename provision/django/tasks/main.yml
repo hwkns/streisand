@@ -1,14 +1,15 @@
 - name: add redis repos
-  sudo: yes
+  become: yes
   apt_repository: repo='ppa:chris-lea/redis-server' state=present
 
 - name: source env setup on ssh
   lineinfile: dest={{ userhome }}/.bashrc line=". {{ app_path }}/.streisand"
 
 - name: install system packages
-  sudo: yes
+  become: yes
   apt: pkg={{ item }} state=installed update_cache=yes
   with_items:
+      - aptitude                # because ansible is dumb
       - git                     # to check out code from github
       - python-virtualenv       # to create the virtualenv
       - python3-dev             # for compiling pip packages
@@ -21,11 +22,11 @@
       - libmysqlclient-dev      # for mysqlclient
 
 - name: upgrade existing system packages
-  sudo: yes
+  become: yes
   apt: upgrade=yes
 
 - name: create virtualenv with python3
-  shell: virtualenv {{ virtualenv_path }} -p python3
+  shell: virtualenv {{ virtualenv_path }} -p python3.5
 
 - name: install requirements to virtualenv
   pip: virtualenv={{ virtualenv_path }} requirements={{ app_path }}/requirements.txt
@@ -34,11 +35,11 @@
   pip: virtualenv={{ virtualenv_path }} requirements={{ app_path }}/testing_requirements.txt
 
 - name: remove default nginx site
-  sudo: yes
+  become: yes
   file: path=/etc/nginx/sites-enabled/default state=absent force=yes
 
 - name: add streisand nginx site symlink
-  sudo: yes
+  become: yes
   file: src={{ app_path }}/nginx.conf dest=/etc/nginx/sites-enabled/streisand state=link force=yes
   notify:
       - Restart nginx
