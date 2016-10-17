@@ -201,7 +201,7 @@ class AnnounceView(View):
 
         handle_announce.delay(
             announce_key=announce_key,
-            swarm=swarm,
+            torrent_info_hash=info_hash,
             new_bytes_uploaded=bytes_recently_uploaded,
             new_bytes_downloaded=bytes_recently_downloaded,
             bytes_remaining=bytes_left,

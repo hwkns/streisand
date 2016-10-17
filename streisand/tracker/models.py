@@ -35,7 +35,7 @@ class Peer(models.Model):
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
 
     swarm = models.ForeignKey(Swarm, null=False, db_index=True, related_name='peers')
-    user_announce_key = models.CharField(max_length=36, null=False)
+    user_announce_key = models.CharField(max_length=36, null=False, db_index=True)
     ip_address = models.GenericIPAddressField(null=False)
     port = models.IntegerField(null=False)
     peer_id = models.CharField(max_length=40, null=False)

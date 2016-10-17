@@ -54,7 +54,7 @@ class AnnounceHandlerTests(TestCase):
         self.announce_view(request, announce_key=self.profile.announce_key_id)
         handler_mock.assert_called_once_with(
             announce_key=self.profile.announce_key_id,
-            swarm=self.swarm,
+            torrent_info_hash=self.swarm.torrent_info_hash,
             new_bytes_uploaded=422,
             new_bytes_downloaded=381,
             bytes_remaining=0,

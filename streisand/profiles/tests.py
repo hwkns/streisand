@@ -22,7 +22,7 @@ class TorrentAnnounceTests(TestCase):
     def upload(self, amount):
         handle_announce(
             announce_key=self.profile.announce_key_id,
-            swarm=self.torrent.swarm,
+            torrent_info_hash=self.torrent.swarm_id,
             peer_id='baz',
             ip_address='0.0.0.0',
             port='1234',

@@ -13,9 +13,8 @@ from .models import UserProfile, UserIPAddress
 
 
 @shared_task
-def handle_announce(announce_key, swarm, new_bytes_uploaded, new_bytes_downloaded,
-                    bytes_remaining, event, ip_address, port, peer_id, user_agent,
-                    time_stamp):
+def handle_announce(announce_key, torrent_info_hash, new_bytes_uploaded, new_bytes_downloaded,
+                    bytes_remaining, event, ip_address, port, peer_id, user_agent, time_stamp):
     """
     Event handler for announces made to the tracker.
 
@@ -28,14 +27,14 @@ def handle_announce(announce_key, swarm, new_bytes_uploaded, new_bytes_downloade
         # Get everything in one query, if it exists
         torrent_stats = TorrentStats.objects.filter(
             profile__announce_key_id=announce_key,
-            torrent__swarm=swarm,
+            torrent__swarm_id=torrent_info_hash,
         ).select_related(
             'profile',
             'torrent',
         ).get()
     except TorrentStats.DoesNotExist:
         profile = UserProfile.objects.get(announce_key_id=announce_key)
-        torrent = Torrent.objects.get(swarm=swarm)
+        torrent = Torrent.objects.get(swarm_id=torrent_info_hash)
         torrent_stats = TorrentStats.objects.create(
             profile=profile,
             torrent=torrent,
@@ -105,7 +104,7 @@ def handle_announce(announce_key, swarm, new_bytes_uploaded, new_bytes_downloade
     if profile.log_successful_announces:
         profile.logged_announces.create(
             time_stamp=time_stamp,
-            swarm=swarm,
+            swarm_id=torrent_info_hash,
             announce_key=announce_key,
             ip_address=ip_address,
             port=port,
