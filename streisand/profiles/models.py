@@ -3,9 +3,9 @@
 from uuid import uuid4
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.db.models import Sum
+from django.urls import reverse
 from django.utils.timezone import now
 
 from tracker.models import Peer

@@ -47,13 +47,12 @@ if PRODUCTION or TESTING:
 
 ROOT_URLCONF = 'www.urls'
 
-LOGOUT_URL = '/logout/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_EXEMPT_URL_PREFIXES = (
+    '/__debug__/',
     '/register/',
     '/logout/',
-    '/__debug__/',
     '/torrents/download/',
 )
 

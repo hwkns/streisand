@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.core.urlresolvers import reverse
 from django.db import models
+from django.urls import reverse
 
 from comments.models import Comment
 from rotten_tomatoes.managers import FilmRottenTomatoesManager

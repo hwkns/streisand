@@ -19,7 +19,7 @@ class ExtraExceptionInfoMiddleware(MiddlewareMixin):
 
     @staticmethod
     def process_exception(request, exception):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             request.META[b'USER'] = request.user.username
 
 
@@ -54,7 +54,7 @@ class LoginRequiredMiddleware(MiddlewareMixin):
         LOGIN_EXEMPT_URL_PREFIXES += tuple(settings.LOGIN_EXEMPT_URL_PREFIXES)
 
     def process_request(self, request):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             if not request.path_info.startswith(self.LOGIN_EXEMPT_URL_PREFIXES):
                 redirect_path = '{login_url}?next={next_url}'.format(
                     login_url=settings.LOGIN_URL,
@@ -101,7 +101,7 @@ class CachedUserAuthenticationMiddleware(MiddlewareMixin):
 
                     user = get_user(request)
 
-                    if user.is_authenticated():
+                    if user.is_authenticated:
                         # Cache the profile and the permissions too
                         user.profile.user_class
                         user.get_all_permissions()

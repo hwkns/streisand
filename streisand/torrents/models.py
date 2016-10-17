@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.core.urlresolvers import reverse
 from django.db import models
+from django.urls import reverse
 from django.utils.timezone import now, timedelta
 
 from picklefield import PickledObjectField

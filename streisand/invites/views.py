@@ -83,7 +83,7 @@ class InviteRegistrationView(View):
         if self.form.is_valid():
 
             # Flag potential dupers
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 log = logging.getLogger('streisand.security')
                 log.warning(
                     'New user "{new_user}" registered while logged in as '

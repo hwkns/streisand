@@ -9,7 +9,7 @@ class IPHistoryMiddleware(MiddlewareMixin):
 
     @staticmethod
     def process_request(request):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             # Update the profile's IP history
             UserIPAddress.objects.update_or_create(
                 profile=request.user.profile,

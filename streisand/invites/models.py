@@ -3,8 +3,8 @@
 from uuid import uuid4
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db import models
+from django.urls import reverse
 
 from www.tasks import async_email
 from www.utils import get_full_url

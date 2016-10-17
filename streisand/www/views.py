@@ -63,8 +63,10 @@ def login(request):
 
         if form.is_valid():
 
-            if request.user.is_authenticated():
-                # this user has more than one account
+            if request.user.is_authenticated:
+                # this user might have more than one account
+                # check if request.user.username == form.username
+                # maybe they're logging in on a friend's computer
                 pass
 
             # Ensure the user-originating redirection url is safe.
@@ -128,7 +130,7 @@ class RegistrationView(View):
         if self.form.is_valid():
 
             # Flag potential dupers
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 log = logging.getLogger('streisand.security')
                 log.warning(
                     'New user "{new_user}" registered while logged in as '
