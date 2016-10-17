@@ -345,7 +345,7 @@
         "fields": {
             "username": "admin",
             "email": "dolan@gooby.pls",
-            "password": "pbkdf2_sha256$12000$hWesB60GnByT$7aArajTou74uwGbkYJsscsrizBo9U9yqbQvwR4c/hB4=",
+            "password": "argon2$argon2i$v=19$m=512,t=2,p=2$d0xuUDRhaUtvdThJ$wr4ngN2Nmk9jV0hb860zAQ",
             "is_active": true,
             "is_staff": true,
             "is_superuser": true,
