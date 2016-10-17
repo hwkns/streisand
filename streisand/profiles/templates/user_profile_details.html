@@ -20,7 +20,7 @@
     <ul>
       <li>Joined: {{ profile.user.date_joined|timestamp }}</li>
       <li>Last Seen: {{ profile.last_seen|timestamp }}</li>
-      <li>Seeding Size: {{ profile.seeding_size }}</li>
+      <li>Seeding Size: {{ profile.seeding_size|filesizeformat }}</li>
       <li>Uploaded: {{ profile.bytes_uploaded|filesizeformat }}</li>
       <li>Downloaded: {{ profile.bytes_downloaded|filesizeformat }}</li>
       <li>Ratio: {{ profile.ratio }}</li>
