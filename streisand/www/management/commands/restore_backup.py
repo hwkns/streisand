@@ -18,7 +18,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         dump_path = options['dump_path']
-        assert(os.path.exists(dump_path), "The specified path '{dump_path}' does not exist!".format(dump_path=dump_path))
+        assert os.path.getsize(dump_path) > 0
 
         self.stdout.write("Dropping all old data")
         call_command('reset_db', interactive=False)
