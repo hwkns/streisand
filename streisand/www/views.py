@@ -110,9 +110,6 @@ def login(request):
 
 class RegistrationView(View):
 
-    form = RegistrationForm()
-    invite_key = None
-
     def dispatch(self, request, *args, **kwargs):
 
         if not Feature.objects.is_enabled('open_registration'):
@@ -121,44 +118,49 @@ class RegistrationView(View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        return self.render_form()
+        return self.render_form(RegistrationForm())
 
     def post(self, request):
 
-        self.form = RegistrationForm(request.POST)
+        form = RegistrationForm(request.POST)
 
-        if self.form.is_valid():
+        if form.is_valid():
 
             # Flag potential dupers
-            if request.user.is_authenticated:
-                log = logging.getLogger('streisand.security')
-                log.warning(
-                    'New user "{new_user}" registered while logged in as '
-                    'existing user "{existing_user}".'.format(
-                        new_user=self.form.cleaned_data['username'],
-                        existing_user=request.user.username,
-                    )
-                )
+            self.log_potential_dupers(request, form)
 
-            self.form.save()
+            form.save()
 
             # Authenticate the newly registered user
             new_authenticated_user = authenticate(
-                username=self.form.cleaned_data['username'],
-                password=self.form.cleaned_data['password1'],
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password1'],
             )
             auth_login(request, new_authenticated_user)
             return redirect('home')
 
         else:
 
-            return self.render_form()
+            return self.render_form(form)
 
-    def render_form(self):
+    @staticmethod
+    def log_potential_dupers(request, form):
+
+        if request.user.is_authenticated:
+            log = logging.getLogger('streisand.security')
+            log.warning(
+                'New user "{new_user}" registered while logged in as '
+                'existing user "{existing_user}".'.format(
+                    new_user=form.cleaned_data['username'],
+                    existing_user=request.user.username,
+                )
+            )
+
+    def render_form(self, form):
         return render(
             request=self.request,
             template_name='register.html',
-            context={'form': self.form},
+            context={'form': form},
         )
 
 
