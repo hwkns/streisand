@@ -5,6 +5,8 @@ from uuid import uuid4
 from django.db import models
 from django.utils.timezone import timedelta
 
+from www.utils import ratio
+
 
 class TorrentStats(models.Model):
 
@@ -49,10 +51,7 @@ class TorrentStats(models.Model):
 
     @property
     def ratio(self):
-        if self.bytes_downloaded == 0:
-            return 0.0
-        else:
-            return round(self.bytes_uploaded / self.bytes_downloaded, 3)
+        return ratio(self.bytes_uploaded, self.bytes_downloaded)
 
     @property
     def seed_time_remaining(self):

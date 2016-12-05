@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.utils.timezone import now
 
 from tracker.models import Peer
+from www.utils import ratio
 
 
 class UserProfile(models.Model):
@@ -123,10 +124,7 @@ class UserProfile(models.Model):
 
     @property
     def ratio(self):
-        if self.bytes_downloaded == 0:
-            return 0.0
-        else:
-            return round(self.bytes_uploaded / self.bytes_downloaded, 3)
+        return ratio(self.bytes_uploaded, self.bytes_downloaded)
 
     @property
     def recent_snatches(self, limit=5):
@@ -155,6 +153,10 @@ class UserProfile(models.Model):
             profile_url=reverse('admin:profiles_userprofile_change', args=[self.id]),
             username=self.username,
         )
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('user__username__iexact',)
 
     def get_absolute_url(self):
         return reverse('user_profile', args=[self.username])
