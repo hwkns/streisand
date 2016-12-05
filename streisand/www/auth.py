@@ -85,38 +85,6 @@ class CustomAuthBackend(ModelBackend):
 
         return user._perm_cache
 
-    @staticmethod
-    def get_user_class_permissions(user):
-        """
-        Returns a set of permission strings the user has from their user class.
-        """
-
-        perm_cache_name = '_user_class_perm_cache'
-
-        if not hasattr(user, perm_cache_name):
-
-            permissions = Permission.objects.filter(
-                Q(user=user)
-                | Q(group__user=user)
-                | Q(user_classes__user_profiles__user=user)
-            ).distinct().values_list(
-                'content_type__app_label',
-                'codename',
-            )
-
-            permissions = set(
-                '{app_label}.{codename}'.format(
-                    app_label=app_label,
-                    codename=codename,
-                )
-                for app_label, codename
-                in permissions
-            )
-
-            setattr(user, perm_cache_name, permissions)
-
-        return getattr(user, perm_cache_name)
-
 
 class OldSitePasswordHasher(BasePasswordHasher):
 
