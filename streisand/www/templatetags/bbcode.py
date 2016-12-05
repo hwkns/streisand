@@ -103,7 +103,6 @@ def render_size(tag_name, value, options, parent, context):
         size=font_size,
         text=value,
     )
-bbcode_parser.add_formatter('size', render_size)
 
 
 def render_quote(tag_name, value, options, parent, context):
@@ -118,7 +117,6 @@ def render_quote(tag_name, value, options, parent, context):
         if 'url' in options:
             text = '<a href="{url}">{text}</a>'.format(url=options['url'], text=text)
     return text
-bbcode_parser.add_formatter('quote', render_quote, strip=True, swallow_trailing_newline=True)
 
 
 def render_img(tag_name, value, options, parent, context):
@@ -126,7 +124,6 @@ def render_img(tag_name, value, options, parent, context):
         return '<img class="bbcode-img" src="{url}" />'.format(url=value)
     else:
         return ''
-bbcode_parser.add_formatter('img', render_img, replace_links=False)
 
 
 def render_spoiler(tag_name, value, options, parent, context):
@@ -141,6 +138,11 @@ def render_spoiler(tag_name, value, options, parent, context):
         title=options['spoiler'] if 'spoiler' in options else 'Spoiler',
         text=value,
     )
+
+
+bbcode_parser.add_formatter('size', render_size)
+bbcode_parser.add_formatter('quote', render_quote, strip=True, swallow_trailing_newline=True)
+bbcode_parser.add_formatter('img', render_img, replace_links=False)
 bbcode_parser.add_formatter('spoiler', render_spoiler)
 
 

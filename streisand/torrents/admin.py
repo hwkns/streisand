@@ -54,4 +54,5 @@ class TorrentAdmin(admin.ModelAdmin):
             'source_media',
         )
 
+
 admin.site.register(Torrent, TorrentAdmin)
