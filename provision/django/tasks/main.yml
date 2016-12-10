@@ -11,6 +11,7 @@
   with_items:
       - aptitude                # because ansible is dumb
       - git                     # to check out code from github
+      - build-essential         # to compile dependencies
       - python-virtualenv       # to create the virtualenv
       - python3-dev             # for compiling pip packages
       - nginx-full              # nginx
