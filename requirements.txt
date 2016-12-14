@@ -1,4 +1,4 @@
-Django[argon2]==1.10.3
+Django[argon2]==1.10.4
 Markdown==2.6.7
 Pillow==3.4.2
 Werkzeug==0.11.11
@@ -18,9 +18,10 @@ django-redis==4.6.0
 django-su==0.5.2
 kombu==3.0.37
 psycopg2==2.6.2
-pytz>=2016.3
+pytz>=2016.10
 redis==2.10.5
-requests==2.12.2
+requests==2.12.3
 six==1.10.0
 sqlparse==0.2.2
+tqdm==4.10.0
 uWSGI==2.0.14
