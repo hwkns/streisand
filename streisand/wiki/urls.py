@@ -12,13 +12,23 @@ urlpatterns = [
         name='wiki_index',
     ),
     url(
-        regex=r'^(?P<wiki_page_slug>.+)/$',
-        view=views.WikiPageView.as_view(),
-        name='wiki_page',
+        regex=r'^(?P<wiki_article_id>\d+)/$',
+        view=views.wiki_article_details,
+        name='wiki_article',
+    ),
+    url(
+        regex=r'^(?P<wiki_article_id>\d+)/edit/$',
+        view=views.WikiArticleEditView.as_view(),
+        name='edit_wiki_article',
     ),
     url(
         regex=r'^new/$',
-        view=views.NewWikiPageView.as_view(),
-        name='new_wiki_page',
+        view=views.WikiArticleCreationView.as_view(),
+        name='new_wiki_article',
+    ),
+    url(
+        regex=r'^(?P<wiki_article_id>\d+)/delete/$',
+        view=views.wiki_article_delete,
+        name='delete_wiki_article',
     ),
 ]

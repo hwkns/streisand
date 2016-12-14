@@ -3,7 +3,7 @@
 from django.db import models
 from django.urls import reverse
 
-from .managers import ForumTopicManager, ForumThreadManager
+from .managers import ForumTopicQuerySet, ForumThreadQuerySet
 
 
 class ForumGroup(models.Model):
@@ -39,7 +39,7 @@ class ForumTopic(models.Model):
     )
     staff_only_thread_creation = models.BooleanField(default=False)
 
-    objects = ForumTopicManager()
+    objects = ForumTopicQuerySet.as_manager()
 
     class Meta:
         ordering = ['sort_order']
@@ -74,7 +74,8 @@ class ForumThread(models.Model):
     created_by = models.ForeignKey(
         to='profiles.UserProfile',
         related_name='forum_threads_created',
-        null=True,  # TODO: turn this off
+        null=True,
+        on_delete=models.SET_NULL,
     )
     topic = models.ForeignKey(
         to='forums.ForumTopic',
@@ -90,7 +91,7 @@ class ForumThread(models.Model):
     class Meta:
         get_latest_by = 'created_at'
 
-    objects = ForumThreadManager()
+    objects = ForumThreadQuerySet.as_manager()
 
     def __str__(self):
         return '{title}'.format(title=self.title)
@@ -111,7 +112,7 @@ class ForumPost(models.Model):
     author = models.ForeignKey(
         to='profiles.UserProfile',
         related_name='forum_posts',
-        null=True,  # TODO: turn this off
+        null=True,
     )
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -131,7 +132,10 @@ class ForumPost(models.Model):
         )
 
     def get_absolute_url(self):
-        return self.thread.get_absolute_url() + '#{}'.format(self.id)
+        return '{thread_url}#{post_id}'.format(
+            thread_url=self.thread.get_absolute_url(),
+            post_id=self.id,
+        )
 
 
 class ForumThreadSubscription(models.Model):

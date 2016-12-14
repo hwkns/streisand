@@ -23,4 +23,5 @@ class Command(BaseCommand):
         call_command('import_forum_topics')
         call_command('import_forum_threads')
         call_command('import_forum_posts')
+        call_command('import_wiki')
         call_command('import_client_whitelist')

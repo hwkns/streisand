@@ -20,6 +20,7 @@ class Command(MySQLCommand):
             OR ID IN (SELECT AuthorID FROM torrents_comments WHERE GroupID IN (SELECT GroupID FROM torrents WHERE ID < 1000))
             OR ID IN (SELECT AuthorID FROM requests_comments WHERE RequestID IN (SELECT RequestID FROM requests WHERE ID < 1000))
             OR ID IN (SELECT AuthorID FROM forums_posts)
+            OR ID IN (SELECT Author FROM wiki_articles)
             OR Username IN (SELECT LastModeratedBy FROM torrents WHERE ID < 1000)
     """
 

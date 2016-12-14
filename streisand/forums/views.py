@@ -22,10 +22,11 @@ def forum_index(request):
 
     forum_groups = OrderedDict()
     for topic in forum_topics:
-        if topic.group.name in forum_groups:
-            forum_groups[topic.group.name].append(topic)
+        group_name = topic.group.name
+        if group_name in forum_groups:
+            forum_groups[group_name].append(topic)
         else:
-            forum_groups[topic.group.name] = [topic]
+            forum_groups[group_name] = [topic]
 
     return render(
         request=request,

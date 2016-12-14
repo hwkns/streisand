@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'torrents',
     'tracker',
     'user_classes',
+    'wiki',
     'www',
 
 ]

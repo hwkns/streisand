@@ -3,13 +3,19 @@
 from django.db import models
 
 
-class ForumTopicManager(models.Manager):
+class ForumTopicQuerySet(models.QuerySet):
 
     def accessible_to_user(self, user):
-        return self.exclude(minimum_user_class__rank__gt=user.profile.user_class.rank)
+        if user.is_superuser:
+            return self.all()
+        else:
+            return self.filter(minimum_user_class__rank__lte=user.profile.user_class.rank)
 
 
-class ForumThreadManager(models.Manager):
+class ForumThreadQuerySet(models.QuerySet):
 
     def accessible_to_user(self, user):
-        return self.exclude(topic__minimum_user_class__rank__gt=user.profile.user_class.rank)
+        if user.is_superuser:
+            return self.all()
+        else:
+            return self.filter(topic__minimum_user_class__rank__lte=user.profile.user_class.rank)
