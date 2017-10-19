@@ -11,7 +11,6 @@ class Command(MySQLCommand):
 
     SQL = """
         SELECT * FROM requests_comments
-        WHERE RequestID IN (SELECT ID FROM requests WHERE ID < 1000)
     """
 
     help = "Imports request comments from the MySQL db"
@@ -28,7 +27,11 @@ class Command(MySQLCommand):
             author = UserProfile.objects.get(old_id=author_id)
         except UserProfile.DoesNotExist:
             return
-        torrent_request = TorrentRequest.objects.get(old_id=request_id)
+
+        try:
+            torrent_request = TorrentRequest.objects.get(old_id=request_id)
+        except TorrentRequest.DoesNotExist:
+            return
 
         comment = torrent_request.comments.create(
             author=author,

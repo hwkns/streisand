@@ -9,7 +9,6 @@ class Command(MySQLCommand):
 
     SQL = """
         SELECT * FROM requests_votes
-        WHERE RequestID IN (SELECT ID FROM requests WHERE ID < 1000)
     """
 
     help = "Imports request votes from the MySQL db"
@@ -23,7 +22,10 @@ class Command(MySQLCommand):
             voter = UserProfile.objects.get(old_id=voter_id)
         except UserProfile.DoesNotExist:
             return
-        torrent_request = TorrentRequest.objects.get(old_id=request_id)
+        try:
+            torrent_request = TorrentRequest.objects.get(old_id=request_id)
+        except TorrentRequest.DoesNotExist:
+            return
 
         vote = torrent_request.votes.create(
             author=voter,

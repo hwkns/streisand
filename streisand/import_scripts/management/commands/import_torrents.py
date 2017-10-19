@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import os
 import re
 from binascii import b2a_hex
 
 from pytz import UTC
-
-from django.conf import settings
 
 from import_scripts.management.commands import MySQLCommand
 from films.models import Film
@@ -14,7 +11,6 @@ from mediainfo.models import Mediainfo
 from profiles.models import UserProfile
 from torrents.models import Torrent, TorrentMetaInfo
 from tracker.models import Swarm
-from tracker.bencoding import bdecode
 
 
 class Command(MySQLCommand):
@@ -70,17 +66,8 @@ class Command(MySQLCommand):
         if codec == 'h.264':
             codec = 'H.264'
 
-        metainfo_dict = self.get_metainfo(torrent_id)
-        if 'files' in metainfo_dict['info']:
-            file_list = [
-                '/'.join([p if isinstance(p, str) else p.decode('latin-1') for p in file['path']])
-                for file
-                in metainfo_dict['info']['files']
-            ]
-        else:
-            file_list = [
-                metainfo_dict['info']['name']
-            ]
+        metainfo_dict = dict()
+        file_list = []
 
         nfo_text = ''
         if bbcode_description:
@@ -117,7 +104,8 @@ class Command(MySQLCommand):
                 mediainfo = Mediainfo.objects.create(text=mediainfo_text)
             except Exception:
                 print(mediainfo_text)
-                raise
+                mediainfo = None
+                # raise
         else:
             mediainfo = None
 
@@ -146,10 +134,3 @@ class Command(MySQLCommand):
         torrent.save()
 
         print(torrent)
-
-    @staticmethod
-    def get_metainfo(torrent_id):
-        path = os.path.join(settings.BASE_DIR, '../torrents/{torrent_id}.torrent'.format(torrent_id=torrent_id))
-        with open(path, 'rb') as f:
-            torrent_bytes = f.read()
-        return bdecode(torrent_bytes)

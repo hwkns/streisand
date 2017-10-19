@@ -138,6 +138,8 @@ BAD_IMDB_ID_FILMS = {
     29103,
     1390,
     15397,
+    29269,
+    31135,
 }
 
 
@@ -145,7 +147,6 @@ class Command(MySQLCommand):
 
     SQL = """
         SELECT * FROM torrents_group
-        WHERE torrents_group.ID IN (SELECT DISTINCT GroupID FROM torrents WHERE ID < 1000)
     """
 
     help = "Imports films from the MySQL db"

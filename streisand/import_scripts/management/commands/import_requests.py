@@ -3,6 +3,7 @@
 from pytz import UTC
 
 from import_scripts.management.commands import MySQLCommand
+from imdb.models import FilmIMDb
 from films.models import Film
 from profiles.models import UserProfile
 from torrent_requests.models import TorrentRequest
@@ -17,7 +18,7 @@ class Command(MySQLCommand):
     per-user votes, and we can refund to those users if we want.
     """
 
-    SQL = """SELECT * FROM requests WHERE ID < 1000"""
+    SQL = """SELECT * FROM requests"""
 
     help = "Imports torrent requests from the MySQL db"
 
@@ -50,6 +51,9 @@ class Command(MySQLCommand):
         else:
             film_title = film.title
             film_year = film.year
+
+        if not FilmIMDb.objects.filter(id=imdb_id).exist():
+            imdb_id = None
 
         torrent_request = TorrentRequest.objects.create(
             old_id=request_id,
