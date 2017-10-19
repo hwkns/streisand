@@ -11,12 +11,6 @@ class Command(MySQLCommand):
 
     SQL = """
         SELECT * FROM imdb_information
-        WHERE imdbID IN (
-            SELECT IMDB FROM torrents_group WHERE ID IN (
-                SELECT DISTINCT GroupID FROM torrents WHERE ID < 1000
-            )
-        )
-        OR imdbID IN (SELECT imdbID FROM requests WHERE ID < 1000)
     """
 
     help = "Imports IMDb information from the MySQL db"

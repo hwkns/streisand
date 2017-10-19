@@ -11,7 +11,6 @@ class Command(MySQLCommand):
 
     SQL = """
         SELECT * FROM torrents_comments
-        WHERE GroupID IN (SELECT GroupID FROM torrents WHERE ID < 1000)
     """
 
     help = "Imports film comments from the MySQL db"
