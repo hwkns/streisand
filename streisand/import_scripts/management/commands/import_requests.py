@@ -52,7 +52,7 @@ class Command(MySQLCommand):
             film_title = film.title
             film_year = film.year
 
-        if not FilmIMDb.objects.filter(id=imdb_id).exist():
+        if not FilmIMDb.objects.filter(id=imdb_id).exists():
             imdb_id = None
 
         torrent_request = TorrentRequest.objects.create(
