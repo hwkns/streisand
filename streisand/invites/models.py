@@ -22,7 +22,7 @@ class Invite(models.Model):
     objects = InviteManager()
 
     def __str__(self):
-        return self.key
+        return '{invite_key}'.format(invite_key=self.key)
 
     def get_absolute_url(self):
         return reverse('invite_registration', kwargs={'invite_key': self.key})
