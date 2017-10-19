@@ -6,6 +6,7 @@ from django.utils.timezone import now, timedelta
 
 from picklefield import PickledObjectField
 
+from profiles.models import UserProfile
 from tracker.bencoding import bencode
 
 
@@ -135,6 +136,12 @@ class Torrent(models.Model):
             self.last_seeded is None or self.last_seeded < one_day_ago,
             self.reseed_request is None or self.reseed_request.created_at < one_week_ago,
         ))
+
+    @property
+    def seeders(self):
+        return UserProfile.objects.filter(
+            announce_key__in=self.swarm.peers.seeders().values_list('user_announce_key', flat=True)
+        )
 
     def request_reseed(self, user_profile):
         self.reseed_request = self.reseed_requests.create(
