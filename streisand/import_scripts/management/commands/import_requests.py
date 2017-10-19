@@ -65,7 +65,7 @@ class Command(MySQLCommand):
             filling_torrent=Torrent.objects.filter(old_id=filling_torrent_id).first(),
             source_media_id=None if source_media == 'ANY' else source_media,
             resolution_id=None if resolution == 'ANY' else resolution,
-            codec_id=None if codec == 'ANY' else 'H.264' if codec == 'h.264' else codec,
+            codec_id=None if codec == 'ANY' or not codec else 'H.264' if codec == 'h.264' else codec,
             container_id=None if container == 'ANY' else container,
         )
         torrent_request.created_at = created_at.replace(tzinfo=UTC)
