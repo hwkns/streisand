@@ -30,7 +30,6 @@ class Film(models.Model):
     trailer_type = models.CharField(max_length=64)
     duration_in_minutes = models.IntegerField(null=True)
     description = models.TextField()
-    nfo = models.TextField()
     moderation_notes = models.TextField()
     tags = models.ManyToManyField('films.Tag', related_name='films')
 
