@@ -1,10 +1,29 @@
 # -*- coding: utf-8 -*-
 
+from rest_framework.permissions import IsAdminUser
+from rest_framework.viewsets import ModelViewSet
+
 from django.shortcuts import render, get_object_or_404
 
 from www.utils import paginate
 
 from .models import Film
+from .serializers import AdminFilmSerializer
+
+
+class FilmViewSet(ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    permission_classes = [IsAdminUser]
+    queryset = Film.objects.all().select_related(
+        'imdb',
+    ).prefetch_related(
+        'tags',
+    ).order_by(
+        '-id',
+    )
+    serializer_class = AdminFilmSerializer
 
 
 def film_index(request):

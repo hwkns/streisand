@@ -3,8 +3,13 @@
 import json
 import logging
 
+from ratelimit.decorators import ratelimit
+from rest_framework.permissions import IsAdminUser
+from rest_framework.viewsets import ModelViewSet
+
 from django.contrib.auth import REDIRECT_FIELD_NAME, authenticate, login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User, Group
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.http import is_safe_url
@@ -12,8 +17,6 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View
-
-from ratelimit.decorators import ratelimit
 
 from films.models import Film
 from film_lists.models import FilmList
@@ -23,7 +26,26 @@ from torrents.models import Torrent
 
 from .forms import RegistrationForm
 from .models import Feature
+from .serializers import UserSerializer, GroupSerializer
 from .signals.signals import successful_login, failed_login
+
+
+class UserViewSet(ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    permission_classes = [IsAdminUser]
+    queryset = User.objects.all().order_by('-date_joined').prefetch_related('groups')
+    serializer_class = UserSerializer
+
+
+class GroupViewSet(ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    permission_classes = [IsAdminUser]
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
 
 
 def home(request):

@@ -1,13 +1,23 @@
 # -*- coding: utf-8 -*-
 
+from rest_framework.authtoken.models import Token
+
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from profiles.models import WatchedUser
 
 from ..models import Feature, LoginAttempt
 from .signals import successful_login, failed_login
+
+
+@receiver(post_save, sender=User)
+def create_token_for_new_user(**kwargs):
+
+    if kwargs['created']:
+        Token.objects.create(user=kwargs['instance'])
 
 
 @receiver(models.signals.post_save, sender='www.Feature')

@@ -1,10 +1,29 @@
 # -*- coding: utf-8 -*-
 
+from rest_framework.permissions import IsAdminUser
+from rest_framework.viewsets import ModelViewSet
+
 from django.shortcuts import render, get_object_or_404
 
 from www.utils import paginate
 
 from .models import UserProfile
+from .serializers import AdminUserProfileSerializer
+
+
+class UserProfileViewSet(ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    permission_classes = [IsAdminUser]
+    queryset = UserProfile.objects.all().select_related(
+        'user',
+        'user_class',
+        'invited_by',
+    ).order_by(
+        '-user__date_joined',
+    )
+    serializer_class = AdminUserProfileSerializer
 
 
 def user_profile_index(request):

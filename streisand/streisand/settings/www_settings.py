@@ -11,6 +11,8 @@ INSTALLED_APPS += [
     # Third party apps
     'django_su',
     'grappelli',
+    'rest_framework',
+    'rest_framework.authtoken',
 
     # Contrib apps
     'django.contrib.admin',
@@ -54,12 +56,29 @@ LOGIN_EXEMPT_URL_PREFIXES = (
     '/register/',
     '/logout/',
     '/torrents/download/',
+    '/api/',
 )
 
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
     'www.auth.OldSitePasswordHasher',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
+    ],
+    'PAGE_SIZE': 50,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
+if DEBUG:
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += (
+        'rest_framework.authentication.SessionAuthentication',
+    )
 
 RT_API_KEY = os.environ.get('RT_API_KEY', '')
 OLD_SITE_SECRET_KEY = os.environ.get('OLD_SITE_HASH', '')

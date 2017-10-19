@@ -14,6 +14,9 @@ from .views import RegistrationView, LegacyURLView, template_viewer, home, login
 
 
 urlpatterns = [
+
+    url(r'^api/v1/', include('api.v1.urls')),
+
     url(
         regex=r'^$',
         view=home,
