@@ -7,7 +7,7 @@ Jumpcut
 
 A private BitTorrent tracker backend written in python, django, and redis
 
-To get started:
+To get started
 ---------------
 
 - install [Vagrant](https://www.vagrantup.com/) and [Ansible](http://docs.ansible.com/intro_installation.html)
@@ -18,6 +18,17 @@ To get started:
 The `vagrant up` step might take a little while, but now you have everything you need to run
 jumpcut!  In this environment, several alias commands are set up for your convenience.  To
 start with, run this command to generate and run migrations and import initial fixture data:
+
+*If you come across any hanging issues in the Vagrant Up process, specifically during NFS mounting, you will need to make sure the Vagrant box has the necessary priveledges to log in.*
+
+- Per the [Vagrant Website](https://www.vagrantup.com/docs/synced-folders/nfs.html):
+> For *nix users, make sure to edit your /etc/sudoers file with visudo. It protects you against syntax errors which could leave you without the ability to gain elevated privileges.
+> **For Ubuntu Linux , sudoers should look like this:**
+Cmnd_Alias VAGRANT_EXPORTS_CHOWN = /bin/chown 0\:0 /tmp/*
+Cmnd_Alias VAGRANT_EXPORTS_MV = /bin/mv -f /tmp/* /etc/exports
+Cmnd_Alias VAGRANT_NFSD_CHECK = /etc/init.d/nfs-kernel-server >statusCmnd_Alias VAGRANT_NFSD_START = /etc/init.d/nfs-kernel-server start
+Cmnd_Alias VAGRANT_NFSD_APPLY = /usr/sbin/exportfs -ar
+%sudo ALL=(root) NOPASSWD: VAGRANT_EXPORTS_CHOWN, VAGRANT_EXPORTS_MV, VAGRANT_NFSD_CHECK, VAGRANT_NFSD_START, VAGRANT_NFSD_APPLY
 
 - `clean_slate`
 
