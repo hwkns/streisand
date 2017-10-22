@@ -40,14 +40,5 @@ function authenticate(username: string, password: string): Promise<{ token: stri
             'Accept': 'application/json'
         },
         data: JSON.stringify({ username, password })
-    }).then((result: { token: string }) => {
-        Requestor.makeRequest({
-            url: `${globals.apiUrl}/films`,
-            headers: {
-                'Authorization': 'token ' + result.token
-            },
-            method: 'GET'
-        });
-        return result;
     });
 }
