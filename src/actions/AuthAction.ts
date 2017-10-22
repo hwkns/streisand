@@ -1,3 +1,5 @@
+import { replace } from 'react-router-redux';
+
 import Store from '../store';
 import globals from '../utilities/globals';
 import Requestor from '../utilities/Requestor';
@@ -23,9 +25,14 @@ function authenticated(token: string): AuthAction {
 
 export function login(username: string, password: string): ThunkAction {
     return (dispatch: IDispatch, getState: () => Store.All) => {
+        const state = getState();
         dispatch(authenticating());
         return authenticate(username, password).then((result: { token: string }) => {
-            return dispatch(authenticated(result.token));
+            const action = dispatch(authenticated(result.token));
+            if (state.location.referrer) {
+                dispatch(replace(state.location.referrer));
+            }
+            return action;
         });
     };
 }

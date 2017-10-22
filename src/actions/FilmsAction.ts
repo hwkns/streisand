@@ -22,10 +22,11 @@ function received(response: IPagedResponse<IFilm>): Action {
     };
 }
 
-export function getFilms(token: string): ThunkAction<Action> {
+export function getFilms(): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
+        const state = getState();
         dispatch(fetching());
-        return fetch(token).then((response: IPagedResponse<IFilm>) => {
+        return fetch(state.auth.token).then((response: IPagedResponse<IFilm>) => {
             return dispatch(received(response));
         });
     };

@@ -41,10 +41,10 @@ class LoginComponent extends React.Component<CombinedProps, State> {
     }
 
     public render() {
-        const { login } = this.props;
+        const login = () => this._login();
         return (
             <div className="well bs-component">
-                <form className="form-horizontal">
+                <form className="form-horizontal" onKeyPress={login}>
                     <fieldset>
                         <legend>Sign in</legend>
                         <div className="form-group">
@@ -64,10 +64,20 @@ class LoginComponent extends React.Component<CombinedProps, State> {
                     </fieldset>
                 </form>
                 <div>
-                    <button className="btn btn-primary" onClick={() => login(this.state.username, this.state.password)}>Login</button>
+                    <button className="btn btn-primary" onClick={login}>Login</button>
                 </div>
             </div>
         );
+    }
+
+    private _login(event?: React.KeyboardEvent<HTMLElement>) {
+        if (event && event.key !== 'Enter') {
+            return;
+        }
+
+        if (this.state.username && this.state.password) {
+            this.props.login(this.state.username, this.state.password);
+        }
     }
 }
 

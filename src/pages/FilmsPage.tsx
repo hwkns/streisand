@@ -9,20 +9,19 @@ import FilmsView from '../components/films/FilmsView';
 export type Props = { };
 
 type ConnectedState = {
-    token: string;
     films: string[];
     isLoading: boolean;
 };
 
 type ConnectedDispatch = {
-    getFilms: (token: string) => void;
+    getFilms: () => void;
 };
 
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
 class ForumsPage extends React.Component<CombinedProps, void> {
     public componentWillMount() {
         if (!this.props.films.length && !this.props.isLoading) {
-            this.props.getFilms(this.props.token);
+            this.props.getFilms();
         }
     }
 
@@ -43,13 +42,12 @@ class ForumsPage extends React.Component<CombinedProps, void> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => ({
-    token: state.auth.token,
     isLoading: state.films.loading,
     films: state.films.allIds
 });
 
 const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({
-    getFilms: (token: string) => dispatch(getFilms(token))
+    getFilms: () => dispatch(getFilms())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForumsPage);
