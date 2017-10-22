@@ -19,8 +19,8 @@ class AppComponent extends React.Component<CombinedProps> {
             </ul>
         );
         return (
-            <div>
-                <nav className="navbar navbar-default">
+            <div style={{'paddingTop': '80px'}}>
+                <nav className="navbar navbar-default navbar-fixed-top">
                     <div className="container">
                         <div className="navbar-header">
                             <Link className="navbar-brand" to="/">JumpCut</Link>
@@ -34,6 +34,13 @@ class AppComponent extends React.Component<CombinedProps> {
                             {links}
                             <ul className="nav navbar-nav navbar-right">
                                 <li><Link to="/about">About</Link></li>
+                                
+                                <li className="dropdown">
+                                    <a className="dropdown-toggle" data-toggle="dropdown" href="#" id="themes" aria-expanded="false">Settings <span className="caret"></span></a>
+                                    <ul className="dropdown-menu" aria-labelledby="themes">
+                                        <li><Link to="/themes">Themes</Link></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                     </div>
