@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
 import Store from '../../store';
@@ -22,7 +23,10 @@ class FilmRowComponent extends React.Component<CombinedProps> {
                     <img src={film.poster_url} width="80px" />
                 </td>
                 <td>
-                    {film.title} ({film.year})
+                    <Link to={'/films/' + film.id} title={film.title}>{film.title}</Link>
+                </td>
+                <td>
+                    {film.year}
                 </td>
             </tr>
         );

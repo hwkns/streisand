@@ -25,6 +25,7 @@ class FilmsViewComponent extends React.Component<CombinedProps> {
                         <tr>
                             <th></th>
                             <th>Name</th>
+                            <th>Year</th>
                         </tr>
                     </thead>
                     <tbody>

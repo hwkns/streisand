@@ -18,7 +18,7 @@ type ConnectedDispatch = {
 };
 
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
-class ForumsPage extends React.Component<CombinedProps, void> {
+class FilmsPage extends React.Component<CombinedProps, void> {
     public componentWillMount() {
         if (!this.props.films.length && !this.props.isLoading) {
             this.props.getFilms();
@@ -50,4 +50,4 @@ const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispa
     getFilms: () => dispatch(getFilms())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ForumsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(FilmsPage);

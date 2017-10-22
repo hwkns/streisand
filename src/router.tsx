@@ -6,6 +6,7 @@ import Store from './store';
 
 import App from './pages/App';
 import HomePage from './pages/HomePage';
+import FilmPage from './pages/FilmPage';
 import Themes from './components/Themes';
 import FilmsPage from './pages/FilmsPage';
 import LoginPage from './pages/LoginPage';
@@ -29,6 +30,7 @@ export function createRoutes(store: ReduxStore<Store.All>) {
                 <Route onEnter={checkAuth}>
                     <Route path="/home" component={HomePage} />
                     <Route path="/films" component={FilmsPage} />
+                    <Route path="/films/:filmId" component={FilmPage} />
                 </Route>
                 <Redirect from="*" to="/home" />
             </Route>
