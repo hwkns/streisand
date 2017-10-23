@@ -4,6 +4,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Visual Studo Solution Files
+.vs/JumpCut/v15.suo
+
 # Distribution / packaging
 .Python
 env/
@@ -67,3 +70,13 @@ streisand/static/
 
 # Sphinx documentation
 docs/_build/
+
+# Visual Studio VS Json and config Settings
+/.vs/VSWorkspaceState.json
+/.vs/slnx.sqlite
+/.vs/ProjectSettings.json
+/.vs/.gitlab
+
+#VS PyProj Files
+JumpCut.pyproj
+JumpCut.pyproj.user
