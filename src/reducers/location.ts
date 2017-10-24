@@ -21,7 +21,6 @@ const defaulValue: ILocationInfo = {
 function _location(state: ILocationInfo = defaulValue, action: IRouterAction): ILocationInfo {
     const payload = action.payload;
     if (payload) {
-        console.log(action);
         if (!state.referrer && action.payload.action === 'POP') {
             return {
                 referred: false,
