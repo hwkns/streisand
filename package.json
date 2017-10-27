@@ -50,6 +50,6 @@
     "uglify-js": "^2.8.0",
     "uglifyjs-webpack-plugin": "^0.4.3",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.4.2"
+    "webpack-dev-server": "^2.9.3"
   }
 }
