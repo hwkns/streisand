@@ -1,22 +1,25 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-// import Store from '../../store';
 import FilmRow from './FilmRow';
+import Store from '../../store';
+import IFilm from '../../models/IFilm';
 
 export type Props = {
-    films: string[];
+    page: number;
 };
 
+type ConnectedState = {
+    films: IFilm[];
+};
 type ConnectedDispatch = {};
-type ConnectedState = {};
 
 type CombinedProps = Props & ConnectedDispatch & ConnectedState;
 class FilmsViewComponent extends React.Component<CombinedProps> {
     public render() {
         const films = this.props.films;
-        const rows = films.map((id: string) => {
-            return (<FilmRow filmId={id} key={id} />);
+        const rows = films.map((film: IFilm) => {
+            return (<FilmRow film={film} key={film.id} />);
         });
         return (
             <div className="bs-component">
@@ -37,6 +40,13 @@ class FilmsViewComponent extends React.Component<CombinedProps> {
     }
 }
 
+const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
+    const page = state.films.pages[ownProps.page];
+    return {
+        films: page ? page.items : []
+    };
+};
+
 const FilmsView: React.ComponentClass<Props> =
-    connect()(FilmsViewComponent);
+    connect(mapStateToProps)(FilmsViewComponent);
 export default FilmsView;

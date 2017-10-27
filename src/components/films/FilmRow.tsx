@@ -6,14 +6,10 @@ import Store from '../../store';
 import IFilm from '../../models/IFilm';
 
 export type Props = {
-    filmId: string;
-};
-
-type ConnectedState = {
     film: IFilm;
 };
 
-type CombinedProps = Props & ConnectedState;
+type CombinedProps = Props;
 class FilmRowComponent extends React.Component<CombinedProps> {
     public render() {
         const film = this.props.film;
@@ -23,7 +19,7 @@ class FilmRowComponent extends React.Component<CombinedProps> {
                     <img src={film.poster_url} width="80px" />
                 </td>
                 <td>
-                    <Link to={'/films/' + film.id} title={film.title}>{film.title}</Link>
+                    <Link to={'/film/' + film.id} title={film.title}>{film.title}</Link>
                 </td>
                 <td>
                     {film.year}
@@ -33,10 +29,6 @@ class FilmRowComponent extends React.Component<CombinedProps> {
     }
 }
 
-const mapStateToProps = (state: Store.All, props: Props): ConnectedState => ({
-    film: state.films.byId[props.filmId]
-});
-
 const FilmRow: React.ComponentClass<Props> =
-    connect(mapStateToProps)(FilmRowComponent);
+    connect()(FilmRowComponent);
 export default FilmRow;

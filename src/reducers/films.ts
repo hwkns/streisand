@@ -3,23 +3,19 @@ import * as objectAssign from 'object-assign';
 
 import Store from '../store';
 import IFilm from '../models/IFilm';
-import Action from '../actions/FilmsAction';
+import FilmAction from '../actions/FilmAction';
+import FilmsAction from '../actions/FilmsAction';
+import { IPage } from '../models/base/IPagedItemSet';
 
-function allIds(state: string[] = [], action: Action): string[] {
-    switch (action.type) {
-        case 'RECEIVED_FILMS':
-            return [
-                ...state,
-                ...action.films.map((item: IFilm) => item.id)
-            ];
-        default:
-            return state;
-    }
-}
+type Action = FilmsAction | FilmAction;
 
 type ItemMap = { [id: string]: IFilm };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
+        case 'FETCHING_FILM':
+            return objectAssign({}, state, { [action.id]: { loading: true } });
+        case 'RECEIVED_FILM':
+            return objectAssign({}, state, { [action.film.id]: action.film });
         case 'RECEIVED_FILMS':
             let map: ItemMap = {};
             for (const item of action.films) {
@@ -31,19 +27,21 @@ function byId(state: ItemMap = {}, action: Action): ItemMap {
     }
 }
 
-function loading(state: boolean = false, action: Action): boolean {
+type Pages = { [page: number]: IPage<IFilm> };
+function pages(state: Pages = {}, action: Action): Pages {
     switch (action.type) {
         case 'FETCHING_FILMS':
-            return true;
+            const page = objectAssign({ items: [] }, state[action.page], { loading: true });
+            return objectAssign({}, state, { [action.page]: page });
         case 'RECEIVED_FILMS':
-            return false;
+            const newPage = { loading: false, items: action.films };
+            return objectAssign({}, state, { [action.page]: newPage });
         default:
             return state;
     }
 }
 
 export default combineReducers<Store.Films>({
-    loading: loading,
     byId: byId,
-    allIds: allIds
+    pages: pages
 });

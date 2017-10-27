@@ -6,6 +6,7 @@ import Store from '../store';
 import IFilm from '../models/IFilm';
 import { getFilm } from '../actions/FilmAction';
 import FilmView from '../components/films/FilmView';
+import ILoadingItem from '../models/base/ILoadingItem';
 
 export type Props = {
     params: {
@@ -46,10 +47,16 @@ class FilmPageComponent extends React.Component<CombinedProps, void> {
     }
 }
 
-const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => ({
-    isLoading: state.films.loading,
-    film: state.films.byId[ownProps.params.filmId]
-});
+const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
+    const item = state.films.byId[ownProps.params.filmId];
+    const loading = (item && (item as ILoadingItem).loading) || false;
+    const film = typeof (item as IFilm).id !== 'undefined' ? item as IFilm : undefined;
+
+    return {
+        isLoading: loading,
+        film: film
+    };
+};
 
 const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({
     getFilm: (id: string) => dispatch(getFilm(id))

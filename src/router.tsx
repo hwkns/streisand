@@ -29,8 +29,11 @@ export function createRoutes(store: ReduxStore<Store.All>) {
                 <Route path="/themes" component={Themes} />
                 <Route onEnter={checkAuth}>
                     <Route path="/home" component={HomePage} />
-                    <Route path="/films" component={FilmsPage} />
-                    <Route path="/films/:filmId" component={FilmPage} />
+
+                    <Route path="/films/:page" component={FilmsPage} />
+                    <Redirect from="/films" to="/films/1" />
+                    <Route path="/film/:filmId" component={FilmPage} />
+                    <Redirect from="/film" to="/films/1" />
                 </Route>
                 <Redirect from="*" to="/home" />
             </Route>

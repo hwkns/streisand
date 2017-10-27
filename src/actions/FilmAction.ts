@@ -6,32 +6,32 @@ import { ThunkAction, IDispatch } from './ActionHelper';
 import IFilm from '../models/IFilm';
 
 type Action =
-    { type: 'FETCHING_FILMS' } |
-    { type: 'RECEIVED_FILMS', films: IFilm[] };
+    { type: 'FETCHING_FILM', id: string } |
+    { type: 'RECEIVED_FILM', film: IFilm };
 export default Action;
 
-function fetching(): Action {
-    return { type: 'FETCHING_FILMS' };
+function fetching(id: string): Action {
+    return { type: 'FETCHING_FILM', id };
 }
 
 function received(response: IFilm): Action {
     return {
-        type: 'RECEIVED_FILMS',
-        films: [response]
+        type: 'RECEIVED_FILM',
+        film: response
     };
 }
 
 export function getFilm(id: string): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
-        dispatch(fetching());
-        return fetch(id, state.auth.token).then((response: IFilm) => {
+        dispatch(fetching(id));
+        return fetch(state.auth.token, id).then((response: IFilm) => {
             return dispatch(received(response));
         });
     };
 }
 
-function fetch(id: string, token: string): Promise<IFilm> {
+function fetch(token: string, id: string): Promise<IFilm> {
     // TODO: Add error handling
     return Requestor.makeRequest({
         url: `${globals.apiUrl}/films/${id}`,
