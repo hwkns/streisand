@@ -3,6 +3,7 @@ import * as redux from 'redux';
 import { connect } from 'react-redux';
 
 import Store from '../store';
+import globals from '../utilities/globals';
 import { getFilms } from '../actions/FilmsAction';
 import FilmsView from '../components/films/FilmsView';
 
@@ -22,18 +23,20 @@ type ConnectedDispatch = {
 };
 
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
-class FilmsPage extends React.Component<CombinedProps, void> {
+class FilmsPage extends React.Component<CombinedProps> {
     public componentWillMount() {
         if (!this.props.isLoading) {
             this.props.getFilms(this.props.page);
         }
     }
 
-    public render() {
-        if (this.props.isLoading) {
-            return (<div>Loading...</div>);
+    public componentWillReceiveProps(props: CombinedProps) {
+        if (!props.isLoading && props.page !== this.props.page) {
+            this.props.getFilms(props.page);
         }
+    }
 
+    public render() {
         return (
             <FilmsView page={this.props.page} />
         );

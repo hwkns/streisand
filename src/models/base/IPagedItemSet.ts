@@ -6,6 +6,7 @@ export interface IPage<T> {
 }
 
 export interface IPagedItemSet<T> {
+    count: number;
     byId: { [id: string]: ILoadingItem | T };
     pages: { [page: number]: IPage<T> };
 }

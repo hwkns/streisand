@@ -9,7 +9,7 @@ import IPagedResponse from '../models/base/IPagedResponse';
 
 type Action =
     { type: 'FETCHING_FILMS', page: number } |
-    { type: 'RECEIVED_FILMS', page: number, films: IFilm[] };
+    { type: 'RECEIVED_FILMS', page: number, count: number, films: IFilm[] };
 export default Action;
 
 function fetching(page: number): Action {
@@ -19,6 +19,7 @@ function fetching(page: number): Action {
 function received(page: number, response: IPagedResponse<IFilm>): Action {
     return {
         page: page,
+        count: response.count,
         type: 'RECEIVED_FILMS',
         films: response.results
     };

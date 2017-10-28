@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import Pager from '../Pager';
 import FilmRow from './FilmRow';
 import Store from '../../store';
 import IFilm from '../../models/IFilm';
@@ -10,6 +11,7 @@ export type Props = {
 };
 
 type ConnectedState = {
+    total: number;
     films: IFilm[];
 };
 type ConnectedDispatch = {};
@@ -23,6 +25,7 @@ class FilmsViewComponent extends React.Component<CombinedProps> {
         });
         return (
             <div className="bs-component">
+                <Pager total={this.props.total} page={this.props.page} />
                 <table className="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -35,6 +38,7 @@ class FilmsViewComponent extends React.Component<CombinedProps> {
                         {rows}
                     </tbody>
                 </table>
+                <Pager total={this.props.total} page={this.props.page} />
             </div>
         );
     }
@@ -43,6 +47,7 @@ class FilmsViewComponent extends React.Component<CombinedProps> {
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const page = state.films.pages[ownProps.page];
     return {
+        total: state.films.count,
         films: page ? page.items : []
     };
 };
