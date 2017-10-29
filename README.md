@@ -1,7 +1,3 @@
-# Super Unstable
-*Please do NOT create bugs or tell me how aweful everything is. I know it is aweful. I have to start somewhere.*
-We still have a ton of decisions to make so everything in this project should be considered temporary.
-
 # Introduction
 The web front-end code for JumpCut.
 
@@ -22,3 +18,7 @@ In order to get the production ready files, all you need to do is run the defaul
 ## Proxies
 None of the APIs that this site is using are setup to work with localhost requests. Until they support CORS you will need to route all API traffic through a proxy. There is a proxy.js file in the root of the project for doing this.
 - Run `node .\proxy.js "http://dev.ronzertnert.xyz:8000"` to start the proxy server for the site api.
+
+## Deployment
+For now the easiest way to deploy this project on the dev server is to clone it there and build it. Then point nginx to the index.html file.
+Long term it would better to have a deploy command/script to dump all the necessary files into a /drop folder so that the whole project isn't needed on the server.
