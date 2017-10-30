@@ -32,7 +32,6 @@ export function getFilm(id: string): ThunkAction<Action> {
 }
 
 function fetch(token: string, id: string): Promise<IFilm> {
-    // TODO: Add error handling
     return Requestor.makeRequest({
         url: `${globals.apiUrl}/films/${id}`,
         headers: {

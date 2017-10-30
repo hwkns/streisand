@@ -7,8 +7,13 @@ import IPagedItemSet from '../models/base/IPagedItemSet';
 
 namespace Store {
     export type Films = IPagedItemSet<IFilm>;
+    export type Errors = {
+        authError: string;
+        unkownError: string;
+    };
 
     export type All = {
+        errors: Errors;
         routing: RouterState;
         location: ILocationInfo;
         auth: IAuthInfo;

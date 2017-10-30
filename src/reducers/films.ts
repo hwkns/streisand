@@ -29,13 +29,17 @@ function byId(state: ItemMap = {}, action: Action): ItemMap {
 
 type Pages = { [page: number]: IPage<IFilm> };
 function pages(state: Pages = {}, action: Action): Pages {
+    let page: IPage<IFilm>;
     switch (action.type) {
         case 'FETCHING_FILMS':
-            const page = objectAssign({ items: [] }, state[action.page], { loading: true });
+            page = objectAssign({ items: [] }, state[action.page], { loading: true });
             return objectAssign({}, state, { [action.page]: page });
         case 'RECEIVED_FILMS':
-            const newPage = { loading: false, items: action.films };
-            return objectAssign({}, state, { [action.page]: newPage });
+            page = { loading: false, items: action.films };
+            return objectAssign({}, state, { [action.page]: page });
+        case 'FILMS_FAILURE':
+            page = objectAssign({ items: [] }, state[action.page], { loading: false });
+            return objectAssign({}, state, { [action.page]: page });
         default:
             return state;
     }

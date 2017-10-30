@@ -8,6 +8,8 @@ export type Props = {};
 
 type ConnectedState = {
     isAuthenticated: boolean;
+    authError: string;
+    errorMessage: string;
 };
 
 type CombinedProps = Props & ConnectedState;
@@ -34,7 +36,6 @@ class AppComponent extends React.Component<CombinedProps> {
                             {links}
                             <ul className="nav navbar-nav navbar-right">
                                 <li><Link to="/about">About</Link></li>
-                                
                                 <li className="dropdown">
                                     <a className="dropdown-toggle" data-toggle="dropdown" href="#" id="themes" aria-expanded="false">Settings <span className="caret"></span></a>
                                     <ul className="dropdown-menu" aria-labelledby="themes">
@@ -46,7 +47,20 @@ class AppComponent extends React.Component<CombinedProps> {
                     </div>
                 </nav>
                 <div className="container">
+                    {this._getErrorBanner()}
                     {this.props.children}
+                </div>
+            </div>
+        );
+    }
+
+    private _getErrorBanner() {
+        const message = this.props.authError || this.props.errorMessage;
+        return !message ? undefined : (
+            <div className="bs-component">
+                <div className="alert alert-dismissible alert-danger">
+                    <button type="button" className="close" data-dismiss="alert">×</button>
+                    {message}
                 </div>
             </div>
         );
@@ -54,6 +68,8 @@ class AppComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, props: Props): ConnectedState => ({
+    errorMessage: state.errors.unkownError,
+    authError: state.errors.authError,
     isAuthenticated: state.auth.isAuthenticated
 });
 

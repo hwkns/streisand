@@ -4,13 +4,17 @@ import Requestor from '../utilities/Requestor';
 import { ThunkAction, IDispatch } from './ActionHelper';
 
 import IFilm from '../models/IFilm';
+import { IUnkownError } from '../models/base/IError';
 import ILoadingItem from '../models/base/ILoadingItem';
 import IPagedResponse from '../models/base/IPagedResponse';
+import ErrorAction, { handleError } from './ErrorAction';
 
-type Action =
+type FilmsAction =
     { type: 'FETCHING_FILMS', page: number } |
-    { type: 'RECEIVED_FILMS', page: number, count: number, films: IFilm[] };
-export default Action;
+    { type: 'RECEIVED_FILMS', page: number, count: number, films: IFilm[] } |
+    { type: 'FILMS_FAILURE', page: number };
+export default FilmsAction;
+type Action = FilmsAction | ErrorAction;
 
 function fetching(page: number): Action {
     return { type: 'FETCHING_FILMS', page };
@@ -25,18 +29,24 @@ function received(page: number, response: IPagedResponse<IFilm>): Action {
     };
 }
 
+function failure(page: number): Action {
+    return { type: 'FILMS_FAILURE', page };
+}
+
 export function getFilms(page: number = 1): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(fetching(page));
         return fetch(state.auth.token, page).then((response: IPagedResponse<IFilm>) => {
             return dispatch(received(page, response));
+        }, (error: IUnkownError) => {
+            dispatch(failure(page));
+            return dispatch(handleError(error));
         });
     };
 }
 
 function fetch(token: string, page: number): Promise<IPagedResponse<IFilm>> {
-    // TODO: Add error handling
     return Requestor.makeRequest({
         url: `${globals.apiUrl}/films?page=${page}`,
         headers: {

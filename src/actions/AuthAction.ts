@@ -3,28 +3,34 @@ import { replace } from 'react-router-redux';
 import Store from '../store';
 import globals from '../utilities/globals';
 import Requestor from '../utilities/Requestor';
+import { IUnkownError } from '../models/base/IError';
+import ErrorAction, { authError } from './ErrorAction';
+import { ThunkAction, IDispatch } from './ActionHelper';
 
 type AuthAction =
     { type: 'AUTHENTICATING' } |
-    { type: 'AUTHENTICATED', token: string };
+    { type: 'AUTHENTICATED', token: string } |
+    { type: 'AUTHENTICATION_FAILED', message: string };
 export default AuthAction;
+type Action = AuthAction | ErrorAction;
 
-interface IDispatch { (action: AuthAction | ThunkAction): AuthAction; }
-type ThunkAction = (dispatch: IDispatch, getState: () => Store.All) => AuthAction | ThunkAction | Promise<AuthAction | ThunkAction>;
-
-function authenticating(): AuthAction {
+function authenticating(): Action {
     return { type: 'AUTHENTICATING' };
 }
 
-function authenticated(token: string): AuthAction {
+function authenticated(token: string): Action {
     return {
         type: 'AUTHENTICATED',
         token: token
     };
 }
 
-export function login(username: string, password: string): ThunkAction {
-    return (dispatch: IDispatch, getState: () => Store.All) => {
+function failure(message: string): Action {
+    return { type: 'AUTHENTICATION_FAILED', message };
+}
+
+export function login(username: string, password: string): ThunkAction<Action> {
+    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(authenticating());
         return authenticate(username, password).then((result: { token: string }) => {
@@ -33,12 +39,13 @@ export function login(username: string, password: string): ThunkAction {
                 dispatch(replace(state.location.referrer));
             }
             return action;
+        }, (error: IUnkownError) => {
+            return dispatch(authError(error));
         });
     };
 }
 
 function authenticate(username: string, password: string): Promise<{ token: string }> {
-    // TODO: Add error handling
     return Requestor.makeRequest({
         url: `${globals.apiUrl}/auth`,
         method: 'POST',

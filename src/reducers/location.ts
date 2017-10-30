@@ -15,7 +15,8 @@ export interface IRouterAction extends RouterAction {
 type Action = AuthAction | IRouterAction;
 
 const defaulValue: ILocationInfo = {
-    referred: false
+    referred: false,
+    referrer: { hash: '', pathname: '/', query: {}, search: '' }
 };
 
 function _location(state: ILocationInfo = defaulValue, action: IRouterAction): ILocationInfo {
