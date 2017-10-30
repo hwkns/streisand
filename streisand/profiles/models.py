@@ -212,7 +212,7 @@ class UserAnnounceKey(models.Model):
     revoked_at = models.DateTimeField(null=True)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class UserAnnounce(models.Model):
