@@ -2,8 +2,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import Pager from '../Pager';
-import FilmRow from './FilmRow';
+import Empty from '../Empty';
 import Store from '../../store';
+import FilmRow from './FilmRow';
 import IFilm from '../../models/IFilm';
 
 export type Props = {
@@ -13,6 +14,7 @@ export type Props = {
 type ConnectedState = {
     total: number;
     films: IFilm[];
+    loading: boolean;
 };
 type ConnectedDispatch = {};
 
@@ -20,6 +22,9 @@ type CombinedProps = Props & ConnectedDispatch & ConnectedState;
 class FilmsViewComponent extends React.Component<CombinedProps> {
     public render() {
         const films = this.props.films;
+        if (!films.length) {
+            return <Empty loading={this.props.loading} />;
+        }
         const rows = films.map((film: IFilm) => {
             return (<FilmRow film={film} key={film.id} />);
         });
@@ -48,6 +53,7 @@ const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const page = state.films.pages[ownProps.page];
     return {
         total: state.films.count,
+        loading: page ? page.loading : false,
         films: page ? page.items : []
     };
 };
