@@ -18,6 +18,10 @@ export function authError(error: IUnkownError): Action {
     return authfailure(message);
 }
 
+export function clearError(): Action {
+    return { type: 'UNKOWN_ERROR', message: '' };
+}
+
 export function handleError(error: IUnkownError): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         if (error.status === 401) {

@@ -1,8 +1,11 @@
 import * as React from 'react';
+import * as redux from 'redux';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
 import Store from '../store';
+import { clearError } from '../actions/ErrorAction';
+import Banner, { BannerType } from '../components/Banner';
 
 export type Props = {};
 
@@ -12,7 +15,11 @@ type ConnectedState = {
     errorMessage: string;
 };
 
-type CombinedProps = Props & ConnectedState;
+type ConnectedDispatch = {
+    clearError: () => void;
+};
+
+type CombinedProps = Props & ConnectedState & ConnectedDispatch;
 class AppComponent extends React.Component<CombinedProps> {
     public render() {
         const links = !this.props.isAuthenticated ? undefined : (
@@ -55,15 +62,14 @@ class AppComponent extends React.Component<CombinedProps> {
     }
 
     private _getErrorBanner() {
-        const message = this.props.authError || this.props.errorMessage;
-        return !message ? undefined : (
-            <div className="bs-component">
-                <div className="alert alert-dismissible alert-danger">
-                    <button type="button" className="close" data-dismiss="alert">×</button>
-                    {message}
-                </div>
-            </div>
-        );
+        if (this.props.authError) {
+            return <Banner type={BannerType.error}>{this.props.authError}</Banner>;
+        }
+
+        if (this.props.errorMessage) {
+            const onClose = () => { this.props.clearError(); };
+            return <Banner type={BannerType.error} onClose={onClose}>{this.props.errorMessage}</Banner>;
+        }
     }
 }
 
@@ -73,6 +79,10 @@ const mapStateToProps = (state: Store.All, props: Props): ConnectedState => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
+const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({
+    clearError: () => dispatch(clearError())
+});
+
 const App: React.ComponentClass<Props> =
-    connect(mapStateToProps)(AppComponent);
+    connect(mapStateToProps, mapDispatchToProps)(AppComponent);
 export default App;
