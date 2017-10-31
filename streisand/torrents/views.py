@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from rest_framework.permissions import IsAdminUser
+from rest_framework.viewsets import ModelViewSet
+
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
@@ -11,8 +14,34 @@ from django.views.generic import View
 from profiles.models import UserProfile
 from www.utils import paginate
 
-from .models import Torrent, ReseedRequest
 from .forms import TorrentUploadForm
+from .models import Torrent, ReseedRequest
+from .serializers import AdminTorrentSerializer
+
+
+class TorrentViewSet(ModelViewSet):
+    """
+    API endpoint that allows torrents to be viewed or edited.
+    """
+    permission_classes = [IsAdminUser]
+    serializer_class = AdminTorrentSerializer
+    queryset = Torrent.objects.all().select_related(
+        'film',
+        'mediainfo',
+        'uploaded_by',
+        'moderated_by',
+    )
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = super().get_queryset()
+        film_id = self.request.query_params.get('film_id', None)
+        if film_id is not None:
+            queryset = queryset.filter(film_id=film_id)
+        return queryset
 
 
 class TorrentDownloadView(View):

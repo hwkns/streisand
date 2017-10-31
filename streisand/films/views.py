@@ -13,7 +13,7 @@ from .serializers import AdminFilmSerializer
 
 class FilmViewSet(ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows films to be viewed or edited.
     """
     permission_classes = [IsAdminUser]
     queryset = Film.objects.all().select_related(

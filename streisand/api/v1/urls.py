@@ -7,6 +7,7 @@ from django.conf.urls import url, include
 
 from films.views import FilmViewSet
 from profiles.views import UserProfileViewSet
+from torrents.views import TorrentViewSet
 from www.views import UserViewSet, GroupViewSet
 
 router = routers.DefaultRouter()
@@ -14,6 +15,7 @@ router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'profiles', UserProfileViewSet)
 router.register(r'films', FilmViewSet)
+router.register(r'torrents', TorrentViewSet)
 
 urlpatterns = [
 
