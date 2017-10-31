@@ -14,7 +14,7 @@ type CombinedProps = Props & ConnectedDispatch & ConnectedState;
 class FilmViewComponent extends React.Component<CombinedProps> {
     public render() {
         const film = this.props.film;
-        const trailerId = getYouTubeId(film.trailer_url);
+        const trailerId = getYouTubeId(film.trailerUrl);
         const youtubeUrl = `//www.youtube.com/embed/${trailerId}?rel=0&amp;wmode=transparent`;
         const tags = film.tags.map((tag: string) => {
             return (<span className="label label-default" key={tag}>{tag}</span>);
@@ -33,7 +33,7 @@ class FilmViewComponent extends React.Component<CombinedProps> {
                     </div>
                 </div>
                 <div className="col-lg-3 col-lg-offset-1">
-                    <img src={film.poster_url} width="250px" />
+                    <img src={film.posterUrl} width="250px" />
                 </div>
             </div>
         );

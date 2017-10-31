@@ -1,17 +1,17 @@
 
 interface IFilm {
     description: string;
-    duration_in_minutes: number;
-    fanart_url: string;
+    durationInMinutes: number;
+    fanartUrl: string;
     id: string; // TODO: actually a number right now, need to get it changed
-    imdb_id: string;
-    moderation_notes: string;
-    poster_url: string;
+    imdbId: string;
+    moderationNotes: string;
+    posterUrl: string;
     tags: string[];
     title: string;
-    tmdb_id: string;
-    trailer_type: string;
-    trailer_url: string;
+    tmdbId: string;
+    trailerType: string;
+    trailerUrl: string;
     year: number;
 }
 

@@ -16,7 +16,7 @@ class FilmRowComponent extends React.Component<CombinedProps> {
         return (
             <tr>
                 <td>
-                    <img src={film.poster_url} width="80px" />
+                    <img src={film.posterUrl} width="80px" />
                 </td>
                 <td>
                     <Link to={'/film/' + film.id} title={film.title}>{film.title}</Link>
