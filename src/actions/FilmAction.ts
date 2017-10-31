@@ -3,12 +3,17 @@ import globals from '../utilities/globals';
 import Requestor from '../utilities/Requestor';
 import { ThunkAction, IDispatch } from './ActionHelper';
 
+import { IUnkownError } from '../models/base/IError';
+import ErrorAction, { handleError } from './ErrorAction';
+
 import IFilm from '../models/IFilm';
 
-type Action =
+type FilmAction =
     { type: 'FETCHING_FILM', id: string } |
-    { type: 'RECEIVED_FILM', film: IFilm };
-export default Action;
+    { type: 'RECEIVED_FILM', film: IFilm } |
+    { type: 'FILM_FAILURE', id: string };
+export default FilmAction;
+type Action = FilmAction | ErrorAction;
 
 function fetching(id: string): Action {
     return { type: 'FETCHING_FILM', id };
@@ -21,12 +26,19 @@ function received(response: IFilm): Action {
     };
 }
 
+function failure(id: string): Action {
+    return { type: 'FILM_FAILURE', id };
+}
+
 export function getFilm(id: string): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(fetching(id));
         return fetch(state.auth.token, id).then((response: IFilm) => {
             return dispatch(received(response));
+        }, (error: IUnkownError) => {
+            dispatch(failure(id));
+            return dispatch(handleError(error));
         });
     };
 }

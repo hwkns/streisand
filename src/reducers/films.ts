@@ -16,6 +16,8 @@ function byId(state: ItemMap = {}, action: Action): ItemMap {
             return objectAssign({}, state, { [action.id]: { loading: true } });
         case 'RECEIVED_FILM':
             return objectAssign({}, state, { [action.film.id]: action.film });
+        case 'FILM_FAILURE':
+            return objectAssign({}, state, { [action.id]: undefined });
         case 'RECEIVED_FILMS':
             let map: ItemMap = {};
             for (const item of action.films) {

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Store from '../store';
 import IFilm from '../models/IFilm';
+import Empty from '../components/Empty';
 import { getFilm } from '../actions/FilmAction';
 import FilmView from '../components/films/FilmView';
 import ILoadingItem from '../models/base/ILoadingItem';
@@ -16,7 +17,7 @@ export type Props = {
 
 type ConnectedState = {
     film: IFilm;
-    isLoading: boolean;
+    loading: boolean;
 };
 
 type ConnectedDispatch = {
@@ -26,19 +27,21 @@ type ConnectedDispatch = {
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
 class FilmPageComponent extends React.Component<CombinedProps, void> {
     public componentWillMount() {
-        if (!this.props.film && !this.props.isLoading) {
+        if (!this.props.loading) {
             this.props.getFilm(this.props.params.filmId);
         }
     }
 
-    public render() {
-        if (this.props.isLoading) {
-            return (<div>Loading...</div>);
+    public componentWillReceiveProps(props: CombinedProps) {
+        if (!props.loading && props.params.filmId !== this.props.params.filmId) {
+            this.props.getFilm(props.params.filmId);
         }
+    }
 
+    public render() {
         const film = this.props.film;
-        if (!film) {
-            return (<div>Film not found :(</div>);
+        if (this.props.loading || !film) {
+            return <Empty loading={this.props.loading} />;
         }
 
         return (
@@ -50,10 +53,10 @@ class FilmPageComponent extends React.Component<CombinedProps, void> {
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const item = state.films.byId[ownProps.params.filmId];
     const loading = (item && (item as ILoadingItem).loading) || false;
-    const film = typeof (item as IFilm).id !== 'undefined' ? item as IFilm : undefined;
+    const film = (item && typeof (item as IFilm).id !== 'undefined') ? item as IFilm : undefined;
 
     return {
-        isLoading: loading,
+        loading: loading,
         film: film
     };
 };

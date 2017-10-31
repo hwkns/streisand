@@ -15,7 +15,7 @@ export type Props = {
 
 type ConnectedState = {
     page: number;
-    isLoading: boolean;
+    loading: boolean;
 };
 
 type ConnectedDispatch = {
@@ -25,13 +25,13 @@ type ConnectedDispatch = {
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
 class FilmsPage extends React.Component<CombinedProps> {
     public componentWillMount() {
-        if (!this.props.isLoading) {
+        if (!this.props.loading) {
             this.props.getFilms(this.props.page);
         }
     }
 
     public componentWillReceiveProps(props: CombinedProps) {
-        if (!props.isLoading && props.page !== this.props.page) {
+        if (!props.loading && props.page !== this.props.page) {
             this.props.getFilms(props.page);
         }
     }
@@ -48,7 +48,7 @@ const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const page = state.films.pages[pageNumber];
     return {
         page: pageNumber,
-        isLoading: page ? page.loading : false
+        loading: page ? page.loading : false
     };
 };
 
