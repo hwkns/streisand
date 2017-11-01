@@ -9,5 +9,5 @@ const isProd = process.env.NODE_ENV === 'production';
 
 export default {
     pageSize: 50,
-    apiUrl: isProd ? 'http://dev.ronzertnert.xyz:8000/api/v1' : 'http://localhost:5000/api/v1'
+    apiUrl: isProd ? 'https://dev.ronzertnert.xyz/api/v1' : 'http://localhost:5000/api/v1'
 };

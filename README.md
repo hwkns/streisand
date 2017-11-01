@@ -17,7 +17,7 @@ In order to get the production ready files, all you need to do is run the defaul
 
 ## Proxies
 None of the APIs that this site is using are setup to work with localhost requests. Until they support CORS you will need to route all API traffic through a proxy. There is a proxy.js file in the root of the project for doing this.
-- Run `node .\proxy.js "http://dev.ronzertnert.xyz:8000"` to start the proxy server for the site api.
+- Run `node .\proxy.js "https://dev.ronzertnert.xyz"` to start the proxy server for the site api.
 
 ## Deployment
 For now the easiest way to deploy this project on the dev server is to clone it there and build it. Then point nginx to the index.html file.
