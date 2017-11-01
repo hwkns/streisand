@@ -7,6 +7,7 @@ const PAGE_SIZE = globals.pageSize;
 const MAX_PAGES = 10;
 
 export type Props = {
+    uri: string;
     page: number;
     total: number;
 };
@@ -27,16 +28,16 @@ function Pager(props: Props) {
         const start = PAGE_SIZE * (i - 1) + 1;
         const end = Math.min(start + PAGE_SIZE - 1, props.total);
         const classes = i === props.page ? 'active' : '';
-        pages.push(<li className={classes} key={i} title={`${start} - ${end}`}><Link to={`/films/${i}`}>{i}</Link></li>);
+        pages.push(<li className={classes} key={i} title={`${start} - ${end}`}><Link to={`${props.uri}/${i}`}>{i}</Link></li>);
     }
     return (
         <ul style={center} className="pagination">
             <li className={props.page === 1 ? 'disabled' : ''}>
-                <Link to="/films/1">«</Link>
+                <Link to={`${props.uri}/1`}>«</Link>
             </li>
             {pages}
             <li className={props.page === pageCount ? 'disabled' : ''}>
-                <Link to={`/films/${pageCount}`}>» </Link>
+                <Link to={`${props.uri}/${pageCount}`}>» </Link>
             </li>
         </ul>
     );

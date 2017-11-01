@@ -7,11 +7,13 @@ import auth from './auth';
 import films from './films';
 import errors from './errors';
 import location from './location';
+import torrents from './torrents';
 
 export const reducers = combineReducers<Store.All>({
     routing,
     auth,
     errors,
     location,
-    films
+    films,
+    torrents
 });

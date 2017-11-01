@@ -5,12 +5,14 @@ import { Route, Redirect, RouterState, RedirectFunction } from 'react-router';
 import Store from './store';
 
 import App from './pages/App';
+import Themes from './components/Themes';
+import AboutPage from './pages/AboutPage';
+import LoginPage from './pages/LoginPage';
+
 import HomePage from './pages/HomePage';
 import FilmPage from './pages/FilmPage';
-import Themes from './components/Themes';
 import FilmsPage from './pages/FilmsPage';
-import LoginPage from './pages/LoginPage';
-import AboutPage from './pages/AboutPage';
+import TorrentsPage from './pages/TorrentsPage';
 
 export function createRoutes(store: ReduxStore<Store.All>) {
     function checkAuth(nextState: RouterState, replace: RedirectFunction) {
@@ -34,6 +36,9 @@ export function createRoutes(store: ReduxStore<Store.All>) {
                     <Redirect from="/films" to="/films/1" />
                     <Route path="/film/:filmId" component={FilmPage} />
                     <Redirect from="/film" to="/films/1" />
+
+                    <Route path="/torrents/:page" component={TorrentsPage} />
+                    <Redirect from="/torrents" to="/torrents/1" />
                 </Route>
                 <Redirect from="*" to="/home" />
             </Route>

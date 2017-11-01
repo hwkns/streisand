@@ -1,12 +1,15 @@
 import { RouterState } from 'react-router-redux';
 
 import IFilm from '../models/IFilm';
+import ITorrent from '../models/ITorrent';
 import IAuthInfo from '../models/IAuthInfo';
 import ILocationInfo from '../models/ILocationInfo';
 import IPagedItemSet from '../models/base/IPagedItemSet';
 
 namespace Store {
     export type Films = IPagedItemSet<IFilm>;
+    export type Torrents = IPagedItemSet<ITorrent>;
+
     export type Errors = {
         authError: string;
         unkownError: string;
@@ -18,6 +21,7 @@ namespace Store {
         location: ILocationInfo;
         auth: IAuthInfo;
         films: Films;
+        torrents: Torrents;
     };
 }
 

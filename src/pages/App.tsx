@@ -25,6 +25,7 @@ class AppComponent extends React.Component<CombinedProps> {
         const links = !this.props.isAuthenticated ? undefined : (
             <ul className="nav navbar-nav">
                 <li><Link to="/films">Films</Link></li>
+                <li><Link to="/torrents">Torrents</Link></li>
             </ul>
         );
         return (
