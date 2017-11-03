@@ -5,6 +5,7 @@ import Pager from '../Pager';
 import Empty from '../Empty';
 import Store from '../../store';
 import TorrentRow from './TorrentRow';
+import TorrentList from './TorrentList';
 import ITorrent from '../../models/ITorrent';
 
 export type Props = {
@@ -25,26 +26,12 @@ class TorrentsViewComponent extends React.Component<CombinedProps> {
         if (!torrents.length) {
             return <Empty loading={this.props.loading} />;
         }
-        const rows = torrents.map((torrent: ITorrent) => {
-            return (<TorrentRow torrent={torrent} key={torrent.id} />);
-        });
+        const pager = <Pager uri="/torrents" total={this.props.total} page={this.props.page} />;
         return (
             <div className="bs-component">
-                <Pager uri="/torrents" total={this.props.total} page={this.props.page} />
-                <table className="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Release Name</th>
-                            <th>Resolution</th>
-                            <th>Source</th>
-                            <th>Size</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {rows}
-                    </tbody>
-                </table>
-                <Pager uri="/torrents" total={this.props.total} page={this.props.page} />
+                {pager}
+                <TorrentList torrents={torrents} />
+                {pager}
             </div>
         );
     }

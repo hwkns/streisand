@@ -4,11 +4,12 @@ import IFilm from '../models/IFilm';
 import ITorrent from '../models/ITorrent';
 import IAuthInfo from '../models/IAuthInfo';
 import ILocationInfo from '../models/ILocationInfo';
+import ITorrentItemSet from '../models/ITorrentItemSet';
 import IPagedItemSet from '../models/base/IPagedItemSet';
 
 namespace Store {
     export type Films = IPagedItemSet<IFilm>;
-    export type Torrents = IPagedItemSet<ITorrent>;
+    export type Torrents = ITorrentItemSet;
 
     export type Errors = {
         authError: string;

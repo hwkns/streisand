@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import Store from '../store';
 import globals from '../utilities/globals';
-import { getTorrents } from '../actions/TorrentsAction';
 import TorrentsView from '../components/torrents/TorrentsView';
+import { getTorrents } from '../actions/torrents/TorrentsAction';
 
 export type Props = {
     params: {

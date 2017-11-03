@@ -1,13 +1,13 @@
-import Store from '../store';
-import globals from '../utilities/globals';
-import Requestor from '../utilities/Requestor';
-import { ThunkAction, IDispatch } from './ActionHelper';
+import Store from '../../store';
+import globals from '../../utilities/globals';
+import Requestor from '../../utilities/Requestor';
+import { ThunkAction, IDispatch } from '../ActionHelper';
 
-import ITorrent from '../models/ITorrent';
-import { IUnkownError } from '../models/base/IError';
-import ILoadingItem from '../models/base/ILoadingItem';
-import IPagedResponse from '../models/base/IPagedResponse';
-import ErrorAction, { handleError } from './ErrorAction';
+import ITorrent from '../../models/ITorrent';
+import { IUnkownError } from '../../models/base/IError';
+import ILoadingItem from '../../models/base/ILoadingItem';
+import ErrorAction, { handleError } from '../ErrorAction';
+import IPagedResponse from '../../models/base/IPagedResponse';
 
 type TorrentsAction =
     { type: 'FETCHING_TORRENTS', page: number } |

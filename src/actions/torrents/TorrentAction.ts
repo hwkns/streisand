@@ -1,12 +1,11 @@
-import Store from '../store';
-import globals from '../utilities/globals';
-import Requestor from '../utilities/Requestor';
-import { ThunkAction, IDispatch } from './ActionHelper';
+import Store from '../../store';
+import globals from '../../utilities/globals';
+import Requestor from '../../utilities/Requestor';
+import { ThunkAction, IDispatch } from '../ActionHelper';
 
-import { IUnkownError } from '../models/base/IError';
-import ErrorAction, { handleError } from './ErrorAction';
-
-import ITorrent from '../models/ITorrent';
+import ITorrent from '../../models/ITorrent';
+import { IUnkownError } from '../../models/base/IError';
+import ErrorAction, { handleError } from '../ErrorAction';
 
 type TorrentAction =
     { type: 'FETCHING_TORRENT', id: string } |

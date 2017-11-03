@@ -1,14 +1,20 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import Store from '../../store';
 import IFilm from '../../models/IFilm';
+import ITorrent from '../../models/ITorrent';
+import TorrentList from '../torrents/TorrentList';
 
 export type Props = {
     film: IFilm;
 };
 
+type ConnectedState = {
+    torrents: ITorrent[];
+    loadingTorrents: boolean;
+};
 type ConnectedDispatch = {};
-type ConnectedState = {};
 
 type CombinedProps = Props & ConnectedDispatch & ConnectedState;
 class FilmViewComponent extends React.Component<CombinedProps> {
@@ -23,13 +29,17 @@ class FilmViewComponent extends React.Component<CombinedProps> {
             <div className="bs-component">
                 <h1>{film.title}  [{film.year}]</h1>
                 <div className="col-lg-8">
-                    <div>
+                    <div className="row">
                         <iframe width="620" height="350" src={youtubeUrl} frameBorder="0"></iframe>
                     </div>
-                    <div>
+                    <div className="row">
                         <h2>Description</h2>
                         <p>{film.description}</p>
                         <div>{tags}</div>
+                    </div>
+                    <div className="row">
+                        <h2>Torrents</h2>
+                        <TorrentList torrents={this.props.torrents} />
                     </div>
                 </div>
                 <div className="col-lg-3 col-lg-offset-1">
@@ -40,8 +50,16 @@ class FilmViewComponent extends React.Component<CombinedProps> {
     }
 }
 
+const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
+    const page = state.torrents.byFilmId[ownProps.film.id];
+    return {
+        torrents: page ? page.items || [] : [],
+        loadingTorrents: page ? page.loading : false
+    };
+};
+
 const FilmView: React.ComponentClass<Props> =
-    connect()(FilmViewComponent);
+    connect(mapStateToProps)(FilmViewComponent);
 export default FilmView;
 
 function getYouTubeId(url: string) {

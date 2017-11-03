@@ -8,6 +8,7 @@ import Empty from '../components/Empty';
 import { getFilm } from '../actions/FilmAction';
 import FilmView from '../components/films/FilmView';
 import ILoadingItem from '../models/base/ILoadingItem';
+import { getTorrents } from '../actions/torrents/FilmTorrentsAction';
 
 export type Props = {
     params: {
@@ -17,11 +18,13 @@ export type Props = {
 
 type ConnectedState = {
     film: IFilm;
+
     loading: boolean;
 };
 
 type ConnectedDispatch = {
     getFilm: (id: string) => void;
+    getTorrents: (filmId: string) => void;
 };
 
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
@@ -29,12 +32,14 @@ class FilmPageComponent extends React.Component<CombinedProps, void> {
     public componentWillMount() {
         if (!this.props.loading) {
             this.props.getFilm(this.props.params.filmId);
+            this.props.getTorrents(this.props.params.filmId);
         }
     }
 
     public componentWillReceiveProps(props: CombinedProps) {
         if (!props.loading && props.params.filmId !== this.props.params.filmId) {
             this.props.getFilm(props.params.filmId);
+            this.props.getTorrents(props.params.filmId);
         }
     }
 
@@ -62,7 +67,8 @@ const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
 };
 
 const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({
-    getFilm: (id: string) => dispatch(getFilm(id))
+    getFilm: (id: string) => dispatch(getFilm(id)),
+    getTorrents: (filmId: string) => dispatch(getTorrents(filmId))
 });
 
 const FilmPage: React.ComponentClass<Props> =

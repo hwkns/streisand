@@ -1,9 +1,8 @@
 import AuthAction from './AuthAction';
 import FilmAction from './FilmAction';
+import TorrentAction from './torrents';
 import ErrorAction from './ErrorAction';
 import FilmsAction from './FilmsAction';
-import TorrentAction from './TorrentAction';
-import TorrentsAction from './TorrentsAction';
 
-type Action = ErrorAction | AuthAction | FilmsAction | FilmAction | TorrentsAction | TorrentAction;
+type Action = ErrorAction | AuthAction | FilmsAction | FilmAction | TorrentAction;
 export default Action;
