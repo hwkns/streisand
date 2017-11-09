@@ -13,6 +13,7 @@ INSTALLED_APPS += [
     'grappelli',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
 
     # Contrib apps
     'django.contrib.admin',
@@ -30,12 +31,14 @@ INSTALLED_APPS += [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'www.middleware.CachedUserAuthenticationMiddleware',
     'www.middleware.LoginRequiredMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -81,6 +84,21 @@ REST_FRAMEWORK = {
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
     ),
 }
+
+CORS_URL_REGEX = r'^/api/v1/.*$'
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+
 
 if DEBUG:
     REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += (
