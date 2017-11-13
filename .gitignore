@@ -3,4 +3,5 @@ node_modules
 
 # Build output
 dist
+drop
 temp

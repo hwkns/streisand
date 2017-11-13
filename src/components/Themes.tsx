@@ -31,8 +31,8 @@ type State = {
 
 export type Props = {};
 class Themes extends React.Component<Props, State> {
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
 
         this.state = {
             theme: getTheme()

@@ -18,8 +18,8 @@ type State = {
 
 type CombinedProps = Props & ConnectedDispatch;
 class LoginComponent extends React.Component<CombinedProps, State> {
-    constructor() {
-        super();
+    constructor(props: CombinedProps) {
+        super(props);
 
         this.state = {
             username: '',
