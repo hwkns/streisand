@@ -1,9 +1,9 @@
-import { combineReducers } from 'redux';
 import * as objectAssign from 'object-assign';
 
 import Store from '../store';
 import Action from '../actions/torrents';
 import ITorrent from '../models/ITorrent';
+import { combineReducers } from './helpers';
 import { IPage } from '../models/base/IPagedItemSet';
 
 type ItemMap = { [id: string]: ITorrent };

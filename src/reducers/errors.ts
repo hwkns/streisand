@@ -1,6 +1,5 @@
-import { combineReducers } from 'redux';
-
 import Store from '../store';
+import { combineReducers } from './helpers';
 import AuthAction from '../actions/AuthAction';
 import ErrorAction from '../actions/ErrorAction';
 

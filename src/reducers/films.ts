@@ -1,8 +1,8 @@
-import { combineReducers } from 'redux';
 import * as objectAssign from 'object-assign';
 
 import Store from '../store';
 import IFilm from '../models/IFilm';
+import { combineReducers } from './helpers';
 import FilmAction from '../actions/FilmAction';
 import FilmsAction from '../actions/FilmsAction';
 import { IPage } from '../models/base/IPagedItemSet';
