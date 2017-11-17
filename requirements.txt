@@ -31,3 +31,5 @@ sqlparse==0.2.4
 tqdm==4.17.1
 uWSGI==2.0.15
 django-webpack-loader==0.0.5
+django-cors-headers==2.0.0
+
