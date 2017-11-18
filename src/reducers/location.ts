@@ -14,15 +14,15 @@ export interface IRouterAction extends RouterAction {
 
 type Action = AuthAction | IRouterAction;
 
-const defaulValue: ILocationInfo = {
+const defaultValue: ILocationInfo = {
     referred: false,
     referrer: { hash: '', pathname: '/', query: {}, search: '' }
 };
 
-function _location(state: ILocationInfo = defaulValue, action: IRouterAction): ILocationInfo {
+function _location(state: ILocationInfo = defaultValue, action: IRouterAction): ILocationInfo {
     const payload = action.payload;
     if (payload) {
-        if (!state.referrer && action.payload.action === 'POP') {
+        if (state.referrer !== defaultValue.referrer && action.payload.action === 'POP') {
             return {
                 referred: false,
                 previous: {
@@ -42,7 +42,7 @@ function _location(state: ILocationInfo = defaulValue, action: IRouterAction): I
     return state;
 }
 
-function location(state: ILocationInfo = defaulValue, action: Action): ILocationInfo {
+function location(state: ILocationInfo = defaultValue, action: Action): ILocationInfo {
     if (state.referred) {
         return state;
     }

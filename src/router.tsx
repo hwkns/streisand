@@ -15,10 +15,15 @@ import FilmsPage from './pages/FilmsPage';
 import TorrentsPage from './pages/TorrentsPage';
 
 export function createRoutes(store: ReduxStore<Store.All>) {
-    function checkAuth(nextState: RouterState, replace: RedirectFunction) {
-        const state = store.getState();
-        if (!state.auth.isAuthenticated) {
+    function requireAuth(nextState: RouterState, replace: RedirectFunction) {
+        if (!store.getState().auth.isAuthenticated) {
             replace('/login');
+        }
+    }
+
+    function checkAuth(nextState: RouterState, replace: RedirectFunction) {
+        if (store.getState().auth.isAuthenticated) {
+            replace('/');
         }
     }
 
@@ -26,10 +31,10 @@ export function createRoutes(store: ReduxStore<Store.All>) {
         <div>
             <Redirect from="/" to="/home" />
             <Route path="/" component={App}>
-                <Route path="/login" component={LoginPage} />
+                <Route path="/login" component={LoginPage} onEnter={checkAuth} />
                 <Route path="/about" component={AboutPage} />
                 <Route path="/themes" component={Themes} />
-                <Route onEnter={checkAuth}>
+                <Route onEnter={requireAuth}>
                     <Route path="/home" component={HomePage} />
 
                     <Route path="/films/:page" component={FilmsPage} />
