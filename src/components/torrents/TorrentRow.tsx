@@ -10,7 +10,7 @@ export type Props = {
 };
 
 type CombinedProps = Props;
-class TorrentRowComponent extends React.Component<CombinedProps> {
+class TorrentRow extends React.Component<CombinedProps> {
     public render() {
         const torrent = this.props.torrent;
         const name = torrent.releaseName || '<Uknown>';
@@ -27,6 +27,4 @@ class TorrentRowComponent extends React.Component<CombinedProps> {
     }
 }
 
-const TorrentRow: React.ComponentClass<Props> =
-    connect()(TorrentRowComponent);
 export default TorrentRow;

@@ -29,7 +29,7 @@ class FilmsViewComponent extends React.Component<CombinedProps> {
             return (<FilmRow film={film} key={film.id} />);
         });
         return (
-            <div className="bs-component">
+            <div>
                 <Pager uri="/films" total={this.props.total} page={this.props.page} />
                 <table className="table table-striped table-hover">
                     <thead>

@@ -44,30 +44,28 @@ class LoginComponent extends React.Component<CombinedProps, State> {
     public render() {
         const login = this._login.bind(this);
         return (
-            <div>
-                <div className="well bs-component">
-                    <form className="form-horizontal" onKeyPress={login}>
-                        <fieldset>
-                            <legend>Sign in</legend>
-                            <div className="form-group">
-                                <label htmlFor="inputEmail" className="col-lg-2 control-label">Email</label>
-                                <div className="col-lg-10">
-                                    <input type="text" className="form-control" id="inputEmail" placeholder="Email"
-                                        value={this.state.username} onChange={(event) => this.handleUserNameChange(event)} />
-                                </div>
+            <div className="well">
+                <form className="form-horizontal" onKeyPress={login}>
+                    <fieldset>
+                        <legend>Sign in</legend>
+                        <div className="form-group">
+                            <label htmlFor="inputEmail" className="col-lg-2 control-label">Email</label>
+                            <div className="col-lg-10">
+                                <input type="text" className="form-control" id="inputEmail" placeholder="Email"
+                                    value={this.state.username} onChange={(event) => this.handleUserNameChange(event)} />
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="inputPassword" className="col-lg-2 control-label">Password</label>
-                                <div className="col-lg-10">
-                                    <input type="password" className="form-control" id="inputPassword" placeholder="Password"
-                                        value={this.state.password} onChange={(event) => this.handlePasswordChange(event)} />
-                                </div>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="inputPassword" className="col-lg-2 control-label">Password</label>
+                            <div className="col-lg-10">
+                                <input type="password" className="form-control" id="inputPassword" placeholder="Password"
+                                    value={this.state.password} onChange={(event) => this.handlePasswordChange(event)} />
                             </div>
-                        </fieldset>
-                    </form>
-                    <div>
-                        <button className="btn btn-primary" onClick={() => login()}>Login</button>
-                    </div>
+                        </div>
+                    </fieldset>
+                </form>
+                <div>
+                    <button className="btn btn-primary" onClick={() => login()}>Login</button>
                 </div>
             </div>
         );

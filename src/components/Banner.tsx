@@ -28,11 +28,9 @@ export default class Banner extends React.Component<IBannerProps> {
             button = <button type="button" className="close" onClick={this.props.onClose}>×</button>;
         }
         return (
-            <div className="bs-component">
-                <div className={classes}>
-                    {button}
-                    {this.props.children}
-                </div>
+            <div className={classes}>
+                {button}
+                {this.props.children}
             </div>
         );
     }

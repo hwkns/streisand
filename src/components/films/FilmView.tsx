@@ -26,7 +26,7 @@ class FilmViewComponent extends React.Component<CombinedProps> {
             return (<span className="label label-default" key={tag}>{tag}</span>);
         });
         return (
-            <div className="bs-component">
+            <div>
                 <h1>{film.title}  [{film.year}]</h1>
                 <div className="col-lg-8">
                     <div className="row">

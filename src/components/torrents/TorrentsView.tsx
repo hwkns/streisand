@@ -28,7 +28,7 @@ class TorrentsViewComponent extends React.Component<CombinedProps> {
         }
         const pager = <Pager uri="/torrents" total={this.props.total} page={this.props.page} />;
         return (
-            <div className="bs-component">
+            <div>
                 {pager}
                 <TorrentList torrents={torrents} />
                 {pager}

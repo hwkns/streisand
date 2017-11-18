@@ -20,21 +20,19 @@ class TorrentListComponent extends React.Component<CombinedProps> {
             return (<TorrentRow torrent={torrent} key={torrent.id} />);
         });
         return (
-            <div className="bs-component">
-                <table className="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Release Name</th>
-                            <th>Resolution</th>
-                            <th>Source</th>
-                            <th>Size</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {rows}
-                    </tbody>
-                </table>
-            </div>
+            <table className="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Release Name</th>
+                        <th>Resolution</th>
+                        <th>Source</th>
+                        <th>Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
+            </table>
         );
     }
 }

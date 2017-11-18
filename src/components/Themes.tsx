@@ -47,10 +47,8 @@ class Themes extends React.Component<Props, State> {
             return (<a href="#" className={classes} onClick={changeTheme} key={theme.name}>{theme.name}</a>);
         });
         return (
-            <div className="bs-component">
-                <div className="list-group">
-                    {items}
-                </div>
+            <div className="list-group">
+                {items}
             </div>
         );
     }
