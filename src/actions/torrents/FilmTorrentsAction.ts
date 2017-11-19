@@ -5,7 +5,6 @@ import { ThunkAction, IDispatch } from '../ActionHelper';
 
 import ITorrent from '../../models/ITorrent';
 import { IUnkownError } from '../../models/base/IError';
-import ILoadingItem from '../../models/base/ILoadingItem';
 import ErrorAction, { handleError } from '../ErrorAction';
 import IPagedResponse from '../../models/base/IPagedResponse';
 

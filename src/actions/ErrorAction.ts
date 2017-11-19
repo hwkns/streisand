@@ -1,6 +1,5 @@
 import { replace } from 'react-router-redux';
 
-import Store from '../store';
 import { IUnkownError } from '../models/base/IError';
 import { ThunkAction, IDispatch } from './ActionHelper';
 
@@ -23,7 +22,7 @@ export function clearError(): Action {
 }
 
 export function handleError(error: IUnkownError): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
+    return (dispatch: IDispatch<Action>) => {
         if (error.status === 401) {
             dispatch(authfailure('Authentication expired'));
             return dispatch(replace('/login'));

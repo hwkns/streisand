@@ -25,10 +25,6 @@ function authenticated(token: string): Action {
     };
 }
 
-function failure(message: string): Action {
-    return { type: 'AUTHENTICATION_FAILED', message };
-}
-
 export function login(username: string, password: string): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();

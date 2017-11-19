@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Store from '../../store';
 import IFilm from '../../models/IFilm';
 import ITorrent from '../../models/ITorrent';
-import TorrentList from '../torrents/TorrentList';
+import TorrentSection from '../torrents/TorrentSection';
 import TorrentModal from '../torrents/TorrentModal';
 
 export type Props = {
@@ -41,7 +41,7 @@ class FilmViewComponent extends React.Component<CombinedProps> {
                     </div>
                     <div className="row">
                         <h2>Torrents</h2>
-                        <TorrentList torrents={this.props.torrents} />
+                        <TorrentSection torrents={this.props.torrents} />
                     </div>
                 </div>
                 <div className="col-lg-3 col-lg-offset-1">

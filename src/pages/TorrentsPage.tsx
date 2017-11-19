@@ -3,7 +3,6 @@ import * as redux from 'redux';
 import { connect } from 'react-redux';
 
 import Store from '../store';
-import globals from '../utilities/globals';
 import TorrentsView from '../components/torrents/TorrentsView';
 import { getTorrents } from '../actions/torrents/TorrentsAction';
 

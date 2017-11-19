@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Pager from '../Pager';
 import Empty from '../Empty';
 import Store from '../../store';
-import TorrentRow from './TorrentRow';
 import TorrentList from './TorrentList';
 import ITorrent from '../../models/ITorrent';
 

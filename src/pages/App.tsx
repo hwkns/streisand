@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as redux from 'redux';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { Navbar, Nav, MenuItem, NavItem, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 import Store from '../store';
 import { clearError } from '../actions/ErrorAction';

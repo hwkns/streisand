@@ -1,7 +1,6 @@
 import { RouterState } from 'react-router-redux';
 
 import IFilm from '../models/IFilm';
-import ITorrent from '../models/ITorrent';
 import IAuthInfo from '../models/IAuthInfo';
 import ILocationInfo from '../models/ILocationInfo';
 import ITorrentItemSet from '../models/ITorrentItemSet';
