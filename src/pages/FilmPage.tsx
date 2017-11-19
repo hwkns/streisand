@@ -7,39 +7,42 @@ import IFilm from '../models/IFilm';
 import Empty from '../components/Empty';
 import { getFilm } from '../actions/FilmAction';
 import FilmView from '../components/films/FilmView';
+import { numericIdentifier } from '../utilities/shim';
 import ILoadingItem from '../models/base/ILoadingItem';
 import { getTorrents } from '../actions/torrents/FilmTorrentsAction';
 
 export type Props = {
     params: {
         filmId: string;
+        torrentId: string;
     };
 };
 
 type ConnectedState = {
+    filmId: number;
+    torrentId: number;
     film: IFilm;
-
     loading: boolean;
 };
 
 type ConnectedDispatch = {
-    getFilm: (id: string) => void;
-    getTorrents: (filmId: string) => void;
+    getFilm: (id: number) => void;
+    getTorrents: (filmId: number) => void;
 };
 
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
 class FilmPageComponent extends React.Component<CombinedProps, void> {
     public componentWillMount() {
         if (!this.props.loading) {
-            this.props.getFilm(this.props.params.filmId);
-            this.props.getTorrents(this.props.params.filmId);
+            this.props.getFilm(this.props.filmId);
+            this.props.getTorrents(this.props.filmId);
         }
     }
 
     public componentWillReceiveProps(props: CombinedProps) {
         if (!props.loading && props.params.filmId !== this.props.params.filmId) {
-            this.props.getFilm(props.params.filmId);
-            this.props.getTorrents(props.params.filmId);
+            this.props.getFilm(props.filmId);
+            this.props.getTorrents(props.filmId);
         }
     }
 
@@ -50,7 +53,7 @@ class FilmPageComponent extends React.Component<CombinedProps, void> {
         }
 
         return (
-            <FilmView film={film} />
+            <FilmView film={film} torrentId={this.props.torrentId} />
         );
     }
 }
@@ -62,13 +65,15 @@ const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
 
     return {
         loading: loading,
-        film: film
+        film: film,
+        filmId: numericIdentifier(ownProps.params.filmId),
+        torrentId: numericIdentifier(ownProps.params.torrentId)
     };
 };
 
 const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({
-    getFilm: (id: string) => dispatch(getFilm(id)),
-    getTorrents: (filmId: string) => dispatch(getTorrents(filmId))
+    getFilm: (id: number) => dispatch(getFilm(id)),
+    getTorrents: (filmId: number) => dispatch(getTorrents(filmId))
 });
 
 const FilmPage: React.ComponentClass<Props> =

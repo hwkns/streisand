@@ -14,10 +14,11 @@ class TorrentRow extends React.Component<CombinedProps> {
     public render() {
         const torrent = this.props.torrent;
         const name = torrent.releaseName || '<Uknown>';
+        const url = `/film/${torrent.filmId}/${torrent.id}`;
         return (
             <tr>
                 <td>
-                    <Link to={'/film/' + torrent.filmId} title={name}>{name}</Link>
+                    <Link to={url} title={name}>{name}</Link>
                 </td>
                 <td>{torrent.resolution}</td>
                 <td>{torrent.sourceMedia}</td>

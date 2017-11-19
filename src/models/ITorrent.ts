@@ -1,7 +1,7 @@
 
 interface ITorrent {
-    id: string;
-    filmId: string;
+    id: number;
+    filmId: number;
     cut: 'Theatrical';
     codec: 'XviD';
     container: 'AVI';
@@ -25,7 +25,7 @@ interface ITorrent {
     fileList: any[]; // TODO: this is always empty
     nfo: string;
     mediainfo?: {
-        id: string;
+        id: number;
         text: string;
         runtime: string; // duration example: '01:16:00'
         resolutionWidth: number;

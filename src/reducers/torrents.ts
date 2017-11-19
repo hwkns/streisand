@@ -6,7 +6,7 @@ import ITorrent from '../models/ITorrent';
 import { combineReducers } from './helpers';
 import { IPage } from '../models/base/IPagedItemSet';
 
-type ItemMap = { [id: string]: ITorrent };
+type ItemMap = { [id: number]: ITorrent };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
         case 'FETCHING_TORRENT':
@@ -45,7 +45,7 @@ function pages(state: Pages = {}, action: Action): Pages {
     }
 }
 
-type Torrents = { [id: string]: IPage<ITorrent> };
+type Torrents = { [id: number]: IPage<ITorrent> };
 function byFilmId(state: Torrents = {}, action: Action): Torrents {
     let page: IPage<ITorrent>;
     switch (action.type) {

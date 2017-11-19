@@ -71,7 +71,8 @@ gulp.task('clean:app', () => {
 const packages = [
     { name: 'react', cdn: 'https://cdnjs.cloudflare.com/ajax/libs/react/{version}/umd/react.production.min.js' },
     { name: 'react-dom', cdn: 'https://cdnjs.cloudflare.com/ajax/libs/react-dom/{version}/umd/react-dom.production.min.js' },
-    { name: 'redux', cdn: 'https://cdnjs.cloudflare.com/ajax/libs/redux/{version}/redux.min.js' }
+    { name: 'redux', cdn: 'https://cdnjs.cloudflare.com/ajax/libs/redux/{version}/redux.min.js' },
+    { name: 'react-bootstrap', cdn: 'https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/{version}/react-bootstrap.min.js' }
 ];
 
 // Make a copy of index.html and replace the local node_module dependencies with the cdn urls above

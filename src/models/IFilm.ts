@@ -3,7 +3,7 @@ interface IFilm {
     description: string;
     durationInMinutes: number;
     fanartUrl: string;
-    id: string; // TODO: actually a number right now, need to get it changed
+    id: number;
     imdbId: string;
     moderationNotes: string;
     posterUrl: string;

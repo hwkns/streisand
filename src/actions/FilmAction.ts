@@ -9,13 +9,13 @@ import ErrorAction, { handleError } from './ErrorAction';
 import IFilm from '../models/IFilm';
 
 type FilmAction =
-    { type: 'FETCHING_FILM', id: string } |
+    { type: 'FETCHING_FILM', id: number } |
     { type: 'RECEIVED_FILM', film: IFilm } |
-    { type: 'FILM_FAILURE', id: string };
+    { type: 'FILM_FAILURE', id: number };
 export default FilmAction;
 type Action = FilmAction | ErrorAction;
 
-function fetching(id: string): Action {
+function fetching(id: number): Action {
     return { type: 'FETCHING_FILM', id };
 }
 
@@ -26,11 +26,11 @@ function received(response: IFilm): Action {
     };
 }
 
-function failure(id: string): Action {
+function failure(id: number): Action {
     return { type: 'FILM_FAILURE', id };
 }
 
-export function getFilm(id: string): ThunkAction<Action> {
+export function getFilm(id: number): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(fetching(id));
@@ -43,7 +43,7 @@ export function getFilm(id: string): ThunkAction<Action> {
     };
 }
 
-function fetch(token: string, id: string): Promise<IFilm> {
+function fetch(token: string, id: number): Promise<IFilm> {
     return Requestor.makeRequest({
         url: `${globals.apiUrl}/films/${id}`,
         headers: {

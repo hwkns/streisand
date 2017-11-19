@@ -9,7 +9,7 @@ import { IPage } from '../models/base/IPagedItemSet';
 
 type Action = FilmsAction | FilmAction;
 
-type ItemMap = { [id: string]: IFilm };
+type ItemMap = { [id: number]: IFilm };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
         case 'FETCHING_FILM':

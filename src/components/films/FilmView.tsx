@@ -5,9 +5,11 @@ import Store from '../../store';
 import IFilm from '../../models/IFilm';
 import ITorrent from '../../models/ITorrent';
 import TorrentList from '../torrents/TorrentList';
+import TorrentModal from '../torrents/TorrentModal';
 
 export type Props = {
     film: IFilm;
+    torrentId: number;
 };
 
 type ConnectedState = {
@@ -45,8 +47,23 @@ class FilmViewComponent extends React.Component<CombinedProps> {
                 <div className="col-lg-3 col-lg-offset-1">
                     <img src={film.posterUrl} width="250px" />
                 </div>
+                {this._getModal()}
             </div>
         );
+    }
+
+    private _getModal() {
+        const torrent = this._getTorrent(this.props.torrentId);
+        return !torrent ? undefined :
+            <TorrentModal film={this.props.film} torrent={torrent} />;
+    }
+
+    private _getTorrent(torrentId: number) {
+        for (const torrent of this.props.torrents) {
+            if (torrent.id === torrentId) {
+                return torrent;
+            }
+        }
     }
 }
 
