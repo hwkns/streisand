@@ -2,13 +2,13 @@
   "name": "jumpcut-web",
   "version": "0.0.1",
   "description": "The website",
-  "homepage": "https://github.com/TEHDevs/jumpcut-web",
+  "homepage": "https://git.ronzertnert.xyz/JumpCut-Front/jumpcut-web",
   "bugs": {
-    "url": "https://github.com/TEHDevs/jumpcut-web/issues"
+    "url": "https://git.ronzertnert.xyz/JumpCut-Front/jumpcut-web/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TEHDevs/jumpcut-web.git"
+    "url": "https://git.ronzertnert.xyz/JumpCut-Front/jumpcut-web.git"
   },
   "dependencies": {
     "bbcode-to-react": "^0.2.7",
