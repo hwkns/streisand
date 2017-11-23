@@ -47,7 +47,7 @@ export function getFilms(page: number = 1): ThunkAction<Action> {
 
 function fetch(token: string, page: number): Promise<IPagedResponse<IFilm>> {
     return Requestor.makeRequest({
-        url: `${globals.apiUrl}/films?page=${page}`,
+        url: `${globals.apiUrl}/films/?page=${page}`,
         headers: {
             'Authorization': 'token ' + token
         },

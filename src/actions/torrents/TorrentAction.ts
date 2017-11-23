@@ -44,7 +44,7 @@ export function getTorrent(id: number): ThunkAction<Action> {
 
 function fetch(token: string, id: number): Promise<ITorrent> {
     return Requestor.makeRequest({
-        url: `${globals.apiUrl}/torrents/${id}`,
+        url: `${globals.apiUrl}/torrents/${id}/`,
         headers: {
             'Authorization': 'token ' + token
         },

@@ -45,7 +45,7 @@ export function getFilm(id: number): ThunkAction<Action> {
 
 function fetch(token: string, id: number): Promise<IFilm> {
     return Requestor.makeRequest({
-        url: `${globals.apiUrl}/films/${id}`,
+        url: `${globals.apiUrl}/films/${id}/`,
         headers: {
             'Authorization': 'token ' + token
         },

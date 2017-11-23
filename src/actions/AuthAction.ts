@@ -43,7 +43,7 @@ export function login(username: string, password: string): ThunkAction<Action> {
 
 function authenticate(username: string, password: string): Promise<{ token: string }> {
     return Requestor.makeRequest({
-        url: `${globals.apiUrl}/auth`,
+        url: `${globals.apiUrl}/auth/`,
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

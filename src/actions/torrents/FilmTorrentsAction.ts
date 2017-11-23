@@ -48,7 +48,7 @@ export function getTorrents(filmId: number, page: number = 1): ThunkAction<Actio
 
 function fetch(token: string, filmId: number, page: number): Promise<IPagedResponse<ITorrent>> {
     return Requestor.makeRequest({
-        url: `${globals.apiUrl}/torrents?film_id=${filmId}&page=${page}`,
+        url: `${globals.apiUrl}/torrents/?film_id=${filmId}&page=${page}`,
         headers: {
             'Authorization': 'token ' + token
         },
