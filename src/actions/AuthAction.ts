@@ -4,15 +4,22 @@ import Store from '../store';
 import globals from '../utilities/globals';
 import Requestor from '../utilities/Requestor';
 import { IUnkownError } from '../models/base/IError';
+import { storeAuthToken } from '../utilities/storage';
 import ErrorAction, { authError } from './ErrorAction';
 import { ThunkAction, IDispatch } from './ActionHelper';
 
 type AuthAction =
+    { type: 'LOGOUT' } |
     { type: 'AUTHENTICATING' } |
     { type: 'AUTHENTICATED', token: string } |
     { type: 'AUTHENTICATION_FAILED', message: string };
 export default AuthAction;
 type Action = AuthAction | ErrorAction;
+
+export function logout(): Action {
+    storeAuthToken('');
+    return { type: 'LOGOUT' };
+}
 
 function authenticating(): Action {
     return { type: 'AUTHENTICATING' };
@@ -30,6 +37,7 @@ export function login(username: string, password: string): ThunkAction<Action> {
         const state = getState();
         dispatch(authenticating());
         return authenticate(username, password).then((result: { token: string }) => {
+            storeAuthToken(result.token);
             const action = dispatch(authenticated(result.token));
             if (state.location.referrer) {
                 dispatch(replace(state.location.referrer));

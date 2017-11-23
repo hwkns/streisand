@@ -2,26 +2,18 @@ import * as assign from 'object-assign';
 
 import IAuthInfo from '../models/IAuthInfo';
 import Action from '../actions/AuthAction';
+import { getAuthToken } from '../utilities/storage';
 
-let authToken: string;
-if (typeof sessionStorage !== 'undefined') {
-    authToken = sessionStorage['jumpcut.token'] || undefined;
-}
-
+const authToken = getAuthToken();
 const defaultValue: IAuthInfo = {
     isAuthenticated: !!authToken,
     isAuthenticating: false,
     token: authToken
 };
 
-function storeToken(token: string) {
-    if (typeof sessionStorage !== 'undefined') {
-        sessionStorage['jumpcut.token'] = token;
-    }
-}
-
 function auth(state: IAuthInfo = defaultValue, action: Action): IAuthInfo {
     switch (action.type) {
+        case 'LOGOUT':
         case 'AUTHENTICATION_FAILED':
             return {
                 isAuthenticated: false,
@@ -31,7 +23,6 @@ function auth(state: IAuthInfo = defaultValue, action: Action): IAuthInfo {
         case 'AUTHENTICATING':
             return assign({}, state, { isAuthenticating: true });
         case 'AUTHENTICATED':
-            storeToken(action.token);
             return {
                 isAuthenticated: true,
                 isAuthenticating: false,

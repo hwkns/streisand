@@ -2,9 +2,11 @@ import * as React from 'react';
 import * as redux from 'redux';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { replace } from 'react-router-redux';
+import { Navbar, Nav, NavDropdown, MenuItem } from 'react-bootstrap';
 
 import Store from '../store';
+import { logout } from '../actions/AuthAction';
 import { clearError } from '../actions/ErrorAction';
 import Banner, { BannerType } from '../components/Banner';
 
@@ -18,17 +20,20 @@ type ConnectedState = {
 
 type ConnectedDispatch = {
     clearError: () => void;
+    logout: () => void;
 };
 
 type CombinedProps = Props & ConnectedState & ConnectedDispatch;
 class AppComponent extends React.Component<CombinedProps> {
     public render() {
-        const links = !this.props.isAuthenticated ? undefined : (
-            <Nav>
-                <li role="presentation"><Link role="button" to="/films">Films</Link></li>
-                <li role="presentation"><Link role="button" to="/torrents">Torrents</Link></li>
-            </Nav>
-        );
+        let logout;
+        let links;
+
+        if (this.props.isAuthenticated) {
+            logout = this._getLogout();
+            links = this._getLinks();
+        }
+
         return (
             <div style={{'paddingTop': '80px'}}>
                 <Navbar fixedTop={true}>
@@ -44,6 +49,7 @@ class AppComponent extends React.Component<CombinedProps> {
                             <li role="presentation"><Link role="button" to="/about">About</Link></li>
                             <NavDropdown title="Settings" id="basic-nav-dropdown">
                                 <li role="presentation"><Link role="menuitem" to="/themes">Themes</Link></li>
+                                {logout}
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
@@ -53,6 +59,22 @@ class AppComponent extends React.Component<CombinedProps> {
                     {this.props.children}
                 </div>
             </div>
+        );
+    }
+
+    private _getLogout() {
+        const onLogout = () => {
+            this.props.logout();
+        };
+        return (<MenuItem onClick={onLogout}>Logout</MenuItem>);
+    }
+
+    private _getLinks() {
+        return (
+            <Nav>
+                <li role="presentation"><Link role="button" to="/films">Films</Link></li>
+                <li role="presentation"><Link role="button" to="/torrents">Torrents</Link></li>
+            </Nav>
         );
     }
 
@@ -68,14 +90,18 @@ class AppComponent extends React.Component<CombinedProps> {
     }
 }
 
-const mapStateToProps = (state: Store.All, props: Props): ConnectedState => ({
+const mapStateToProps = (state: Store.All): ConnectedState => ({
     errorMessage: state.errors.unkownError,
     authError: state.errors.authError,
     isAuthenticated: state.auth.isAuthenticated
 });
 
 const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({
-    clearError: () => dispatch(clearError())
+    clearError: () => dispatch(clearError()),
+    logout: () => {
+        dispatch(logout());
+        dispatch(replace('/login'));
+    }
 });
 
 const App: React.ComponentClass<Props> =
