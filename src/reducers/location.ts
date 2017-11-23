@@ -22,7 +22,7 @@ const defaultValue: ILocationInfo = {
 function _location(state: ILocationInfo = defaultValue, action: IRouterAction): ILocationInfo {
     const payload = action.payload;
     if (payload) {
-        if (state.referrer !== defaultValue.referrer && action.payload.action === 'POP') {
+        if (action.payload.action === 'POP') {
             return {
                 referred: false,
                 previous: {
@@ -32,7 +32,7 @@ function _location(state: ILocationInfo = defaultValue, action: IRouterAction): 
                     search: payload.search
                 }
             };
-        } else if (action.payload.action === 'REPLACE' && payload.pathname === '/login') {
+        } else if (state.previous && action.payload.action === 'REPLACE' && payload.pathname === '/login') {
             return {
                 referred: false,
                 referrer: state.previous
