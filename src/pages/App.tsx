@@ -1,59 +1,35 @@
 import * as React from 'react';
 import * as redux from 'redux';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { replace } from 'react-router-redux';
-import { Navbar, Nav, NavDropdown, MenuItem } from 'react-bootstrap';
 
 import Store from '../store';
-import { logout } from '../actions/AuthAction';
+import SiteNav from '../components/SiteNav';
+import { ScreenSize } from '../models/IDeviceInfo';
 import { clearError } from '../actions/ErrorAction';
+import { watchScreenSize } from '../utilities/device';
 import Banner, { BannerType } from '../components/Banner';
+import { updateScreenSize } from '../actions/DeviceAction';
 
 export type Props = {};
 
 type ConnectedState = {
-    isAuthenticated: boolean;
     authError: string;
     errorMessage: string;
 };
 
 type ConnectedDispatch = {
     clearError: () => void;
-    logout: () => void;
+    updateScreenSize: (screenSize: ScreenSize) => void;
 };
 
 type CombinedProps = Props & ConnectedState & ConnectedDispatch;
 class AppComponent extends React.Component<CombinedProps> {
+    private _screenSizeWatcher: () => void;
+
     public render() {
-        let logout;
-        let links;
-
-        if (this.props.isAuthenticated) {
-            logout = this._getLogout();
-            links = this._getLinks();
-        }
-
         return (
             <div style={{'paddingTop': '80px'}}>
-                <Navbar fixedTop={true}>
-                    <Navbar.Header>
-                        <Navbar.Brand>
-                            <Link to="/">JumpCut</Link>
-                        </Navbar.Brand>
-                        <Navbar.Toggle />
-                    </Navbar.Header>
-                    <Navbar.Collapse>
-                        {links}
-                        <Nav pullRight>
-                            <li role="presentation"><Link role="button" to="/about">About</Link></li>
-                            <NavDropdown title="Settings" id="basic-nav-dropdown">
-                                <li role="presentation"><Link role="menuitem" to="/themes">Themes</Link></li>
-                                {logout}
-                            </NavDropdown>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
+                <SiteNav />
                 <div className="container">
                     {this._getErrorBanner()}
                     {this.props.children}
@@ -62,20 +38,18 @@ class AppComponent extends React.Component<CombinedProps> {
         );
     }
 
-    private _getLogout() {
-        const onLogout = () => {
-            this.props.logout();
-        };
-        return (<MenuItem onClick={onLogout}>Logout</MenuItem>);
+    public componentWillUnmount() {
+        if (this._screenSizeWatcher) {
+            window.removeEventListener('resize', this._screenSizeWatcher);
+            this._screenSizeWatcher = undefined;
+        }
     }
 
-    private _getLinks() {
-        return (
-            <Nav>
-                <li role="presentation"><Link role="button" to="/films">Films</Link></li>
-                <li role="presentation"><Link role="button" to="/torrents">Torrents</Link></li>
-            </Nav>
-        );
+    public componentDidMount() {
+        this._screenSizeWatcher = watchScreenSize((screenSize: ScreenSize) => {
+            this.props.updateScreenSize(screenSize);
+        });
+        window.addEventListener('resize', this._screenSizeWatcher);
     }
 
     private _getErrorBanner() {
@@ -92,16 +66,12 @@ class AppComponent extends React.Component<CombinedProps> {
 
 const mapStateToProps = (state: Store.All): ConnectedState => ({
     errorMessage: state.errors.unkownError,
-    authError: state.errors.authError,
-    isAuthenticated: state.auth.isAuthenticated
+    authError: state.errors.authError
 });
 
 const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({
     clearError: () => dispatch(clearError()),
-    logout: () => {
-        dispatch(logout());
-        dispatch(replace('/login'));
-    }
+    updateScreenSize: (screenSize: ScreenSize) => dispatch(updateScreenSize(screenSize))
 });
 
 const App: React.ComponentClass<Props> =

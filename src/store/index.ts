@@ -2,6 +2,7 @@ import { RouterState } from 'react-router-redux';
 
 import IFilm from '../models/IFilm';
 import IAuthInfo from '../models/IAuthInfo';
+import IDeviceInfo from '../models/IDeviceInfo';
 import ILocationInfo from '../models/ILocationInfo';
 import ITorrentItemSet from '../models/ITorrentItemSet';
 import IPagedItemSet from '../models/base/IPagedItemSet';
@@ -22,6 +23,7 @@ namespace Store {
         auth: IAuthInfo;
         films: Films;
         torrents: Torrents;
+        deviceInfo: IDeviceInfo;
     };
 }
 

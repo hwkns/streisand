@@ -8,6 +8,7 @@ import films from './films';
 import errors from './errors';
 import location from './location';
 import torrents from './torrents';
+import deviceInfo from './deviceInfo';
 
 export const reducers = combineReducers<Store.All>({
     routing,
@@ -15,5 +16,6 @@ export const reducers = combineReducers<Store.All>({
     errors,
     location,
     films,
-    torrents
+    torrents,
+    deviceInfo
 });
