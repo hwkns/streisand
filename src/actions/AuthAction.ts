@@ -41,6 +41,8 @@ export function login(username: string, password: string): ThunkAction<Action> {
             const action = dispatch(authenticated(result.token));
             if (state.location.referrer) {
                 dispatch(replace(state.location.referrer));
+            } else {
+                dispatch(replace('/'));
             }
             return action;
         }, (error: IUnkownError) => {
