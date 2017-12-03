@@ -11,11 +11,11 @@ import LoginPage from './pages/LoginPage';
 
 import HomePage from './pages/HomePage';
 
-import WikiPage from './pages/WikiPage';
-import WikisPage from './pages/WikisPage';
+import WikiPage from './pages/wikis/WikiPage';
+import WikisPage from './pages/wikis/WikisPage';
 
-import FilmPage from './pages/FilmPage';
-import FilmsPage from './pages/FilmsPage';
+import FilmPage from './pages/films/FilmPage';
+import FilmsPage from './pages/films/FilmsPage';
 import TorrentsPage from './pages/TorrentsPage';
 
 export function createRoutes(store: ReduxStore<Store.All>) {

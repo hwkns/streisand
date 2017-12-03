@@ -1,12 +1,12 @@
-import Store from '../store';
-import globals from '../utilities/globals';
-import Requestor from '../utilities/Requestor';
-import { ThunkAction, IDispatch } from './ActionHelper';
+import Store from '../../store';
+import globals from '../../utilities/globals';
+import Requestor from '../../utilities/Requestor';
+import { ThunkAction, IDispatch } from '../ActionHelper';
 
-import { IUnkownError } from '../models/base/IError';
-import ErrorAction, { handleError } from './ErrorAction';
+import { IUnkownError } from '../../models/base/IError';
+import ErrorAction, { handleError } from '../ErrorAction';
 
-import IFilm from '../models/IFilm';
+import IFilm from '../../models/IFilm';
 
 type FilmAction =
     { type: 'FETCHING_FILM', id: number } |

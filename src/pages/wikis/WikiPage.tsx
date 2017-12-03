@@ -2,13 +2,13 @@ import * as React from 'react';
 import * as redux from 'redux';
 import { connect } from 'react-redux';
 
-import Store from '../store';
-import IWiki from '../models/IWiki';
-import Empty from '../components/Empty';
-import WikiView from '../components/wikis/WikiView';
-import { numericIdentifier } from '../utilities/shim';
-import { getWiki } from '../actions/wikis/WikiAction';
-import ILoadingItem from '../models/base/ILoadingItem';
+import Store from '../../store';
+import IWiki from '../../models/IWiki';
+import Empty from '../../components/Empty';
+import WikiView from '../../components/wikis/WikiView';
+import { numericIdentifier } from '../../utilities/shim';
+import { getWiki } from '../../actions/wikis/WikiAction';
+import ILoadingItem from '../../models/base/ILoadingItem';
 
 export type Props = {
     params: {

@@ -2,14 +2,14 @@ import * as React from 'react';
 import * as redux from 'redux';
 import { connect } from 'react-redux';
 
-import Store from '../store';
-import IFilm from '../models/IFilm';
-import Empty from '../components/Empty';
-import { getFilm } from '../actions/FilmAction';
-import FilmView from '../components/films/FilmView';
-import { numericIdentifier } from '../utilities/shim';
-import ILoadingItem from '../models/base/ILoadingItem';
-import { getTorrents } from '../actions/torrents/FilmTorrentsAction';
+import Store from '../../store';
+import IFilm from '../../models/IFilm';
+import Empty from '../../components/Empty';
+import FilmView from '../../components/films/FilmView';
+import { numericIdentifier } from '../../utilities/shim';
+import { getFilm } from '../../actions/films/FilmAction';
+import ILoadingItem from '../../models/base/ILoadingItem';
+import { getTorrents } from '../../actions/torrents/FilmTorrentsAction';
 
 export type Props = {
     params: {
