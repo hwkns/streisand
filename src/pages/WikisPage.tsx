@@ -3,8 +3,8 @@ import * as redux from 'redux';
 import { connect } from 'react-redux';
 
 import Store from '../store';
-import { getWikis } from '../actions/WikiAction';
 import WikisView from '../components/wikis/WikisView';
+import { getWikis } from '../actions/wikis/WikisAction';
 
 export type Props = {
     params: {

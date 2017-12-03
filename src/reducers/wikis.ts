@@ -1,8 +1,8 @@
 import * as objectAssign from 'object-assign';
 
 import Store from '../store';
-import Action from '../actions/WikiAction';
 import IWiki from '../models/IWiki';
+import Action from '../actions/wikis';
 import { combineReducers } from './helpers';
 import { IPage } from '../models/base/IPagedItemSet';
 
@@ -10,6 +10,8 @@ let counter = 1;
 type ItemMap = { [id: number]: IWiki };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
+        case 'RECEIVED_WIKI':
+            return objectAssign({}, state, { [action.wiki.id]: action.wiki });
         case 'RECEIVED_WIKIS':
             let map: ItemMap = {};
             for (const item of action.wikis) {

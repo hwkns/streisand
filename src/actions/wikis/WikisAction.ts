@@ -1,12 +1,12 @@
-import Store from '../store';
-import globals from '../utilities/globals';
-import Requestor from '../utilities/Requestor';
-import { ThunkAction, IDispatch } from './ActionHelper';
+import Store from '../../store';
+import globals from '../../utilities/globals';
+import Requestor from '../../utilities/Requestor';
+import { ThunkAction, IDispatch } from '../ActionHelper';
 
-import IWiki from '../models/IWiki';
-import { IUnkownError } from '../models/base/IError';
-import ErrorAction, { handleError } from './ErrorAction';
-import IPagedResponse from '../models/base/IPagedResponse';
+import IWiki from '../../models/IWiki';
+import { IUnkownError } from '../../models/base/IError';
+import ErrorAction, { handleError } from '../ErrorAction';
+import IPagedResponse from '../../models/base/IPagedResponse';
 
 type WikiAction =
     { type: 'FETCHING_WIKIS', page: number } |

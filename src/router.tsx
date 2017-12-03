@@ -10,9 +10,12 @@ import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 
 import HomePage from './pages/HomePage';
+
+import WikiPage from './pages/WikiPage';
+import WikisPage from './pages/WikisPage';
+
 import FilmPage from './pages/FilmPage';
 import FilmsPage from './pages/FilmsPage';
-import WikisPage from './pages/WikisPage';
 import TorrentsPage from './pages/TorrentsPage';
 
 export function createRoutes(store: ReduxStore<Store.All>) {
@@ -49,6 +52,8 @@ export function createRoutes(store: ReduxStore<Store.All>) {
 
                     <Route path="/wikis/:page" component={WikisPage} />
                     <Redirect from="/wikis" to="/wikis/1" />
+                    <Route path="/wiki/:wikiId" component={WikiPage} />
+                    <Redirect from="/wiki" to="/wikis/1" />
                 </Route>
                 <Redirect from="*" to="/home" />
             </Route>
