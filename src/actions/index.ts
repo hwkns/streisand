@@ -1,5 +1,6 @@
 import AuthAction from './AuthAction';
 import FilmAction from './FilmAction';
+import WikiAction from './WikiAction';
 import TorrentAction from './torrents';
 import ErrorAction from './ErrorAction';
 import FilmsAction from './FilmsAction';
@@ -10,5 +11,6 @@ type Action = ErrorAction
     | FilmsAction
     | FilmAction
     | TorrentAction
-    | DeviceAction;
+    | DeviceAction
+    | WikiAction;
 export default Action;

@@ -1,6 +1,7 @@
 import { RouterState } from 'react-router-redux';
 
 import IFilm from '../models/IFilm';
+import IWiki from '../models/IWiki';
 import IAuthInfo from '../models/IAuthInfo';
 import IDeviceInfo from '../models/IDeviceInfo';
 import ILocationInfo from '../models/ILocationInfo';
@@ -8,8 +9,9 @@ import ITorrentItemSet from '../models/ITorrentItemSet';
 import IPagedItemSet from '../models/base/IPagedItemSet';
 
 namespace Store {
-    export type Films = IPagedItemSet<IFilm>;
     export type Torrents = ITorrentItemSet;
+    export type Films = IPagedItemSet<IFilm>;
+    export type Wikis = IPagedItemSet<IWiki>;
 
     export type Errors = {
         authError: string;
@@ -24,6 +26,7 @@ namespace Store {
         films: Films;
         torrents: Torrents;
         deviceInfo: IDeviceInfo;
+        wikis: Wikis;
     };
 }
 

@@ -5,6 +5,7 @@ import { combineReducers } from './helpers';
 
 import auth from './auth';
 import films from './films';
+import wikis from './wikis';
 import errors from './errors';
 import location from './location';
 import torrents from './torrents';
@@ -17,5 +18,6 @@ export const reducers = combineReducers<Store.All>({
     location,
     films,
     torrents,
-    deviceInfo
+    deviceInfo,
+    wikis
 });
