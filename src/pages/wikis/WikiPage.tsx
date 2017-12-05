@@ -29,16 +29,14 @@ type ConnectedDispatch = {
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
 class FilmPageComponent extends React.Component<CombinedProps, void> {
     public componentWillMount() {
-        if (!this.props.loading) {
-            // TODO: Uncomment when wiki responses contain their identifiers
-            // this.props.getWiki(this.props.wikiId);
+        if (!this.props.loading && !this.props.wiki) {
+            this.props.getWiki(this.props.wikiId);
         }
     }
 
     public componentWillReceiveProps(props: CombinedProps) {
-        if (!props.loading && props.params.wikiId !== this.props.params.wikiId) {
-            // TODO: Uncomment when wiki responses contain their identifiers
-            // this.props.getWiki(props.wikiId);
+        if (!props.loading && !props.wiki) {
+            this.props.getWiki(props.wikiId);
         }
     }
 

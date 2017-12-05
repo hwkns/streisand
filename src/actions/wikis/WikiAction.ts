@@ -45,7 +45,7 @@ export function getWiki(id: number): ThunkAction<Action> {
 
 function fetch(token: string, id: number): Promise<IWiki> {
     return Requestor.makeRequest({
-        url: `${globals.apiUrl}/wikis/${id}/`,
+        url: `${globals.apiUrl}/wiki/${id}/`,
         headers: {
             'Authorization': 'token ' + token
         },

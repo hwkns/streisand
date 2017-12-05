@@ -6,7 +6,6 @@ import Action from '../actions/wikis';
 import { combineReducers } from './helpers';
 import { IPage } from '../models/base/IPagedItemSet';
 
-let counter = 1;
 type ItemMap = { [id: number]: IWiki };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
@@ -15,10 +14,6 @@ function byId(state: ItemMap = {}, action: Action): ItemMap {
         case 'RECEIVED_WIKIS':
             let map: ItemMap = {};
             for (const item of action.wikis) {
-                if (!item.id) {
-                    // TODO: remove this once the wiki api includes the id on the wiki response objects
-                    item.id = counter++;
-                }
                 map[item.id] = item;
             }
             return objectAssign({}, state, map);
