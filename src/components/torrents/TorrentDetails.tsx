@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { Parser } from 'bbcode-to-react';
 import { Tabs, Tab } from 'react-bootstrap';
 
 import IFilm from '../../models/IFilm';
+import TextView from '../bbcode/TextView';
 import ITorrent from '../../models/ITorrent';
-
-const parser = new Parser();
 
 export type Props = {
     film: IFilm;
@@ -39,7 +37,7 @@ function InfoRow(props: IRowProps) {
 function GeneralContent(props: { torrent: ITorrent }) {
     return (
         <div style={{ 'margin-top': '8px' }}>
-            <div>{parser.toReact(props.torrent.description)}</div>
+            <TextView content={props.torrent.description} />
         </div>
     );
 }

@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { Parser } from 'bbcode-to-react';
 
 import IWiki from '../../models/IWiki';
-
-const parser = new Parser();
+import TextView from '../bbcode/TextView';
 
 export type Props = {
     wiki: IWiki;
@@ -15,7 +13,7 @@ class WikiView extends React.Component<Props> {
         return (
             <div>
                 <h1>{wiki.title}</h1>
-                <div>{parser.toReact(wiki.body)}</div>
+                <TextView content={wiki.body} />
             </div>
         );
     }

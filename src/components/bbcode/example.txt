@@ -1,0 +1,385 @@
+Welcome to the TehConnection BBCode page! As of [url=https://tehconnection.eu/forums.php?action=viewthread&threadid=2821]update #3[/url] we have a powerful BBCode parser implemented by our awesome coders. This page documents all the available text effects you are able to include in your forum posts, torrent comments, reviews, PMs, montages and anywhere else you can write on site.
+↵
+↵
+↵
+↵Firefox users may find the [url=https://addons.mozilla.org/en-US/firefox/addon/bbcodextra/]BBCodeXtra[/url] add-on useful.
+↵
+↵
+↵
+↵[size=4][b]Text Styles[/b] (b, i, u, s, sup, sub, spoiler, acronym, size, color, font)[/size]
+↵
+↵
+↵
+↵[color=red][[i][/i]b]...[[i][/i]/b][/color]
+↵
+↵The [[i][/i]b] tag formats its contents using [b]bold text[/b].
+↵
+↵
+↵
+↵[color=red][[i][/i]i]...[[i][/i]/i][/color]
+↵
+↵The [[i][/i]i] tag formats its contents using [i]italic text[/i].
+↵
+↵
+↵
+↵[color=red][[i][/i]u]...[[i][/i]/u][/color]
+↵
+↵The [[i][/i]u] tag adds an [u]underline[/u] to its contents.
+↵
+↵
+↵
+↵[color=red][[i][/i]s]...[[i][/i]/s][/color]
+↵
+↵The [[i][/i]s] tag adds a [s]strikeout[/s] to its contents.
+↵
+↵
+↵
+↵[color=red][[i][/i]sup]...[[i][/i]/sup][/color]
+↵
+↵The [[i][/i]sup] tag formats its contents as [sup]superscript[/sup].
+↵
+↵
+↵
+↵[color=red][[i][/i]sub]...[[i][/i]/sub][/color]
+↵
+↵The [[i][/i]sub] tag formats its contents as [sub]subscript[/sub].
+↵
+↵
+↵
+↵[color=red][[i][/i]spoiler]...[[i][/i]/spoiler][/color]
+↵
+↵The [[i][/i]spoiler] tag formats its contents as a [spoiler]spoiler[/spoiler]
+↵
+↵
+↵
+↵[color=red][[i][/i]size=n]...[[i][/i]/size][/color]
+↵
+↵The [[i][/i]size] tag lets you control the size of your text. The size given must be a number from 0 to 7:
+↵
+↵
+↵
+↵[size=0]This text is size 0 (tiny).[/size]
+↵
+↵[size=1]This text is size 1 (very small).[/size]
+↵
+↵[size=2]This text is size 2 (small).[/size]
+↵
+↵[size=3]This text is size 3 (normal).[/size]
+↵
+↵[size=4]This text is size 4 (large).[/size]
+↵
+↵[size=5]This text is size 5 (very large).[/size]
+↵
+↵[size=6]This text is size 6 (huge).[/size]
+↵
+↵[size=7]This text is size 7 (ridiculous).[/size]
+↵
+↵
+↵
+↵[color=red][[i][/i]color=n]...[[i][/i]/color][/color]
+↵
+↵The [[i][/i]color] tag allows you to control the text color. You can specify the color as either a three-digit hex code, like #069, or as a six-digit hex code, like #E34715, or as a standard HTML color name, like red. For example, [[i][/i]color=red]Red[[i][/i]/color] will appear as [color=red]Red[/color], and [[i][/i]color=#069]True blue![[i][/i]/color] will appear as [color=#069]True blue![/color]
+↵
+↵
+↵
+↵[color=red][[i][/i]font=n]...[[i][/i]/font][/color]
+↵
+↵The [[i][/i]font] tag allows you to alter the text's typeface. You may use specific font names, like Times New Roman, or generic font names, like cursive. Note that if you want to use a name that contains spaces, like Times New Roman, you should surround it in quotation marks, like this: [[i][/i]font="Times New Roman"]...[[i][/i]/font].
+↵
+↵
+↵
+↵Note that the [[i][/i]font] tag allows you to separate font names with commas, just like CSS does, so that if a given font is not available, your choice of fallback fonts can be used instead: [[i][/i]font=Arial,Helv,Helvetica,sans]...[[i][/i]/font]
+↵
+↵
+↵
+↵The [[i][/i]font] tag also recognizes the five standard CSS "generic" font names:
+↵
+↵[list=circle]
+↵
+↵    [*] serif - A serifed font, like Times or Roman
+↵
+↵    [*] sans-serif - A sans-serif font, like Helvetica or Arial (also sansserif, sans serif, and just sans)
+↵
+↵    [*] cursive - A cursive font, like Zapf-Chancery
+↵
+↵    [*] fantasy - A "fantasy" font, like Western
+↵
+↵    [*] monospace - A fixed-width font, like Courier (also mono) 
+↵
+↵[/list]
+↵
+↵
+↵
+↵
+↵
+↵[size=4][b]Links[/b] (url)[/size]
+↵
+↵
+↵
+↵[color=red][[i][/i]url=n]...[[i][/i]/url][/color]
+↵
+↵The [[i][/i]url] tag allows you to insert links to external documents. Note that if you paste a URL anywhere on the site it will automatically convert it into a clickable link.
+↵
+↵
+↵
+↵[[i][/i]url=http://www.google.com/]Google![[i][/i]/url]   -->   [url=http://www.google.com/]Google![/url]
+↵
+↵
+↵
+↵
+↵
+↵[color=red][[i][/i]img]...[[i][/i]/img][/color]
+↵
+↵This tag inserts an image into your document. You should provide a URL to the image between the start and end [[i][/i]img] tags. The URL must end with .jpg, .png or .gif; for example:
+↵
+↵
+↵
+↵[[i][/i]img]http://static.tehconnection.eu/styles/hadronic/images/logo_small.png[[i][/i]/img] would give:
+↵
+↵
+↵
+↵[img]http://static.tehconnection.eu/styles/hadronic/images/logo_small.png[/img]
+↵
+↵
+↵
+↵
+↵
+↵[size=4][b]Alignment[/b] (left, right, center, indent)[/size]
+↵
+↵
+↵
+↵[color=red][[i][/i]center]...[[i][/i]/center][/color]
+↵
+↵The [[i][/i]center] tag causes its contents to be broken into a separate block and aligned horizontally to the center of the page:
+↵
+↵[center]Centered text![/center]
+↵
+↵
+↵
+↵[color=red][[i][/i]left]...[[i][/i]/left][/color]
+↵
+↵The [[i][/i]left] tag causes its contents to be broken into a separate block and aligned horizontally to the left of the page:
+↵
+↵
+↵
+↵[left]Left-aligned text![/left]
+↵
+↵
+↵
+↵[color=red][[i][/i]right]...[[i][/i]/right][/color]
+↵
+↵The [[i][/i]right] tag causes its contents to be broken into a separate block and aligned horizontally to the right of the page:
+↵
+↵
+↵
+↵[right]Right-aligned text![/right]
+↵
+↵
+↵
+↵[color=red][[i][/i]indent]...[[i][/i]/indent][/color]
+↵
+↵The [[i][/i]indent] tag causes its contents to be broken into a separate block and be to indented, to have an approximately half-inch margin on the left side:
+↵
+↵
+↵
+↵[indent]Indented text![/indent]
+↵
+↵
+↵
+↵
+↵
+↵[size=4][b]Tables[/b] (table, tr, td)[/size]
+↵
+↵
+↵
+↵[color=red][[i][/i]table]...[[i][/i]tr]...[[i][/i]td]...[[i][/i]/td]...[[i][/i]/tr]...[[i][/i]/table][/color]
+↵
+↵Tables will adjust their width based upon the text entered.
+↵
+↵
+↵
+↵Code:
+↵
+↵[[i][/i]table]
+↵
+↵[[i][/i]tr]
+↵
+↵[[i][/i]td]This text appears in the first cell on the first line.[[i][/i]/td]
+↵
+↵[[i][/i]td]This text appears in the second cell on the first line.[[i][/i]/td]
+↵
+↵[[i][/i]/tr]
+↵
+↵[[i][/i]tr]
+↵
+↵[[i][/i]td]This text appears in the first cell on the second line.[[i][/i]/td]
+↵
+↵[[i][/i]/tr]
+↵
+↵[[i][/i]/table]
+↵
+↵
+↵
+↵Output:
+↵
+↵[table]
+↵
+↵[tr]
+↵
+↵[td]This text appears in the first cell on the first line.[/td]
+↵
+↵[td]This text appears in the second cell on the first line.[/td]
+↵
+↵[/tr]
+↵
+↵[tr]
+↵
+↵[td]This text appears in the first cell on the second line.[/td]
+↵
+↵[/tr]
+↵
+↵[/table]
+↵
+↵
+↵
+↵
+↵
+↵[size=4][b]Containers[/b] (code, quote, pre)[/size]
+↵
+↵
+↵
+↵[color=red][[i][/i]code]...[[i][/i]/code][/color]
+↵
+↵The [[i][/i]code] tag is designed for representing content from various programming languages without requiring use of special formatting to display it. Every character between [[i][/i]code] and [[i][/i]/code] will be copied directly to the output, with whitespace including newlines and tabs, retained and preformatted. The only exception to this is that the first newline after the [[i][/i]code] tag will be removed, and the last newline before [[i][/i]/code] will be removed, just to keep the output from having wasted blank lines in it.
+↵
+↵
+↵
+↵[code]
+↵
+↵def foo():
+↵
+↵    print("Here's some code!")
+↵
+↵[/code]
+↵
+↵
+↵
+↵
+↵
+↵[color=red][[i][/i]quote]...[[i][/i]/quote]
+↵
+↵[[i][/i]quote=John]...[[i][/i]/quote][/color]
+↵
+↵The quote tag is fairly self explanatory but it has been flashed up to give us the ability to add links. Clicking the 'quote' button on an forum post will quote a user like this [[i][/i]quote=sitenick]contents of quoted post[[i][/i]/quote] which gives us:
+↵
+↵
+↵
+↵[quote=sitenick]contents of quoted post[/quote]
+↵
+↵
+↵
+↵[color=red][[i][/i]pre]...[[i][/i]/pre][/color]
+↵
+↵The [[i][/i]pre] tag is designed to display preformatted text on a web page. This tag will display text in a fixed width font and preserve any spaces and line breaks which otherwise might be stripped out by our forums.
+↵
+↵
+↵
+↵[pre]Hello,  I  am  a  sentence  constructed  entirely  from  preformatted  text.
+↵
+↵   Look,
+↵
+↵      I
+↵
+↵         see
+↵
+↵            a
+↵
+↵               boat![/pre]
+↵
+↵
+↵
+↵
+↵
+↵[size=4][b]Lists[/b] (list)[/size]
+↵
+↵
+↵
+↵[color=red][[i][/i]list]...[[i][/i]*]...[[i][/i]*]...[[i][/i]/list]
+↵
+↵[[i][/i]list=type]...[[i][/i]*]...[[i][/i]*]...[[i][/i]/list][/color]
+↵
+↵The [[i][/i]list] tag is designed for creating lists of things. In its default form, where no type is given, it creates a simple bullet-point list, like this:
+↵
+↵
+↵
+↵[table]
+↵
+↵[tr]
+↵
+↵[td]
+↵
+↵[[i][/i]list]
+↵
+↵[[i][/i]*]John
+↵
+↵[[i][/i]*]Mary
+↵
+↵[[i][/i]*]Bill 
+↵
+↵[[i][/i]*]Sue 
+↵
+↵[[i][/i]/list]
+↵
+↵[/td]
+↵
+↵[td]
+↵
+↵[list]
+↵
+↵[*]John
+↵
+↵[*]Mary
+↵
+↵[*]Bill 
+↵
+↵[*]Sue 
+↵
+↵[/list]
+↵
+↵[/td]
+↵
+↵[/tr]
+↵
+↵[/table]
+↵
+↵
+↵
+↵Notice that while you do need to have an ending [[i][/i]/list] tag, you don't need to have an ending [[i][/i]/*] tag for each [[i][/i]*] tag; this makes creating lists somewhat simpler.
+↵
+↵
+↵
+↵You can also create numbered lists by specifying what type of list you want; for example, if you want a numbered list, use type "1", or for an alphabetic list, use type "A", or for Roman numerals, use type "i". All possible list types are listed below:
+↵
+↵
+↵
+↵[list]
+↵
+↵[*] For an ordered list using Arabic numerals (1, 2, 3...) use [[i][/i]list=1]...[[i][/i]/list]
+↵
+↵[*] For an ordered list using Arabic numerals with a leading zero (01, 02, 03...) use [[i][/i]list=01]...[[i][/i]/list]
+↵
+↵[*] For an ordered list using capital letters (A, B, C...) use [[i][/i]list=A]...[[i][/i]/list]
+↵
+↵[*] For an ordered list using lower case letters (a, b, c...) use [[i][/i]list=a]...[[i][/i]/list]
+↵
+↵[*] For an ordered list using capital Roman numerals (I, II, III...) use [[i][/i]list=I]...[[i][/i]/list]
+↵
+↵[*] For an ordered list using lower case Roman numerals (i, ii, iii...) use [[i][/i]list=i]...[[i][/i]/list]
+↵
+↵[/list]
+↵
+↵
+↵
+↵
+↵
+↵This concludes your lesson with BBCode and TehConnection; go forth and make your text sexy!
