@@ -16,19 +16,19 @@ export function storeAuthToken(token: string) {
 }
 
 function getValue(key: string) {
-    if (typeof sessionStorage !== 'undefined') {
-        return sessionStorage[key];
+    if (typeof localStorage !== 'undefined') {
+        return localStorage[key];
     }
 }
 
 function setValue(key: string, value: string) {
-    if (typeof sessionStorage !== 'undefined') {
-        sessionStorage[key] = value;
+    if (typeof localStorage !== 'undefined') {
+        localStorage[key] = value;
     }
 }
 
 function clearEntry(key: string) {
-    if (typeof sessionStorage !== 'undefined') {
-        delete sessionStorage[key];
+    if (typeof localStorage !== 'undefined') {
+        delete localStorage[key];
     }
 }

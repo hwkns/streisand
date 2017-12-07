@@ -58,15 +58,15 @@ class Themes extends React.Component<Props, State> {
         let link = document.querySelector('#theme');
         link['href'] = url;
         this.setState({ theme: url });
-        if (typeof sessionStorage !== 'undefined') {
-            sessionStorage['jumpcut.theme.url'] = url;
+        if (typeof localStorage !== 'undefined') {
+            localStorage['jumpcut.theme.url'] = url;
         }
     }
 }
 
 function getTheme(): string {
     var defaultTheme = window['__defaultTheme'];
-    return (typeof sessionStorage !== 'undefined' && sessionStorage['jumpcut.theme.url']) || defaultTheme;
+    return (typeof localStorage !== 'undefined' && localStorage['jumpcut.theme.url']) || defaultTheme;
 }
 
 export default Themes;

@@ -9,7 +9,7 @@
     <!-- https://www.bootstrapcdn.com/bootswatch/ -->
     <script type="text/javascript">
         var defaultTheme = window['__defaultTheme'] = 'https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/darkly/bootstrap.min.css';
-        var url = (typeof sessionStorage !== 'undefined' && sessionStorage['jumpcut.theme.url']) || defaultTheme;
+        var url = (typeof localStorage !== 'undefined' && localStorage['jumpcut.theme.url']) || defaultTheme;
         var link = document.createElement('link');
         link.href = url;
         link.type = 'text/css';
