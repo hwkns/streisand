@@ -27,7 +27,7 @@ type ConnectedDispatch = {
 };
 
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
-class FilmPageComponent extends React.Component<CombinedProps, void> {
+class WikiPageComponent extends React.Component<CombinedProps, void> {
     public componentWillMount() {
         if (!this.props.loading && !this.props.wiki) {
             this.props.getWiki(this.props.wikiId);
@@ -53,6 +53,7 @@ class FilmPageComponent extends React.Component<CombinedProps, void> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
+    console.log('finding wiki');
     const item = state.wikis.byId[ownProps.params.wikiId];
     const loading = (item && (item as ILoadingItem).loading) || false;
     const wiki = (item && typeof (item as IWiki).id !== 'undefined') ? item as IWiki : undefined;
@@ -68,6 +69,6 @@ const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispa
     getWiki: (id: number) => dispatch(getWiki(id))
 });
 
-const FilmPage: React.ComponentClass<Props> =
-    connect(mapStateToProps, mapDispatchToProps)(FilmPageComponent);
-export default FilmPage;
+const WikiPage: React.ComponentClass<Props> =
+    connect(mapStateToProps, mapDispatchToProps)(WikiPageComponent);
+export default WikiPage;

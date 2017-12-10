@@ -1,11 +1,15 @@
 
-interface IWiki {
+// editable fields
+export interface IWikiUpdate {
+    title: string;
+    body: string;
+}
+
+interface IWiki extends IWikiUpdate {
     id: number;
     modifiedAt: string; // Date
     createdBy: number; // user id
     modifiedBy: number; // user id
-    title: string;
-    body: string;
     readAccessMinimumUserClass: number;
     writeAccessMinimumUserClass: number;
 }

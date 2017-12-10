@@ -8,7 +8,7 @@ export interface IRequestOptions {
 
 function parseResponse<T>(request: XMLHttpRequest): T {
     let result: T;
-    if (typeof request.responseText === 'string') {
+    if (request.responseText && typeof request.responseText === 'string') {
         try {
             result = JSON.parse(request.responseText);
         } catch (error) {
@@ -25,7 +25,7 @@ export default class Requestor {
             xmlHttp.onreadystatechange = () => {
                 if (xmlHttp.readyState === 4) {
                     const result = parseResponse<T>(xmlHttp);
-                    if (xmlHttp.status === 200) {
+                    if (xmlHttp.status >= 200 && xmlHttp.status < 300) {
                         resolve(result);
                     } else if (xmlHttp.status >= 400) {
                         reject({

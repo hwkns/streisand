@@ -1,10 +1,10 @@
 import * as objectAssign from 'object-assign';
 
-import Store from '../store';
 import Action from '../actions/torrents';
 import ITorrent from '../models/ITorrent';
 import { combineReducers } from './helpers';
 import { IPage } from '../models/base/IPagedItemSet';
+import ITorrentItemSet from '../models/ITorrentItemSet';
 
 type ItemMap = { [id: number]: ITorrent };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
@@ -72,4 +72,4 @@ function count(state: number = 0, action: Action): number {
     }
 }
 
-export default combineReducers<Store.Torrents>({ byId, byFilmId, count, pages });
+export default combineReducers<ITorrentItemSet>({ byId, byFilmId, count, pages });

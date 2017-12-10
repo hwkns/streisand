@@ -9,7 +9,6 @@ import ITorrentItemSet from '../models/ITorrentItemSet';
 import IPagedItemSet from '../models/base/IPagedItemSet';
 
 namespace Store {
-    export type Torrents = ITorrentItemSet;
     export type Films = IPagedItemSet<IFilm>;
     export type Wikis = IPagedItemSet<IWiki>;
 
@@ -24,7 +23,7 @@ namespace Store {
         location: ILocationInfo;
         auth: IAuthInfo;
         films: Films;
-        torrents: Torrents;
+        torrents: ITorrentItemSet;
         deviceInfo: IDeviceInfo;
         wikis: Wikis;
     };

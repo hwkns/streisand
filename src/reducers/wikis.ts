@@ -9,6 +9,10 @@ import { IPage } from '../models/base/IPagedItemSet';
 type ItemMap = { [id: number]: IWiki };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
+        case 'REMOVED_WIKI':
+            const copy = objectAssign({}, state);
+            delete copy[action.id];
+            return copy;
         case 'RECEIVED_WIKI':
             return objectAssign({}, state, { [action.wiki.id]: action.wiki });
         case 'RECEIVED_WIKIS':
