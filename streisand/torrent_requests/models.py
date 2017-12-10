@@ -110,6 +110,7 @@ class Vote(models.Model):
     torrent_request = models.ForeignKey(
         to='torrent_requests.TorrentRequest',
         related_name='votes',
+        on_delete=models.CASCADE,
     )
     bounty_in_bytes = models.BigIntegerField(default=0)
 
@@ -138,4 +139,8 @@ class Vote(models.Model):
 
 class RequestComment(Comment):
 
-    request = models.ForeignKey('torrent_requests.TorrentRequest', related_name='comments')
+    request = models.ForeignKey(
+        to='torrent_requests.TorrentRequest',
+        related_name='comments',
+        on_delete=models.CASCADE,
+    )

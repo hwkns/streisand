@@ -16,14 +16,16 @@ class TorrentStats(models.Model):
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
 
     profile = models.ForeignKey(
-        'profiles.UserProfile',
+        to='profiles.UserProfile',
         null=False,
         related_name='torrent_stats',
+        on_delete=models.CASCADE,
     )
     torrent = models.ForeignKey(
-        'torrents.Torrent',
+        to='torrents.Torrent',
         null=False,
         related_name='torrent_stats',
+        on_delete=models.CASCADE,
     )
 
     bytes_uploaded = models.BigIntegerField(default=0)

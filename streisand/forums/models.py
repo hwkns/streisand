@@ -30,6 +30,8 @@ class ForumTopic(models.Model):
     group = models.ForeignKey(
         to='forums.ForumGroup',
         related_name='topics',
+        null=False,
+        on_delete=models.PROTECT,
     )
     minimum_user_class = models.ForeignKey(
         to='user_classes.UserClass',
@@ -80,7 +82,8 @@ class ForumThread(models.Model):
     topic = models.ForeignKey(
         to='forums.ForumTopic',
         related_name='threads',
-        null=True,  # TODO: turn this off
+        null=False,
+        on_delete=models.PROTECT,
     )
     subscribed_users = models.ManyToManyField(
         to='profiles.UserProfile',
@@ -113,6 +116,7 @@ class ForumPost(models.Model):
         to='profiles.UserProfile',
         related_name='forum_posts',
         null=True,
+        on_delete=models.PROTECT,
     )
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -120,6 +124,7 @@ class ForumPost(models.Model):
     thread = models.ForeignKey(
         to='forums.ForumThread',
         related_name='posts',
+        on_delete=models.CASCADE,
     )
 
     class Meta:
@@ -142,8 +147,10 @@ class ForumThreadSubscription(models.Model):
     profile = models.ForeignKey(
         to='profiles.UserProfile',
         related_name='forum_thread_subscriptions',
+        on_delete=models.CASCADE,
     )
     thread = models.ForeignKey(
         to='forums.ForumThread',
         related_name='subscriptions',
+        on_delete=models.CASCADE,
     )

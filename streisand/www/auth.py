@@ -57,7 +57,7 @@ class CustomAuthBackend(ModelBackend):
         Returns a set of permission strings the user has from their groups,
         user class, and custom permissions.
         """
-        if not user.is_active or user.is_anonymous() or obj is not None:
+        if not user.is_active or user.is_anonymous or obj is not None:
             return set()
 
         if not hasattr(user, '_perm_cache'):

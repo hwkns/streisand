@@ -27,6 +27,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(
         to='auth.User',
         related_name='profile',
+        on_delete=models.CASCADE,
     )
     user_class = models.ForeignKey(
         to='user_classes.UserClass',
@@ -75,6 +76,7 @@ class UserProfile(models.Model):
                   "announces made by this user's torrent client(s).",
     )
     last_seeded = models.DateTimeField(null=True)
+    average_seeding_size = models.BigIntegerField(default=0)
     watch_queue = models.ForeignKey(
         to='film_lists.FilmList',
         null=True,
@@ -176,6 +178,22 @@ class UserProfile(models.Model):
             self.save()
 
 
+class UserEmailAddress(models.Model):
+    """
+    Used to keep a history of email addresses used by a profile.
+    """
+    profile = models.ForeignKey(
+        to='profiles.UserProfile',
+        null=False,
+        db_index=True,
+        related_name='email_addresses',
+        on_delete=models.CASCADE,
+    )
+    email = models.EmailField()
+    first_used = models.DateTimeField(auto_now_add=True)
+    last_used = models.DateTimeField(auto_now=True)
+
+
 class UserIPAddress(models.Model):
     """
     Used to keep a history of IP addresses used by a profile, including
@@ -186,6 +204,7 @@ class UserIPAddress(models.Model):
         null=False,
         db_index=True,
         related_name='ip_addresses',
+        on_delete=models.CASCADE,
     )
     ip_address = models.GenericIPAddressField(null=False)
     used_with = models.CharField(max_length=16, null=False)
@@ -207,6 +226,7 @@ class UserAnnounceKey(models.Model):
         to='profiles.UserProfile',
         related_name='announce_keys',
         db_index=True,
+        on_delete=models.CASCADE,
     )
     issued_at = models.DateTimeField(auto_now_add=True)
     revoked_at = models.DateTimeField(null=True)
@@ -230,11 +250,13 @@ class UserAnnounce(models.Model):
         null=False,
         db_index=True,
         related_name='logged_announces',
+        on_delete=models.CASCADE,
     )
     swarm = models.ForeignKey(
         to='tracker.Swarm',
         null=False,
         db_index=True,
+        on_delete=models.CASCADE,
     )
     time_stamp = models.DateTimeField(null=False)
     announce_key = models.UUIDField(null=False)
@@ -250,7 +272,10 @@ class UserAnnounce(models.Model):
 
 class WatchedUser(models.Model):
 
-    profile = models.ForeignKey(to='profiles.UserProfile')
+    profile = models.ForeignKey(
+        to='profiles.UserProfile',
+        on_delete=models.CASCADE,
+    )
     notes = models.TextField()
     added_at = models.DateTimeField(auto_now_add=True)
     last_checked = models.DateTimeField(auto_now=True)

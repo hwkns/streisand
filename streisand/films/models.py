@@ -4,7 +4,7 @@ from django.db import models
 from django.urls import reverse
 
 from comments.models import Comment
-from rotten_tomatoes.managers import FilmRottenTomatoesManager
+from rotten_tomatoes.models import FilmRottenTomatoes
 
 
 class Film(models.Model):
@@ -49,13 +49,17 @@ class Film(models.Model):
         if self.rotten_tomatoes:
             self.rotten_tomatoes.refresh_from_api()
         elif self.imdb:
-            self.rotten_tomatoes = FilmRottenTomatoesManager.create_from_imdb_tt_id(self.imdb.tt_id)
+            self.rotten_tomatoes = FilmRottenTomatoes.objects.create_from_imdb_tt_id(self.imdb.tt_id)
             self.save()
 
 
 class FilmComment(Comment):
 
-    film = models.ForeignKey('films.Film', related_name='comments')
+    film = models.ForeignKey(
+        to='films.Film',
+        related_name='comments',
+        on_delete=models.CASCADE,
+    )
 
 
 class Tag(models.Model):

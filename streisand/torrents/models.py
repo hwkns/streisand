@@ -15,7 +15,13 @@ class Torrent(models.Model):
     old_id = models.PositiveIntegerField(null=True, db_index=True)
 
     # Film information
-    film = models.ForeignKey('films.Film', null=False, db_index=True, related_name='torrents')
+    film = models.ForeignKey(
+        to='films.Film',
+        null=False,
+        db_index=True,
+        related_name='torrents',
+        on_delete=models.PROTECT,
+    )
     cut = models.CharField(max_length=128, default='Theatrical')
 
     # Site information
@@ -25,18 +31,21 @@ class Torrent(models.Model):
         null=True,
         blank=False,
         related_name='uploaded_torrents',
+        on_delete=models.PROTECT,
     )
     encoded_by = models.ForeignKey(
         to='profiles.UserProfile',
         null=True,
         blank=True,
         related_name='encodes',
+        on_delete=models.PROTECT,
     )
     moderated_by = models.ForeignKey(
         to='profiles.UserProfile',
         null=True,
         blank=True,
         related_name='moderated_torrents',
+        on_delete=models.PROTECT,
     )
     is_approved = models.NullBooleanField(
         choices=(
@@ -50,6 +59,7 @@ class Torrent(models.Model):
         to='torrents.ReseedRequest',
         null=True,
         related_name='active_on_torrent',
+        on_delete=models.SET_NULL,
     )
     snatch_count = models.IntegerField(default=0)
 
@@ -59,7 +69,11 @@ class Torrent(models.Model):
     is_scene = models.NullBooleanField(default=False)
     description = models.TextField()
     nfo = models.TextField()
-    mediainfo = models.OneToOneField(to='mediainfo.Mediainfo', null=True)
+    mediainfo = models.OneToOneField(
+        to='mediainfo.Mediainfo',
+        null=True,
+        on_delete=models.PROTECT,
+    )
 
     # Format information
     is_3d = models.BooleanField(default=False)
@@ -94,8 +108,17 @@ class Torrent(models.Model):
     )
 
     # BitTorrent information
-    swarm = models.OneToOneField('tracker.Swarm', related_name='torrent', db_index=True)
-    metainfo = models.OneToOneField('torrents.TorrentMetaInfo', related_name='torrent')
+    swarm = models.OneToOneField(
+        to='tracker.Swarm',
+        related_name='torrent',
+        db_index=True,
+        on_delete=models.PROTECT,
+    )
+    metainfo = models.OneToOneField(
+        to='torrents.TorrentMetaInfo',
+        related_name='torrent',
+        on_delete=models.PROTECT,
+    )
     file_list = PickledObjectField(null=False)
     size_in_bytes = models.BigIntegerField(null=False)
 
@@ -176,11 +199,13 @@ class ReseedRequest(models.Model):
     torrent = models.ForeignKey(
         to='torrents.Torrent',
         related_name='reseed_requests',
+        on_delete=models.CASCADE,
     )
     created_by = models.ForeignKey(
         to='profiles.UserProfile',
         related_name='reseed_requests',
         null=True,
+        on_delete=models.CASCADE,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     fulfilled_at = models.DateTimeField(null=True)

@@ -34,7 +34,7 @@ urlpatterns = [
 
     # Admin
     url(r'^grappelli/', include('grappelli.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
 
     # Registration
     url(

@@ -28,8 +28,12 @@ class FilmListItem(models.Model):
         to='film_lists.FilmList',
         related_name='items',
         db_index=True,
+        on_delete=models.CASCADE,
     )
-    film = models.ForeignKey('films.Film')
+    film = models.ForeignKey(
+        to='films.Film',
+        on_delete=models.PROTECT,
+    )
 
     class Meta:
         unique_together = ['film_list', 'film']
