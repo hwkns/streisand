@@ -55,7 +55,13 @@ def handle_deleted_forum_post(**kwargs):
 
     thread.number_of_posts = F('number_of_posts') - 1
     topic.number_of_posts = F('number_of_posts') - 1
-    thread.latest_post = ForumPost.objects.filter(thread=thread).latest()
-    topic.latest_post = ForumPost.objects.filter(thread__topic=topic).latest()
+    try:
+        thread.latest_post = ForumPost.objects.filter(thread=thread).latest()
+    except ForumPost.DoesNotExist:
+        thread.latest_post = None
+    try:
+        topic.latest_post = ForumPost.objects.filter(thread__topic=topic).latest()
+    except ForumPost.DoesNotExist:
+        topic.latest_post = None
     thread.save()
     topic.save()
