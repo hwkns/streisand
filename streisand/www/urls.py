@@ -7,8 +7,9 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import logout_then_login
 
-from invites.views import InviteRegistrationView
+from rest_framework_swagger.views import get_swagger_view
 
+from invites.views import InviteRegistrationView
 from .decorators import https_required
 from .views import RegistrationView, LegacyURLView, template_viewer, home, login
 
@@ -16,6 +17,7 @@ from .views import RegistrationView, LegacyURLView, template_viewer, home, login
 urlpatterns = [
 
     url(r'^api/v1/', include('api.v1.urls')),
+    url(r'^swagger/', get_swagger_view(title='JumpCut API')),
 
     url(
         regex=r'^$',

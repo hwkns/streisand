@@ -9,13 +9,21 @@ from films.views import FilmViewSet
 from profiles.views import UserProfileViewSet
 from torrents.views import TorrentViewSet
 from www.views import UserViewSet, GroupViewSet
+from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadViewSet, ForumPostViewSet
+from wiki.views import WikiArticleViewSet
 
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'groups', GroupViewSet)
-router.register(r'profiles', UserProfileViewSet)
-router.register(r'films', FilmViewSet)
-router.register(r'torrents', TorrentViewSet)
+router.register(r'users', viewset=UserViewSet)
+router.register(r'groups', viewset=GroupViewSet)
+router.register(r'profiles', viewset=UserProfileViewSet)
+router.register(r'films', viewset=FilmViewSet)
+router.register(r'torrents', viewset=TorrentViewSet)
+router.register(r'forum-groups', viewset=ForumGroupViewSet, base_name='forum-group')
+router.register(r'forum-topics', viewset=ForumTopicViewSet, base_name='forum-topic')
+router.register(r'forum-threads', viewset=ForumThreadViewSet, base_name='forum-thread')
+router.register(r'forum-posts', viewset=ForumPostViewSet, base_name='forum-post')
+router.register(r'wiki-articles', viewset=WikiArticleViewSet, base_name='wiki-article')
+
 
 urlpatterns = [
 

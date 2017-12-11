@@ -17,6 +17,7 @@ class UserProfileAdmin(admin.ModelAdmin):
         'old_id',
         'invited_by_link',
         'last_seeded',
+        'seeding_size',
     )
 
     exclude = (

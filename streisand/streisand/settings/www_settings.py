@@ -13,6 +13,7 @@ INSTALLED_APPS += [
     'grappelli',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_swagger',
     'corsheaders',
 
     # Contrib apps
@@ -82,13 +83,28 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PARSER_CLASSES': (
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
     ),
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic',
+        }
+    },
 }
 
 CORS_URL_REGEX = r'^/api/v1/.*$'
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
+# Set Allow All to False, as adding this as True marked it as *,
+# and adding it to Nginx also added it and caused CORS XHTML Errors.
 
+CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?ronzertnert\.xyz$', )
+# Changed allow all to allowing a select few to access the api auth (Any Ronzertnert fqdn)
+# TODO update CORS ORIGIN When we go live.
 
 CORS_ALLOW_METHODS = (
     'DELETE',
@@ -98,6 +114,7 @@ CORS_ALLOW_METHODS = (
     'POST',
     'PUT',
 )
+
 
 
 if DEBUG:

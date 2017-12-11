@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from rest_framework.permissions import IsAdminUser
+from rest_framework.viewsets import ModelViewSet
 from collections import OrderedDict
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -8,7 +10,97 @@ from django.views.generic import View
 from www.utils import paginate
 
 from .forms import ForumPostForm
-from .models import ForumTopic, ForumThread, ForumPost
+from .models import ForumGroup, ForumTopic, ForumThread, ForumPost
+from .serializers import (
+    ForumGroupSerializer,
+    ForumTopicSerializer,
+    ForumThreadSerializer,
+    ForumPostSerializer,
+)
+
+
+class ForumGroupViewSet(ModelViewSet):
+
+    permission_classes = [IsAdminUser]
+    serializer_class = ForumGroupSerializer
+    queryset = ForumGroup.objects.all().prefetch_related(
+        'topics__latest_post__author__user',
+        'topics__latest_post__author__user_class',
+        'topics__latest_post__thread',
+    )
+
+
+class ForumTopicViewSet(ModelViewSet):
+
+    permission_classes = [IsAdminUser]
+    serializer_class = ForumTopicSerializer
+    queryset = ForumTopic.objects.all().select_related(
+        'group',
+        'minimum_user_class',
+        'latest_post__author__user',
+        'latest_post__author__user_class',
+        'latest_post__thread',
+    ).prefetch_related(
+        'threads__created_by__user',
+        'threads__latest_post__author__user',
+        'threads__latest_post__author__user_class',
+        'threads__latest_post__thread',
+    )
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+
+        group_id = self.request.query_params.get('group_id', None)
+        if group_id is not None:
+            queryset = queryset.filter(group_id=group_id)
+
+        return queryset
+
+
+class ForumThreadViewSet(ModelViewSet):
+
+    permission_classes = [IsAdminUser]
+    serializer_class = ForumThreadSerializer
+    queryset = ForumThread.objects.all().select_related(
+        'latest_post__author__user',
+        'latest_post__author__user_class',
+        'latest_post__thread',
+    ).prefetch_related(
+        'posts__author__user',
+        'posts__author__user_class',
+    )
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+
+        topic_id = self.request.query_params.get('topic_id', None)
+        if topic_id is not None:
+            queryset = queryset.filter(topic_id=topic_id)
+
+        return queryset
+
+
+class ForumPostViewSet(ModelViewSet):
+
+    permission_classes = [IsAdminUser]
+    serializer_class = ForumPostSerializer
+    queryset = ForumPost.objects.all().select_related(
+        'thread',
+        'author__user',
+        'author__user_class',
+    )
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+
+        thread_id = self.request.query_params.get('thread_id', None)
+        if thread_id is not None:
+            queryset = queryset.filter(thread_id=thread_id)
+
+        return queryset
 
 
 def forum_index(request):
