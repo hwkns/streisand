@@ -66,9 +66,6 @@ class ForumThreadViewSet(ModelViewSet):
         'latest_post__author__user',
         'latest_post__author__user_class',
         'latest_post__thread',
-    ).prefetch_related(
-        'posts__author__user',
-        'posts__author__user_class',
     )
 
     def get_queryset(self):
