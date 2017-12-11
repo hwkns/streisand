@@ -43,6 +43,7 @@ class WikiArticle(models.Model):
 
     class Meta:
         get_latest_by = 'created_at'
+        ordering = ['-created_at']
 
     def __str__(self):
         return '{title}'.format(

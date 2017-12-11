@@ -6,6 +6,23 @@ from django.views.generic import View
 from .forms import WikiArticleForm
 from .models import WikiArticle
 
+from rest_framework.permissions import IsAdminUser
+from rest_framework.viewsets import ModelViewSet
+
+from .serializers import WikiSerializer
+
+
+class WikiArticleViewSet(ModelViewSet):
+
+    permission_classes = [IsAdminUser]
+    serializer_class = WikiSerializer
+    queryset = WikiArticle.objects.all().select_related(
+        'created_by',
+        'modified_by',
+        'read_access_minimum_user_class',
+        'read_access_minimum_user_class',
+    )
+
 
 def wiki_index(request):
 

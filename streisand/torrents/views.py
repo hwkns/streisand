@@ -20,9 +20,7 @@ from .serializers import AdminTorrentSerializer
 
 
 class TorrentViewSet(ModelViewSet):
-    """
-    API endpoint that allows torrents to be viewed or edited.
-    """
+
     permission_classes = [IsAdminUser]
     serializer_class = AdminTorrentSerializer
     queryset = Torrent.objects.all().select_related(
@@ -33,10 +31,6 @@ class TorrentViewSet(ModelViewSet):
     )
 
     def get_queryset(self):
-        """
-        Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
-        """
         queryset = super().get_queryset()
         film_id = self.request.query_params.get('film_id', None)
         if film_id is not None:

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework import serializers
 
 from .models import UserProfile
 
 
-class AdminUserProfileSerializer(ModelSerializer):
+class AdminUserProfileSerializer(serializers.ModelSerializer):
 
-    user_class = SerializerMethodField()
+    user_class = serializers.CharField(source='user_class.name')
 
     class Meta:
         model = UserProfile
@@ -30,29 +30,58 @@ class AdminUserProfileSerializer(ModelSerializer):
             'last_seeded',
         )
 
-    def get_user_class(self, profile):
-        return profile.user_class.name
-
 
 class OwnedUserProfileSerializer(AdminUserProfileSerializer):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        remove_fields = (
-            'staff_notes',
-        )
-        for field_name in remove_fields:
-            self.fields.pop(field_name)
-
-
-class PublicUserProfileSerializer(ModelSerializer):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        remove_fields = (
+    class Meta(AdminUserProfileSerializer.Meta):
+        fields = (
+            'id',
+            'username',
+            'email',
+            'user_class',
+            'account_status',
+            'is_donor',
+            'custom_title',
+            'avatar_url',
+            'description',
+            'average_seeding_size',
             'irc_key',
             'invite_count',
-
+            'bytes_uploaded',
+            'bytes_downloaded',
+            'last_seeded',
         )
-        for field_name in remove_fields:
-            self.fields.pop(field_name)
+
+
+class PublicUserProfileSerializer(OwnedUserProfileSerializer):
+
+    class Meta(OwnedUserProfileSerializer.Meta):
+        fields = (
+            'id',
+            'username',
+            'email',
+            'user_class',
+            'account_status',
+            'is_donor',
+            'custom_title',
+            'avatar_url',
+            'description',
+            'average_seeding_size',
+            'bytes_uploaded',
+            'bytes_downloaded',
+            'last_seeded',
+        )
+
+
+class DisplayUserProfileSerializer(PublicUserProfileSerializer):
+
+    class Meta(PublicUserProfileSerializer.Meta):
+        fields = (
+            'id',
+            'username',
+            'user_class',
+            'account_status',
+            'is_donor',
+            'custom_title',
+            'avatar_url',
+        )

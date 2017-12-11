@@ -18,6 +18,7 @@ django-picklefield==1.0.0
 django-ratelimit==1.1.0
 django-redis==4.8.0
 django-su==0.5.2
+django_rest_swagger==2.1.2
 djangorestframework==3.7.3
 djangorestframework-camel-case==1.0b1
 kombu==4.1.0

@@ -40,6 +40,14 @@ class ForumTopic(models.Model):
         on_delete=models.SET_NULL,
     )
     staff_only_thread_creation = models.BooleanField(default=False)
+    number_of_threads = models.PositiveIntegerField(default=0)
+    number_of_posts = models.PositiveIntegerField(default=0)
+    latest_post = models.OneToOneField(
+        to='forums.ForumPost',
+        related_name='topic_latest',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
 
     objects = ForumTopicQuerySet.as_manager()
 
@@ -84,6 +92,13 @@ class ForumThread(models.Model):
         related_name='threads',
         null=False,
         on_delete=models.PROTECT,
+    )
+    number_of_posts = models.PositiveIntegerField(default=0)
+    latest_post = models.OneToOneField(
+        to='forums.ForumPost',
+        related_name='thread_latest',
+        null=True,
+        on_delete=models.SET_NULL,
     )
     subscribed_users = models.ManyToManyField(
         to='profiles.UserProfile',

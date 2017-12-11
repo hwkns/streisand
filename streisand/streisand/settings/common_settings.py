@@ -33,7 +33,11 @@ SECRET_KEY = os.environ.get('STREISAND_SECRET_KEY', 'you_deserve_to_be_pwned')
 
 ALLOWED_HOSTS = [
     'localhost',
+    '.jumpcut.to',
 ]
+HOST_DOMAIN = os.environ.get('HOST_DOMAIN', '')
+if HOST_DOMAIN:
+    ALLOWED_HOSTS.append(HOST_DOMAIN)
 
 INSTALLED_APPS = [
 
