@@ -9,7 +9,7 @@ from films.views import FilmViewSet
 from profiles.views import UserProfileViewSet
 from torrents.views import TorrentViewSet
 from www.views import UserViewSet, GroupViewSet
-from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadViewSet, ForumPostViewSet
+from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadViewSet, ForumPostViewSet, NewsPostViewSet
 from wiki.views import WikiArticleViewSet
 
 router = routers.DefaultRouter()
@@ -22,6 +22,7 @@ router.register(r'forum-groups', viewset=ForumGroupViewSet, base_name='forum-gro
 router.register(r'forum-topics', viewset=ForumTopicViewSet, base_name='forum-topic')
 router.register(r'forum-threads', viewset=ForumThreadViewSet, base_name='forum-thread')
 router.register(r'forum-posts', viewset=ForumPostViewSet, base_name='forum-post')
+router.register(r'news-posts', viewset=NewsPostViewSet, base_name='news-post')
 router.register(r'wiki-articles', viewset=WikiArticleViewSet, base_name='wiki-article')
 
 
