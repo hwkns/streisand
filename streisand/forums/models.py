@@ -3,7 +3,7 @@
 from django.db import models
 from django.urls import reverse
 
-from .managers import ForumGroupQuerySet, ForumTopicQuerySet, ForumThreadQuerySet
+from .managers import ForumGroupQuerySet, ForumTopicQuerySet, ForumThreadQuerySet, ForumPostQuerySet
 
 
 class ForumGroup(models.Model):
@@ -139,6 +139,8 @@ class ForumPost(models.Model):
 
     class Meta:
         get_latest_by = 'created_at'
+
+    objects = ForumPostQuerySet.as_manager()
 
     def __str__(self):
         return 'Forum post by {author} in thread {thread}'.format(
