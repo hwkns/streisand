@@ -3,7 +3,7 @@
 from django.db import models
 from django.urls import reverse
 
-from .managers import ForumTopicQuerySet, ForumThreadQuerySet
+from .managers import ForumGroupQuerySet, ForumTopicQuerySet, ForumThreadQuerySet
 
 
 class ForumGroup(models.Model):
@@ -12,6 +12,8 @@ class ForumGroup(models.Model):
 
     sort_order = models.PositiveSmallIntegerField()
     name = models.CharField(max_length=256)
+
+    objects = ForumGroupQuerySet.as_manager()
 
     class Meta:
         ordering = ['sort_order']
@@ -64,13 +66,6 @@ class ForumTopic(models.Model):
                 'topic_id': self.id,
             }
         )
-
-    def is_accessible_to_user(self, user):
-
-        if self.minimum_user_class is None:
-            return True
-        else:
-            return self.minimum_user_class.rank <= user.profile.user_class.rank
 
 
 class ForumThread(models.Model):

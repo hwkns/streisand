@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from collections import OrderedDict
 
+from django.db.models import OuterRef, Subquery
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 
@@ -21,7 +22,7 @@ from .serializers import (
 
 class ForumGroupViewSet(ModelViewSet):
 
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
     serializer_class = ForumGroupSerializer
     queryset = ForumGroup.objects.all().prefetch_related(
         'topics__latest_post__author__user',
@@ -29,10 +30,13 @@ class ForumGroupViewSet(ModelViewSet):
         'topics__latest_post__thread',
     )
 
+    def get_queryset(self):
+        return super().get_queryset().accessible_to_user(self.request.user)
+
 
 class ForumTopicViewSet(ModelViewSet):
 
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
     serializer_class = ForumTopicSerializer
     queryset = ForumTopic.objects.all().select_related(
         'group',
@@ -49,7 +53,7 @@ class ForumTopicViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().accessible_to_user(self.request.user)
 
         group_id = self.request.query_params.get('group_id', None)
         if group_id is not None:
@@ -60,7 +64,7 @@ class ForumTopicViewSet(ModelViewSet):
 
 class ForumThreadViewSet(ModelViewSet):
 
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
     serializer_class = ForumThreadSerializer
     queryset = ForumThread.objects.all().select_related(
         'latest_post__author__user',
@@ -70,7 +74,7 @@ class ForumThreadViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().accessible_to_user(self.request.user)
 
         topic_id = self.request.query_params.get('topic_id', None)
         if topic_id is not None:
@@ -81,7 +85,7 @@ class ForumThreadViewSet(ModelViewSet):
 
 class ForumPostViewSet(ModelViewSet):
 
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
     serializer_class = ForumPostSerializer
     queryset = ForumPost.objects.all().select_related(
         'thread',
@@ -91,13 +95,54 @@ class ForumPostViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().accessible_to_user(self.request.user)
 
         thread_id = self.request.query_params.get('thread_id', None)
         if thread_id is not None:
             queryset = queryset.filter(thread_id=thread_id)
 
         return queryset
+
+
+class NewsPostViewSet(ModelViewSet):
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = ForumPostSerializer
+
+    def get_queryset(self):
+
+        # Earliest post subquery
+        earliest_post = ForumPost.objects.filter(
+            thread=OuterRef('id'),
+        ).order_by(
+            'created_at',
+        ).values('id')[:1]
+
+        # Get news threads with earliest post
+        news_threads = ForumThread.objects.filter(
+            topic__name='Announcements',
+        ).annotate(
+            earliest_post_id=Subquery(earliest_post),
+        )
+
+        # Return earliest posts from each thread
+        return ForumPost.objects.filter(
+            id__in=news_threads.values('earliest_post_id'),
+        ).select_related(
+            'thread',
+            'author__user',
+            'author__user_class',
+        ).order_by(
+            '-created_at',
+        )
+
+    def get_object(self):
+        """
+        If the 'latest' identifier is requested, fetch the most recent news post.
+        """
+        if self.action == 'retrieve' and self.kwargs[self.lookup_field] == 'latest':
+            return self.get_queryset().first()
+        return super().get_object()
 
 
 def forum_index(request):

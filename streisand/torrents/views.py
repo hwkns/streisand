@@ -31,10 +31,13 @@ class TorrentViewSet(ModelViewSet):
     )
 
     def get_queryset(self):
+
         queryset = super().get_queryset()
+
         film_id = self.request.query_params.get('film_id', None)
         if film_id is not None:
             queryset = queryset.filter(film_id=film_id)
+
         return queryset
 
 
