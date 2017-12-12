@@ -31,7 +31,9 @@ class PagerComponent extends React.Component<CombinedProps> {
         const pagesToShow = getPagesToShow(this.props.screenSize);
         const half = (pagesToShow - 1) / 2;
 
+        // left is going to be the page number of the left most paging button
         let left = page - half > 0 ? page - half : 1;
+        // right is the page number of the right most paging button
         let right = Math.min(pageCount, page + pagesToShow - 1 - (page - left));
         left = Math.max(1, page - pagesToShow + 1 + (right - page));
 

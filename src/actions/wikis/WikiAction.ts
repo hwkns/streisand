@@ -75,7 +75,7 @@ export function updateWiki(id: number, wiki: IWikiUpdate): ThunkAction<Action> {
 
 function fetch(token: string, id: number): Promise<IWiki> {
     return Requestor.makeRequest({
-        url: `${globals.apiUrl}/wiki/${id}/`,
+        url: `${globals.apiUrl}/wiki-articles/${id}/`,
         headers: {
             'Authorization': 'token ' + token
         },
@@ -85,7 +85,7 @@ function fetch(token: string, id: number): Promise<IWiki> {
 
 function remove(token: string, id: number): Promise<void> {
     return Requestor.makeRequest({
-        url: `${globals.apiUrl}/wiki/${id}/`,
+        url: `${globals.apiUrl}/wiki-articles/${id}/`,
         headers: {
             'Authorization': 'token ' + token
         },
@@ -95,7 +95,7 @@ function remove(token: string, id: number): Promise<void> {
 
 function update(token: string, id: number, wiki: IWikiUpdate): Promise<IWiki> {
     return Requestor.makeRequest({
-        url: `${globals.apiUrl}/wiki/${id}/`,
+        url: `${globals.apiUrl}/wiki-articles/${id}/`,
         headers: {
             'Authorization': 'token ' + token,
             'Content-Type': 'application/json'
