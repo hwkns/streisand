@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from profiles.serializers import DisplayUserProfileSerializer
+from www.templatetags.bbcode import bbcode as bbcode_to_html
 from .models import ForumGroup, ForumPost, ForumThread, ForumTopic
 
 
@@ -11,6 +12,7 @@ class ForumPostSerializer(ModelSerializer):
 
     thread = serializers.SerializerMethodField()
     author = DisplayUserProfileSerializer()
+    body_html = serializers.SerializerMethodField()
 
     class Meta:
         model = ForumPost
@@ -19,6 +21,7 @@ class ForumPostSerializer(ModelSerializer):
             'author',
             'thread',
             'body',
+            'body_html',
             'created_at',
             'modified_at',
         )
@@ -30,6 +33,10 @@ class ForumPostSerializer(ModelSerializer):
             'id': thread.id,
             'title': thread.title,
         }
+
+    @staticmethod
+    def get_body_html(forum_post):
+        return bbcode_to_html(forum_post.body)
 
 
 class ForumThreadSerializer(ModelSerializer):
