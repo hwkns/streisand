@@ -3,6 +3,7 @@ import { routerReducer as routing } from 'react-router-redux';
 import Store from '../store';
 import { combineReducers } from './helpers';
 
+import news from './news';
 import auth from './auth';
 import films from './films';
 import wikis from './wikis';
@@ -19,5 +20,6 @@ export const reducers = combineReducers<Store.All>({
     films,
     torrents,
     deviceInfo,
-    wikis
+    wikis,
+    news
 });

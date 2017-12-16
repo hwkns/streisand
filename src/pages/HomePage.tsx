@@ -1,5 +1,11 @@
 import * as React from 'react';
 
+import LatestNews from '../components/LatestNews';
+
 export default function HomePage() {
-    return (<div>Welcome!</div>);
+    return (
+        <div>
+            <LatestNews />
+        </div>
+    );
 }

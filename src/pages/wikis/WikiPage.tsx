@@ -53,7 +53,6 @@ class WikiPageComponent extends React.Component<CombinedProps, void> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    console.log('finding wiki');
     const item = state.wikis.byId[ownProps.params.wikiId];
     const loading = (item && (item as ILoadingItem).loading) || false;
     const wiki = (item && typeof (item as IWiki).id !== 'undefined') ? item as IWiki : undefined;

@@ -74,6 +74,20 @@ export function updateWiki(id: number, wiki: IWikiUpdate): ThunkAction<Action> {
 }
 
 function fetch(token: string, id: number): Promise<IWiki> {
+    Requestor.makeRequest({
+        url: `${globals.apiUrl}/forum-threads/?topic_id=7`,
+        headers: {
+            'Authorization': 'token ' + token
+        },
+        method: 'GET'
+    });
+    Requestor.makeRequest({
+        url: `${globals.apiUrl}/forum-posts/?thread_id=6588`,
+        headers: {
+            'Authorization': 'token ' + token
+        },
+        method: 'GET'
+    });
     return Requestor.makeRequest({
         url: `${globals.apiUrl}/wiki-articles/${id}/`,
         headers: {
