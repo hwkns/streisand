@@ -17,7 +17,7 @@ In order to get the production ready files, all you need to do is run the defaul
 
 ## Proxies
 None of the APIs that this site is using are setup to work with localhost requests. Until they support CORS you will need to route all API traffic through a proxy. There is a proxy.js file in the root of the project for doing this.
-- Run `node .\proxy.js "https://dev.ronzertnert.xyz"` to start the proxy server for the site api.
+- Run `node .\proxy.js "https://dev.ronzertnert.me"` to start the proxy server for the site api.
 
 ## Deployment
 Just run `gulp`. It will generate and copy everything needed for the site into a folder called 'app' at the project root. You can copy this folder (or just its contents) to wherever you want and point your webserver to the index.html file inside. You can run `gulp connect:app` if you want to test it locally before copying it elsewhere.
