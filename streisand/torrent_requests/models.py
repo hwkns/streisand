@@ -15,7 +15,7 @@ class TorrentRequest(models.Model):
 
     # Site information
     created_by = models.ForeignKey(
-        to='profiles.UserProfile',
+        to='users.User',
         null=True,
         related_name='torrent_requests',
         on_delete=models.SET_NULL,
@@ -102,7 +102,7 @@ class TorrentRequest(models.Model):
 class Vote(models.Model):
 
     author = models.ForeignKey(
-        to='profiles.UserProfile',
+        to='users.User',
         null=True,
         related_name='torrent_request_votes',
         on_delete=models.SET_NULL,

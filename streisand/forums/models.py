@@ -36,7 +36,7 @@ class ForumTopic(models.Model):
         on_delete=models.PROTECT,
     )
     minimum_user_class = models.ForeignKey(
-        to='user_classes.UserClass',
+        to='users.UserClass',
         related_name='unlocked_forum_topics',
         null=True,
         on_delete=models.SET_NULL,
@@ -77,7 +77,7 @@ class ForumThread(models.Model):
     is_sticky = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
-        to='profiles.UserProfile',
+        to='users.User',
         related_name='forum_threads_created',
         null=True,
         on_delete=models.SET_NULL,
@@ -96,7 +96,7 @@ class ForumThread(models.Model):
         on_delete=models.SET_NULL,
     )
     subscribed_users = models.ManyToManyField(
-        to='profiles.UserProfile',
+        to='users.User',
         through='forums.ForumThreadSubscription',
         related_name='forum_threads_subscribed',
     )
@@ -123,7 +123,7 @@ class ForumPost(models.Model):
     old_id = models.PositiveIntegerField(null=True, db_index=True)
 
     author = models.ForeignKey(
-        to='profiles.UserProfile',
+        to='users.User',
         related_name='forum_posts',
         null=True,
         on_delete=models.PROTECT,
@@ -136,6 +136,8 @@ class ForumPost(models.Model):
         related_name='posts',
         on_delete=models.CASCADE,
     )
+
+    objects = ForumPostQuerySet.as_manager()
 
     class Meta:
         get_latest_by = 'created_at'
@@ -156,8 +158,8 @@ class ForumPost(models.Model):
 
 
 class ForumThreadSubscription(models.Model):
-    profile = models.ForeignKey(
-        to='profiles.UserProfile',
+    user = models.ForeignKey(
+        to='users.User',
         related_name='forum_thread_subscriptions',
         on_delete=models.CASCADE,
     )

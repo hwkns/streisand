@@ -20,25 +20,25 @@ class InviteView(View):
     invites = []
 
     def dispatch(self, request, *args, **kwargs):
-        self.invites = Invite.objects.filter(offered_by=request.user.profile)
+        self.invites = Invite.objects.filter(offered_by=request.user)
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
 
-        invite_form = InviteForm(offered_by=request.user.profile)
+        invite_form = InviteForm(offered_by=request.user)
         return self._render(invite_form)
 
-    @method_decorator(permission_required('profiles.can_invite', raise_exception=True))
+    @method_decorator(permission_required('users.can_invite', raise_exception=True))
     def post(self, request):
 
         invite_form = InviteForm(
             request.POST,
-            offered_by=request.user.profile,
+            offered_by=request.user,
         )
         if invite_form.is_valid():
             new_invite = invite_form.save()
             new_invite.send_email()
-            invite_form = InviteForm(offered_by=request.user.profile)
+            invite_form = InviteForm(offered_by=request.user)
             return self._render(invite_form)
 
         # Render the form with errors
@@ -86,8 +86,8 @@ class InviteRegistrationView(RegistrationView):
             with transaction.atomic:
                 invite.delete()
                 new_user = form.save()
-                new_user.profile.invited_by = offered_by
-                new_user.profile.save()
+                new_user.invited_by = offered_by
+                new_user.save()
 
             # Authenticate the newly registered user
             new_authenticated_user = authenticate(

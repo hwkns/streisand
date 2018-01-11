@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from import_scripts.management.commands import MySQLCommand
-from profiles.models import UserProfile
 from torrent_requests.models import TorrentRequest
+from users.models import User
 
 
 class Command(MySQLCommand):
@@ -10,8 +10,11 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM requests_votes
     """
+    COUNT_SQL = """
+        SELECT COUNT(*) FROM requests_votes
+    """
 
-    help = "Imports request votes from the MySQL db"
+    help = "Import request votes"
 
     def handle_row(self, row):
 
@@ -19,17 +22,15 @@ class Command(MySQLCommand):
         voter_id = row['UserID']
 
         try:
-            voter = UserProfile.objects.get(old_id=voter_id)
-        except UserProfile.DoesNotExist:
+            voter = User.objects.get(old_id=voter_id)
+        except User.DoesNotExist:
             return
         try:
             torrent_request = TorrentRequest.objects.get(old_id=request_id)
         except TorrentRequest.DoesNotExist:
             return
 
-        vote = torrent_request.votes.create(
+        torrent_request.votes.create(
             author=voter,
             bounty_in_bytes=0,
         )
-
-        print(vote)

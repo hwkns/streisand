@@ -16,7 +16,7 @@ class NewTorrentRequestView(View):
 
     def get(self, request):
 
-        torrent_request_form = TorrentRequestForm(requester_profile=request.user.profile)
+        torrent_request_form = TorrentRequestForm(requester=request.user)
         return self._render(torrent_request_form)
 
     @method_decorator(permission_required('torrent_requests.can_request', raise_exception=True))
@@ -24,7 +24,7 @@ class NewTorrentRequestView(View):
 
         torrent_request_form = TorrentRequestForm(
             request.POST,
-            requester_profile=request.user.profile,
+            requester=request.user,
         )
 
         if torrent_request_form.is_valid():
@@ -52,7 +52,7 @@ class NewTorrentRequestView(View):
 def torrent_request_index(request):
 
     all_torrent_requests = TorrentRequest.objects.select_related(
-        'created_by__user',
+        'created_by',
         'filling_torrent',
         'source_media',
         'resolution',
@@ -63,7 +63,7 @@ def torrent_request_index(request):
     created_by = request.GET.get('created_by')
 
     if created_by:
-        all_torrent_requests = all_torrent_requests.filter(created_by__user__username=created_by)
+        all_torrent_requests = all_torrent_requests.filter(created_by__username=created_by)
 
     order_by = request.GET.get('order_by')
 
@@ -95,7 +95,7 @@ class TorrentRequestView(View):
         torrent_request = self._get_torrent_request(torrent_request_id)
 
         vote_form = VoteForm(
-            voter_profile=request.user.profile,
+            voter=request.user,
             torrent_request=torrent_request,
         )
 
@@ -108,14 +108,14 @@ class TorrentRequestView(View):
 
         vote_form = VoteForm(
             request.POST,
-            voter_profile=request.user.profile,
+            voter=request.user,
             torrent_request=torrent_request,
         )
 
         if vote_form.is_valid():
             vote_form.save()
             vote_form = VoteForm(
-                voter_profile=request.user.profile,
+                voter=request.user,
                 torrent_request=torrent_request,
             )
 
@@ -126,7 +126,7 @@ class TorrentRequestView(View):
 
         return get_object_or_404(
             TorrentRequest.objects.select_related(
-                'created_by__user',
+                'created_by',
                 'filling_torrent',
                 'source_media',
                 'resolution',

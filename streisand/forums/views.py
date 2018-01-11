@@ -7,7 +7,6 @@ from collections import OrderedDict
 from django.db.models import OuterRef, Subquery
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
-
 from www.utils import paginate
 
 from .forms import ForumPostForm
@@ -25,7 +24,7 @@ class ForumGroupViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = ForumGroupSerializer
     queryset = ForumGroup.objects.all().prefetch_related(
-        'topics__latest_post__author__user',
+        'topics__latest_post__author',
         'topics__latest_post__author__user_class',
         'topics__latest_post__thread',
     )
@@ -41,12 +40,12 @@ class ForumTopicViewSet(ModelViewSet):
     queryset = ForumTopic.objects.all().select_related(
         'group',
         'minimum_user_class',
-        'latest_post__author__user',
+        'latest_post__author',
         'latest_post__author__user_class',
         'latest_post__thread',
     ).prefetch_related(
-        'threads__created_by__user',
-        'threads__latest_post__author__user',
+        'threads__created_by',
+        'threads__latest_post__author',
         'threads__latest_post__author__user_class',
         'threads__latest_post__thread',
     )
@@ -67,7 +66,7 @@ class ForumThreadViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = ForumThreadSerializer
     queryset = ForumThread.objects.all().select_related(
-        'latest_post__author__user',
+        'latest_post__author',
         'latest_post__author__user_class',
         'latest_post__thread',
     )
@@ -89,7 +88,7 @@ class ForumPostViewSet(ModelViewSet):
     serializer_class = ForumPostSerializer
     queryset = ForumPost.objects.all().select_related(
         'thread',
-        'author__user',
+        'author',
         'author__user_class',
     )
 
@@ -130,7 +129,7 @@ class NewsPostViewSet(ModelViewSet):
             id__in=news_threads.values('earliest_post_id'),
         ).select_related(
             'thread',
-            'author__user',
+            'author',
             'author__user_class',
         ).order_by(
             '-created_at',
@@ -180,9 +179,7 @@ def forum_topic_details(request, topic_id):
 
     threads = paginate(
         request=request,
-        queryset=topic.threads.select_related(
-            'created_by__user',
-        ),
+        queryset=topic.threads.select_related('created_by'),
         items_per_page=25,
     )
 
@@ -221,9 +218,7 @@ class ForumThreadView(View):
 
         self.posts = paginate(
             request=request,
-            queryset=self.thread.posts.select_related(
-                'author__user',
-            ),
+            queryset=self.thread.posts.select_related('author'),
             items_per_page=25,
         )
 
@@ -233,7 +228,7 @@ class ForumThreadView(View):
 
         form = ForumPostForm(
             thread=self.thread,
-            author=request.user.profile,
+            author=request.user,
         )
 
         return self._render(
@@ -247,7 +242,7 @@ class ForumThreadView(View):
         form = ForumPostForm(
             request.POST,
             thread=self.thread,
-            author=request.user.profile,
+            author=request.user,
         )
 
         if form.is_valid():

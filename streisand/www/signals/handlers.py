@@ -2,22 +2,40 @@
 
 from rest_framework.authtoken.models import Token
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission
+from django.core.cache import cache
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
-from profiles.models import WatchedUser
+from users.models import User, WatchedUser, UserClass
+from www.models import Feature, LoginAttempt
 
-from ..models import Feature, LoginAttempt
 from .signals import successful_login, failed_login
 
 
-@receiver(post_save, sender=User)
-def create_token_for_new_user(**kwargs):
+@receiver([post_save, post_delete], sender='users.User')
+def invalidate_user_cache(**kwargs):
+    instance = kwargs['instance']
+    key = User.CACHE_KEY.format(user_id=instance.id)
+    cache.delete(key)
 
+
+# Signal handler for new users
+@receiver(post_save, sender='users.User')
+def handle_new_user(**kwargs):
     if kwargs['created']:
-        Token.objects.create(user=kwargs['instance'])
+        user = kwargs['instance']
+
+        Token.objects.create(user=user)
+
+        can_leech = Permission.objects.get(codename='can_leech')
+        user.user_permissions.add(can_leech)
+
+        if not user.user_class:
+            user.user_class = UserClass.objects.get(name='User')
+
+        user.reset_announce_key()
 
 
 @receiver(models.signals.post_save, sender='www.Feature')
@@ -71,7 +89,7 @@ def track_successful_login_attempts(**kwargs):
     if failed_login_attempts.count() > 2:
 
         WatchedUser.objects.get_or_create(
-            profile=user.profile,
+            user=user,
             defaults={
                 'notes': '{n} failed login attempts before success'.format(
                     n=failed_login_attempts.count(),

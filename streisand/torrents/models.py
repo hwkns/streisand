@@ -6,8 +6,8 @@ from django.utils.timezone import now, timedelta
 
 from picklefield import PickledObjectField
 
-from profiles.models import UserProfile
 from tracker.bencoding import bencode
+from users.models import User
 
 
 class Torrent(models.Model):
@@ -27,21 +27,21 @@ class Torrent(models.Model):
     # Site information
     uploaded_at = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey(
-        to='profiles.UserProfile',
+        to='users.User',
         null=True,
         blank=False,
         related_name='uploaded_torrents',
         on_delete=models.PROTECT,
     )
     encoded_by = models.ForeignKey(
-        to='profiles.UserProfile',
+        to='users.User',
         null=True,
         blank=True,
         related_name='encodes',
         on_delete=models.PROTECT,
     )
     moderated_by = models.ForeignKey(
-        to='profiles.UserProfile',
+        to='users.User',
         null=True,
         blank=True,
         related_name='moderated_torrents',
@@ -162,13 +162,13 @@ class Torrent(models.Model):
 
     @property
     def seeders(self):
-        return UserProfile.objects.filter(
+        return User.objects.filter(
             announce_key__in=self.swarm.peers.seeders().values_list('user_announce_key', flat=True)
         )
 
-    def request_reseed(self, user_profile):
+    def request_reseed(self, user):
         self.reseed_request = self.reseed_requests.create(
-            created_by=user_profile,
+            created_by=user,
         )
         self.save()
 
@@ -180,13 +180,13 @@ class TorrentMetaInfo(models.Model):
     def __str__(self):
         return str(self.torrent)
 
-    def for_user_download(self, user_profile):
+    def for_user_download(self, user):
 
         # Make sure the private flag is set
         self.dictionary['info']['private'] = 1
 
         # Set the announce url
-        self.dictionary['announce'] = user_profile.announce_url
+        self.dictionary['announce'] = user.announce_url
 
         # Return the bencoded version
         return bencode(self.dictionary)
@@ -202,7 +202,7 @@ class ReseedRequest(models.Model):
         on_delete=models.CASCADE,
     )
     created_by = models.ForeignKey(
-        to='profiles.UserProfile',
+        to='users.User',
         related_name='reseed_requests',
         null=True,
         on_delete=models.CASCADE,

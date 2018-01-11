@@ -31,7 +31,7 @@ class LogEntry(models.Model):
 
 class LoginAttempt(models.Model):
     user = models.ForeignKey(
-        to='auth.User',
+        to='users.User',
         related_name='login_attempts',
         null=True,
         on_delete=models.SET_NULL,

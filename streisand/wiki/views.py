@@ -66,7 +66,7 @@ class WikiArticleEditView(View):
 
     def get(self, request):
 
-        form = WikiArticleForm(instance=self.article, author=request.user.profile)
+        form = WikiArticleForm(instance=self.article, author=request.user)
 
         return self._render(
             context={
@@ -77,7 +77,7 @@ class WikiArticleEditView(View):
 
     def post(self, request):
 
-        form = WikiArticleForm(instance=self.article, data=request.POST, author=request.user.profile)
+        form = WikiArticleForm(instance=self.article, data=request.POST, author=request.user)
 
         if form.is_valid():
 
@@ -106,7 +106,7 @@ class WikiArticleCreationView(View):
 
     def get(self, request):
 
-        form = WikiArticleForm(author=request.user.profile)
+        form = WikiArticleForm(author=request.user)
 
         return render(
             request=request,
@@ -119,7 +119,7 @@ class WikiArticleCreationView(View):
 
     def post(self, request):
 
-        form = WikiArticleForm(request.POST, author=request.user.profile)
+        form = WikiArticleForm(request.POST, author=request.user)
 
         if form.is_valid():
 

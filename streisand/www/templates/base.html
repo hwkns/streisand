@@ -46,12 +46,12 @@
         </ul>
           <div class="navbar-right">
             <ul class="nav navbar-nav">
-              {% if user.profile %}
+              {% if user.is_authenticated %}
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }} ({{ user.profile.ratio }}) <span class="caret"></span></a>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }} ({{ user.ratio }}) <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="{% url 'user_profile' username=user.username %}">Profile</a></li>
-                    <li><a href="{% url 'invite_index' %}">Invite <span class="badge">{{ user.profile.invite_count }}</span></a></li>
+                    <li><a href="{% url 'invite_index' %}">Invite <span class="badge">{{ user.invite_count }}</span></a></li>
                     <li class="divider"></li>
                     <li class="dropdown-header">Nav header</li>
                     <li><a href="#">Separated link</a></li>

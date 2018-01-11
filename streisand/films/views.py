@@ -25,6 +25,16 @@ class FilmViewSet(ModelViewSet):
     )
     serializer_class = AdminFilmSerializer
 
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+
+        # Tag filtering
+        if 'tag' in self.request.query_params:
+            queryset = queryset.filter(tags__name=self.request.query_params['tag'])
+
+        return queryset
+
 
 def film_index(request):
 
@@ -49,8 +59,8 @@ def film_details(request, film_id, torrent_id=None):
     if torrent_id is not None:
         torrent_id = int(torrent_id)
 
-    torrents = film.torrents.select_related('moderated_by__user', 'uploaded_by__user')
-    comments = film.comments.select_related('author__user')
+    torrents = film.torrents.select_related('moderated_by', 'uploaded_by')
+    comments = film.comments.select_related('author')
 
     return render(
         request=request,

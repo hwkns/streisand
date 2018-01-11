@@ -5,14 +5,14 @@
 
 {% block main %}
     <div class="page-header">
-      <h1>Profiles</h1>
+      <h1>User Profiles</h1>
     </div>
 
     <ul>
-      {% for p in profiles %}
-        <li><a href="{{ p.get_absolute_url }}">{{ p.username }}</a></li>
+      {% for user in users %}
+        <li><a href="{{ user.get_absolute_url }}">{{ user.username }}</a></li>
       {% endfor %}
     </ul>
 
-    {% pagination profiles %}
+    {% pagination users %}
 {% endblock %}

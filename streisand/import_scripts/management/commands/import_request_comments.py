@@ -3,7 +3,7 @@
 from pytz import UTC
 
 from import_scripts.management.commands import MySQLCommand
-from profiles.models import UserProfile
+from users.models import User
 from torrent_requests.models import TorrentRequest
 
 
@@ -12,8 +12,11 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM requests_comments
     """
+    COUNT_SQL = """
+        SELECT COUNT(*) FROM requests_comments
+    """
 
-    help = "Imports request comments from the MySQL db"
+    help = "Import request comments"
 
     def handle_row(self, row):
 
@@ -24,8 +27,8 @@ class Command(MySQLCommand):
         edit_date = row['EditedTime']
 
         try:
-            author = UserProfile.objects.get(old_id=author_id)
-        except UserProfile.DoesNotExist:
+            author = User.objects.get(old_id=author_id)
+        except User.DoesNotExist:
             return
 
         try:
@@ -43,5 +46,3 @@ class Command(MySQLCommand):
         else:
             comment.modified_at = comment.created_at
         comment.save(update_fields=['created_at', 'modified_at'])
-
-        print(comment)

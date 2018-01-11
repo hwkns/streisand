@@ -156,7 +156,7 @@
     },
     {
         "pk": 1,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 23,
             "name": "User",
@@ -165,7 +165,7 @@
     },
     {
         "pk": 2,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 3,
             "name": "Member",
@@ -174,7 +174,7 @@
     },
     {
         "pk": 3,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 30,
             "name": "mfer",
@@ -183,7 +183,7 @@
     },
     {
         "pk": 4,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 24,
             "name": "Fanatic",
@@ -192,7 +192,7 @@
     },
     {
         "pk": 5,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 4,
             "name": "Actor",
@@ -201,7 +201,7 @@
     },
     {
         "pk": 6,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 25,
             "name": "Director",
@@ -210,7 +210,7 @@
     },
     {
         "pk": 7,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 20,
             "name": "Producer",
@@ -219,7 +219,7 @@
     },
     {
         "pk": 8,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 33,
             "name": "Archivist",
@@ -228,7 +228,7 @@
     },
     {
         "pk": 9,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 31,
             "name": "Uploader",
@@ -237,7 +237,7 @@
     },
     {
         "pk": 10,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 8,
             "name": "Encoder",
@@ -246,7 +246,7 @@
     },
     {
         "pk": 11,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 7,
             "name": "Executive Producer",
@@ -255,7 +255,7 @@
     },
     {
         "pk": 12,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 5,
             "name": "Legend",
@@ -264,7 +264,7 @@
     },
     {
         "pk": 13,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 9,
             "name": "Community Staff",
@@ -273,7 +273,7 @@
     },
     {
         "pk": 14,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 26,
             "name": "Director of Torrentography",
@@ -282,7 +282,7 @@
     },
     {
         "pk": 15,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 28,
             "name": "Designer",
@@ -291,7 +291,7 @@
     },
     {
         "pk": 16,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 11,
             "name": "Moderator",
@@ -301,7 +301,7 @@
     },
     {
         "pk": 17,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 14,
             "name": "Developer",
@@ -311,7 +311,7 @@
     },
     {
         "pk": 18,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 21,
             "name": "Administrator",
@@ -321,7 +321,7 @@
     },
     {
         "pk": 19,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 1,
             "name": "SiteOp",
@@ -331,7 +331,7 @@
     },
     {
         "pk": 20,
-        "model": "user_classes.userclass",
+        "model": "users.userclass",
         "fields": {
             "old_id": 15,
             "name": "SysAdmin",
@@ -340,8 +340,16 @@
         }
     },
     {
+        "pk": "16fd2706-8baf-433b-82eb-8c7fada847da",
+        "model": "users.userannouncekey",
+        "fields": {
+            "user": 1,
+            "issued_at": "2014-09-18T14:52:58.484Z"
+        }
+    },
+    {
         "pk": 1,
-        "model": "auth.user",
+        "model": "users.user",
         "fields": {
             "username": "admin",
             "email": "dolan@gooby.pls",
@@ -354,22 +362,7 @@
             "groups": [],
             "first_name": "",
             "last_name": "",
-            "user_permissions": []
-        }
-    },
-    {
-        "pk": "16fd2706-8baf-433b-82eb-8c7fada847da",
-        "model": "profiles.userannouncekey",
-        "fields": {
-            "used_with_profile": 1,
-            "issued_at": "2014-09-18T14:52:58.484Z"
-        }
-    },
-    {
-        "pk": 1,
-        "model": "profiles.userprofile",
-        "fields": {
-            "user": 1,
+            "user_permissions": [],
             "user_class": 18,
             "announce_key": "16fd2706-8baf-433b-82eb-8c7fada847da",
             "bytes_uploaded": 0,

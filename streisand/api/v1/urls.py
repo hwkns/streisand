@@ -6,16 +6,14 @@ from rest_framework.authtoken.views import obtain_auth_token
 from django.conf.urls import url, include
 
 from films.views import FilmViewSet
-from profiles.views import UserProfileViewSet
-from torrents.views import TorrentViewSet
-from www.views import UserViewSet, GroupViewSet
 from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadViewSet, ForumPostViewSet, NewsPostViewSet
+from torrents.views import TorrentViewSet
+from users.views import UserViewSet, GroupViewSet
 from wiki.views import WikiArticleViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', viewset=UserViewSet)
 router.register(r'groups', viewset=GroupViewSet)
-router.register(r'profiles', viewset=UserProfileViewSet)
 router.register(r'films', viewset=FilmViewSet)
 router.register(r'torrents', viewset=TorrentViewSet)
 router.register(r'forum-groups', viewset=ForumGroupViewSet, base_name='forum-group')

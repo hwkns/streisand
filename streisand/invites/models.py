@@ -15,7 +15,7 @@ from .managers import InviteManager
 class Invite(models.Model):
 
     offered_by = models.ForeignKey(
-        to='profiles.UserProfile',
+        to='users.User',
         related_name='invites',
         on_delete=models.CASCADE,
     )

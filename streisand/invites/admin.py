@@ -12,7 +12,7 @@ class InviteAdmin(admin.ModelAdmin):
 
     fields = (
         'key',
-        'offered_by_profile_link',
+        'offered_by_link',
         'created_at',
         'valid_until',
         'is_valid',
@@ -24,19 +24,19 @@ class InviteAdmin(admin.ModelAdmin):
 
     search_fields = (
         'key',
-        'offered_by__user__username',
-        'offered_by__user__email',
+        'offered_by__username',
+        'offered_by__email',
     )
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('offered_by__user')
+        return super().get_queryset(request).select_related('offered_by')
 
-    def offered_by_profile_link(self, invite):
+    def offered_by_link(self, invite):
         return '<a href="{profile_url}">{username}</a>'.format(
             profile_url=invite.offered_by.get_absolute_url(),
-            username=invite.offered_by,
+            username=invite.offered_by.username,
         )
-    offered_by_profile_link.allow_tags = True
+    offered_by_link.allow_tags = True
 
     def valid_until(self, invite):
         return invite.created_at + Invite.objects.INVITES_VALID_FOR

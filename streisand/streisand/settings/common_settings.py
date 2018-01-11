@@ -19,6 +19,8 @@ import dj_database_url
 from django.utils.timezone import timedelta
 
 
+AUTH_USER_MODEL = 'users.User'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
@@ -37,7 +39,7 @@ ALLOWED_HOSTS = [
 ]
 HOST_DOMAIN = os.environ.get('HOST_DOMAIN', '')
 if HOST_DOMAIN:
-    ALLOWED_HOSTS.append(HOST_DOMAIN)
+    ALLOWED_HOSTS.append('.' + HOST_DOMAIN)
 
 INSTALLED_APPS = [
 
@@ -54,13 +56,12 @@ INSTALLED_APPS = [
     'invites',
     'media_formats',
     'mediainfo',
-    'profiles',
     'rotten_tomatoes',
     'torrent_requests',
     'torrent_stats',
     'torrents',
     'tracker',
-    'user_classes',
+    'users',
     'wiki',
     'www',
 

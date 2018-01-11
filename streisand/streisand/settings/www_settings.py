@@ -19,7 +19,6 @@ INSTALLED_APPS += [
     # Contrib apps
     'django.contrib.admin',
     'django.contrib.humanize',
-    'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
 
@@ -35,6 +34,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -42,10 +42,9 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsPostCsrfMiddleware',
     'www.middleware.CachedUserAuthenticationMiddleware',
     'www.middleware.LoginRequiredMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'profiles.middleware.IPHistoryMiddleware',
+    'www.middleware.IPHistoryMiddleware',
 ]
+from django.middleware.security import SecurityMiddleware
 
 if PRODUCTION or TESTING:
     INSTALLED_APPS.remove('debug_toolbar')
@@ -68,6 +67,24 @@ PASSWORD_HASHERS = [
     'www.auth.OldSitePasswordHasher',
 ]
 
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 10,
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser',
@@ -84,7 +101,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
     ),
+    'URL_FORMAT_OVERRIDE': None,
 }
+
+if DEBUG:
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += (
+        'rest_framework.authentication.SessionAuthentication',
+    )
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
@@ -96,29 +119,12 @@ SWAGGER_SETTINGS = {
 
 CORS_URL_REGEX = r'^/api/v1/.*$'
 
-CORS_ORIGIN_ALLOW_ALL = False
-# Set Allow All to False, as adding this as True marked it as *,
-# and adding it to Nginx also added it and caused CORS XHTML Errors.
+CORS_ORIGIN_WHITELIST = [
+    subdomain + '.' + HOST_DOMAIN
+    for subdomain
+    in ('api', 'dev', 'static', 'www')
+]
 
-CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?ronzertnert\.xyz$', )
-# Changed allow all to allowing a select few to access the api auth (Any Ronzertnert fqdn)
-# TODO update CORS ORIGIN When we go live.
-
-CORS_ALLOW_METHODS = (
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-)
-
-
-
-if DEBUG:
-    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += (
-        'rest_framework.authentication.SessionAuthentication',
-    )
 
 RT_API_KEY = os.environ.get('RT_API_KEY', '')
 OLD_SITE_SECRET_KEY = os.environ.get('OLD_SITE_HASH', '')
@@ -150,7 +156,6 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
-                'django.contrib.messages.context_processors.messages',
             ],
         },
     },

@@ -2,7 +2,15 @@
 
 from rest_framework import serializers
 
-from .models import UserProfile
+from django.contrib.auth.models import Group
+
+from .models import User
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('url', 'name')
 
 
 class AdminUserProfileSerializer(serializers.ModelSerializer):
@@ -10,17 +18,19 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
     user_class = serializers.CharField(source='user_class.name')
 
     class Meta:
-        model = UserProfile
+        model = User
         fields = (
             'id',
             'username',
             'email',
-            'user_class',
+            'url',
             'account_status',
+            'user_class',
+            'groups',
             'is_donor',
             'custom_title',
             'avatar_url',
-            'description',
+            'profile_description',
             'average_seeding_size',
             'staff_notes',
             'irc_key',
@@ -43,7 +53,7 @@ class OwnedUserProfileSerializer(AdminUserProfileSerializer):
             'is_donor',
             'custom_title',
             'avatar_url',
-            'description',
+            'profile_description',
             'average_seeding_size',
             'irc_key',
             'invite_count',
@@ -65,7 +75,7 @@ class PublicUserProfileSerializer(OwnedUserProfileSerializer):
             'is_donor',
             'custom_title',
             'avatar_url',
-            'description',
+            'profile_description',
             'average_seeding_size',
             'bytes_uploaded',
             'bytes_downloaded',

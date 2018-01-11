@@ -11,8 +11,11 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM torrents_group
     """
+    COUNT_SQL = """
+        SELECT COUNT(*) FROM torrents_group
+    """
 
-    help = "Imports films from the MySQL db"
+    help = "Import films"
 
     def handle_row(self, row):
 
@@ -42,5 +45,3 @@ class Command(MySQLCommand):
         )
 
         f.tags.set(tags)
-
-        print(f)

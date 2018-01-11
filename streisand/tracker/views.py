@@ -7,8 +7,8 @@ from django.http import HttpResponse
 from django.utils.timezone import now
 from django.views.generic import View
 
-from profiles.models import UserProfile
-from profiles.tasks import handle_announce
+from users.models import User
+from www.tasks import handle_announce
 
 from .bencoding import bencode
 from .models import Peer, Swarm, TorrentClient
@@ -47,7 +47,7 @@ class AnnounceView(View):
         #
 
         # Fail if the announce_key is invalid
-        if not UserProfile.objects.filter(announce_key_id=announce_key).exists():
+        if not User.objects.filter(announce_key_id=announce_key).exists():
             return self.failure('Invalid announce key')
 
         # Fail if any required parameters are missing

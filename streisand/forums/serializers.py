@@ -3,7 +3,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from profiles.serializers import DisplayUserProfileSerializer
+from users.serializers import DisplayUserProfileSerializer
 from www.templatetags.bbcode import bbcode as bbcode_to_html
 from .models import ForumGroup, ForumPost, ForumThread, ForumTopic
 
