@@ -3,11 +3,11 @@ import * as redux from 'redux';
 import { connect } from 'react-redux';
 
 import Store from '../../store';
-import IWiki, { IWikiUpdate } from '../../models/IWiki';
 import TextView from '../bbcode/TextView';
-import TextEditor, { ITextEditorHandle } from '../bbcode/TextEditor';
 import WikiCommandBar from './WikiCommandBar';
+import IWiki, { IWikiUpdate } from '../../models/IWiki';
 import { updateWiki } from '../../actions/wikis/WikiAction';
+import Editor, { IEditorHandle } from '../bbcode/Editor';
 
 export type Props = {
     wiki: IWiki;
@@ -25,7 +25,7 @@ type ConnectedDispatch = {
 
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
 class WikiViewComponent extends React.Component<CombinedProps, State> {
-    private _editorHandle: ITextEditorHandle;
+    private _editorHandle: IEditorHandle;
 
     constructor(props: CombinedProps) {
         super(props);
@@ -50,15 +50,12 @@ class WikiViewComponent extends React.Component<CombinedProps, State> {
         };
 
         if (editMode) {
-            // A rough estimate of how much space is available on the page
-            // with a minimum starting height of 250 px
-            const height = Math.max(250, window.innerHeight - 220);
-            const onHandle = (handle: ITextEditorHandle) => { this._editorHandle = handle; };
+            const onHandle = (handle: IEditorHandle) => { this._editorHandle = handle; };
             return (
                 <div>
                     <WikiCommandBar wiki={wiki} editMode={editMode} operations={operations} />
                     <h1>{wiki.title}</h1>
-                    <TextEditor content={wiki.body} receiveHandle={onHandle} startingHeight={height} />
+                    <Editor content={wiki.body} receiveHandle={onHandle} size="large" />
                 </div>
             );
         }

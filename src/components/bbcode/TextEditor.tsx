@@ -2,6 +2,7 @@ import * as React from 'react';
 
 export interface ITextEditorHandle {
     getContent: () => string;
+    injectTag: (tag: string, value?: string) => void;
 }
 
 export type Props = {
@@ -15,6 +16,8 @@ type State = {
 };
 
 export default class TextEditor extends React.Component<Props, State> {
+    private _textArea: HTMLTextAreaElement;
+
     constructor(props: Props) {
         super(props);
 
@@ -30,7 +33,13 @@ export default class TextEditor extends React.Component<Props, State> {
     public componentDidMount() {
         if (this.props.receiveHandle) {
             this.props.receiveHandle({
-                getContent: () => { return this.state.content; }
+                getContent: () => { return this.state.content; },
+                injectTag: (tag: string, value?: string) => {
+                    if (this._textArea) {
+                        injectTag(this._textArea, tag, value);
+                        this.setState({ content: this._textArea.value });
+                    }
+                }
             });
         }
     }
@@ -42,7 +51,8 @@ export default class TextEditor extends React.Component<Props, State> {
     public render() {
         return <textarea
             className="form-control"
-            style={{ height: `${this.props.startingHeight}px`}}
+            ref={(textarea: HTMLTextAreaElement) => this._textArea = textarea}
+            style={{ height: `${this.props.startingHeight}px` }}
             spellCheck={true}
             value={this.state.content}
             onChange={this._handleChange.bind(this)}
@@ -51,5 +61,26 @@ export default class TextEditor extends React.Component<Props, State> {
 
     private _handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
         this.setState({ content: event.target.value });
+    }
+}
+
+function injectTag(element: HTMLTextAreaElement, tag: string, value?: string) {
+    if (element.selectionStart || element.selectionStart === 0) {
+        const text = element.value;
+        const start = element.selectionStart;
+        const end = element.selectionEnd;
+
+        const selection = text.substring(start, end);
+        const insertion = `[${tag}${value ? `=${value}` : ''}]${selection}${tag !== '*' ? `[/${tag}]` : ''}`;
+        const newText = text.substring(0, start) + insertion + text.substring(end, text.length);
+        element.value = newText;
+
+        const insertionOffset = 1 + tag.length + (value ? 1 + value.length : 0) + 1;
+        const newFocus = start + insertionOffset;
+        element.setSelectionRange(newFocus, newFocus + end - start);
+        element.focus();
+    } else {
+        element.value += tag;
+        element.focus();
     }
 }
