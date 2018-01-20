@@ -84,6 +84,15 @@ function getSecondaryCommandSet(props: ICommandBarProps) {
         };
     };
 
+    const injectText = (text: string, cursor?: number) => {
+        return () => {
+            const handle = props.getHandle();
+            if (handle) {
+                handle.injectText(text, cursor);
+            }
+        };
+    };
+
     let commands: ICommandProps[] = [
         {
             icon: 'bold',
@@ -116,7 +125,7 @@ function getSecondaryCommandSet(props: ICommandBarProps) {
         }, {
             icon: 'quote-left',
             tooltip: 'Quote',
-            onExecute: injectTag('quote')
+            onExecute: injectTag('quote', 'unitPower')
         }, {
             icon: 'text-height',
             tooltip: 'Text size in pixels',
@@ -128,11 +137,11 @@ function getSecondaryCommandSet(props: ICommandBarProps) {
         }, {
             icon: 'align-center',
             tooltip: 'Align center',
-            onExecute: injectTag('align', 'center')
+            onExecute: injectTag('center')
         }, {
             icon: 'align-right',
             tooltip: 'Align right',
-            onExecute: injectTag('align', 'right')
+            onExecute: injectTag('right')
         }, {
             icon: 'code',
             tooltip: 'Code',
@@ -140,7 +149,11 @@ function getSecondaryCommandSet(props: ICommandBarProps) {
         }, {
             icon: 'list',
             tooltip: 'List',
-            onExecute: injectTag('*')
+            onExecute: injectText('[list]\n[*] First\n[*] Second\n[/list]', 10)
+        }, {
+            icon: 'table',
+            tooltip: 'Table',
+            onExecute: injectText('[table]\n  [thead]\n    [th] First column      [/th]\n    [th] Second column[/th]\n  [/thead]\n  [tbody]\n    [tr]\n      [td] First cell[/td]\n      [td] Second cell[/td]\n    [/tr]\n  [/tbody]\n[/table]', 27)
         }, {
             icon: 'info',
             tooltip: 'BBCode help',

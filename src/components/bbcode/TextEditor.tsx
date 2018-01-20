@@ -3,6 +3,7 @@ import * as React from 'react';
 export interface ITextEditorHandle {
     getContent: () => string;
     injectTag: (tag: string, value?: string) => void;
+    injectText: (text: string, cursor?: number) => void;
 }
 
 export type Props = {
@@ -39,6 +40,12 @@ export default class TextEditor extends React.Component<Props, State> {
                         injectTag(this._textArea, tag, value);
                         this.setState({ content: this._textArea.value });
                     }
+                },
+                injectText: (text: string, cursor?: number) => {
+                    if (this._textArea) {
+                        injectText(this._textArea, text, cursor);
+                        this.setState({ content: this._textArea.value });
+                    }
                 }
             });
         }
@@ -64,6 +71,24 @@ export default class TextEditor extends React.Component<Props, State> {
     }
 }
 
+function injectText(element: HTMLTextAreaElement, text: string, cursor?: number) {
+    if (element.selectionStart || element.selectionStart === 0) {
+        const original = element.value;
+        const start = element.selectionStart;
+        const end = element.selectionEnd;
+
+        const newText = original.substring(0, start) + text + original.substring(end, original.length);
+        element.value = newText;
+
+        const newFocus = start + (cursor || 0);
+        element.setSelectionRange(newFocus, newFocus);
+        element.focus();
+    } else {
+        element.value += text;
+        element.focus();
+    }
+}
+
 function injectTag(element: HTMLTextAreaElement, tag: string, value?: string) {
     if (element.selectionStart || element.selectionStart === 0) {
         const text = element.value;
@@ -71,7 +96,7 @@ function injectTag(element: HTMLTextAreaElement, tag: string, value?: string) {
         const end = element.selectionEnd;
 
         const selection = text.substring(start, end);
-        const insertion = `[${tag}${value ? `=${value}` : ''}]${selection}${tag !== '*' ? `[/${tag}]` : ''}`;
+        const insertion = `[${tag}${value ? `=${value}` : ''}]${selection}[/${tag}]`;
         const newText = text.substring(0, start) + insertion + text.substring(end, text.length);
         element.value = newText;
 

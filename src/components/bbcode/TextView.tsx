@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { Parser } from 'bbcode-to-react';
 
-const parser = new Parser();
+import { extendParser } from './tags';
+
+const parser = extendParser(new Parser());
 const style: React.CSSProperties = {
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-word'
