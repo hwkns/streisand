@@ -1,52 +1,11 @@
-import * as React from 'react';
+import ICommandProps from './ICommandProps';
+import CommandBarProps from './CommandBarProps';
 
-import { ITextEditorHandle } from './TextEditor';
-
-interface ICommandBarProps {
-    isPreview: boolean;
-    toggleMode: () => void;
-    getHandle: () => ITextEditorHandle;
-    commitContent: (content: string) => void;
-}
-
-export default function CommandBar(props: ICommandBarProps) {
-    let primary = buildCommands([
-        getModeCommand(props)
-    ]);
-    let secondary = getSecondaryCommandSet(props);
-    return (
-        <div style={{ display: 'flex', 'margin-bottom': '4px' }}>
-            <div className="btn-toolbar" style={{ 'margin-right': '20px' }}>
-                {primary}
-            </div>
-            {secondary}
-        </div >
-    );
-}
-
-function FontIcon(props: { type: string }) {
-    let className = `fa fa-${props.type}`;
-    return <i className={className} style={{ 'font-size': '14px' }} />;
-}
-
-interface ICommandProps {
-    icon?: string;
-    label?: string;
-    tooltip?: string;
-    onExecute: () => void;
-}
-function Command(props: ICommandProps) {
-    return <button type="button" className="btn btn-sm btn-default" title={props.tooltip} onClick={props.onExecute}>
-        {props.icon && <FontIcon type={props.icon} />}
-        {props.label}
-    </button>;
-}
-
-function getModeCommand(props: ICommandBarProps): ICommandProps {
+export function getModeCommand(props: CommandBarProps): ICommandProps {
     if (!props.isPreview) {
         return {
             label: 'Preview',
-            tooltip: 'Switch to preview mode',
+            title: 'Switch to preview mode',
             onExecute: () => {
                 const handle = props.getHandle();
                 if (handle) {
@@ -59,20 +18,14 @@ function getModeCommand(props: ICommandBarProps): ICommandProps {
 
     return {
         label: 'Edit',
-        tooltip: 'Switch to edit mode',
+        title: 'Switch to edit mode',
         onExecute: () => { props.toggleMode(); }
     };
 }
 
-function buildCommands(commands: ICommandProps[]) {
-    return commands.map((props: ICommandProps) => {
-        return React.createElement(Command, props);
-    });
-}
-
-function getSecondaryCommandSet(props: ICommandBarProps) {
+export function getCommandSet(props: CommandBarProps) {
     if (props.isPreview) {
-        return;
+        return [];
     }
 
     const injectTag = (tag: string, value?: string) => {
@@ -93,78 +46,102 @@ function getSecondaryCommandSet(props: ICommandBarProps) {
         };
     };
 
-    let commands: ICommandProps[] = [
+    const commands: ICommandProps[] = [
         {
             icon: 'bold',
-            tooltip: 'Bold',
+            title: 'Bold',
             onExecute: injectTag('b')
         }, {
             icon: 'italic',
-            tooltip: 'Italic',
+            title: 'Italic',
             onExecute: injectTag('i')
         }, {
             icon: 'underline',
-            tooltip: 'Underline',
+            title: 'Underline',
             onExecute: injectTag('u')
         }, {
             icon: 'strikethrough',
-            tooltip: 'Strikethrough',
+            title: 'Strikethrough',
             onExecute: injectTag('s')
         }, {
             icon: 'link',
-            tooltip: 'Link',
+            title: 'Link',
             onExecute: injectTag('url', 'https://example.com')
         }, {
             icon: 'image',
-            tooltip: 'Image',
+            title: 'Image',
             onExecute: injectTag('img')
         }, {
             icon: 'eye-slash',
-            tooltip: 'Hide',
+            title: 'Hide',
             onExecute: injectTag('hide')
         }, {
             icon: 'quote-left',
-            tooltip: 'Quote',
+            title: 'Quote',
             onExecute: injectTag('quote', 'unitPower')
         }, {
             icon: 'text-height',
-            tooltip: 'Text size in pixels',
+            title: 'Text size in pixels',
             onExecute: injectTag('size', '12')
         }, {
             icon: 'paint-brush',
-            tooltip: 'Text color',
+            title: 'Text color',
             onExecute: injectTag('color', '#000000')
         }, {
             icon: 'align-center',
-            tooltip: 'Align center',
+            title: 'Align center',
             onExecute: injectTag('center')
         }, {
             icon: 'align-right',
-            tooltip: 'Align right',
+            title: 'Align right',
             onExecute: injectTag('right')
         }, {
             icon: 'code',
-            tooltip: 'Code',
-            onExecute: injectTag('code')
+            title: 'Code',
+            children: [
+                {
+                    label: 'Code',
+                    onExecute: injectTag('code')
+                }, {
+                    label: 'Inline code',
+                    onExecute: injectTag('code', 'inline')
+                }
+            ]
         }, {
             icon: 'list',
-            tooltip: 'List',
-            onExecute: injectText('[list]\n[*] First\n[*] Second\n[/list]', 10)
+            title: 'List',
+            children: [
+                {
+                    label: '[*] Unordered list',
+                    onExecute: injectText('[list]\n[*] First\n[*] Second\n[/list]', 10)
+                }, {
+                    label: '[1] Numeric list',
+                    onExecute: injectText('[list=1]\n[*] First\n[*] Second\n[/list]', 12)
+                }, {
+                    label: '[a] Alphabetic list',
+                    onExecute: injectText('[list=a]\n[*] First\n[*] Second\n[/list]', 12)
+                }, {
+                    label: '[A] Alphabetic list',
+                    onExecute: injectText('[list=A]\n[*] First\n[*] Second\n[/list]', 12)
+                }, {
+                    label: '[i] Roman numeral list',
+                    onExecute: injectText('[list=i]\n[*] First\n[*] Second\n[/list]', 12)
+                }, {
+                    label: '[I] Roman numeral list',
+                    onExecute: injectText('[list=I]\n[*] First\n[*] Second\n[/list]', 12)
+                }
+            ]
         }, {
             icon: 'table',
-            tooltip: 'Table',
+            title: 'Table',
             onExecute: injectText('[table]\n  [thead]\n    [th] First column      [/th]\n    [th] Second column[/th]\n  [/thead]\n  [tbody]\n    [tr]\n      [td] First cell[/td]\n      [td] Second cell[/td]\n    [/tr]\n  [/tbody]\n[/table]', 27)
         }, {
             icon: 'info',
-            tooltip: 'BBCode help',
+            title: 'BBCode help',
             onExecute: () => {
                 console.log('Go to help page');
             }
         }
     ];
-    return (
-        <div className="btn-toolbar">
-            {buildCommands(commands)}
-        </div>
-    );
+    return commands;
 }

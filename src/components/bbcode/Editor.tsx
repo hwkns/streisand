@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import TextView from './TextView';
-import EditorCommandBar from './EditorCommandBar';
+import EditorCommandBar from './commands/EditorCommandBar';
 import TextEditor, { ITextEditorHandle } from './TextEditor';
 
 export interface IEditorHandle {
