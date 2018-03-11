@@ -15,6 +15,7 @@ INSTALLED_APPS += [
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'corsheaders',
+    'drf_yasg',
 
     # Contrib apps
     'django.contrib.admin',
@@ -135,6 +136,10 @@ AUTHENTICATION_BACKENDS = [
     # django-su
     'django_su.backends.SuBackend',
 ]
+
+REDOC_SETTINGS = {
+   'LAZY_RENDERING': True,
+}
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
