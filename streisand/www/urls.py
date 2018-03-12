@@ -6,18 +6,33 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import logout_then_login
-
-from rest_framework_swagger.views import get_swagger_view
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 from invites.views import InviteRegistrationView
 from .decorators import https_required
 from .views import RegistrationView, LegacyURLView, template_viewer, home, login
 
+schema_view = get_schema_view(
+   openapi.Info(
+      title="JumpCut.to API",
+      default_version='v1',
+      description="JumpCut API",
+      terms_of_service="https://www.jumpcut.to/terms/",
+      contact=openapi.Contact(email="admin@jumpcut.to"),
+   ),
+)
+
 
 urlpatterns = [
 
     url(r'^api/v1/', include('api.v1.urls')),
-    url(r'^swagger/', get_swagger_view(title='JumpCut API')),
+    url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=None), name='schema-json'),
+    url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
+
+    # Not sure if we need this yet
+    url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=None), name='schema-redoc'),
+
 
     url(
         regex=r'^$',
