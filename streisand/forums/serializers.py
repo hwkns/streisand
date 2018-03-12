@@ -2,14 +2,12 @@
 
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-
 from users.serializers import DisplayUserProfileSerializer
 from www.templatetags.bbcode import bbcode as bbcode_to_html
 from .models import ForumGroup, ForumPost, ForumThread, ForumTopic
 
 
 class ForumPostSerializer(ModelSerializer):
-
     thread = serializers.SerializerMethodField()
     author = DisplayUserProfileSerializer()
     body_html = serializers.SerializerMethodField()
@@ -40,28 +38,41 @@ class ForumPostSerializer(ModelSerializer):
 
 
 class ForumThreadSerializer(ModelSerializer):
-
-    latest_post = ForumPostSerializer()
+    latest_post = serializers.ReadOnlyField(source='last_forumpost.id')
+    latest_post_created = serializers.ReadOnlyField(source='last_forumpost.created_at')
+    post_count = serializers.ReadOnlyField(source='forumpost_count')
+    topic_name = serializers.ReadOnlyField(source='topic.name')
+    topic_id = serializers.ReadOnlyField(source='topic.id')
+    subscribed_users = serializers.HiddenField(default=serializers.CurrentUserDefault()
+                                               )
+    posts = ForumPostSerializer(many=True, read_only=True)
 
     class Meta:
         model = ForumThread
-        fields = (
-            'id',
-            'topic',
-            'title',
-            'created_at',
-            'created_by',
-            'is_locked',
-            'is_sticky',
-            'number_of_posts',
-            'latest_post',
-        )
+        fields = ('id',
+                  'topic_id',
+                  'topic_name',
+                  'title',
+                  'created_at',
+                  'created_by',
+                  'posts',
+                  'latest_post',
+                  'latest_post_created',
+                  'post_count',
+                  'is_locked',
+                  'is_sticky',
+                  'subscribed_users'
+                  )
 
 
 class ForumTopicSerializer(ModelSerializer):
-
-    group = serializers.SerializerMethodField()
-    latest_post = ForumPostSerializer()
+    latest_thread = serializers.ReadOnlyField(source='last_thread.id')
+    latest_thread_title = serializers.ReadOnlyField(source='last_thread.title')
+    latest_thread_created = serializers.ReadOnlyField(source='last_thread.created_at')
+    thread_count = serializers.ReadOnlyField(source='forumthread_count')
+    post_count = serializers.ReadOnlyField(source='forumpost_count')
+    group_name = serializers.ReadOnlyField(source='group.name')
+    group_id = serializers.ReadOnlyField(source='group.id')
 
     class Meta:
         model = ForumTopic
@@ -70,20 +81,16 @@ class ForumTopicSerializer(ModelSerializer):
             'sort_order',
             'name',
             'description',
-            'group',
+            'group_name',
+            'group_id',
             'minimum_user_class',
-            'number_of_threads',
-            'number_of_posts',
+            'post_count',
             'latest_post',
+            'latest_thread',
+            'latest_thread_title',
+            'latest_thread_created',
+            'thread_count',
         )
-
-    @staticmethod
-    def get_group(forum_topic):
-        group = forum_topic.group
-        return {
-            'id': group.id,
-            'name': group.name,
-        }
 
 
 class ForumGroupSerializer(ModelSerializer):

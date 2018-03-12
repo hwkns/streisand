@@ -21,6 +21,10 @@ class ForumGroup(models.Model):
     def __str__(self):
         return '{name}'.format(name=self.name)
 
+    @property
+    def forumtopics(self):
+        return ForumTopic.objects.filter(group__id=self.id)
+
 
 class ForumTopic(models.Model):
 
@@ -53,7 +57,28 @@ class ForumTopic(models.Model):
 
     objects = ForumTopicQuerySet.as_manager()
 
+    @property
+    def forumthreads(self):
+        return ForumThread.objects.filter(topic__id=self.id)
+
+    @property
+    def forumthread_count(self):
+        return len(self.forumthreads)
+
+    @property
+    def forumposts(self):
+        return ForumPost.objects.filter(thread__topic__id=self.id)
+
+    @property
+    def forumpost_count(self):
+        return len(self.forumposts)
+
+    @property
+    def last_forumthread(self):
+        return self.forumthreads.order_by('-created_at').first()
+
     class Meta:
+
         ordering = ['sort_order']
 
     def __str__(self):
@@ -104,6 +129,19 @@ class ForumThread(models.Model):
     class Meta:
         get_latest_by = 'created_at'
 
+
+    @property
+    def forumposts(self):
+        return ForumPost.objects.filter(thread__id=self.id)
+
+    @property
+    def forumpost_count(self):
+        return len(self.forumposts)
+
+    @property
+    def last_forumpost(self):
+        return self.forumposts.order_by('-created_at').first()
+
     objects = ForumThreadQuerySet.as_manager()
 
     def __str__(self):
@@ -149,6 +187,12 @@ class ForumPost(models.Model):
             author=self.author,
             thread=self.thread,
         )
+
+    @property
+    def forum_post_number(self):
+        qs = self.forumthread.forumposts.order_by('created_at')
+        forum_post_index = list(qs.values_list('id', flat=True)).index(self.id)
+        return forum_post_index + 1
 
     def get_absolute_url(self):
         return '{thread_url}#{post_id}'.format(
