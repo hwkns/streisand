@@ -22,6 +22,7 @@ INSTALLED_APPS += [
     'django.contrib.humanize',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'django.contrib.messages',
 
     # Debug Toolbar
     'debug_toolbar',
@@ -38,6 +39,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsPostCsrfMiddleware',
