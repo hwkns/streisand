@@ -1,10 +1,21 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render
+from rest_framework import filters
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from www.utils import paginate
-
 from .models import FilmList
+from .serializers import FilmListSerializer
+
+
+class FilmListViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = FilmListSerializer
+    queryset = FilmList.objects.all().prefetch_related('films__torrents')
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('films__title', 'title')
 
 
 def film_list_index(request):
