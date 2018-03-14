@@ -1,16 +1,25 @@
 # -*- coding: utf-8 -*-
 
-from rest_framework.permissions import IsAdminUser
-from rest_framework.viewsets import ModelViewSet
-
 from django.contrib.auth.models import Group
 from django.shortcuts import render, get_object_or_404
+from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
 from www.utils import paginate
-
 from .models import User
-from .serializers import GroupSerializer, AdminUserProfileSerializer
+from .serializers import GroupSerializer, AdminUserProfileSerializer, OwnedUserProfileSerializer
 
+
+class CurrentUserView(APIView):
+    """
+    API endpoint that shows the currently logged in user. default is /api/v1/current-user.
+    """
+    def get(self, request):
+        serializer = OwnedUserProfileSerializer(request.user)
+        return Response(serializer.data)
+ 
 
 class UserViewSet(ModelViewSet):
     """
