@@ -8,7 +8,7 @@ from django.conf.urls import url, include
 from films.views import FilmViewSet
 from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadViewSet, ForumPostViewSet, NewsPostViewSet
 from torrents.views import TorrentViewSet
-from users.views import UserViewSet, GroupViewSet
+from users.views import UserViewSet, GroupViewSet, CurrentUserView
 from wiki.views import WikiArticleViewSet
 
 router = routers.DefaultRouter()
@@ -32,5 +32,5 @@ urlpatterns = [
 
     # DRF browsable API
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-
+    url(r'^current-user/', CurrentUserView.as_view()),
 ]
