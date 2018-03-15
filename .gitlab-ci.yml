@@ -15,7 +15,7 @@ cache:
 before_script:
   - python -V
   
- install:
+install:
     - "pip install -r requirements.txt"
     - "pip install -r testing_requirements.txt"
     - "pip install coveralls"
