@@ -24,7 +24,7 @@ class WikiArticleCreateUpdateDestroyViewSet(mixins.CreateModelMixin,
                                 mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
                                 GenericViewSet):
     """
-    API endpoint that allows Wikis to be created, edited, or deleted only. Options are HEAD, Wiki, PATCH, DELETE.
+    API endpoint that allows Wikis to be created, edited, or deleted only. Options are HEAD, POST, PATCH, DELETE.
     """
     serializer_class = WikiCreateUpdateDestroySerializer
     filter_backends = [SearchFilter, OrderingFilter]
