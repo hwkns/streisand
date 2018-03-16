@@ -145,9 +145,9 @@ class WikiArticleEditView(View):
             },
         )
 
-    def Wiki(self, request):
+    def post(self, request):
 
-        form = WikiArticleForm(instance=self.article, data=request.Wiki, author=request.user)
+        form = WikiArticleForm(instance=self.article, data=request.POST, author=request.user)
 
         if form.is_valid():
 
@@ -187,9 +187,9 @@ class WikiArticleCreationView(View):
             }
         )
 
-    def Wiki(self, request):
+    def post(self, request):
 
-        form = WikiArticleForm(request.Wiki, author=request.user)
+        form = WikiArticleForm(request.POST, author=request.user)
 
         if form.is_valid():
 
