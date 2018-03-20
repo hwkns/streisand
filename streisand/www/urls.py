@@ -6,32 +6,48 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import logout_then_login
+
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
+from rest_framework.decorators import api_view
+from rest_framework import permissions
+from rest_framework import request
 
 from invites.views import InviteRegistrationView
 from .decorators import https_required
 from .views import RegistrationView, LegacyURLView, template_viewer, home, login
 
-schema_view = get_schema_view(
-   openapi.Info(
+swagger_info = openapi.Info(
       title="JumpCut.to API",
       default_version='v1',
       description="JumpCut API",
       terms_of_service="https://www.jumpcut.to/terms/",
       contact=openapi.Contact(email="admin@jumpcut.to"),
-   ),
+   )
+
+SchemaView = get_schema_view(
+      validators=['ssv', 'flex'],
+      public=False,
+      permission_classes=(permissions.IsAdminUser,),
 )
+
+@api_view(['GET'])
+def plain_view(request):
+    pass
+
+
 
 
 urlpatterns = [
 
     url(r'^api/v1/', include('api.v1.urls')),
-    url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=None), name='schema-json'),
-    url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
+    url(r'^swagger(?P<format>.json|.yaml)$', SchemaView.without_ui(cache_timeout=0), name='schema-json'),
+    url(r'^swagger/$', SchemaView.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+
 
     # Not sure if we need this yet
-    url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=None), name='schema-redoc'),
+    url(r'^redoc/$', SchemaView.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
 
     url(

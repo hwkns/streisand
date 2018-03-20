@@ -9,7 +9,7 @@ from films.views import FilmViewSet
 from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadViewSet, ForumPostViewSet, NewsPostViewSet
 from torrents.views import TorrentViewSet
 from users.views import UserViewSet, GroupViewSet, CurrentUserView
-from wiki.views import WikiArticleViewSet
+from wiki.views import WikiArticleCreateUpdateDestroyViewSet, WikiArticleBodyViewSet, WikiArticleViewListOnlyViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', viewset=UserViewSet)
@@ -21,8 +21,9 @@ router.register(r'forum-topics', viewset=ForumTopicViewSet, base_name='forum-top
 router.register(r'forum-threads', viewset=ForumThreadViewSet, base_name='forum-thread')
 router.register(r'forum-posts', viewset=ForumPostViewSet, base_name='forum-post')
 router.register(r'news-posts', viewset=NewsPostViewSet, base_name='news-post')
-router.register(r'wiki-articles', viewset=WikiArticleViewSet, base_name='wiki-article')
-router.register(r'collections', viewset=FilmListViewSet, base_name='collection')
+router.register(r'wikis', viewset=WikiArticleCreateUpdateDestroyViewSet, base_name='wiki')
+router.register(r'wiki-articles', viewset=WikiArticleViewListOnlyViewSet, base_name='wiki-article')
+router.register(r'wiki-bodies', viewset=WikiArticleBodyViewSet, base_name='wiki-body')
 
 
 urlpatterns = [
@@ -34,4 +35,5 @@ urlpatterns = [
     # DRF browsable API
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^current-user/', CurrentUserView.as_view()),
+
 ]
