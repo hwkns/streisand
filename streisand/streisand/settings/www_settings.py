@@ -113,12 +113,16 @@ if DEBUG:
     )
 
 SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'basic': {
-            'type': 'basic',
-        }
-    },
+'LOGIN_URL': '/admin/login',
+    'LOGOUT_URL': '/admin//logout',
+
+    'DEFAULT_INFO': 'www.urls.swagger_info'
+
 }
+
+# Swagger https settings needed below. 
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CORS_URL_REGEX = r'^/api/v1/.*$'
 
@@ -139,9 +143,6 @@ AUTHENTICATION_BACKENDS = [
     'django_su.backends.SuBackend',
 ]
 
-REDOC_SETTINGS = {
-   'LAZY_RENDERING': True,
-}
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
