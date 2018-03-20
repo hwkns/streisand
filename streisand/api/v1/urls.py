@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from django.conf.urls import url, include
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 
-from django.conf.urls import url, include
-
+from film_lists.views import FilmListViewSet
 from films.views import FilmViewSet
 from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadViewSet, ForumPostViewSet, NewsPostViewSet
 from torrents.views import TorrentViewSet
@@ -24,7 +24,7 @@ router.register(r'news-posts', viewset=NewsPostViewSet, base_name='news-post')
 router.register(r'wikis', viewset=WikiArticleCreateUpdateDestroyViewSet, base_name='wiki')
 router.register(r'wiki-articles', viewset=WikiArticleViewListOnlyViewSet, base_name='wiki-article')
 router.register(r'wiki-bodies', viewset=WikiArticleBodyViewSet, base_name='wiki-body')
-
+router.register(r'collections', viewset=FilmListViewSet, base_name='collection')
 
 urlpatterns = [
 
