@@ -120,6 +120,10 @@ SWAGGER_SETTINGS = {
 
 }
 
+# Swagger https settings needed below. 
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 CORS_URL_REGEX = r'^/api/v1/.*$'
 
 CORS_ORIGIN_WHITELIST = [
