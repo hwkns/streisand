@@ -24,7 +24,7 @@ router.register(r'news-posts', viewset=NewsPostViewSet, base_name='news-post')
 router.register(r'wikis', viewset=WikiArticleCreateUpdateDestroyViewSet, base_name='wiki')
 router.register(r'wiki-articles', viewset=WikiArticleViewListOnlyViewSet, base_name='wiki-article')
 router.register(r'wiki-bodies', viewset=WikiArticleBodyViewSet, base_name='wiki-body')
-
+router.register(r'collections', viewset=FilmListViewSet, base_name='collection')
 
 urlpatterns = [
 
