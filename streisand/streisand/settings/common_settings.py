@@ -35,7 +35,7 @@ SECRET_KEY = os.environ.get('STREISAND_SECRET_KEY', 'you_deserve_to_be_pwned')
 
 ALLOWED_HOSTS = [
     'localhost',
-    '.jumpcut.to',
+    '.tehjump.xyz',
 ]
 HOST_DOMAIN = os.environ.get('HOST_DOMAIN', '')
 if HOST_DOMAIN:
