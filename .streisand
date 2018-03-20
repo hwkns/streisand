@@ -4,7 +4,7 @@
 cd /var/www/streisand
 
 ### Activate project virtualenv
-. /home/vagrant/.venv/bin/activate
+. /home/ubuntu/.venv/bin/activate
 
 ### Ignore PendingDeprecation warnings
 export PYTHONWARNINGS="ignore::PendingDeprecationWarning"
