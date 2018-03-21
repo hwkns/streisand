@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from comments.models import Comment
 from rotten_tomatoes.models import FilmRottenTomatoes
+from users.models import User
 
 
 class Film(models.Model):
@@ -68,3 +69,30 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Collection(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='collection_creators')
+    title = models.CharField(max_length=1024)                                                          
+    description = models.TextField()                                                                   
+    film = models.ManyToManyField(Film, related_name='lists')
+    collection_tags = models.ManyToManyField('films.Tag', related_name='collections')
+
+    def __str__(self):                                                                                 
+        return self.title                                                                              
+                                                                                                       
+    def __len__(self):                                                                                 
+        return self.films.count()                                                                      
+                                                                                                       
+    def get_absolute_url(self):                                                                        
+        return reverse('collections_details', args=[self.id])
+
+
+class CollectionComment(Comment):
+
+    collection = models.ForeignKey(
+        to='films.Collection',
+        related_name='collections_comments',
+        on_delete=models.CASCADE,
+    )
+
