@@ -7,8 +7,30 @@ from django.shortcuts import render, get_object_or_404
 
 from www.utils import paginate
 
-from .models import Film
-from .serializers import AdminFilmSerializer
+from .models import Film, Collection
+from .serializers import AdminFilmSerializer, CollectionSerializer
+
+
+class CollectionViewSet(ModelViewSet):
+    permission_classes = [IsAdminUser]
+    serializer_class = CollectionSerializer
+    queryset = Collection.objects.all().select_related(
+        'creator',
+    ).prefetch_related(
+        'collection_tags',
+    ).order_by(
+        '-id',
+    )
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+
+        # Tag filtering
+        if 'collection_tags' in self.request.query_params:
+            queryset = queryset.filter(collection_tags__name=self.request.query_params['collection_tags'])
+
+        return queryset
 
 
 class FilmViewSet(ModelViewSet):
