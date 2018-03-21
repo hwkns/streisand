@@ -48,9 +48,11 @@ class CollectionSerializer(serializers.ModelSerializer):
     list_title = serializers.CharField(source='title')                                                 
     list_description = serializers.CharField(source='description')
     film = serializers.PrimaryKeyRelatedField(many=True, queryset=Film.objects.all())
+    film_title = serializers.StringRelatedField(many=True, source='film')
+    film_link = serializers.HyperlinkedRelatedField(many=True, read_only=True, source='film', view_name='film-detail')
     url = serializers.HyperlinkedIdentityField(read_only=True, view_name='collection-detail')
     comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True, source='collections_comments')
 
     class Meta:
         model = Collection
-        fields = ('creator', 'comments', 'list_id', 'url', 'list_title', 'list_description', 'collection_tags', 'film')
+        fields = ('creator', 'comments', 'list_id', 'url', 'list_title', 'list_description', 'collection_tags', 'film', 'film_title', 'film_link')
