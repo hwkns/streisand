@@ -43,12 +43,6 @@ class PublicFilmSerializer(AdminFilmSerializer):
             self.fields.pop(field_name)
 
 
-class FilmSerializer(serializers.ModelSerializer, serializers.PrimaryKeyRelatedField):
-    class Meta:
-        model = Film
-        fields = ('id', 'lists', 'title', 'year', 'description', 'tags')
-
-
 class CollectionSerializer(serializers.ModelSerializer):
     list_id = serializers.IntegerField(source='id', read_only=True)                                    
     list_title = serializers.CharField(source='title')                                                 
