@@ -54,7 +54,7 @@ test:
   - coverage run ./streisand/manage.py test streisand
   - coverage report -m
   
- codequality:
+codequality:
   image: docker:latest
   variables:
     DOCKER_DRIVER: overlay
