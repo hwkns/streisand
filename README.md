@@ -1,5 +1,7 @@
 [![pipeline status](https://git.ronzertnert.me/JumpCut/JumpCut/badges/develop/pipeline.svg)](https://git.ronzertnert.me/JumpCut/JumpCut/commits/develop)
+[![Build Status](https://travis-ci.com/TheSaltman/JumpCut.svg?token=omojFLEmKUq3bYx2FWE8&branch=develop)](https://travis-ci.com/TheSaltman/JumpCut)
 [![Coverage Status](https://coveralls.io/repos/streisand/streisand/badge.svg?branch=develop&service=github)](https://coveralls.io/github/streisand/streisand?branch=develop)
+[![coverage Report](https://git.ronzertnert.me/JumpCut/JumpCut/badges/develop/coverage.svg)](https://git.ronzertnert.me/JumpCut/JumpCut/commits/develop)
 [![Code Climate](https://codeclimate.com/github/streisand/streisand/badges/gpa.svg)](https://codeclimate.com/github/streisand/streisand)
 
 Jumpcut
