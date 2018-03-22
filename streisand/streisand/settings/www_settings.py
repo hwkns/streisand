@@ -47,7 +47,6 @@ MIDDLEWARE = [
     'www.middleware.LoginRequiredMiddleware',
     'www.middleware.IPHistoryMiddleware',
 ]
-from django.middleware.security import SecurityMiddleware
 
 if PRODUCTION or TESTING:
     INSTALLED_APPS.remove('debug_toolbar')
@@ -113,14 +112,14 @@ if DEBUG:
     )
 
 SWAGGER_SETTINGS = {
-'LOGIN_URL': '/admin/login',
+    'LOGIN_URL': '/admin/login',
     'LOGOUT_URL': '/admin//logout',
 
     'DEFAULT_INFO': 'www.urls.swagger_info'
 
 }
 
-# Swagger https settings needed below. 
+# Swagger https settings needed below.
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 

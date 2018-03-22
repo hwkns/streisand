@@ -2,7 +2,8 @@
 
 from rest_framework import serializers
 
-from .models import Film, Collection, CollectionComment
+from .models import Film, Collection
+
 
 class AdminFilmSerializer(serializers.ModelSerializer):
 
@@ -44,8 +45,8 @@ class PublicFilmSerializer(AdminFilmSerializer):
 
 
 class CollectionSerializer(serializers.ModelSerializer):
-    list_id = serializers.IntegerField(source='id', read_only=True)                                    
-    list_title = serializers.CharField(source='title')                                                 
+    list_id = serializers.IntegerField(source='id', read_only=True)
+    list_title = serializers.CharField(source='title')
     list_description = serializers.CharField(source='description')
     film = serializers.PrimaryKeyRelatedField(many=True, queryset=Film.objects.all())
     film_title = serializers.StringRelatedField(many=True, read_only=True, source='film')

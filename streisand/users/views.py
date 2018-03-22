@@ -19,7 +19,7 @@ class CurrentUserView(APIView):
     def get(self, request):
         serializer = OwnedUserProfileSerializer(request.user)
         return Response(serializer.data)
- 
+
 
 class UserViewSet(ModelViewSet):
     """
