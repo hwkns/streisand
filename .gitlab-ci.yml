@@ -70,3 +70,6 @@ codequality:
       "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
   artifacts:
     paths: [codeclimate.json]
+    
+  tags:
+    - codequality
