@@ -26,7 +26,7 @@ before_script:
   # - apt-get update -q && apt-get install nodejs -yqq
   - pip install -r requirements.txt
   - pip install -r testing_requirements.txt
-  - pip install pytest-cov
+  - pip install coverage
 
 
 # To get Django tests to work you may need to create a settings file using
