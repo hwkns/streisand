@@ -26,7 +26,7 @@ before_script:
   # - apt-get update -q && apt-get install nodejs -yqq
   - pip install -r requirements.txt
   - pip install -r testing_requirements.txt
-  - pip install coveralls
+  - pip install pytest-cov
 
 
 # To get Django tests to work you may need to create a settings file using
@@ -52,3 +52,4 @@ test:
   - ./streisand/manage.py makemigrations
   - ./streisand/manage.py migrate
   - coverage run ./streisand/manage.py test streisand
+  - coverage report -m
