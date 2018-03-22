@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/streisand/streisand.svg?branch=develop)](https://travis-ci.org/streisand/streisand)
+[![pipeline status](https://git.ronzertnert.me/JumpCut/JumpCut/badges/develop/pipeline.svg)](https://git.ronzertnert.me/JumpCut/JumpCut/commits/develop)
 [![Coverage Status](https://coveralls.io/repos/streisand/streisand/badge.svg?branch=develop&service=github)](https://coveralls.io/github/streisand/streisand?branch=develop)
 [![Code Climate](https://codeclimate.com/github/streisand/streisand/badges/gpa.svg)](https://codeclimate.com/github/streisand/streisand)
 
