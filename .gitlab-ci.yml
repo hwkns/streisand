@@ -55,7 +55,6 @@ test:
   - coverage report -m
   
 codequality:
-  <<: *dedicated-no-docs-no-db-pull-cache-job
   image: docker:latest
   before_script: []
   services:
