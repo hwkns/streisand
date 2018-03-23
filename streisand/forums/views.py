@@ -16,6 +16,7 @@ from .serializers import (
     ForumTopicSerializer,
     ForumThreadSerializer,
     ForumPostSerializer,
+    ForumTopicStatSerializer,
 )
 
 
@@ -32,6 +33,11 @@ class ForumGroupViewSet(ModelViewSet):
     def get_queryset(self):
         return super().get_queryset().accessible_to_user(self.request.user)
 
+class ForumTopicStatsViewSet(ModelViewSet):
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = ForumTopicStatSerializer
+    queryset = ForumTopic.objects.all()
 
 class ForumTopicViewSet(ModelViewSet):
 
