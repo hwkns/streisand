@@ -82,7 +82,8 @@ class ForumTopicSerializer(ModelSerializer):
 class ForumTopicStatSerializer(ModelSerializer):
     group_name = serializers.StringRelatedField(read_only=True, source='group')
     latest_post_id = serializers.PrimaryKeyRelatedField(source='latest_post.id', read_only=True)
-    latest_post_author = serializers.PrimaryKeyRelatedField(source='latest_post.author', read_only=True)
+    latest_post_author_id = serializers.PrimaryKeyRelatedField(source='latest_post.author', read_only=True)
+    latest_post_author_name = serializers.StringRelatedField(source='latest_post.author', read_only=True)
     latest_post_thread_id = serializers.PrimaryKeyRelatedField(source='latest_post.thread.id', read_only=True)
     latest_post_thread_title = serializers.StringRelatedField(source='latest_post.thread.title', read_only=True)
 
@@ -99,7 +100,8 @@ class ForumTopicStatSerializer(ModelSerializer):
             'number_of_threads',
             'number_of_posts',
             'latest_post_id',
-            'latest_post_author',
+            'latest_post_author_id',
+            'latest_post_author_name',
             'latest_post_thread_id',
             'latest_post_thread_title',
 
