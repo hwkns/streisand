@@ -56,4 +56,15 @@ class CollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Collection
-        fields = ('creator', 'comments', 'list_id', 'url', 'list_title', 'list_description', 'collection_tags', 'film', 'film_title', 'film_link')
+        fields = (
+            'creator',
+            'comments',
+            'list_id',
+            'url',
+            'list_title',
+            'list_description',
+            'collection_tags',
+            'film',
+            'film_title',
+            'film_link'
+        )
