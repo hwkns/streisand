@@ -112,6 +112,8 @@ class ForumGroupSerializer(ModelSerializer):
 
     topic_name = serializers.StringRelatedField(many=True, read_only=True, source='topics')
     thread_count = serializers.IntegerField(read_only=True, source='topics.number_of_threads')
+
+
     class Meta:
         model = ForumGroup
         fields = (

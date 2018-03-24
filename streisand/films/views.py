@@ -17,10 +17,12 @@ class CollectionViewSet(ModelViewSet):
     queryset = Collection.objects.all().select_related(
         'creator',
     ).prefetch_related(
+        'film',
         'collection_tags',
+        'collections_comments',
     ).order_by(
         '-id',
-    )
+    ).distinct()
 
     def get_queryset(self):
 

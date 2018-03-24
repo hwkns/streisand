@@ -33,11 +33,24 @@ class ForumGroupViewSet(ModelViewSet):
     def get_queryset(self):
         return super().get_queryset().accessible_to_user(self.request.user)
 
+
 class ForumTopicStatsViewSet(ModelViewSet):
 
     permission_classes = [IsAuthenticated]
     serializer_class = ForumTopicStatSerializer
-    queryset = ForumTopic.objects.all()
+    queryset = ForumTopic.objects.all().select_related(
+        'group',
+        'minimum_user_class',
+        'latest_post__author',
+        'latest_post__author__user_class',
+        'latest_post__thread',
+    ).prefetch_related(
+        'threads__created_by',
+        'threads__latest_post__author',
+        'threads__latest_post__author__user_class',
+        'threads__latest_post__thread',
+    ).distinct()
+
 
 class ForumTopicViewSet(ModelViewSet):
 
