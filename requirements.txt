@@ -33,3 +33,4 @@ tqdm==4.19.5
 uWSGI==2.0.17
 django-cors-headers==2.2.0
 drf-yasg[validation]==1.5.1
+django-filter==2.0.0.dev1
