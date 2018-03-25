@@ -61,6 +61,8 @@ class ForumThreadSerializer(ModelSerializer):
 class ForumTopicSerializer(ModelSerializer):
     group_name = serializers.StringRelatedField(read_only=True, source='group')
     latest_post = ForumPostSerializer()
+    thread_link = serializers.HyperlinkedRelatedField(many=True, read_only=True,
+                                                      source='threads', view_name='forum-thread-detail')
 
     class Meta:
         model = ForumTopic
@@ -70,6 +72,7 @@ class ForumTopicSerializer(ModelSerializer):
             'name',
             'description',
             'threads',
+            'thread_link',
             'group',
             'group_name',
             'minimum_user_class',

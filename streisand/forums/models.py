@@ -142,8 +142,6 @@ class ForumPost(models.Model):
     class Meta:
         get_latest_by = 'created_at'
 
-    objects = ForumPostQuerySet.as_manager()
-
     def __str__(self):
         return 'Forum post by {author} in thread {thread}'.format(
             author=self.author,

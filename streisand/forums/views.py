@@ -2,13 +2,14 @@
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from django_filters import rest_framework as filters
 from collections import OrderedDict
 
 from django.db.models import OuterRef, Subquery
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from www.utils import paginate
-
+from www.pagination import ForumsLimitOffsetPagination
 from .forms import ForumPostForm
 from .models import ForumGroup, ForumTopic, ForumThread, ForumPost
 from .serializers import (
@@ -18,6 +19,7 @@ from .serializers import (
     ForumPostSerializer,
     ForumTopicStatSerializer,
 )
+from .filters import ForumTopicFilter, ForumThreadFilter, ForumPostFilter
 
 
 class ForumGroupViewSet(ModelViewSet):
@@ -28,7 +30,8 @@ class ForumGroupViewSet(ModelViewSet):
         'topics__latest_post__author',
         'topics__latest_post__author__user_class',
         'topics__latest_post__thread',
-    )
+    ).distinct()
+    pagination_class = ForumsLimitOffsetPagination
 
     def get_queryset(self):
         return super().get_queryset().accessible_to_user(self.request.user)
@@ -38,36 +41,29 @@ class ForumTopicStatsViewSet(ModelViewSet):
 
     permission_classes = [IsAuthenticated]
     serializer_class = ForumTopicStatSerializer
-    queryset = ForumTopic.objects.all().select_related(
+    queryset = ForumTopic.objects.all().prefetch_related(
         'group',
         'minimum_user_class',
         'latest_post__author',
         'latest_post__author__user_class',
         'latest_post__thread',
-    ).prefetch_related(
-        'threads__created_by',
-        'threads__latest_post__author',
-        'threads__latest_post__author__user_class',
-        'threads__latest_post__thread',
     ).distinct()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = ForumTopicFilter
+    pagination_class = ForumsLimitOffsetPagination
+
+    def get_queryset(self):
+        return super().get_queryset().accessible_to_user(self.request.user)
 
 
 class ForumTopicViewSet(ModelViewSet):
 
     permission_classes = [IsAuthenticated]
     serializer_class = ForumTopicSerializer
-    queryset = ForumTopic.objects.all().select_related(
-        'group',
-        'minimum_user_class',
-        'latest_post__author',
-        'latest_post__author__user_class',
-        'latest_post__thread',
-    ).prefetch_related(
-        'threads__created_by',
-        'threads__latest_post__author',
-        'threads__latest_post__author__user_class',
-        'threads__latest_post__thread',
-    )
+    queryset = ForumTopic.objects.all().prefetch_related('group', 'threads', 'latest_post__author').distinct()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = ForumTopicFilter
+    pagination_class = ForumsLimitOffsetPagination
 
     def get_queryset(self):
 
@@ -84,11 +80,15 @@ class ForumThreadViewSet(ModelViewSet):
 
     permission_classes = [IsAuthenticated]
     serializer_class = ForumThreadSerializer
-    queryset = ForumThread.objects.all().select_related(
-        'latest_post__author',
-        'latest_post__author__user_class',
-        'latest_post__thread',
-    )
+    queryset = ForumThread.objects.all().prefetch_related(
+        'posts__author',
+        'topic__latest_post__author',
+        'topic__latest_post__author__user_class',
+        'topic__latest_post__thread',
+    ).distinct()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = ForumThreadFilter
+    pagination_class = ForumsLimitOffsetPagination
 
     def get_queryset(self):
 
@@ -105,11 +105,16 @@ class ForumPostViewSet(ModelViewSet):
 
     permission_classes = [IsAuthenticated]
     serializer_class = ForumPostSerializer
-    queryset = ForumPost.objects.all().select_related(
+    queryset = ForumPost.objects.all().prefetch_related(
         'thread',
+        'thread__topic',
+        'topic_latest__latest_post',
         'author',
         'author__user_class',
-    )
+    ).distinct()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = ForumPostFilter
+    pagination_class = ForumsLimitOffsetPagination
 
     def get_queryset(self):
 
@@ -146,13 +151,15 @@ class NewsPostViewSet(ModelViewSet):
         # Return earliest posts from each thread
         return ForumPost.objects.filter(
             id__in=news_threads.values('earliest_post_id'),
-        ).select_related(
+        ).prefetch_related(
             'thread',
             'author',
             'author__user_class',
         ).order_by(
             '-created_at',
-        )
+        ).distinct()
+
+    pagination_class = ForumsLimitOffsetPagination
 
     def get_object(self):
         """

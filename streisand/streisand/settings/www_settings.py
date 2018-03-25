@@ -16,6 +16,7 @@ INSTALLED_APPS += [
     'rest_framework_swagger',
     'corsheaders',
     'drf_yasg',
+    'django_filters',
 
     # Contrib apps
     'django.contrib.admin',
@@ -90,7 +91,9 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser',
-    ],
+    ], 'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     'PAGE_SIZE': 50,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
