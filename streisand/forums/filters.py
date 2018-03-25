@@ -4,13 +4,13 @@ from .models import ForumTopic, ForumThread, ForumPost
 
 class ForumTopicFilter(filters.FilterSet):
 
-    topic_name = filters.CharFilter(name='name', lookup_expr='icontains')
-    topic_description = filters.CharFilter(name='description', lookup_expr='icontains')
+    name = filters.CharFilter(name='name', lookup_expr='icontains')
+    description = filters.CharFilter(name='description', lookup_expr='icontains')
     latest_post_author = filters.CharFilter(name='latest_post__author__username', lookup_expr='icontains')
 
     class Meta:
-        model  = ForumTopic
-        fields = ['topic_name', 'topic_description', 'latest_post_author']
+        model = ForumTopic
+        fields = ['name', 'description', 'latest_post_author']
 
 
 class ForumThreadFilter(filters.FilterSet):
@@ -20,7 +20,7 @@ class ForumThreadFilter(filters.FilterSet):
     created_by = filters.CharFilter(name='created_by', lookup_expr='icontains')
 
     class Meta:
-        model  = ForumThread
+        model = ForumThread
         fields = ['title', 'created_at', 'created_by']
 
 
@@ -31,5 +31,5 @@ class ForumPostFilter(filters.FilterSet):
     author = filters.CharFilter(name='author', lookup_expr='icontains')
 
     class Meta:
-        model  = ForumThread
-        fields = ['title', 'created_at', 'author']
+        model = ForumPost
+        fields = ['body', 'created_at', 'author']
