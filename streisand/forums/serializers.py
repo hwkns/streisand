@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
 
 from www.templatetags.bbcode import bbcode as bbcode_to_html
 from .models import ForumGroup, ForumPost, ForumThread, ForumTopic
@@ -112,8 +112,7 @@ class ForumTopicSerializer(ModelSerializer):
         )
 
 
-class ForumTopicStatSerializer(ModelSerializer):
-    group_name = serializers.StringRelatedField(read_only=True, source='group')
+class ForumTopicDataSerializer(ModelSerializer):
     latest_post_id = serializers.PrimaryKeyRelatedField(source='latest_post.id', read_only=True)
     latest_post_author_id = serializers.PrimaryKeyRelatedField(source='latest_post.author', read_only=True)
     latest_post_author_name = serializers.StringRelatedField(source='latest_post.author', read_only=True)
@@ -127,8 +126,6 @@ class ForumTopicStatSerializer(ModelSerializer):
             'sort_order',
             'name',
             'description',
-            'group',
-            'group_name',
             'minimum_user_class',
             'number_of_threads',
             'number_of_posts',
@@ -137,14 +134,12 @@ class ForumTopicStatSerializer(ModelSerializer):
             'latest_post_author_name',
             'latest_post_thread_id',
             'latest_post_thread_title',
-
         )
 
 
 class ForumGroupSerializer(ModelSerializer):
-
-    topic_name = serializers.StringRelatedField(many=True, read_only=True, source='topics')
-    thread_count = serializers.IntegerField(read_only=True, source='topics.number_of_threads')
+    topic_count = serializers.IntegerField(source='topics.count')
+    topics__data = ForumTopicDataSerializer(many=True, source='topics', read_only=True)
 
     class Meta:
         model = ForumGroup
@@ -152,7 +147,7 @@ class ForumGroupSerializer(ModelSerializer):
             'id',
             'name',
             'sort_order',
-            'topics',
-            'topic_name',
-            'thread_count',
+            'topic_count',
+            'topics__data',
+
         )

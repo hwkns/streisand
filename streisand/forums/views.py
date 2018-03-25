@@ -17,7 +17,6 @@ from .serializers import (
     ForumTopicSerializer,
     ForumThreadSerializer,
     ForumPostSerializer,
-    ForumTopicStatSerializer,
 )
 from .filters import ForumTopicFilter, ForumThreadFilter, ForumPostFilter
 
@@ -31,25 +30,6 @@ class ForumGroupViewSet(ModelViewSet):
         'topics__latest_post__author__user_class',
         'topics__latest_post__thread',
     ).distinct()
-    pagination_class = ForumsLimitOffsetPagination
-
-    def get_queryset(self):
-        return super().get_queryset().accessible_to_user(self.request.user)
-
-
-class ForumTopicStatsViewSet(ModelViewSet):
-
-    permission_classes = [IsAuthenticated]
-    serializer_class = ForumTopicStatSerializer
-    queryset = ForumTopic.objects.all().prefetch_related(
-        'group',
-        'minimum_user_class',
-        'latest_post__author',
-        'latest_post__author__user_class',
-        'latest_post__thread',
-    ).distinct()
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = ForumTopicFilter
     pagination_class = ForumsLimitOffsetPagination
 
     def get_queryset(self):
