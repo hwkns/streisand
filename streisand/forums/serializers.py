@@ -34,11 +34,37 @@ class ForumPostSerializer(ModelSerializer):
         return bbcode_to_html(forum_post.body)
 
 
+class ForumPostForThreadSerializer(ModelSerializer):
+    body_bbcode_html = serializers.SerializerMethodField()
+    author_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
+    author_username = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True,
+                                                     source='author')
+
+    class Meta:
+        model = ForumPost
+        fields = (
+                'id',
+                'author_id',
+                'author_username',
+                'body',
+                'body_bbcode_html',
+                'created_at',
+                'modified_at',
+            )
+
+    @staticmethod
+    def get_body_bbcode_html(forum_post):
+        return bbcode_to_html(forum_post.body)
+
+
 class ForumThreadSerializer(ModelSerializer):
+    created_by_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(),
+                                                       read_only=True, source='created_by')
     created_by = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
     topic_title = serializers.StringRelatedField(read_only=True, source='topic')
-    latest_post_author = serializers.StringRelatedField(source='latest_post.author', read_only=True)
-    posts = ForumPostSerializer(many=True, read_only=True)
+    latest_post_author_username = serializers.StringRelatedField(source='latest_post.author', read_only=True)
+    latest_post_author_id = serializers.PrimaryKeyRelatedField(source='latest_post.author', read_only=True)
+    posts = ForumPostForThreadSerializer(many=True, read_only=True)
 
     class Meta:
         model = ForumThread
@@ -48,12 +74,14 @@ class ForumThreadSerializer(ModelSerializer):
             'topic_title',
             'title',
             'created_at',
+            'created_by_id',
             'created_by',
             'is_locked',
             'is_sticky',
             'number_of_posts',
             'latest_post',
-            'latest_post_author',
+            'latest_post_author_id',
+            'latest_post_author_username',
             'posts',
         )
 
