@@ -161,6 +161,46 @@ class ForumPost(models.Model):
         )
 
 
+class ForumReport(models.Model):
+    reporting_user = models.ForeignKey(
+        to='users.User',
+        related_name='reports',
+        null=True,
+        on_delete=models.PROTECT,
+    )
+    reported_at = models.DateTimeField(auto_now_add=True)
+    reason = models.TextField(max_length=1024, blank=False, null=False)
+    thread = models.ForeignKey(
+        ForumThread, blank=True, null=True, default=None, on_delete=models.CASCADE
+    )
+    post = models.ForeignKey(
+        ForumPost, blank=True, null=True, default=None, on_delete=models.CASCADE
+    )
+    resolved = models.BooleanField(default=False)
+    resolved_by = models.ForeignKey(
+        to='users.User',
+        related_name='report_resolved',
+        null=True,
+        on_delete=models.PROTECT,
+    )
+    date_resolved = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        ordering = ('-reported_at',)
+
+    def __str__(self):
+        return 'Report by {reporting_user} in thread {thread}'.format(
+            reporting_user=self.reporting_user,
+            thread=self.thread,
+        )
+
+    def get_absolute_url(self):
+        return '{thread_url}#{report_id}'.format(
+            thread_url=self.thread.get_absolute_url(),
+            report_id=self.id,
+        )
+
+
 class ForumThreadSubscription(models.Model):
     user = models.ForeignKey(
         to='users.User',

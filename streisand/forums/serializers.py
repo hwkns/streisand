@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from www.templatetags.bbcode import bbcode as bbcode_to_html
-from .models import ForumGroup, ForumPost, ForumThread, ForumTopic
+from .models import ForumGroup, ForumPost, ForumThread, ForumTopic, ForumThreadSubscription
 
 
 class ForumPostSerializer(ModelSerializer):
@@ -84,6 +84,7 @@ class ForumThreadSerializer(ModelSerializer):
             'latest_post_author_id',
             'latest_post_author_username',
             'posts',
+            'subscribed_users',
         )
 
 
@@ -188,3 +189,11 @@ class ForumGroupSerializer(ModelSerializer):
             'topics_data',
 
         )
+
+
+class ForumThreadSubscriptionSerializer(ModelSerializer):
+    user = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
+
+    class Meta:
+        model = ForumThreadSubscription
+        fields = ('user', 'thread')

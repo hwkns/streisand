@@ -12,13 +12,14 @@ from django.views.generic import View
 from www.utils import paginate
 from www.pagination import ForumsPageNumberPagination, ForumTopicCursorSetPagination, ForumThreadCursorSetPagination
 from .forms import ForumPostForm
-from .models import ForumGroup, ForumTopic, ForumThread, ForumPost
+from .models import ForumGroup, ForumTopic, ForumThread, ForumPost, ForumThreadSubscription
 from .serializers import (
     ForumGroupSerializer,
     ForumTopicSerializer,
     ForumThreadSerializer,
     ForumPostSerializer,
     ForumThreadIndexSerializer,
+    ForumThreadSubscriptionSerializer,
 )
 from .filters import ForumTopicFilter, ForumThreadFilter, ForumPostFilter
 
@@ -200,6 +201,20 @@ class ForumPostViewSet(ModelViewSet):
             queryset = queryset.filter(thread_id=thread_id)
 
         return queryset
+
+
+class ForumThreadSubscriptionViewSet(ModelViewSet):
+
+    """
+    API endpoint that allows ThreadSubscriptions to be viewed, or edited.
+    Please Note: Pagination is set to Page Number Pagination.
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = ForumThreadSubscriptionSerializer
+    queryset = ForumThreadSubscription.objects.all().prefetch_related(
+        'thread',
+    ).order_by('-thread').distinct('thread')
+    pagination_class = ForumsPageNumberPagination
 
 
 class NewsPostViewSet(ModelViewSet):
