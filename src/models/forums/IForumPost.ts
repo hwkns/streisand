@@ -16,12 +16,12 @@ export interface IPartialForumPost {
     id: number;
     author: number;
     thread: number;
+    createdAt: string; // Date
 }
 
 export interface IForumPost extends IPartialForumPost {
     body: string;
     bodyHtml: string;
-    createdAt: string; // Date
     modifiedAt: string; // Date
 }
 

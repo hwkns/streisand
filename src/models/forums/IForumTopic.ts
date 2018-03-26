@@ -8,6 +8,7 @@ export interface IForumTopicResponse {
     numberOfThreads: number;
     numberOfPosts: number;
     latestPostId: number;
+    latestPostCreatedAt: string; // Date
     latestPostAuthorId: number;
     latestPostAuthorName: string;
     latestPostThreadId: number;

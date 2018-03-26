@@ -17,7 +17,7 @@ export function transformGroups(response: IPagedResponse<IForumGroupResponse>): 
             topics: []
         };
         result.groups.push(transformedGroup);
-        for (const topic of group.topics_Data) {
+        for (const topic of group.topicsData) {
             transformedGroup.topics.push(topic.id);
             result.topics.push({
                 id: topic.id,
@@ -37,7 +37,8 @@ export function transformGroups(response: IPagedResponse<IForumGroupResponse>): 
             result.posts.push({
                 id: topic.latestPostId,
                 thread: topic.latestPostThreadId,
-                author: topic.latestPostAuthorId
+                author: topic.latestPostAuthorId,
+                createdAt: topic.latestPostCreatedAt
             });
 
             result.users.push({

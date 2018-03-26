@@ -8,7 +8,7 @@ export interface IForumGroupResponse {
     name: string;
     sortOrder: number;
     topicCount: number;
-    topics_Data: IForumTopicResponse[];
+    topicsData: IForumTopicResponse[];
 }
 
 export interface IForumGroup {

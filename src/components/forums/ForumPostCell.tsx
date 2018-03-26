@@ -22,10 +22,10 @@ type ConnectedDispatch = {};
 type CombinedProps = Props & ConnectedDispatch & ConnectedState;
 class ForumPostCellComponent extends React.Component<CombinedProps> {
     public render() {
-        // const post = this.props.post;
+        const post = this.props.post;
         const thread = this.props.thread;
         const author = this.props.author;
-        const posted = getDateDiff({ past: (new Date()) });
+        const posted = getDateDiff({ past: post.createdAt });
         const authorLink = <Link to={'/user/' + author.id} title={author.username}>{author.username}</Link>;
         const threadLink = <Link to={'/thread/' + thread.id} title={thread.title}>{thread.title}</Link>;
         return (
