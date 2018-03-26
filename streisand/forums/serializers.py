@@ -59,7 +59,8 @@ class ForumPostForThreadSerializer(ModelSerializer):
 
 class ForumThreadSerializer(ModelSerializer):
     created_by_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(),
-                                                       read_only=True, source='created_by')
+                                                       read_only=True, source='created_by'
+                                                       )
     created_by = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
     topic_title = serializers.StringRelatedField(read_only=True, source='topic')
     latest_post_author_username = serializers.StringRelatedField(source='latest_post.author', read_only=True)
@@ -136,6 +137,40 @@ class ForumTopicDataSerializer(ModelSerializer):
             'latest_post_author_name',
             'latest_post_thread_id',
             'latest_post_thread_title',
+        )
+
+
+class ForumThreadIndexSerializer(ModelSerializer):
+    group_name = serializers.StringRelatedField(read_only=True, source='topic.group')
+    group_id = serializers.PrimaryKeyRelatedField(read_only=True, source='topic.group')
+    created_by_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(),
+                                                       read_only=True, source='created_by')
+    created_by_username = serializers.StringRelatedField(
+        default=serializers.CurrentUserDefault(), source='created_by', read_only=True)
+    topic_title = serializers.StringRelatedField(read_only=True, source='topic')
+    latest_post_author_username = serializers.StringRelatedField(source='latest_post.author', read_only=True)
+    latest_post_author_id = serializers.PrimaryKeyRelatedField(source='latest_post.author', read_only=True)
+    latest_post_created_at = serializers.DateTimeField(source='latest_post.created_at', read_only=True)
+
+    class Meta:
+        model = ForumThread
+        fields = (
+            'group_id',
+            'group_name',
+            'topic',
+            'topic_title',
+            'id',
+            'title',
+            'created_at',
+            'created_by_id',
+            'created_by_username',
+            'is_locked',
+            'is_sticky',
+            'number_of_posts',
+            'latest_post',
+            'latest_post_created_at',
+            'latest_post_author_id',
+            'latest_post_author_username',
         )
 
 

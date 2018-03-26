@@ -110,7 +110,7 @@ class ForumThread(models.Model):
     objects = ForumThreadQuerySet.as_manager()
 
     class Meta:
-        get_latest_by = 'created_at'
+        get_latest_by = '-created_at'
 
     def __str__(self):
         return '{title}'.format(title=self.title)

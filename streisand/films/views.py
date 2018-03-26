@@ -43,10 +43,10 @@ class FilmViewSet(ModelViewSet):
     queryset = Film.objects.all().select_related(
         'imdb',
     ).prefetch_related(
-        'tags',
+        'tags', 'lists'
     ).order_by(
         '-id',
-    )
+    ).distinct()
     serializer_class = AdminFilmSerializer
 
     def get_queryset(self):

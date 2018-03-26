@@ -11,7 +11,7 @@ class ForumsLimitOffsetPagination(LimitOffsetPagination):
 
 
 class ForumsPageNumberPagination(PageNumberPagination):
-    page_size = 20
+    page_size = 15
 
 
 class ForumThreadCursorSetPagination(CursorPagination):
