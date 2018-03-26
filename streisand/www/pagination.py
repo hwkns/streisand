@@ -1,4 +1,4 @@
-from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination, CursorPagination
 
 
 class WikiPageNumberPagination(PageNumberPagination):
@@ -11,4 +11,16 @@ class ForumsLimitOffsetPagination(LimitOffsetPagination):
 
 
 class ForumsPageNumberPagination(PageNumberPagination):
-    page_size =25
+    page_size = 20
+
+
+class ForumThreadCursorSetPagination(CursorPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    ordering = '-created_at'    # '-creation' is default
+
+
+class ForumTopicCursorSetPagination(CursorPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    ordering = 'sort_order'     # '-creation' is default

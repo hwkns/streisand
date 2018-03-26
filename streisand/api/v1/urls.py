@@ -5,7 +5,8 @@ from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 
 from films.views import FilmViewSet, CollectionViewSet
-from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadViewSet, ForumPostViewSet, NewsPostViewSet
+from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadViewSet, ForumThreadUpdateViewSet,\
+    ForumPostViewSet, NewsPostViewSet
 from torrents.views import TorrentViewSet
 from users.views import UserViewSet, GroupViewSet, CurrentUserView
 from wiki.views import WikiArticleCreateUpdateDestroyViewSet, WikiArticleBodyViewSet, WikiArticleViewListOnlyViewSet
@@ -18,6 +19,7 @@ router.register(r'torrents', viewset=TorrentViewSet)
 router.register(r'forum-groups', viewset=ForumGroupViewSet, base_name='forum-group')
 router.register(r'forum-topics', viewset=ForumTopicViewSet, base_name='forum-topic')
 router.register(r'forum-threads', viewset=ForumThreadViewSet, base_name='forum-thread')
+router.register(r'forum-thread-items', viewset=ForumThreadUpdateViewSet, base_name='forum-thread-item')
 router.register(r'forum-posts', viewset=ForumPostViewSet, base_name='forum-post')
 router.register(r'news-posts', viewset=NewsPostViewSet, base_name='news-post')
 router.register(r'wikis', viewset=WikiArticleCreateUpdateDestroyViewSet, base_name='wiki')

@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from django_filters import rest_framework as filters
+from rest_framework import mixins
 from collections import OrderedDict
-
+from rest_framework.mixins import Response
 from django.db.models import OuterRef, Subquery
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from www.utils import paginate
-from www.pagination import ForumsLimitOffsetPagination
+from www.pagination import ForumsPageNumberPagination, ForumTopicCursorSetPagination, ForumThreadCursorSetPagination
 from .forms import ForumPostForm
 from .models import ForumGroup, ForumTopic, ForumThread, ForumPost
 from .serializers import (
@@ -22,28 +23,35 @@ from .filters import ForumTopicFilter, ForumThreadFilter, ForumPostFilter
 
 
 class ForumGroupViewSet(ModelViewSet):
-
+    """
+    API endpoint that allows ForumGroups to be edited, viewed, edited, or created.
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = ForumGroupSerializer
     queryset = ForumGroup.objects.all().prefetch_related(
         'topics__latest_post__author',
         'topics__latest_post__author__user_class',
         'topics__latest_post__thread',
-    ).distinct()
-    pagination_class = ForumsLimitOffsetPagination
+    ).order_by('sort_order').distinct('sort_order')
+    pagination_class = ForumTopicCursorSetPagination
 
     def get_queryset(self):
         return super().get_queryset().accessible_to_user(self.request.user)
 
 
 class ForumTopicViewSet(ModelViewSet):
-
+    """
+    API endpoint that allows ForumTopics to be edited, viewed, edited, or created.
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = ForumTopicSerializer
-    queryset = ForumTopic.objects.all().prefetch_related('group', 'threads', 'latest_post__author').distinct()
+    queryset = ForumTopic.objects.all().select_related('group', 'minimum_user_class', 'latest_post').prefetch_related(
+        'group', 'minimum_user_class', 'threads', 'latest_post', 'latest_post__author',
+        'latest_post__author__user_class', 'latest_post__thread__topic'
+    ).order_by('sort_order').distinct('sort_order')
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumTopicFilter
-    pagination_class = ForumsLimitOffsetPagination
+    pagination_class = ForumTopicCursorSetPagination
 
     def get_queryset(self):
 
@@ -56,19 +64,62 @@ class ForumTopicViewSet(ModelViewSet):
         return queryset
 
 
-class ForumThreadViewSet(ModelViewSet):
-
+class ForumThreadViewSet(mixins.ListModelMixin, GenericViewSet):
+    """
+    API endpoint that allows ForumThreads to be viewed only.
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = ForumThreadSerializer
     queryset = ForumThread.objects.all().prefetch_related(
+        'created_by',
+        'posts__thread',
         'posts__author',
+        'latest_post',
+        'latest_post__author',
         'topic__latest_post__author',
         'topic__latest_post__author__user_class',
         'topic__latest_post__thread',
-    ).distinct()
+    ).order_by('-created_at').distinct('created_at')
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumThreadFilter
-    pagination_class = ForumsLimitOffsetPagination
+    pagination_class = ForumThreadCursorSetPagination
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset().accessible_to_user(self.request.user)
+
+        topic_id = self.request.query_params.get('topic_id', None)
+        if topic_id is not None:
+            queryset = queryset.filter(topic_id=topic_id)
+
+        return queryset
+
+
+class ForumThreadUpdateViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin,
+                               mixins.RetrieveModelMixin, GenericViewSet):
+    """
+    API endpoint that allows ForumThreads to be created, updated, or edited only.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def partial_update(self, request, pk=None):
+        serializer = ForumThreadSerializer(request.user, data=request.data, partial=True)
+        serializer.save()
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
+    serializer_class = ForumThreadSerializer
+    queryset = ForumThread.objects.all().prefetch_related(
+        'created_by',
+        'posts__author',
+        'latest_post',
+        'latest_post__author',
+        'topic__latest_post__author',
+        'topic__latest_post__author__user_class',
+        'topic__latest_post__thread',
+    ).order_by('topic__latest_post__thread').distinct('topic__latest_post__thread')
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = ForumThreadFilter
+    pagination_class = ForumThreadCursorSetPagination
 
     def get_queryset(self):
 
@@ -82,7 +133,9 @@ class ForumThreadViewSet(ModelViewSet):
 
 
 class ForumPostViewSet(ModelViewSet):
-
+    """
+    API endpoint that allows ForumPosts to be viewed, or edited.
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = ForumPostSerializer
     queryset = ForumPost.objects.all().prefetch_related(
@@ -91,10 +144,10 @@ class ForumPostViewSet(ModelViewSet):
         'topic_latest__latest_post',
         'author',
         'author__user_class',
-    ).distinct()
+    ).order_by('-created_at').distinct('created_at')
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumPostFilter
-    pagination_class = ForumsLimitOffsetPagination
+    pagination_class = ForumThreadCursorSetPagination
 
     def get_queryset(self):
 
@@ -108,7 +161,9 @@ class ForumPostViewSet(ModelViewSet):
 
 
 class NewsPostViewSet(ModelViewSet):
-
+    """
+    API endpoint that allows LatestForumPosts to be viewed, or edited.
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = ForumPostSerializer
 
@@ -139,7 +194,7 @@ class NewsPostViewSet(ModelViewSet):
             '-created_at',
         ).distinct()
 
-    pagination_class = ForumsLimitOffsetPagination
+    pagination_class = ForumsPageNumberPagination
 
     def get_object(self):
         """

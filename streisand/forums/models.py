@@ -9,10 +9,8 @@ from .managers import ForumGroupQuerySet, ForumTopicQuerySet, ForumThreadQuerySe
 class ForumGroup(models.Model):
 
     old_id = models.PositiveIntegerField(null=True, db_index=True)
-
     sort_order = models.PositiveSmallIntegerField()
     name = models.CharField(max_length=256)
-
     objects = ForumGroupQuerySet.as_manager()
 
     class Meta:
@@ -67,6 +65,14 @@ class ForumTopic(models.Model):
             }
         )
 
+    @property
+    def threads(self):
+        return ForumThread.objects.filter(group__id=self.id)
+
+    @property
+    def thread_count(self):
+        return self.threads.count()
+
 
 class ForumThread(models.Model):
 
@@ -101,10 +107,10 @@ class ForumThread(models.Model):
         related_name='forum_threads_subscribed',
     )
 
+    objects = ForumThreadQuerySet.as_manager()
+
     class Meta:
         get_latest_by = 'created_at'
-
-    objects = ForumThreadQuerySet.as_manager()
 
     def __str__(self):
         return '{title}'.format(title=self.title)

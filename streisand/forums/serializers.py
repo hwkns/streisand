@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
+from rest_framework.serializers import ModelSerializer
 
 from www.templatetags.bbcode import bbcode as bbcode_to_html
 from .models import ForumGroup, ForumPost, ForumThread, ForumTopic
@@ -43,14 +43,14 @@ class ForumPostForThreadSerializer(ModelSerializer):
     class Meta:
         model = ForumPost
         fields = (
-                'id',
-                'author_id',
-                'author_username',
-                'body',
-                'body_bbcode_html',
-                'created_at',
-                'modified_at',
-            )
+            'id',
+            'author_id',
+            'author_username',
+            'body',
+            'body_bbcode_html',
+            'created_at',
+            'modified_at',
+        )
 
     @staticmethod
     def get_body_bbcode_html(forum_post):
@@ -90,7 +90,7 @@ class ForumTopicSerializer(ModelSerializer):
     group_name = serializers.StringRelatedField(read_only=True, source='group')
     latest_post = ForumPostSerializer()
     thread_link = serializers.HyperlinkedRelatedField(many=True, read_only=True,
-                                                      source='threads', view_name='forum-thread-detail')
+                                                      source='threads', view_name='forum-thread-item-detail')
     thread_title = serializers.StringRelatedField(many=True, read_only=True, source='threads')
 
     class Meta:
@@ -118,6 +118,7 @@ class ForumTopicDataSerializer(ModelSerializer):
     latest_post_author_name = serializers.StringRelatedField(source='latest_post.author', read_only=True)
     latest_post_thread_id = serializers.PrimaryKeyRelatedField(source='latest_post.thread.id', read_only=True)
     latest_post_thread_title = serializers.StringRelatedField(source='latest_post.thread.title', read_only=True)
+    latest_post_created_at = serializers.DateTimeField(source='latest_post.thread.created_at', read_only=True)
 
     class Meta:
         model = ForumTopic
@@ -130,6 +131,7 @@ class ForumTopicDataSerializer(ModelSerializer):
             'number_of_threads',
             'number_of_posts',
             'latest_post_id',
+            'latest_post_created_at',
             'latest_post_author_id',
             'latest_post_author_name',
             'latest_post_thread_id',
@@ -139,7 +141,7 @@ class ForumTopicDataSerializer(ModelSerializer):
 
 class ForumGroupSerializer(ModelSerializer):
     topic_count = serializers.IntegerField(source='topics.count')
-    topics__data = ForumTopicDataSerializer(many=True, source='topics', read_only=True)
+    topics_data = ForumTopicDataSerializer(many=True, source='topics', read_only=True)
 
     class Meta:
         model = ForumGroup
@@ -148,6 +150,6 @@ class ForumGroupSerializer(ModelSerializer):
             'name',
             'sort_order',
             'topic_count',
-            'topics__data',
+            'topics_data',
 
         )
