@@ -1,0 +1,58 @@
+import * as React from 'react';
+import { connect } from 'react-redux';
+
+import Store from '../../store';
+import ForumTopicRow from './ForumTopicRow';
+import IForumGroup from '../../models/forums/IForumGroup';
+import { IPartialForumTopic } from '../../models/forums/IForumTopic';
+
+export type Props = {
+    group: IForumGroup;
+};
+
+type ConnectedState = {
+    topics: IPartialForumTopic[];
+};
+type ConnectedDispatch = {};
+
+type CombinedProps = Props & ConnectedDispatch & ConnectedState;
+class ForumGroupComponent extends React.Component<CombinedProps> {
+    public render() {
+        const group = this.props.group;
+        const topics = this.props.topics;
+        const rows = topics.map((topic: IPartialForumTopic) => {
+            return (<ForumTopicRow topic={topic} key={topic.id} />);
+        });
+        return (
+            <div>
+                <h2>{group.title}</h2>
+                <table className="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Latest Post</th>
+                            <th>Threads</th>
+                            <th>Posts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+}
+
+const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
+    const topics = ownProps.group.topics.map((topicId: number) => {
+        return state.forums.topics.byId[topicId];
+    });
+    return {
+        topics: topics as IPartialForumTopic[]
+    };
+};
+
+const ForumGroup: React.ComponentClass<Props> =
+    connect(mapStateToProps)(ForumGroupComponent);
+export default ForumGroup;

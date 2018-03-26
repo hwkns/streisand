@@ -4,7 +4,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 
 import Store from './index';
-import { reducers } from '../reducers';
+import reducers from '../reducers';
 import DevTools from '../components/DevTools';
 
 declare var module: any;

@@ -8,11 +8,12 @@ import auth from './auth';
 import films from './films';
 import wikis from './wikis';
 import errors from './errors';
+import forums from './forums';
 import location from './location';
 import torrents from './torrents';
 import deviceInfo from './deviceInfo';
 
-export const reducers = combineReducers<Store.All>({
+export default combineReducers<Store.All>({
     routing,
     auth,
     errors,
@@ -21,5 +22,6 @@ export const reducers = combineReducers<Store.All>({
     torrents,
     deviceInfo,
     wikis,
-    news
+    news,
+    forums
 });

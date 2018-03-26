@@ -1,3 +1,9 @@
+
+export interface IPartialUser {
+    id: number;
+    username: string;
+}
+
 interface IUser {
     accountStatus: string;
     avatarUrl: string;

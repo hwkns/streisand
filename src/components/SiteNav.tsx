@@ -64,6 +64,7 @@ class SiteNavComponent extends React.Component<CombinedProps> {
                 <li role="presentation"><Link role="button" to="/films">Films</Link></li>
                 <li role="presentation"><Link role="button" to="/torrents">Torrents</Link></li>
                 <li role="presentation"><Link role="button" to="/wikis">Wikis</Link></li>
+                <li role="presentation"><Link role="button" to="/forum">Forum</Link></li>
             </Nav>
         );
     }
