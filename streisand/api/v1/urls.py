@@ -10,6 +10,7 @@ from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadIndexV
 from torrents.views import TorrentViewSet
 from users.views import UserViewSet, GroupViewSet, CurrentUserView
 from wiki.views import WikiArticleCreateUpdateDestroyViewSet, WikiArticleBodyViewSet, WikiArticleViewListOnlyViewSet
+from drf_auto_endpoint.router import router
 
 router = routers.DefaultRouter()
 router.register(r'users', viewset=UserViewSet, base_name='user')

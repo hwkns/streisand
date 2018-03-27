@@ -6,7 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from django.shortcuts import render, get_object_or_404
 
 from www.utils import paginate
-
+from www.pagination import FilmCursorPagination, CollectionCursorPagination
 from .models import Film, Collection, CollectionComment, FilmComment
 from .serializers import AdminFilmSerializer, CollectionSerializer, FilmCommentSerializer, CollectionCommentSerializer
 
@@ -59,6 +59,7 @@ class CollectionViewSet(ModelViewSet):
     ).order_by(
         '-id',
     ).distinct('id')
+    pagination_class = CollectionCursorPagination
 
     def get_queryset(self):
 
@@ -87,6 +88,7 @@ class FilmViewSet(ModelViewSet):
     ).order_by(
         '-id',
     ).distinct('id')
+    pagination_class = FilmCursorPagination
 
     def get_queryset(self):
 

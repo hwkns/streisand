@@ -72,6 +72,7 @@ class Tag(models.Model):
 
 class Collection(models.Model):
     creator = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='collection_creators')
+    created_at = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=1024)
     description = models.TextField()
     film = models.ManyToManyField(Film, related_name='lists')

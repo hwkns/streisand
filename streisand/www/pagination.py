@@ -24,3 +24,19 @@ class ForumTopicCursorSetPagination(CursorPagination):
     page_size = 5
     page_size_query_param = 'page_size'
     ordering = 'sort_order'     # '-creation' is default
+
+
+class FilmCursorPagination(CursorPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    ordering = '-id'     # '-creation' is default
+
+
+class CollectionCursorPagination(CursorPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    ordering = '-id'     # '-creation' is default
+
+
+class FilmPageNumberPagination(PageNumberPagination):
+    page_size = 25

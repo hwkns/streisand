@@ -13,9 +13,7 @@ INSTALLED_APPS += [
     'grappelli',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_framework_swagger',
     'corsheaders',
-    'drf_yasg',
     'django_filters',
 
     # Contrib apps
@@ -88,6 +86,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EXPORTER_ADAPTER = 'export_app.adapters.MobxAxiosAdapter'
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser',
@@ -105,6 +105,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PARSER_CLASSES': (
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+        # 'rest_framework.parsers.MultiPartParser',
     ),
     'URL_FORMAT_OVERRIDE': None,
 }
@@ -114,15 +115,6 @@ if DEBUG:
         'rest_framework.authentication.SessionAuthentication',
     )
 
-SWAGGER_SETTINGS = {
-    'LOGIN_URL': '/admin/login',
-    'LOGOUT_URL': '/admin//logout',
-
-    'DEFAULT_INFO': 'www.urls.swagger_info'
-
-}
-
-# Swagger https settings needed below.
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -171,6 +163,8 @@ TEMPLATES = [
     },
 ]
 
+EXPORTER_FRONT_APPLICATION_PATH = '../front/js/src'
+EXPORTER_ROUTER_PATH = 'www.urls.router'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 STATIC_URL = '/static/'
