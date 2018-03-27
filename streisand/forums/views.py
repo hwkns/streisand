@@ -91,8 +91,7 @@ class ForumThreadIndexViewSet(ModelViewSet):
         'topic__latest_post__author',
         'topic__latest_post__author__user_class',
         'topic__latest_post__thread',
-    ).order_by('-is_sticky', '-latest_post__created_at'
-    ).distinct('is_sticky', 'latest_post__created_at')
+    ).order_by('-is_sticky', '-latest_post__created_at').distinct('is_sticky', 'latest_post__created_at')
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumThreadFilter
     pagination_class = ForumsPageNumberPagination
@@ -116,6 +115,7 @@ class ForumThreadWithAllPostsViewSet(mixins.ListModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = ForumThreadSerializer
     queryset = ForumThread.objects.all().prefetch_related(
+        'posts',
         'created_by',
         'posts__thread',
         'posts__author',
@@ -125,6 +125,7 @@ class ForumThreadWithAllPostsViewSet(mixins.ListModelMixin, GenericViewSet):
         'topic__latest_post__author',
         'topic__latest_post__author__user_class',
         'topic__latest_post__thread',
+        'subscribed_users',
     ).order_by('-created_at').distinct('created_at')
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumThreadFilter
@@ -164,8 +165,6 @@ class ForumThreadItemViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, m
         'topic__latest_post__author__user_class',
         'topic__latest_post__thread',
     ).order_by('topic__latest_post__thread').distinct('topic__latest_post__thread')
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = ForumThreadFilter
     pagination_class = ForumThreadCursorSetPagination
 
     def get_queryset(self):
