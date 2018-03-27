@@ -48,9 +48,13 @@ class ForumTopicViewSet(ModelViewSet):
     """
     permission_classes = [IsAuthenticated]
     serializer_class = ForumTopicSerializer
-    queryset = ForumTopic.objects.all().select_related('group', 'minimum_user_class', 'latest_post').prefetch_related(
-        'group', 'minimum_user_class', 'threads', 'latest_post', 'latest_post__author',
-        'latest_post__author__user_class', 'latest_post__thread__topic'
+    queryset = ForumTopic.objects.all().select_related(
+        'group', 'minimum_user_class', 'latest_post'
+    ).prefetch_related(
+        'group', 'minimum_user_class', 'threads',
+        'latest_post', 'latest_post__author',
+        'latest_post__author__user_class',
+        'latest_post__thread__topic'
     ).order_by('sort_order').distinct('sort_order')
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumTopicFilter
@@ -87,7 +91,8 @@ class ForumThreadIndexViewSet(ModelViewSet):
         'topic__latest_post__author',
         'topic__latest_post__author__user_class',
         'topic__latest_post__thread',
-    ).order_by('created_at', 'topic').distinct('created_at')
+    ).order_by('-is_sticky', '-latest_post__created_at'
+    ).distinct('is_sticky', 'latest_post__created_at')
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumThreadFilter
     pagination_class = ForumsPageNumberPagination
