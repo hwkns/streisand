@@ -55,7 +55,6 @@ class Film(models.Model):
 
 
 class FilmComment(Comment):
-
     film = models.ForeignKey(
         to='films.Film',
         related_name='comments',
@@ -82,16 +81,13 @@ class Collection(models.Model):
         return self.title
 
     def __len__(self):
-        return self.films.count()
+        return self.film.count()
 
     def get_absolute_url(self):
         return reverse('collections_details', args=[self.id])
 
 
 class CollectionComment(Comment):
-
-    collection = models.ForeignKey(
-        to='films.Collection',
-        related_name='collections_comments',
-        on_delete=models.CASCADE,
-    )
+    collection = models.ForeignKey(Collection, related_name='collections_comments',
+                                   on_delete=models.CASCADE,
+                                   )
