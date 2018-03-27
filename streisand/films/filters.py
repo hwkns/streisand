@@ -1,4 +1,4 @@
-from django_filters import rest_framework as filters, widgets
+from django_filters import rest_framework as filters
 from .models import Film, Collection
 
 
