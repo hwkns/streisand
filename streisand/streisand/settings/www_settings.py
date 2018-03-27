@@ -86,8 +86,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-EXPORTER_ADAPTER = 'export_app.adapters.MobxAxiosAdapter'
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser',
@@ -163,8 +161,6 @@ TEMPLATES = [
     },
 ]
 
-EXPORTER_FRONT_APPLICATION_PATH = '../front/js/src'
-EXPORTER_ROUTER_PATH = 'www.urls.router'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 STATIC_URL = '/static/'
