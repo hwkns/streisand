@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import Store from '../../store';
 import ForumTopicRow from './ForumTopicRow';
 import IForumGroup from '../../models/forums/IForumGroup';
-import { IPartialForumTopic } from '../../models/forums/IForumTopic';
+import IForumTopic from '../../models/forums/IForumTopic';
 
 export type Props = {
     group: IForumGroup;
 };
 
 type ConnectedState = {
-    topics: IPartialForumTopic[];
+    topics: IForumTopic[];
 };
 type ConnectedDispatch = {};
 
@@ -20,7 +20,7 @@ class ForumGroupComponent extends React.Component<CombinedProps> {
     public render() {
         const group = this.props.group;
         const topics = this.props.topics;
-        const rows = topics.map((topic: IPartialForumTopic) => {
+        const rows = topics.map((topic: IForumTopic) => {
             return (<ForumTopicRow topic={topic} key={topic.id} />);
         });
         return (
@@ -49,7 +49,7 @@ const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
         return state.forums.topics.byId[topicId];
     });
     return {
-        topics: topics as IPartialForumTopic[]
+        topics: topics as IForumTopic[]
     };
 };
 

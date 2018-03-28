@@ -19,6 +19,7 @@ import FilmsPage from './pages/films/FilmsPage';
 import TorrentsPage from './pages/TorrentsPage';
 
 import ForumPage from './pages/forums/ForumPage';
+import ForumTopicPage from './pages/forums/ForumTopicPage';
 
 export function createRoutes(store: ReduxStore<Store.All>) {
     function requireAuth(nextState: RouterState, replace: RedirectFunction) {
@@ -58,6 +59,9 @@ export function createRoutes(store: ReduxStore<Store.All>) {
                     <Redirect from="/wiki" to="/wikis/1" />
 
                     <Route path="/forum" component={ForumPage} />
+                    <Route path="/forum/topic/:topicId/:page" component={ForumTopicPage} />
+                    <Redirect from="/forum/topic" to="/forum" />
+                    <Redirect from="/forum/topic/*" to="/forum/topic/*/1" />
                 </Route>
                 <Redirect from="*" to="/home" />
             </Route>

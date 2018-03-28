@@ -12,17 +12,14 @@ export interface IForumPostResponse {
     modifiedAt: string; // Date
 }
 
-export interface IPartialForumPost {
+export interface IForumPost {
     id: number;
     author: number;
     thread: number;
     createdAt: string; // Date
-}
-
-export interface IForumPost extends IPartialForumPost {
-    body: string;
-    bodyHtml: string;
-    modifiedAt: string; // Date
+    body?: string;
+    bodyHtml?: string;
+    modifiedAt?: string; // Date
 }
 
 export default IForumPost;

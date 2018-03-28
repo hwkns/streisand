@@ -15,18 +15,15 @@ export interface IForumTopicResponse {
     latestPostThreadTitle: string;
 }
 
-export interface IPartialForumTopic {
+export interface IForumTopic {
     id: number;
     group: number;
     title: string;
-    description: string;
-    numberOfThreads: number;
-    numberOfPosts: number;
-    latestPost: number;
-}
-
-export interface IForumTopic extends IPartialForumTopic {
-    threads: number[];
+    description?: string;
+    numberOfThreads?: number;
+    numberOfPosts?: number;
+    latestPost?: number;
+    threads?: number[];
 }
 
 export default IForumTopic;

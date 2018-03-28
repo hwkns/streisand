@@ -7,11 +7,7 @@ import Empty from '../../components/Empty';
 import ForumView from '../../components/forums/ForumView';
 import { getForumGroups } from '../../actions/forums/ForumGroupsAction';
 
-export type Props = {
-    params: {
-        page: string;
-    };
-};
+export type Props = { };
 
 type ConnectedState = {
     loading: boolean;

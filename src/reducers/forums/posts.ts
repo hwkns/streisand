@@ -1,18 +1,22 @@
 import * as objectAssign from 'object-assign';
 
-import Action from '../../actions/forums/ForumGroupsAction';
-import { IPartialForumPost, IForumPost } from '../../models/forums/IForumPost';
-import { combineReducers, mergeItem } from '../helpers';
-import { IPage } from '../../models/base/IPagedItemSet';
+import { combineReducers } from '../helpers';
+import { INestedPages } from '../../models/base/IPagedItemSet';
+import { IForumPost } from '../../models/forums/IForumPost';
 import { ForumPostData } from '../../models/forums/IForumData';
+import ForumTopicAction from '../../actions/forums/ForumTopicAction';
+import ForumGroupsAction from '../../actions/forums/ForumGroupsAction';
 
-type ItemMap = { [id: number]: IPartialForumPost | IForumPost };
+type Action = ForumGroupsAction | ForumTopicAction;
+
+type ItemMap = { [id: number]: IForumPost };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
         case 'RECEIVED_FORUM_GROUPS':
+        case 'RECEIVED_FORUM_TOPIC':
             let map: ItemMap = {};
             for (const item of action.data.posts) {
-                mergeItem(map, item);
+                map[item.id] = item;
             }
             return objectAssign({}, state, map);
         default:
@@ -20,13 +24,9 @@ function byId(state: ItemMap = {}, action: Action): ItemMap {
     }
 }
 
-type Items = { [page: number]: IPage<IPartialForumPost | IForumPost> };
-function pages(state: Items = {}, action: Action): Items {
+type Items = INestedPages<IForumPost>;
+function byThread(state: Items = {}, action: Action): Items {
     return state;
 }
 
-function count(state: number = 0, action: Action): number {
-    return state;
-}
-
-export default combineReducers<ForumPostData>({ byId, count, pages });
+export default combineReducers<ForumPostData>({ byId, byThread });

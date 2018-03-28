@@ -11,4 +11,13 @@ export interface IPagedItemSet<T> {
     pages: { [page: number]: IPage<T> };
 }
 
+export interface INestedPage<T> {
+    count: number;
+    pages: { [page: number]: IPage<T> };
+}
+
+export interface INestedPages<T> {
+    [id: number]: INestedPage<T>;
+}
+
 export default IPagedItemSet;

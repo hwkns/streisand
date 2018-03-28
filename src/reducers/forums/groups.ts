@@ -1,8 +1,27 @@
+import * as objectAssign from 'object-assign';
 
 import { combineReducers } from '../helpers';
 import IForumGroup from '../../models/forums/IForumGroup';
-import Action from '../../actions/forums/ForumGroupsAction';
 import { ForumGroupData } from '../../models/forums/IForumData';
+import ForumTopicAction from '../../actions/forums/ForumTopicAction';
+import ForumGroupsAction from '../../actions/forums/ForumGroupsAction';
+
+type Action = ForumGroupsAction | ForumTopicAction;
+
+type ItemMap = { [id: number]: IForumGroup };
+function byId(state: ItemMap = {}, action: Action): ItemMap {
+    switch (action.type) {
+        case 'RECEIVED_FORUM_GROUPS':
+        case 'RECEIVED_FORUM_TOPIC':
+            let map: ItemMap = {};
+            for (const item of action.data.groups) {
+                map[item.id] = item;
+            }
+            return objectAssign({}, state, map);
+        default:
+            return state;
+    }
+}
 
 function items(state: IForumGroup[] = [], action: Action): IForumGroup[] {
     switch (action.type) {
@@ -25,4 +44,4 @@ function loading(state: boolean = false, action: Action): boolean {
     }
 }
 
-export default combineReducers<ForumGroupData>({ loading, items });
+export default combineReducers<ForumGroupData>({ byId, loading, items });

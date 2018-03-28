@@ -28,6 +28,11 @@ class PagerComponent extends React.Component<CombinedProps> {
     public render() {
         const { uri, page, total } = this.props;
         const pageCount = Math.ceil(total / PAGE_SIZE);
+        if (pageCount <= 1) {
+            // No need to render paging controls if there is only one page
+            return null;
+        }
+
         const pagesToShow = getPagesToShow(this.props.screenSize);
         const half = (pagesToShow - 1) / 2;
 

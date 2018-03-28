@@ -1,13 +1,29 @@
+import { IForumPost } from './IForumPost';
 import { IForumGroup } from './IForumGroup';
-import { IPage, IPagedItemSet } from '../base/IPagedItemSet';
-import { IPartialForumPost, IForumPost } from './IForumPost';
-import { IPartialForumThread, IForumThread } from './IForumThread';
-import { IPartialForumTopic, IForumTopic } from './IForumTopic';
+import { IForumTopic } from './IForumTopic';
+import { IForumThread } from './IForumThread';
+import ILoadingItem from '../base/ILoadingItem';
+import { INestedPages } from '../base/IPagedItemSet';
 
-export type ForumGroupData = IPage<IForumGroup>;
-export type ForumTopicData = IPagedItemSet<IPartialForumTopic | IForumTopic>;
-export type ForumThreadData = IPagedItemSet<IPartialForumThread | IForumThread>;
-export type ForumPostData = IPagedItemSet<IPartialForumPost | IForumPost>;
+export type ForumGroupData = {
+    loading: boolean;
+    items: IForumGroup[];
+    byId: { [id: number]: IForumGroup };
+};
+
+export type ForumTopicData = {
+    byId: { [id: number]: ILoadingItem | IForumTopic };
+};
+
+export type ForumThreadData = {
+    byId: { [id: number]: ILoadingItem | IForumThread };
+    byTopic: INestedPages<IForumThread>;
+};
+
+export type ForumPostData = {
+    byId: { [id: number]: IForumPost };
+    byThread: INestedPages<IForumPost>;
+};
 
 interface IForumData {
     groups: ForumGroupData;

@@ -1,7 +1,7 @@
-import { IPartialUser } from '../IUser';
-import { IPartialForumPost } from './IForumPost';
-import { IPartialForumThread } from './IForumThread';
-import { IForumTopicResponse, IPartialForumTopic } from './IForumTopic';
+import IUser from '../IUser';
+import IForumPost from './IForumPost';
+import IForumThread from './IForumThread';
+import { IForumTopicResponse, IForumTopic } from './IForumTopic';
 
 export interface IForumGroupResponse {
     id: number;
@@ -14,15 +14,15 @@ export interface IForumGroupResponse {
 export interface IForumGroup {
     id: number;
     title: string;
-    topics: number[];
+    topics?: number[];
 }
 
 export interface IForumGroupData {
     groups: IForumGroup[];
-    topics: IPartialForumTopic[];
-    threads: IPartialForumThread[];
-    posts: IPartialForumPost[];
-    users: IPartialUser[];
+    topics: IForumTopic[];
+    threads: IForumThread[];
+    posts: IForumPost[];
+    users: IUser[];
 }
 
 export default IForumGroup;

@@ -1,5 +1,6 @@
 import IPagedResponse from '../../models/base/IPagedResponse';
-import { IForumGroupResponse, IForumGroupData } from '../../models/forums/IForumGroup';
+import { IForumThreadResponse } from '../../models/forums/IForumThread';
+import { IForumGroupResponse, IForumGroupData} from '../../models/forums/IForumGroup';
 
 export function transformGroups(response: IPagedResponse<IForumGroupResponse>): IForumGroupData {
     const result: IForumGroupData = {
@@ -31,7 +32,8 @@ export function transformGroups(response: IPagedResponse<IForumGroupResponse>): 
 
             result.threads.push({
                 id: topic.latestPostThreadId,
-                title: topic.latestPostThreadTitle
+                title: topic.latestPostThreadTitle,
+                topic: topic.id
             });
 
             result.posts.push({
@@ -46,6 +48,63 @@ export function transformGroups(response: IPagedResponse<IForumGroupResponse>): 
                 username: topic.latestPostAuthorName
             });
         }
+    }
+
+    return result;
+}
+
+export function transformTopic(response: IPagedResponse<IForumThreadResponse>): IForumGroupData {
+    const result: IForumGroupData = {
+        groups: [],
+        topics: [],
+        threads: [],
+        posts: [],
+        users: []
+    };
+
+    let addedCommon = false;
+    for (const thread of response.results) {
+        if (!addedCommon) {
+            result.groups.push({
+                id: thread.groupId,
+                title: thread.groupName
+            });
+            result.topics.push({
+                id: thread.topic,
+                title: thread.topicTitle,
+                group: thread.groupId
+            });
+            addedCommon = true;
+        }
+
+        result.threads.push({
+            id: thread.id,
+            title: thread.title,
+            topic: thread.topic,
+            createdAt: thread.createdAt,
+            createdBy: thread.createdById,
+            isLocked: thread.isLocked,
+            isSticky: thread.isSticky,
+            numberOfPosts: thread.numberOfPosts,
+            latestPost: thread.latestPost
+        });
+
+        result.posts.push({
+            id: thread.latestPost,
+            thread: thread.id,
+            author: thread.latestPostAuthorId,
+            createdAt: thread.latestPostCreatedAt
+        });
+
+        result.users.push({
+            id: thread.createdById,
+            username: thread.createdByUsername
+        });
+
+        result.users.push({
+            id: thread.latestPostAuthorId,
+            username: thread.latestPostAuthorUsername
+        });
     }
 
     return result;
