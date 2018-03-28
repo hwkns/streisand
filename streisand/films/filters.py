@@ -4,11 +4,9 @@ from .models import Film, Collection
 
 class FilmFilter(filters.FilterSet):
 
-    title = filters.CharFilter(field_name='title', lookup_expr='icontains')
-
     class Meta:
         model = Film
-        fields = ['title', ]
+        fields = ['imdb_id', 'title', 'description', 'tags', 'year', ]
 
 
 class CollectionFilter(filters.FilterSet):
