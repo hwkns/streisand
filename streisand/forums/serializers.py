@@ -11,7 +11,9 @@ class ForumPostSerializer(ModelSerializer):
     topic_name = serializers.StringRelatedField(read_only=True, source='thread.topic')
     topic_id = serializers.PrimaryKeyRelatedField(read_only=True, source='thread.topic')
     thread_title = serializers.StringRelatedField(read_only=True, source='thread')
-    author = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
+    author_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
+    author_username = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True,
+                                                     source='author')
     body_html = serializers.SerializerMethodField()
 
     class Meta:
@@ -22,8 +24,8 @@ class ForumPostSerializer(ModelSerializer):
             'thread_title',
             'topic_id',
             'topic_name',
-            'author',
-            'body',
+            'author_id',
+            'author_username',
             'body_html',
             'created_at',
             'modified_at',

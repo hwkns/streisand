@@ -100,10 +100,13 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'www.renderers.CamelCaseJSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.JSONRenderer',
+
     ),
     'DEFAULT_PARSER_CLASSES': (
         'www.parsers.CamelCaseJSONParser',
-        # 'rest_framework.parsers.MultiPartParser',
+        'www.parsers.CamelCaseMultiPartParser',
+
     ),
     'URL_FORMAT_OVERRIDE': None,
 }
