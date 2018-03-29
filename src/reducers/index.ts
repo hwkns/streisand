@@ -5,6 +5,7 @@ import { combineReducers } from './helpers';
 
 import news from './news';
 import auth from './auth';
+import users from './users';
 import films from './films';
 import wikis from './wikis';
 import errors from './errors';
@@ -18,6 +19,7 @@ export default combineReducers<Store.All>({
     auth,
     errors,
     location,
+    users,
     films,
     torrents,
     deviceInfo,

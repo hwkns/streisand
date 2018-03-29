@@ -1,5 +1,6 @@
 import { RouterState } from 'react-router-redux';
 
+import IUser from '../models/IUser';
 import IFilm from '../models/IFilm';
 import IWiki from '../models/IWiki';
 import INewsPost from '../models/INewsPost';
@@ -11,6 +12,7 @@ import ITorrentItemSet from '../models/ITorrentItemSet';
 import IPagedItemSet from '../models/base/IPagedItemSet';
 
 namespace Store {
+    export type Users = IPagedItemSet<IUser>;
     export type Films = IPagedItemSet<IFilm>;
     export type Wikis = IPagedItemSet<IWiki>;
     export type News = { latest: INewsPost; loading: boolean; };
@@ -25,6 +27,7 @@ namespace Store {
         routing: RouterState;
         location: ILocationInfo;
         auth: IAuthInfo;
+        users: Users;
         films: Films;
         torrents: ITorrentItemSet;
         deviceInfo: IDeviceInfo;

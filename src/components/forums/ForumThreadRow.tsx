@@ -33,7 +33,7 @@ class ForumThreadRowComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const author = { id: 5, username: 'The Dude' };
+    const author = ownProps.thread && state.users.byId[ownProps.thread.createdBy] as IUser;
     return {
         author: author
     };
