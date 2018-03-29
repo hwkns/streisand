@@ -15,6 +15,10 @@ class ForumPostSerializer(ModelSerializer):
     author_username = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True,
                                                      source='author')
     body_html = serializers.SerializerMethodField()
+    modified_by_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(),
+                                     read_only=True, source='modified_by')
+    modified_by_username = serializers.StringRelatedField(default=serializers.CurrentUserDefault(),
+                                      read_only=True, source='modified_by')
 
     class Meta:
         model = ForumPost
@@ -29,6 +33,8 @@ class ForumPostSerializer(ModelSerializer):
             'body_html',
             'created_at',
             'modified_at',
+            'modified_by_id',
+            'modified_by_username',
         )
 
     @staticmethod

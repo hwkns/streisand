@@ -137,6 +137,12 @@ class ForumPost(models.Model):
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+    modified_by = models.ForeignKey(
+        to='users.User',
+        related_name='modified_posts',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     thread = models.ForeignKey(
         to='forums.ForumThread',
         related_name='posts',
