@@ -5,10 +5,12 @@ from www.util import underscoreize
 
 # From https://github.com/beda-software/djangorestframework-camel-case
 
+
 class CamelCaseFormParser(parsers.FormParser):
     def parse(self, stream, media_type=None, parser_context=None):
         data = super(CamelCaseFormParser, self).parse(
             stream, media_type=media_type, parser_context=parser_context)
+
         return underscoreize(data)
 
 

@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'media_formats',
     'mediainfo',
     'rotten_tomatoes',
+    'tests',
     'torrent_requests',
     'torrent_stats',
     'torrents',
