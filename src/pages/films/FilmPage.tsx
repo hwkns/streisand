@@ -8,7 +8,7 @@ import Empty from '../../components/Empty';
 import FilmView from '../../components/films/FilmView';
 import { numericIdentifier } from '../../utilities/shim';
 import { getFilm } from '../../actions/films/FilmAction';
-import ILoadingItem from '../../models/base/ILoadingItem';
+import { isLoadingItem } from '../../models/base/ILoadingItem';
 import { getTorrents } from '../../actions/torrents/FilmTorrentsAction';
 
 export type Props = {
@@ -59,9 +59,16 @@ class FilmPageComponent extends React.Component<CombinedProps, void> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const item = state.films.byId[ownProps.params.filmId];
-    const loading = (item && (item as ILoadingItem).loading) || false;
-    const film = (item && typeof (item as IFilm).id !== 'undefined') ? item as IFilm : undefined;
+    const filmId = numericIdentifier(ownProps.params.filmId);
+    const item = state.films.byId[filmId];
+
+    let film: IFilm;
+    let loading = false;
+    if (isLoadingItem(item)) {
+        loading = item.loading;
+    } else if (item) {
+        film = item;
+    }
 
     return {
         loading: loading,

@@ -34,7 +34,9 @@ export default class TextEditor extends React.Component<Props, State> {
     public componentDidMount() {
         if (this.props.receiveHandle) {
             this.props.receiveHandle({
-                getContent: () => { return this.state.content; },
+                getContent: () => {
+                    return this.state.content;
+                },
                 injectTag: (tag: string, value?: string) => {
                     if (this._textArea) {
                         injectTag(this._textArea, tag, value);

@@ -6,6 +6,7 @@ import Store from '../../store';
 import Empty from '../../components/Empty';
 import { numericIdentifier } from '../../utilities/shim';
 import IForumTopic from '../../models/forums/IForumTopic';
+import { isLoadingItem } from '../../models/base/ILoadingItem';
 import { getThreads } from '../../actions/forums/ForumTopicAction';
 import ForumTopicView from '../../components/forums/ForumTopicView';
 
@@ -59,7 +60,7 @@ const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const topicPages = state.forums.threads.byTopic[topicId];
     const page = topicPages && topicPages.pages[pageNumber];
     const item = state.forums.topics.byId[topicId];
-    const topic = (item && typeof (item as IForumTopic).id !== 'undefined') ? item as IForumTopic : undefined;
+    const topic = !isLoadingItem(item) && item;
 
     return {
         topic: topic,

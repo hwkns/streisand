@@ -8,7 +8,7 @@ import Empty from '../../components/Empty';
 import WikiView from '../../components/wikis/WikiView';
 import { numericIdentifier } from '../../utilities/shim';
 import { getWiki } from '../../actions/wikis/WikiAction';
-import ILoadingItem from '../../models/base/ILoadingItem';
+import { isLoadingItem } from '../../models/base/ILoadingItem';
 
 export type Props = {
     params: {
@@ -29,20 +29,23 @@ type ConnectedDispatch = {
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
 class WikiPageComponent extends React.Component<CombinedProps, void> {
     public componentWillMount() {
-        if (!this.props.loading && !this.props.wiki) {
+        const hasContent = this.props.wiki && this.props.wiki.body;
+        if (!this.props.loading && !hasContent) {
             this.props.getWiki(this.props.wikiId);
         }
     }
 
     public componentWillReceiveProps(props: CombinedProps) {
-        if (!props.loading && !props.wiki) {
+        const hasContent = props.wiki && props.wiki.body;
+        if (!props.loading && !hasContent) {
             this.props.getWiki(props.wikiId);
         }
     }
 
     public render() {
         const wiki = this.props.wiki;
-        if (this.props.loading || !wiki) {
+        const hasContent = wiki && wiki.body;
+        if (this.props.loading || !hasContent) {
             return <Empty loading={this.props.loading} />;
         }
 
@@ -53,14 +56,21 @@ class WikiPageComponent extends React.Component<CombinedProps, void> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const item = state.wikis.byId[ownProps.params.wikiId];
-    const loading = (item && (item as ILoadingItem).loading) || false;
-    const wiki = (item && typeof (item as IWiki).id !== 'undefined') ? item as IWiki : undefined;
+    const wikiId = numericIdentifier(ownProps.params.wikiId);
+    const item = state.wikis.byId[wikiId];
+
+    let wiki: IWiki;
+    let loading = false;
+    if (isLoadingItem(item)) {
+        loading = item.loading;
+    } else if (item) {
+        wiki = item;
+    }
 
     return {
         loading: loading,
         wiki: wiki,
-        wikiId: numericIdentifier(ownProps.params.wikiId)
+        wikiId: wikiId
     };
 };
 

@@ -38,7 +38,12 @@ export default class Editor extends React.Component<Props, State> {
     public componentDidMount() {
         if (this.props.receiveHandle) {
             this.props.receiveHandle({
-                getContent: () => { return this.state.content; }
+                getContent: () => {
+                    if (!this.state.preview && this._textEditor) {
+                        return this._textEditor.getContent();
+                    }
+                    return this.state.content;
+                }
             });
         }
     }

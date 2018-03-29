@@ -42,9 +42,10 @@ class WikiViewComponent extends React.Component<CombinedProps, State> {
             onEdit: () => { this.setState({ editMode: true }); },
             onCancel: () => { this.setState({ editMode: false }); },
             onSave: () => {
+                const content = this._editorHandle.getContent();
                 this.props.updateWiki(wiki.id, {
                     title: wiki.title,
-                    body: this._editorHandle.getContent()
+                    body: content
                 });
             }
         };

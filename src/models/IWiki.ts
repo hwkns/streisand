@@ -7,8 +7,9 @@ export interface IWikiUpdate {
 
 interface IWiki extends IWikiUpdate {
     id: number;
-    modifiedAt: string; // Date
+    createdAt: string; // Date
     createdBy: number; // user id
+    modifiedAt: string; // Date
     modifiedBy: number; // user id
     readAccessMinimumUserClass: number;
     writeAccessMinimumUserClass: number;
