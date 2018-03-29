@@ -105,7 +105,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PARSER_CLASSES': (
         'www.parsers.CamelCaseJSONParser',
-        'www.parsers.CamelCaseMultiPartParser',
+     # hide this for now  'www.parsers.CamelCaseMultiPartParser',
 
     ),
     'URL_FORMAT_OVERRIDE': None,
