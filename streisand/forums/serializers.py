@@ -30,6 +30,7 @@ class ForumPostSerializer(ModelSerializer):
             'topic_name',
             'author_id',
             'author_username',
+            'body',
             'body_html',
             'created_at',
             'modified_at',
