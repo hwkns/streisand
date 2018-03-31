@@ -7,7 +7,7 @@ from django_filters import rest_framework as filters
 from django.shortcuts import render, get_object_or_404
 
 from www.utils import paginate
-from www.pagination import FilmCursorPagination, CollectionCursorPagination
+from www.pagination import FilmPageNumberPagination
 from .models import Film, Collection, CollectionComment, FilmComment
 from .serializers import AdminFilmSerializer, CollectionSerializer, FilmCommentSerializer, CollectionCommentSerializer
 from .filters import FilmFilter, CollectionFilter
@@ -61,7 +61,7 @@ class CollectionViewSet(ModelViewSet):
     ).order_by(
         '-id',
     ).distinct('id')
-    pagination_class = CollectionCursorPagination
+    pagination_class = FilmPageNumberPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = CollectionFilter
 
@@ -92,7 +92,7 @@ class FilmViewSet(ModelViewSet):
     ).order_by(
         '-id',
     ).distinct('id')
-    pagination_class = FilmCursorPagination
+    pagination_class = FilmPageNumberPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = FilmFilter
 

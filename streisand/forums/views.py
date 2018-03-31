@@ -10,7 +10,7 @@ from django.db.models import OuterRef, Subquery
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from www.utils import paginate
-from www.pagination import ForumsPageNumberPagination, ForumTopicCursorSetPagination, ForumThreadCursorSetPagination
+from www.pagination import ForumsPageNumberPagination
 from .forms import ForumPostForm
 from .models import ForumGroup, ForumTopic, ForumThread, ForumPost, ForumThreadSubscription
 from .serializers import (
@@ -35,7 +35,7 @@ class ForumGroupViewSet(ModelViewSet):
         'topics__latest_post__author__user_class',
         'topics__latest_post__thread',
     ).order_by('sort_order').distinct('sort_order')
-    pagination_class = ForumTopicCursorSetPagination
+    pagination_class = ForumsPageNumberPagination
 
     def get_queryset(self):
         return super().get_queryset().accessible_to_user(self.request.user)
@@ -44,7 +44,7 @@ class ForumGroupViewSet(ModelViewSet):
 class ForumTopicViewSet(ModelViewSet):
     """
     API endpoint that allows ForumTopics to be created, viewed, edited, or deleted.
-    Please Note: Pagination is set to Cursor Pagination.
+    Please Note: Pagination is set to Page Number Pagination.
     """
     permission_classes = [IsAuthenticated]
     serializer_class = ForumTopicSerializer
@@ -58,7 +58,7 @@ class ForumTopicViewSet(ModelViewSet):
     ).order_by('sort_order').distinct('sort_order')
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumTopicFilter
-    pagination_class = ForumTopicCursorSetPagination
+    pagination_class = ForumsPageNumberPagination
 
     def get_queryset(self):
 
@@ -110,7 +110,7 @@ class ForumThreadIndexViewSet(ModelViewSet):
 class ForumThreadWithAllPostsViewSet(mixins.ListModelMixin, GenericViewSet):
     """
     API endpoint that allows ForumThreads to be viewed only. This view shows all Forum Threads and associated posts.
-    Please Note: Pagination is set to Cursor Pagination.
+    Please Note: Pagination is set to Page Number Pagination.
     """
     permission_classes = [IsAuthenticated]
     serializer_class = ForumThreadSerializer
@@ -129,7 +129,7 @@ class ForumThreadWithAllPostsViewSet(mixins.ListModelMixin, GenericViewSet):
     ).order_by('-created_at').distinct('created_at')
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumThreadFilter
-    pagination_class = ForumThreadCursorSetPagination
+    pagination_class = ForumsPageNumberPagination
 
     def get_queryset(self):
 
@@ -146,7 +146,7 @@ class ForumThreadItemViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, m
                              mixins.RetrieveModelMixin, GenericViewSet):
     """
     API endpoint that allows ForumThreads to be created, updated, edited or deleted only.
-    Please Note: Pagination is set to Cursor Pagination.
+    Please Note: Pagination is set to Page Number Pagination.
     """
     permission_classes = [IsAuthenticated]
 
@@ -165,7 +165,7 @@ class ForumThreadItemViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, m
         'topic__latest_post__author__user_class',
         'topic__latest_post__thread',
     ).order_by('topic__latest_post__thread').distinct('topic__latest_post__thread')
-    pagination_class = ForumThreadCursorSetPagination
+    pagination_class = ForumsPageNumberPagination
 
     def get_queryset(self):
 
@@ -181,7 +181,7 @@ class ForumThreadItemViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, m
 class ForumPostViewSet(ModelViewSet):
     """
     API endpoint that allows ForumPosts to be created, viewed, edited or deleted.
-    Please Note: Pagination is set to Cursor Pagination.
+    Please Note: Pagination is set to Page Number Pagination.
     """
     permission_classes = [IsAuthenticated]
     serializer_class = ForumPostSerializer
@@ -194,7 +194,7 @@ class ForumPostViewSet(ModelViewSet):
     ).order_by('-created_at').distinct('created_at')
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumPostFilter
-    pagination_class = ForumThreadCursorSetPagination
+    pagination_class = ForumsPageNumberPagination
 
     def get_queryset(self):
 
