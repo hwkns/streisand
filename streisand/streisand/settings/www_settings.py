@@ -15,6 +15,7 @@ INSTALLED_APPS += [
     'rest_framework.authtoken',
     'corsheaders',
     'django_filters',
+    'docs',
 
     # Contrib apps
     'django.contrib.admin',
@@ -38,6 +39,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -175,6 +177,8 @@ STATICFILES_FINDERS = [
 
 ITEMS_PER_PAGE = 50
 
+DOCS_ROOT = os.path.join(BASE_DIR, 'docs/build/html')
+DOCS_ACCESS = 'staff'
 
 LOGGING = {
     'version': 1,

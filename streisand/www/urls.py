@@ -16,6 +16,7 @@ from .views import RegistrationView, LegacyURLView, template_viewer, home, login
 urlpatterns = [
     url(r'^api/v1/', include('api.v1.urls')),
     url(r'^docs/', include_docs_urls(title='JumpCut API v1', public=False)),
+    url(r'^model-docs/', include('docs.urls')),
 
     url(
         regex=r'^$',
@@ -33,6 +34,7 @@ urlpatterns = [
 
     # Admin
     url(r'^grappelli/', include('grappelli.urls')),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', admin.site.urls),
 
     # Registration
