@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     # Local apps
     'comments',
     'films',
-    'film_lists',
     'forums',
     'imdb',
     'invites',

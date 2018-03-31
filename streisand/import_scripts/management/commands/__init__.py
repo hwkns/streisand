@@ -11,7 +11,7 @@ class MySQLCommand(BaseCommand):
 
     DB_CONFIG = {
         'user': 'root',
-        'password': 'fuckneebs',
+        'password': '',
         'host': '10.0.2.2',
         'db': 'tc',
         'cursorclass': SSDictCursor,
