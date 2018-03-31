@@ -16,7 +16,6 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View
 
 from films.models import Film
-from film_lists.models import FilmList
 from forums.models import ForumThread
 from torrents.models import Torrent
 from users.models import User
@@ -184,14 +183,6 @@ class LegacyURLView(View):
 
     def inbox(self, request):
         pass
-
-    def montage(self, request):
-
-        if 'id' not in request.GET:
-            return redirect('film_list_index')
-
-        film_list = get_object_or_404(FilmList, old_id=request.GET['id'])
-        return redirect(film_list)
 
     def peoples(self, request):
         pass

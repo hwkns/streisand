@@ -83,7 +83,7 @@ class User(AbstractUser):
     last_seeded = models.DateTimeField(null=True)
     average_seeding_size = models.BigIntegerField(default=0)
     watch_queue = models.ForeignKey(
-        to='film_lists.FilmList',
+        to='films.Collection',
         null=True,
         blank=True,
         editable=False,
