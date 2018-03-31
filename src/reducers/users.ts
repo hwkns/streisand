@@ -13,6 +13,7 @@ function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
         case 'RECEIVED_FORUM_GROUPS':
         case 'RECEIVED_FORUM_TOPIC':
+        case 'RECEIVED_FORUM_THREAD':
             const map: ItemMap = {};
             for (const item of action.data.users) {
                 map[item.id] = item;

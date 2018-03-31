@@ -17,8 +17,8 @@ export interface IForumTopicResponse {
 
 export interface IForumTopic {
     id: number;
-    group: number;
     title: string;
+    group?: number;
     description?: string;
     numberOfThreads?: number;
     numberOfPosts?: number;

@@ -1,4 +1,5 @@
 import IPagedResponse from '../../models/base/IPagedResponse';
+import { IForumPostResponse } from '../../models/forums/IForumPost';
 import { IForumThreadResponse } from '../../models/forums/IForumThread';
 import { IForumGroupResponse, IForumGroupData} from '../../models/forums/IForumGroup';
 
@@ -105,6 +106,55 @@ export function transformTopic(response: IPagedResponse<IForumThreadResponse>): 
             id: thread.latestPostAuthorId,
             username: thread.latestPostAuthorUsername
         });
+    }
+
+    return result;
+}
+
+export function transformThread(response: IPagedResponse<IForumPostResponse>): IForumGroupData {
+    const result: IForumGroupData = {
+        groups: [],
+        topics: [],
+        threads: [],
+        posts: [],
+        users: []
+    };
+
+    let addedCommon = false;
+    for (const post of response.results) {
+        if (!addedCommon) {
+            result.topics.push({
+                id: post.topicId,
+                title: post.topicName
+            });
+            result.threads.push({
+                id: post.thread,
+                title: post.threadTitle,
+                topic: post.topicId
+            });
+            addedCommon = true;
+        }
+
+        result.posts.push({
+            id: post.id,
+            thread: post.thread,
+            author: 10437, // TODO: fix this when the field gets added to the API
+            createdAt: post.createdAt,
+            modifiedAt: post.modifiedAt,
+            body: post.body
+        });
+
+        // post creater
+        result.users.push({
+            id: 10437, // TODO: fix this when the field gets added to the API
+            username: post.author
+        });
+
+        // post modifier
+        // result.users.push({
+        //     id: 10437, // TODO: fix this when the field gets added to the API
+        //     username: 'neebs' // TODO: fix this when the field gets added to the API
+        // });
     }
 
     return result;

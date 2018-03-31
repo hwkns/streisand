@@ -4,18 +4,18 @@ import { connect } from 'react-redux';
 import Pager from '../Pager';
 import Empty from '../Empty';
 import Store from '../../store';
-import ForumThreadRow from './ForumThreadRow';
-import IForumTopic from '../../models/forums/IForumTopic';
+import ForumPost from './ForumPost';
+import IForumPost from '../../models/forums/IForumPost';
 import IForumThread from '../../models/forums/IForumThread';
 
 export type Props = {
     page: number;
-    topic: IForumTopic;
+    thread: IForumThread;
 };
 
 type ConnectedState = {
     total: number;
-    threads: IForumThread[];
+    posts: IForumPost[];
     loading: boolean;
 };
 type ConnectedDispatch = {};
@@ -23,29 +23,18 @@ type ConnectedDispatch = {};
 type CombinedProps = Props & ConnectedDispatch & ConnectedState;
 class ForumTopicViewComponent extends React.Component<CombinedProps> {
     public render() {
-        const threads = this.props.threads;
-        const uri = `/forum/topic/${this.props.topic.id}`;
-        if (!threads.length) {
+        const posts = this.props.posts;
+        const uri = `/forum/thread/${this.props.thread.id}`;
+        if (!posts.length) {
             return <Empty loading={this.props.loading} />;
         }
-        const rows = threads.map((thread: IForumThread) => {
-            return (<ForumThreadRow thread={thread} key={thread.id} />);
+        const rows = posts.map((post: IForumPost) => {
+            return (<ForumPost post={post} key={post.id} />);
         });
         return (
             <div>
                 <Pager uri={uri} total={this.props.total} page={this.props.page} />
-                <table className="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Thread Activity</th>
-                            <th>Posts</th>
-                            <th>Author</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {rows}
-                    </tbody>
-                </table>
+                <div>{rows}</div>
                 <Pager uri={uri} total={this.props.total} page={this.props.page} />
             </div>
         );
@@ -53,12 +42,12 @@ class ForumTopicViewComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const topicPages = state.forums.threads.byTopic[ownProps.topic.id];
-    const page = topicPages && topicPages.pages[ownProps.page];
+    const threadPages = state.forums.posts.byThread[ownProps.thread.id];
+    const page = threadPages && threadPages.pages[ownProps.page];
     return {
-        total: topicPages ? topicPages.count : 0,
+        total: threadPages ? threadPages.count : 0,
         loading: page ? page.loading : false,
-        threads: page ? page.items : []
+        posts: page ? page.items : []
     };
 };
 

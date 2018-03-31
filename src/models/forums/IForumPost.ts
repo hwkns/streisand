@@ -18,7 +18,6 @@ export interface IForumPost {
     thread: number;
     createdAt: string; // Date
     body?: string;
-    bodyHtml?: string;
     modifiedAt?: string; // Date
 }
 

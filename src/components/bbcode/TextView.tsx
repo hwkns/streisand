@@ -11,7 +11,7 @@ const style: React.CSSProperties = {
 
 function TextView(props: { content: string }) {
     return (
-        <div style={style}>{parser.toReact(props.content)}</div>
+        <div style={style}>{parser.toReact(props.content || '')}</div>
     );
 }
 

@@ -1,12 +1,9 @@
 import * as objectAssign from 'object-assign';
 
+import Action from '../../actions/forums';
 import { combineReducers } from '../helpers';
 import IForumGroup from '../../models/forums/IForumGroup';
 import { ForumGroupData } from '../../models/forums/IForumData';
-import ForumTopicAction from '../../actions/forums/ForumTopicAction';
-import ForumGroupsAction from '../../actions/forums/ForumGroupsAction';
-
-type Action = ForumGroupsAction | ForumTopicAction;
 
 type ItemMap = { [id: number]: IForumGroup };
 function byId(state: ItemMap = {}, action: Action): ItemMap {

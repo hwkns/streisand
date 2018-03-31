@@ -8,8 +8,8 @@ export interface IUserLinkProps {
 }
 
 export default function UserLink(props: IUserLinkProps) {
-    const userName = props.user.username || '<unkown>';
-    if (!props.user.id) {
+    const userName = props.user && props.user.username ? props.user.username : '<unkown>';
+    if (!props.user || !props.user.id) {
         return (<span>{userName}</span>);
     }
     return (<Link to={'/users/' + props.user.id}>{userName}</Link>);

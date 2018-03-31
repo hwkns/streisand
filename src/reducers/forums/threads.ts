@@ -1,19 +1,17 @@
 import * as objectAssign from 'object-assign';
 
+import Action from '../../actions/forums';
 import { combineReducers } from '../helpers';
 import { INestedPages } from '../../models/base/IPagedItemSet';
 import { IForumThread } from '../../models/forums/IForumThread';
 import { ForumThreadData } from '../../models/forums/IForumData';
-import ForumTopicAction from '../../actions/forums/ForumTopicAction';
-import ForumGroupsAction from '../../actions/forums/ForumGroupsAction';
-
-type Action = ForumGroupsAction | ForumTopicAction;
 
 type ItemMap = { [id: number]: IForumThread };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
         case 'RECEIVED_FORUM_GROUPS':
         case 'RECEIVED_FORUM_TOPIC':
+        case 'RECEIVED_FORUM_THREAD':
             let map: ItemMap = {};
             for (const item of action.data.threads) {
                 map[item.id] = item;

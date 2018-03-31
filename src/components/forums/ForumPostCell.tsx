@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 
 import Store from '../../store';
 import IUser from '../../models/IUser';
+import UserLink from '../links/UserLink';
+import { getDateDiff } from '../../utilities/dates';
 import IForumPost from '../../models/forums/IForumPost';
 import IForumThread from '../../models/forums/IForumThread';
-import { getDateDiff } from '../../utilities/dates';
 
 export type Props = {
     id: number;
@@ -24,13 +25,16 @@ class ForumPostCellComponent extends React.Component<CombinedProps> {
     public render() {
         const post = this.props.post;
         const thread = this.props.thread;
-        const author = this.props.author;
+
+        if (!post) {
+            return <td>No posts...</td>;
+        }
+
         const posted = getDateDiff({ past: post.createdAt });
-        const authorLink = <Link to={'/user/' + author.id} title={author.username}>{author.username}</Link>;
         const threadLink = <Link to={'/forum/thread/' + thread.id} title={thread.title}>{thread.title}</Link>;
         return (
             <td>
-                {authorLink} posted in {threadLink} {posted}
+                <UserLink user={this.props.author} /> posted in {threadLink} {posted}
             </td>
         );
     }
