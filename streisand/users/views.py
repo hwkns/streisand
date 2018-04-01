@@ -6,7 +6,9 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+from django_filters import rest_framework as filters
 
+from .filters import UserFilter
 from www.utils import paginate
 from .models import User
 from .serializers import GroupSerializer, AdminUserProfileSerializer, OwnedUserProfileSerializer
@@ -27,6 +29,8 @@ class UserViewSet(ModelViewSet):
     """
     permission_classes = [IsAdminUser]
     serializer_class = AdminUserProfileSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = UserFilter
     queryset = User.objects.all().select_related(
         'user_class',
         'invited_by',
