@@ -4,21 +4,27 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 
+from invites.views import InviteViewSet
 from films.views import FilmViewSet, CollectionViewSet, CollectionCommentViewSet, FilmCommentViewSet
 from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadIndexViewSet, ForumThreadWithAllPostsViewSet, \
     ForumThreadItemViewSet, ForumPostViewSet, NewsPostViewSet, ForumThreadSubscriptionViewSet
 from torrents.views import TorrentViewSet
+from tracker.views import TorrentClientViewSet, SwarmViewSet, PeerViewSet
 from users.views import UserViewSet, GroupViewSet, CurrentUserView
 from wiki.views import WikiArticleCreateUpdateDestroyViewSet, WikiArticleBodyViewSet, WikiArticleViewListOnlyViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', viewset=UserViewSet, base_name='user')
+router.register(r'invites', viewset=InviteViewSet, base_name='invite')
 router.register(r'groups', viewset=GroupViewSet, base_name='group')
 router.register(r'films', viewset=FilmViewSet, base_name='film')
 router.register(r'film-comments', viewset=FilmCommentViewSet, base_name='film-comment')
 router.register(r'collections', viewset=CollectionViewSet, base_name='collection')
 router.register(r'collection-comments', viewset=CollectionCommentViewSet, base_name='collection-comment')
 router.register(r'torrents', viewset=TorrentViewSet, base_name='torrent')
+router.register(r'torrent-clients', viewset=TorrentClientViewSet, base_name='torrent-client')
+router.register(r'tracker-swarm', viewset=SwarmViewSet, base_name='tracker-swarm')
+router.register(r'tracker-peers', viewset=PeerViewSet, base_name='tracker-peer')
 router.register(r'forum-groups', viewset=ForumGroupViewSet, base_name='forum-group')
 router.register(r'forum-topics', viewset=ForumTopicViewSet, base_name='forum-topic')
 router.register(r'forum-thread-index', viewset=ForumThreadIndexViewSet, base_name='forum-thread-index')
