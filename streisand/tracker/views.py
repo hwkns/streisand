@@ -22,7 +22,7 @@ class TorrentClientViewSet(ModelViewSet):
     """
 
     serializer_class = TorrentClientSerializer
-    permission_classes = IsAdminUser
+    permission_classes = [IsAdminUse]r
     queryset = TorrentClient.objects.all()
 
 
@@ -32,7 +32,7 @@ class SwarmViewSet(ModelViewSet):
     """
 
     serializer_class = SwarmSerializer
-    permission_classes = IsAdminUser
+    permission_classes = [IsAdminUser]
     queryset = Swarm.objects.all()
 
 
@@ -42,7 +42,7 @@ class PeerViewSet(ModelViewSet):
     """
 
     serializer_class = PeerSerializer
-    permission_classes = IsAdminUser
+    permission_classes = [IsAdminUser]
     queryset = Peer.objects.all()
 
 
