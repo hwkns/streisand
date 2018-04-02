@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.utils import timezone
 from django.db import models
 from django.urls import reverse
 
@@ -131,13 +130,6 @@ class ForumThread(models.Model):
             }
         )
 
-    def save(self, *args, **kwargs):
-        if self.modified and self.modified_at is None:
-            self.modified_at = timezone.now()
-        elif not self.modified and self.modified_at is not None:
-            self.modified_at = None
-        super(ForumThread, self).save(*args, **kwargs)
-
 
 class ForumPost(models.Model):
 
@@ -181,13 +173,6 @@ class ForumPost(models.Model):
             thread_url=self.thread.get_absolute_url(),
             post_id=self.id,
         )
-
-    def save(self, *args, **kwargs):
-        if self.modified and self.modified_at is None:
-            self.modified_at = timezone.now()
-        elif not self.modified and self.modified_at is not None:
-            self.modified_at = None
-        super(ForumPost, self).save(*args, **kwargs)
 
 
 class ForumReport(models.Model):
