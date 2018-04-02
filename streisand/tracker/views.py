@@ -22,7 +22,7 @@ class TorrentClientViewSet(ModelViewSet):
     """
 
     serializer_class = TorrentClientSerializer
-    permission_classes = [IsAdminUse]r
+    permission_classes = [IsAdminUser]
     queryset = TorrentClient.objects.all()
 
 
