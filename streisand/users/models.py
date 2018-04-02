@@ -58,10 +58,10 @@ class User(AbstractUser):
         on_delete=models.PROTECT,
     )
     avatar_url = models.URLField(max_length=512, null=True, blank=True)
-    custom_title = models.CharField(max_length=256, null=True)
-    profile_description = models.TextField()
-    staff_notes = models.TextField()
-    irc_key = models.CharField(max_length=128)
+    custom_title = models.CharField(max_length=256, null=True, blank=True)
+    profile_description = models.TextField(null=True, blank=True)
+    staff_notes = models.TextField(null=True)
+    irc_key = models.CharField(max_length=128, null=True, blank=True)
     invited_by = models.ForeignKey(
         to='users.User',
         null=True,

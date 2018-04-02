@@ -2,30 +2,43 @@
 
 from django.contrib.auth.models import Group
 from django.shortcuts import render, get_object_or_404
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from django_filters import rest_framework as filters
-
-from .filters import UserFilter
+from rest_framework.views import APIView
+from .filters import UserFilter, PublicUserFilter
 from www.utils import paginate
 from .models import User
-from .serializers import GroupSerializer, AdminUserProfileSerializer, OwnedUserProfileSerializer
+from .serializers import GroupSerializer, AdminUserProfileSerializer, OwnedUserProfileSerializer, PublicUserProfileSerializer
 
 
 class CurrentUserView(APIView):
-    """
-    API endpoint that shows the currently logged in user. default is /api/v1/current-user.
-    """
     def get(self, request):
         serializer = OwnedUserProfileSerializer(request.user)
         return Response(serializer.data)
 
 
+class PublicUserProfileViewSet(ModelViewSet):
+    """
+    API endpoint that allows users to be viewed and searched only.
+    """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = PublicUserProfileSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = PublicUserFilter
+    queryset = User.objects.all().select_related(
+        'user_class',
+    ).prefetch_related(
+       'user_class', 'groups',
+    ).order_by(
+        '-date_joined',
+    )
+
+
 class UserViewSet(ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows users to be viewed or edited, by administrators.
     """
     permission_classes = [IsAdminUser]
     serializer_class = AdminUserProfileSerializer
@@ -80,3 +93,4 @@ def user_profile_details(request, username):
             'user': user,
         },
     )
+

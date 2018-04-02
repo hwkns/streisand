@@ -10,11 +10,12 @@ from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadIndexV
     ForumThreadItemViewSet, ForumPostViewSet, NewsPostViewSet, ForumThreadSubscriptionViewSet
 from torrents.views import TorrentViewSet
 from tracker.views import TorrentClientViewSet, SwarmViewSet, PeerViewSet
-from users.views import UserViewSet, GroupViewSet, CurrentUserView
+from users.views import UserViewSet, GroupViewSet, CurrentUserView, PublicUserProfileViewSet
 from wiki.views import WikiArticleCreateUpdateDestroyViewSet, WikiArticleBodyViewSet, WikiArticleViewListOnlyViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', viewset=UserViewSet, base_name='user')
+router.register(r'user-profiles', viewset=PublicUserProfileViewSet, base_name='user-profile')
 router.register(r'invites', viewset=InviteViewSet, base_name='invite')
 router.register(r'groups', viewset=GroupViewSet, base_name='group')
 router.register(r'films', viewset=FilmViewSet, base_name='film')
@@ -48,5 +49,5 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^current-user/', CurrentUserView.as_view()),
 
-
 ]
+

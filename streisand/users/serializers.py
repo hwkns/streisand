@@ -15,7 +15,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class AdminUserProfileSerializer(serializers.ModelSerializer):
 
-    user_class = serializers.CharField(source='user_class.name')
+    user_class = serializers.StringRelatedField()
 
     class Meta:
         model = User
@@ -42,6 +42,7 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
 
 
 class OwnedUserProfileSerializer(AdminUserProfileSerializer):
+    username = serializers.StringRelatedField()
 
     class Meta(AdminUserProfileSerializer.Meta):
         fields = (
@@ -62,8 +63,11 @@ class OwnedUserProfileSerializer(AdminUserProfileSerializer):
             'last_seeded',
         )
 
+        extra_kwargs = {'username': {'read_only': True, 'required': True}}
+
 
 class PublicUserProfileSerializer(OwnedUserProfileSerializer):
+    username = serializers.StringRelatedField()
 
     class Meta(OwnedUserProfileSerializer.Meta):
         fields = (
@@ -81,6 +85,8 @@ class PublicUserProfileSerializer(OwnedUserProfileSerializer):
             'bytes_downloaded',
             'last_seeded',
         )
+
+    extra_kwargs = {'username': {'read_only': True, 'required': True}}
 
 
 class DisplayUserProfileSerializer(PublicUserProfileSerializer):
