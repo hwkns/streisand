@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from django.utils import timezone
 from django.db import models
 from django.urls import reverse
 
@@ -88,6 +88,14 @@ class ForumThread(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
+    modified = models.BooleanField(default=False)
+    modified_at = models.DateTimeField(auto_now=True)
+    modified_by = models.ForeignKey(
+        to='users.User',
+        related_name='modified_threads',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     topic = models.ForeignKey(
         to='forums.ForumTopic',
         related_name='threads',
@@ -123,6 +131,13 @@ class ForumThread(models.Model):
             }
         )
 
+    def save(self, *args, **kwargs):
+        if self.modified and self.modified_at is None:
+            self.modified_at = timezone.now()
+        elif not self.modified and self.modified_at is not None:
+            self.modified_at = None
+        super(ForumThread, self).save(*args, **kwargs)
+
 
 class ForumPost(models.Model):
 
@@ -136,6 +151,7 @@ class ForumPost(models.Model):
     )
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    modified = models.BooleanField(default=False)
     modified_at = models.DateTimeField(auto_now=True)
     modified_by = models.ForeignKey(
         to='users.User',
@@ -165,6 +181,13 @@ class ForumPost(models.Model):
             thread_url=self.thread.get_absolute_url(),
             post_id=self.id,
         )
+
+    def save(self, *args, **kwargs):
+        if self.modified and self.modified_at is None:
+            self.modified_at = timezone.now()
+        elif not self.modified and self.modified_at is not None:
+            self.modified_at = None
+        super(ForumPost, self).save(*args, **kwargs)
 
 
 class ForumReport(models.Model):
