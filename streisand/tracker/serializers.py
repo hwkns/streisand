@@ -24,4 +24,3 @@ class TorrentClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = TorrentClient
         fields = '__all__'
-

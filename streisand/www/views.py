@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View
 
-from films.models import Film
+from films.models import Film, Collection
 from forums.models import ForumThread
 from torrents.models import Torrent
 from users.models import User
@@ -224,9 +224,9 @@ class LegacyURLView(View):
             else:
                 return redirect(torrent)
 
-        # FilmLists
+        # Collection
         elif 'montage' in request.GET:
-            get_object_or_404(FilmList, old_id=request.GET['montage'])
+            get_object_or_404(Collection, old_id=request.GET['montage'])
 
         # Films
         film = get_object_or_404(Film, old_id=request.GET['id'])

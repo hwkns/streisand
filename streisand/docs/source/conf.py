@@ -14,13 +14,15 @@
 #
 import os
 import sys
+from django.core.wsgi import get_wsgi_application
 import sphinx_bootstrap_theme
+
 sys.path.insert(0, os.path.abspath('../..'))
 project_path = os.path.abspath('../..')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "streisand.settings.www_settings")
+
 sys.path.append(project_path)
 os.chdir(project_path)
-from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
 # -- Project information -----------------------------------------------------
 

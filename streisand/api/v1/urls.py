@@ -50,4 +50,3 @@ urlpatterns = [
     url(r'^current-user/', CurrentUserView.as_view()),
 
 ]
-

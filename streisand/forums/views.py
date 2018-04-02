@@ -26,7 +26,7 @@ from .filters import ForumTopicFilter, ForumThreadFilter, ForumPostFilter
 
 class ForumGroupViewSet(ModelViewSet):
     """
-    API endpoint that allows ForumGroups to be edited, viewed, edited, or created.
+    API endpoint that allows ForumGroups to be viewed, edited, or created.
     """
     permission_classes = [IsAuthenticated]
     serializer_class = ForumGroupSerializer

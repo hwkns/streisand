@@ -31,7 +31,7 @@ class PublicUserProfileViewSet(ModelViewSet):
     queryset = User.objects.all().select_related(
         'user_class',
     ).prefetch_related(
-       'user_class', 'groups',
+        'user_class', 'groups',
     ).order_by(
         '-date_joined',
     )
@@ -94,4 +94,3 @@ def user_profile_details(request, username):
             'user': user,
         },
     )
-
