@@ -25,6 +25,7 @@ class PublicUserProfileViewSet(ModelViewSet):
     """
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PublicUserProfileSerializer
+    http_method_names = ['get', 'head', 'options']
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = PublicUserFilter
     queryset = User.objects.all().select_related(
