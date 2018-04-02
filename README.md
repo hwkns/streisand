@@ -13,6 +13,8 @@ To get started
 
 - install [Vagrant](https://www.vagrantup.com/) and [Ansible](http://docs.ansible.com/intro_installation.html)
 - `cd` into the project root (next to Vagrantfile)
+- `run` `sudo systemctl enable rpc-statd`
+- `run` `sudo systemctl start rpc-statd`
 - `vagrant up`
 - `vagrant ssh`
 
