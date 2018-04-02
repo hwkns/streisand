@@ -10,8 +10,21 @@ A private BitTorrent tracker backend written in python, django, and redis
 
 To get started
 ---------------
-
-- install [Vagrant](https://www.vagrantup.com/) and [Ansible](http://docs.ansible.com/intro_installation.html)
+- **Note these instructions are for a Linux Operating System.**
+- Install VirtualBox [VirtualBox](https://www.virtualbox.org/wiki/Linux_Downloads)
+- Note From the Vagrant Website: `The VirtualBox provider is compatible with VirtualBox versions 4.0.x, 4.1.x, 4.2.x, 4.3.x, 5.0.x, 5.1.x, and 5.2.x`
+- Make sure you download 5.2.x
+- install the latest [Vagrant](https://www.vagrantup.com/)
+- For Vagrant: `wget https://releases.hashicorp.com/vagrant/2.0.3/vagrant_2.0.3_x86_64.deb?_ga=2.44737508.196731817.1522674812-543847631.1519942211 -O vagrant.deb`
+- Note: Lates version is 2.0.3 and this is critical for Virtualbox instillations
+- `sudo dpkg -i vagrant.deb`
+- and [Ansible](http://docs.ansible.com/intro_installation.html)
+- For Ansible: 
+- `sudo apt-get update`
+- `sudo apt-get install software-properties-common`
+- `sudo apt-add-repository ppa:ansible/ansible (For Ubuntu and Debian)`
+- `sudo apt-get update`
+- `sudo apt-get install ansible`
 - `cd` into the project root (next to Vagrantfile)
 - `run` `sudo systemctl enable rpc-statd`
 - `run` `sudo systemctl start rpc-statd`
