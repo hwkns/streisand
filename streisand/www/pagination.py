@@ -44,4 +44,3 @@ class FilmPageNumberPagination(PageNumberPagination):
 
 class UserPageNumberPagination(PageNumberPagination):
     page_size = 25
-   

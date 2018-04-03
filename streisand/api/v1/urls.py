@@ -10,7 +10,7 @@ from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadIndexV
     ForumThreadItemViewSet, ForumPostViewSet, NewsPostViewSet, ForumThreadSubscriptionViewSet
 from torrents.views import TorrentViewSet
 from tracker.views import TorrentClientViewSet, SwarmViewSet, PeerViewSet
-from users.views import UserViewSet, GroupViewSet, CurrentUserView, PublicUserProfileViewSet
+from users.views import UserViewSet, GroupViewSet, CurrentUserView, PublicUserProfileViewSet, ChangePasswordView
 from wiki.views import WikiArticleCreateUpdateDestroyViewSet, WikiArticleBodyViewSet, WikiArticleViewListOnlyViewSet
 
 router = routers.DefaultRouter()
@@ -48,5 +48,6 @@ urlpatterns = [
     # DRF browsable API
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^current-user/', CurrentUserView.as_view()),
+    url(r'^change-password/', ChangePasswordView.as_view()),
 
 ]
