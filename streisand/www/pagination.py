@@ -40,3 +40,8 @@ class CollectionCursorPagination(CursorPagination):
 
 class FilmPageNumberPagination(PageNumberPagination):
     page_size = 25
+
+
+class UserPageNumberPagination(PageNumberPagination):
+    page_size = 25
+   

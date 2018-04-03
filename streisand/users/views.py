@@ -9,6 +9,7 @@ from django_filters import rest_framework as filters
 from rest_framework.views import APIView
 from .filters import UserFilter, PublicUserFilter
 from www.utils import paginate
+from www.pagination import UserPageNumberPagination
 from .models import User
 from .serializers import GroupSerializer, AdminUserProfileSerializer, OwnedUserProfileSerializer, PublicUserProfileSerializer
 
@@ -28,6 +29,7 @@ class PublicUserProfileViewSet(ModelViewSet):
     http_method_names = ['get', 'head', 'options']
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = PublicUserFilter
+    pagination_class = UserPageNumberPagination
     queryset = User.objects.all().select_related(
         'user_class',
     ).prefetch_related(
@@ -45,6 +47,7 @@ class UserViewSet(ModelViewSet):
     serializer_class = AdminUserProfileSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = UserFilter
+    pagination_class = UserPageNumberPagination
     queryset = User.objects.all().select_related(
         'user_class',
         'invited_by',
