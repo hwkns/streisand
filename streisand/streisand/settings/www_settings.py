@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'www.middleware.CachedUserAuthenticationMiddleware',
     'www.middleware.LoginRequiredMiddleware',
     'www.middleware.IPHistoryMiddleware',
+
 ]
 
 if PRODUCTION or TESTING:
@@ -100,12 +101,13 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
-        'www.renderers.CamelCaseJSONRenderer',
+        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
 
     ),
     'DEFAULT_PARSER_CLASSES': (
-        'www.parsers.CamelCaseJSONParser',
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+        'rest_framework.parsers.JSONParser',
 
     ),
     'URL_FORMAT_OVERRIDE': None,
@@ -115,7 +117,6 @@ if DEBUG:
     REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += (
         'rest_framework.authentication.SessionAuthentication',
     )
-
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -127,7 +128,6 @@ CORS_ORIGIN_WHITELIST = [
     in ('api', 'dev', 'static', 'www')
 ]
 
-
 RT_API_KEY = os.environ.get('RT_API_KEY', '')
 OLD_SITE_SECRET_KEY = os.environ.get('OLD_SITE_HASH', '')
 
@@ -137,7 +137,6 @@ AUTHENTICATION_BACKENDS = [
     # django-su
     'django_su.backends.SuBackend',
 ]
-
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
@@ -230,7 +229,6 @@ LOGGING = {
 }
 
 if TESTING:
-
     # http://django-dynamic-fixture.readthedocs.org/en/latest/data_fixtures.html#custom-field-fixture
     DDF_FIELD_FIXTURES = {
         'picklefield.fields.PickledObjectField': {
