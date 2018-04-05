@@ -22,9 +22,9 @@ class TorrentRequestForm(ModelForm):
         )
 
     def __init__(self, *args, **kwargs):
-        requester = kwargs.pop('requester')
+        requester_profile = kwargs.pop('requester_profile')
         super().__init__(*args, **kwargs)
-        self.instance.created_by = requester
+        self.instance.created_by = requester_profile
 
 
 class VoteForm(ModelForm):
@@ -36,10 +36,10 @@ class VoteForm(ModelForm):
         )
 
     def __init__(self, *args, **kwargs):
-        voter = kwargs.pop('voter')
+        voter_profile = kwargs.pop('voter_profile')
         torrent_request = kwargs.pop('torrent_request')
         super().__init__(*args, **kwargs)
-        self.instance.author = voter
+        self.instance.author = voter_profile
         self.instance.torrent_request = torrent_request
 
     def clean(self):

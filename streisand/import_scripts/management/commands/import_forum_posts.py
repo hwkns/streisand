@@ -5,7 +5,7 @@ from pytz import UTC
 from import_scripts.management.commands import MySQLCommand
 
 from forums.models import ForumThread
-from users.models import User
+from profiles.models import UserProfile
 
 
 class Command(MySQLCommand):
@@ -13,11 +13,8 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM forums_posts
     """
-    COUNT_SQL = """
-        SELECT COUNT(*) FROM forums_posts
-    """
 
-    help = "Import forum posts"
+    help = "Imports forum posts from the MySQL db"
 
     def handle_row(self, row):
 
@@ -31,8 +28,9 @@ class Command(MySQLCommand):
         forum_thread = ForumThread.objects.get(old_id=row['TopicID'])
 
         try:
-            author = User.objects.get(old_id=author_id)
-        except User.DoesNotExist:
+            author = UserProfile.objects.get(old_id=author_id)
+        except UserProfile.DoesNotExist:
+            # print('User', author_id, 'does not exist!!!!!!!!!!!!!!!!!!!!!!!!')
             author = None
 
         forum_post = forum_thread.posts.create(
@@ -47,3 +45,9 @@ class Command(MySQLCommand):
         else:
             forum_post.modified_at = forum_post.created_at
         forum_post.save()
+
+    def pre_sql(self):
+        print('importing forum posts...')
+
+    def post_sql(self):
+        print('finished importing forum posts')

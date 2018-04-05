@@ -5,9 +5,9 @@ from pytz import UTC
 from import_scripts.management.commands import MySQLCommand
 from imdb.models import FilmIMDb
 from films.models import Film
+from profiles.models import UserProfile
 from torrent_requests.models import TorrentRequest
 from torrents.models import Torrent
-from users.models import User
 
 
 class Command(MySQLCommand):
@@ -19,9 +19,8 @@ class Command(MySQLCommand):
     """
 
     SQL = """SELECT * FROM requests"""
-    COUNT_SQL = """SELECT COUNT(*) FROM requests"""
 
-    help = "Import torrent requests"
+    help = "Imports torrent requests from the MySQL db"
 
     def handle_row(self, row):
 
@@ -41,7 +40,7 @@ class Command(MySQLCommand):
         if container == 'Matroska':
             container = 'MKV'
 
-        requester = User.objects.filter(old_id=requester_id).first()
+        requester = UserProfile.objects.filter(old_id=requester_id).first()
         description = bbcode_description.encode('latin-1').decode('utf-8').strip() if bbcode_description else ''
 
         try:
@@ -76,3 +75,5 @@ class Command(MySQLCommand):
             author=None,
             bounty_in_bytes=bounty,
         )
+
+        print(torrent_request)

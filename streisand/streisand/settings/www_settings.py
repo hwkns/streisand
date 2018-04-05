@@ -13,16 +13,13 @@ INSTALLED_APPS += [
     'grappelli',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',
-    'django_filters',
-    'docs',
 
     # Contrib apps
     'django.contrib.admin',
     'django.contrib.humanize',
+    'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
-    'django.contrib.messages',
 
     # Debug Toolbar
     'debug_toolbar',
@@ -33,21 +30,17 @@ INSTALLED_APPS += [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.admindocs.middleware.XViewMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'www.middleware.CachedUserAuthenticationMiddleware',
     'www.middleware.LoginRequiredMiddleware',
-    'www.middleware.IPHistoryMiddleware',
-
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'profiles.middleware.IPHistoryMiddleware',
 ]
 
 if PRODUCTION or TESTING:
@@ -71,30 +64,10 @@ PASSWORD_HASHERS = [
     'www.auth.OldSitePasswordHasher',
 ]
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {
-            'min_length': 10,
-        }
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser',
-    ], 'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ),
+    ],
     'PAGE_SIZE': 50,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -103,30 +76,16 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-
     ),
     'DEFAULT_PARSER_CLASSES': (
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
-        'rest_framework.parsers.JSONParser',
-
     ),
-    'URL_FORMAT_OVERRIDE': None,
 }
 
 if DEBUG:
     REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += (
         'rest_framework.authentication.SessionAuthentication',
     )
-
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-CORS_URL_REGEX = r'^/api/v1/.*$'
-
-CORS_ORIGIN_WHITELIST = [
-    subdomain + '.' + HOST_DOMAIN
-    for subdomain
-    in ('api', 'dev', 'static', 'www')
-]
 
 RT_API_KEY = os.environ.get('RT_API_KEY', '')
 OLD_SITE_SECRET_KEY = os.environ.get('OLD_SITE_HASH', '')
@@ -158,6 +117,7 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -174,8 +134,6 @@ STATICFILES_FINDERS = [
 
 ITEMS_PER_PAGE = 50
 
-DOCS_ROOT = os.path.join(BASE_DIR, 'docs/build/html')
-DOCS_ACCESS = 'staff'
 
 LOGGING = {
     'version': 1,
@@ -229,6 +187,7 @@ LOGGING = {
 }
 
 if TESTING:
+
     # http://django-dynamic-fixture.readthedocs.org/en/latest/data_fixtures.html#custom-field-fixture
     DDF_FIELD_FIXTURES = {
         'picklefield.fields.PickledObjectField': {

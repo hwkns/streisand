@@ -12,11 +12,8 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM imdb_information
     """
-    COUNT_SQL = """
-        SELECT COUNT(*) FROM imdb_information
-    """
 
-    help = "Import IMDb information"
+    help = "Imports IMDb information from the MySQL db"
 
     def handle_row(self, row):
 
@@ -26,10 +23,12 @@ class Command(MySQLCommand):
         runtime_in_minutes = row['runtime']
         last_updated = row['updatedOn']
 
-        FilmIMDb.objects.create(
+        i = FilmIMDb.objects.create(
             id=imdb_id,
             rating=rating,
             rating_vote_count=rating_vote_count,
             runtime_in_minutes=runtime_in_minutes,
             last_updated=last_updated.replace(tzinfo=UTC) if last_updated else None,
         )
+
+        print(i.tt_id)

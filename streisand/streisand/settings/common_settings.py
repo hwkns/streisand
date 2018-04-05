@@ -19,8 +19,6 @@ import dj_database_url
 from django.utils.timezone import timedelta
 
 
-AUTH_USER_MODEL = 'users.User'
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
@@ -34,14 +32,8 @@ TEST_RUNNER = 'streisand.test_utils.CustomTestSuiteRunner'
 SECRET_KEY = os.environ.get('STREISAND_SECRET_KEY', 'you_deserve_to_be_pwned')
 
 ALLOWED_HOSTS = [
-    # Adding this for development
-    '*',
     'localhost',
-    '.jumpcut.to',
 ]
-HOST_DOMAIN = os.environ.get('HOST_DOMAIN', '')
-if HOST_DOMAIN:
-    ALLOWED_HOSTS.append('.' + HOST_DOMAIN)
 
 INSTALLED_APPS = [
 
@@ -52,18 +44,19 @@ INSTALLED_APPS = [
     # Local apps
     'comments',
     'films',
+    'film_lists',
     'forums',
     'imdb',
     'invites',
     'media_formats',
     'mediainfo',
+    'profiles',
     'rotten_tomatoes',
-    'tests',
     'torrent_requests',
     'torrent_stats',
     'torrents',
     'tracker',
-    'users',
+    'user_classes',
     'wiki',
     'www',
 

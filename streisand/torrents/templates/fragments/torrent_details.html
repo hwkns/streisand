@@ -12,7 +12,7 @@
     {% if torrent.is_accepting_reseed_requests and 'torrents.can_request_reseed' in perms %}
     | <a name="torrent-rr-{{ torrent.id }}" href="{% url 'reseed_request' torrent_id=torrent.id %}">RR</a>
     {% endif %}
-    | <a name="torrent-dl-{{ torrent.id }}" href="{% url 'torrent_download' torrent_id=torrent.id announce_key=user.announce_key_id %}">DL</a>
+    | <a name="torrent-dl-{{ torrent.id }}" href="{% url 'torrent_download' torrent_id=torrent.id announce_key=user.profile.announce_key_id %}">DL</a>
     | <a name="torrent-pl-{{ torrent.id }}" href="{{ torrent.get_absolute_url }}">PL</a>
   </div>
   <div class="collapse{% if torrent.id == torrent_id %} in{% endif %}" id="{{ torrent.id }}_details">
