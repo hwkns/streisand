@@ -6,27 +6,24 @@ from hashlib import md5, sha1
 from django.conf import settings
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import BasePasswordHasher, mask_hash
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import Permission
 from django.db.models import Q
 from django.utils.crypto import constant_time_compare
 
-from profiles.models import UserProfile
+from users.models import User
 
 
 class CustomAuthBackend(ModelBackend):
 
     def get_user(self, user_id):
         try:
-            profile = UserProfile.objects.filter(
-                user_id=user_id
+            user = User.objects.filter(
+                id=user_id
             ).select_related(
-                'user',
                 'user_class',
             ).get()
         except User.DoesNotExist:
             user = None
-        else:
-            user = profile.user
         return user
 
     def authenticate(self, username=None, password=None, **kwargs):
@@ -57,7 +54,7 @@ class CustomAuthBackend(ModelBackend):
         Returns a set of permission strings the user has from their groups,
         user class, and custom permissions.
         """
-        if not user.is_active or user.is_anonymous() or obj is not None:
+        if not user.is_active or user.is_anonymous or obj is not None:
             return set()
 
         if not hasattr(user, '_perm_cache'):
@@ -68,7 +65,7 @@ class CustomAuthBackend(ModelBackend):
                 # Group permissions
                 | Q(group__user=user)
                 # UserClass permissions
-                | Q(user_classes__user_profiles__user=user)
+                | Q(user_classes__users=user)
             ).distinct().values_list(
                 'content_type__app_label',
                 'codename',

@@ -8,16 +8,17 @@ from pytz import UTC
 from import_scripts.management.commands import MySQLCommand
 from films.models import Film
 from mediainfo.models import Mediainfo
-from profiles.models import UserProfile
 from torrents.models import Torrent, TorrentMetaInfo
 from tracker.models import Swarm
+from users.models import User
 
 
 class Command(MySQLCommand):
 
     SQL = """SELECT * FROM torrents"""
+    COUNT_SQL = """SELECT COUNT(*) FROM torrents"""
 
-    help = "Imports torrents from files and the MySQL db"
+    help = "Import torrents"
 
     moderation_values = {
         0: None,
@@ -95,15 +96,14 @@ class Command(MySQLCommand):
 
         swarm = Swarm.objects.create(torrent_info_hash=info_hash)
         metainfo = TorrentMetaInfo.objects.create(dictionary=metainfo_dict)
-        uploader = UserProfile.objects.filter(old_id=uploader_id).first()
-        moderator = UserProfile.objects.filter(user__username=last_moderated_by_username).first()
+        uploader = User.objects.filter(old_id=uploader_id).first()
+        moderator = User.objects.filter(username=last_moderated_by_username).first()
 
         mediainfo_text = mediainfo.encode('latin-1').decode('utf-8').strip() if mediainfo else ''
         if mediainfo_text:
             try:
                 mediainfo = Mediainfo.objects.create(text=mediainfo_text)
             except Exception:
-                print(mediainfo_text)
                 mediainfo = None
                 # raise
         else:
@@ -132,5 +132,3 @@ class Command(MySQLCommand):
         )
         torrent.uploaded_at = uploaded_at.replace(tzinfo=UTC)
         torrent.save()
-
-        print(torrent)

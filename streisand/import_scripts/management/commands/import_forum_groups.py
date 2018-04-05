@@ -10,8 +10,11 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM forums_groups ORDER BY Sort
     """
+    COUNT_SQL = """
+        SELECT COUNT(*) FROM forums_groups
+    """
 
-    help = "Imports forum groups from the MySQL db"
+    help = "Import forum groups"
 
     def handle_row(self, row):
 
@@ -19,10 +22,8 @@ class Command(MySQLCommand):
         sort = row['Sort']
         name = row['Name']
 
-        forum_group = ForumGroup.objects.create(
+        ForumGroup.objects.create(
             old_id=old_id,
             sort_order=sort,
             name=name,
         )
-
-        print(forum_group)

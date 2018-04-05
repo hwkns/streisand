@@ -3,7 +3,7 @@
 from import_scripts.management.commands import MySQLCommand
 
 from forums.models import ForumGroup
-from user_classes.models import UserClass
+from users.models import UserClass
 
 
 class Command(MySQLCommand):
@@ -11,8 +11,11 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM forums ORDER BY Sort
     """
+    COUNT_SQL = """
+        SELECT COUNT(*) FROM forums
+    """
 
-    help = "Imports forum topics from the MySQL db"
+    help = "Import forum topics"
 
     user_class_names = {
         200: 'User',
@@ -35,7 +38,7 @@ class Command(MySQLCommand):
         staff_only_thread_creation = (row['MinClassCreate'] == 650)
         min_class = UserClass.objects.get(name=self.user_class_names[row['MinClassRead']])
 
-        forum_topic = forum_group.topics.create(
+        forum_group.topics.create(
             old_id=old_id,
             sort_order=sort,
             name=name,
@@ -43,5 +46,3 @@ class Command(MySQLCommand):
             minimum_user_class=min_class,
             staff_only_thread_creation=staff_only_thread_creation,
         )
-
-        print(forum_topic)

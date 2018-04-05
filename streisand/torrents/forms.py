@@ -41,9 +41,9 @@ class TorrentUploadForm(forms.ModelForm):
         )
 
     def __init__(self, *args, **kwargs):
-        uploader_profile = kwargs.pop('uploader_profile')
+        uploader = kwargs.pop('uploader')
         super().__init__(*args, **kwargs)
-        self.instance.uploaded_by = uploader_profile
+        self.instance.uploaded_by = uploader
         self.metainfo_dict = None
 
     def clean_torrent_file(self):

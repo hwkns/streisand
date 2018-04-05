@@ -7,7 +7,12 @@ class Comment(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey('profiles.UserProfile', related_name='%(class)ss')
+    author = models.ForeignKey(
+        to='users.User',
+        related_name='%(class)ss',
+        null=True,
+        on_delete=models.PROTECT,
+    )
     text = models.TextField()
 
     class Meta:

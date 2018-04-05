@@ -5,8 +5,7 @@ from pytz import UTC
 from import_scripts.management.commands import MySQLCommand
 
 from wiki.models import WikiArticle
-from profiles.models import UserProfile
-from user_classes.models import UserClass
+from users.models import User, UserClass
 
 
 class Command(MySQLCommand):
@@ -14,8 +13,11 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM wiki_articles
     """
+    COUNT_SQL = """
+        SELECT COUNT(*) FROM wiki_articles
+    """
 
-    help = "Imports wiki articles from the MySQL db"
+    help = "Import wiki articles"
 
     def handle_row(self, row):
 
@@ -26,9 +28,8 @@ class Command(MySQLCommand):
         modified_at = row['Date']
 
         try:
-            modified_by = UserProfile.objects.get(old_id=author_id)
-        except UserProfile.DoesNotExist:
-            # print('User', author_id, 'does not exist!!!!!!!!!!!!!!!!!!!!!!!!')
+            modified_by = User.objects.get(old_id=author_id)
+        except User.DoesNotExist:
             modified_by = None
 
         article = WikiArticle.objects.create(
@@ -43,8 +44,4 @@ class Command(MySQLCommand):
         WikiArticle.objects.filter(id=article.id).update(modified_at=modified_at.replace(tzinfo=UTC))
 
     def pre_sql(self):
-        print('importing wiki articles...')
         self.moderator_user_class = UserClass.objects.get(name='Moderator')
-
-    def post_sql(self):
-        print('finished importing wiki articles')

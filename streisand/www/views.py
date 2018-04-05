@@ -4,12 +4,9 @@ import json
 import logging
 
 from ratelimit.decorators import ratelimit
-from rest_framework.permissions import IsAdminUser
-from rest_framework.viewsets import ModelViewSet
 
 from django.contrib.auth import REDIRECT_FIELD_NAME, authenticate, login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User, Group
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.http import is_safe_url
@@ -18,34 +15,14 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View
 
-from films.models import Film
-from film_lists.models import FilmList
+from films.models import Film, Collection
 from forums.models import ForumThread
-from profiles.models import UserProfile
 from torrents.models import Torrent
+from users.models import User
+from www.models import Feature
 
 from .forms import RegistrationForm
-from .models import Feature
-from .serializers import UserSerializer, GroupSerializer
 from .signals.signals import successful_login, failed_login
-
-
-class UserViewSet(ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    permission_classes = [IsAdminUser]
-    queryset = User.objects.all().order_by('-date_joined').prefetch_related('groups')
-    serializer_class = UserSerializer
-
-
-class GroupViewSet(ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    permission_classes = [IsAdminUser]
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
 
 
 def home(request):
@@ -207,24 +184,16 @@ class LegacyURLView(View):
     def inbox(self, request):
         pass
 
-    def montage(self, request):
-
-        if 'id' not in request.GET:
-            return redirect('film_list_index')
-
-        film_list = get_object_or_404(FilmList, old_id=request.GET['id'])
-        return redirect(film_list)
-
     def peoples(self, request):
         pass
 
     def queue(self, request):
 
         if 'user' in request.GET:
-            profile = get_object_or_404(UserProfile, old_id=request.GET['user'])
+            user = get_object_or_404(User, old_id=request.GET['user'])
         else:
-            profile = request.user.profile
-        return redirect(profile.watch_queue)
+            user = request.user
+        return redirect(user.watch_queue)
 
     def requests(self, request):
         pass
@@ -255,9 +224,9 @@ class LegacyURLView(View):
             else:
                 return redirect(torrent)
 
-        # FilmLists
+        # Collection
         elif 'montage' in request.GET:
-            get_object_or_404(FilmList, old_id=request.GET['montage'])
+            get_object_or_404(Collection, old_id=request.GET['montage'])
 
         # Films
         film = get_object_or_404(Film, old_id=request.GET['id'])
@@ -266,12 +235,11 @@ class LegacyURLView(View):
     def user(self, request):
 
         if 'id' not in request.GET:
-            # TODO: torrent notifications?  https://tehconnection.eu/user.php?action=notify
             return redirect('profile_index')
 
-        # UserProfiles
-        profile = get_object_or_404(UserProfile, old_id=request.GET['id'])
-        return redirect(profile)
+        # Users
+        user = get_object_or_404(User, old_id=request.GET['id'])
+        return redirect(user)
 
     def wiki(self, request):
         pass

@@ -2,6 +2,7 @@
 
 import MySQLdb
 from MySQLdb.cursors import SSDictCursor
+from tqdm import tqdm
 
 from django.core.management.base import BaseCommand
 
@@ -10,6 +11,7 @@ class MySQLCommand(BaseCommand):
 
     DB_CONFIG = {
         'user': 'root',
+        'password': 'fuckneebs',
         'host': '10.0.2.2',
         'db': 'tc',
         'cursorclass': SSDictCursor,
@@ -17,6 +19,7 @@ class MySQLCommand(BaseCommand):
     }
 
     SQL = ""
+    COUNT_SQL = ""
 
     help = "*******************************"
 
@@ -24,13 +27,22 @@ class MySQLCommand(BaseCommand):
 
         self.pre_sql()
 
-        cnx = MySQLdb.connect(**self.DB_CONFIG)
-        cursor = cnx.cursor()
+        db_connection = MySQLdb.connect(**self.DB_CONFIG)
+        cursor = db_connection.cursor()
+
+        if self.COUNT_SQL:
+            cursor.execute(self.COUNT_SQL)
+            count = cursor.fetchall()[0]['COUNT(*)']
+        else:
+            count = None
+
         cursor.execute(self.SQL)
-        for row in cursor.fetchall():
+        items = cursor.fetchall()
+        for row in tqdm(items, desc=self.help, total=count, unit='items'):
             self.handle_row(row)
+
         cursor.close()
-        cnx.close()
+        db_connection.close()
 
         self.post_sql()
 

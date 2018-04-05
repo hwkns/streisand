@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from rest_framework.permissions import IsAdminUser
+from rest_framework.viewsets import ModelViewSet
+
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
@@ -8,11 +11,34 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 
-from profiles.models import UserProfile
+from users.models import User
 from www.utils import paginate
 
-from .models import Torrent, ReseedRequest
 from .forms import TorrentUploadForm
+from .models import Torrent, ReseedRequest
+from .serializers import AdminTorrentSerializer
+
+
+class TorrentViewSet(ModelViewSet):
+
+    permission_classes = [IsAdminUser]
+    serializer_class = AdminTorrentSerializer
+    queryset = Torrent.objects.all().select_related(
+        'film',
+        'mediainfo',
+        'uploaded_by',
+        'moderated_by',
+    )
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+
+        film_id = self.request.query_params.get('film_id', None)
+        if film_id is not None:
+            queryset = queryset.filter(film_id=film_id)
+
+        return queryset
 
 
 class TorrentDownloadView(View):
@@ -21,12 +47,12 @@ class TorrentDownloadView(View):
 
         # Make sure we have a valid announce key
         try:
-            profile = UserProfile.objects.get(announce_key_id=announce_key)
-        except UserProfile.DoesNotExist:
+            user = User.objects.get(announce_key_id=announce_key)
+        except User.DoesNotExist:
             raise PermissionDenied
 
         # Make sure the user can download torrents
-        if not profile.user.has_perm('torrents.can_download'):
+        if not user.has_perm('torrents.can_download'):
             raise PermissionDenied
 
         # Make sure we have a valid torrent id
@@ -37,7 +63,7 @@ class TorrentDownloadView(View):
 
         # Respond with the customized torrent
         response = HttpResponse(
-            content=torrent.metainfo.for_user_download(profile),
+            content=torrent.metainfo.for_user_download(user),
             content_type='application/x-bittorrent',
         )
         response['Content-Disposition'] = 'attachment; filename={release_name}.torrent'.format(
@@ -50,7 +76,7 @@ class TorrentUploadView(View):
 
     def get(self, request):
 
-        torrent_upload_form = TorrentUploadForm(uploader_profile=request.user.profile)
+        torrent_upload_form = TorrentUploadForm(uploader=request.user)
         return self._render(torrent_upload_form)
 
     @method_decorator(permission_required('torrents.can_upload', raise_exception=True))
@@ -59,7 +85,7 @@ class TorrentUploadView(View):
         torrent_upload_form = TorrentUploadForm(
             request.POST,
             request.FILES,
-            uploader_profile=request.user.profile,
+            uploader=request.user,
         )
 
         if torrent_upload_form.is_valid():
@@ -105,7 +131,7 @@ class TorrentModerationView(View):
         else:
             torrent.is_approved = None
 
-        torrent.moderated_by = request.user.profile
+        torrent.moderated_by = request.user
         torrent.save()
 
         return redirect(torrent)
@@ -116,7 +142,7 @@ def reseed_request_index(request):
     all_reseed_requests = ReseedRequest.objects.filter(
         active_on_torrent__isnull=False,
     ).select_related(
-        'created_by__user',
+        'created_by',
         'torrent__film',
     ).order_by(
         '-created_at',
@@ -144,6 +170,6 @@ def new_reseed_request(request, torrent_id):
     if not torrent.is_accepting_reseed_requests:
         raise PermissionDenied
 
-    torrent.request_reseed(request.user.profile)
+    torrent.request_reseed(request.user)
 
     return redirect(torrent)
