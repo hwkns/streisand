@@ -34,6 +34,8 @@ TEST_RUNNER = 'streisand.test_utils.CustomTestSuiteRunner'
 SECRET_KEY = os.environ.get('STREISAND_SECRET_KEY', 'you_deserve_to_be_pwned')
 
 ALLOWED_HOSTS = [
+    # Adding this for development
+    '*',
     'localhost',
     '.jumpcut.to',
 ]
@@ -50,13 +52,13 @@ INSTALLED_APPS = [
     # Local apps
     'comments',
     'films',
-    'film_lists',
     'forums',
     'imdb',
     'invites',
     'media_formats',
     'mediainfo',
     'rotten_tomatoes',
+    'tests',
     'torrent_requests',
     'torrent_stats',
     'torrents',

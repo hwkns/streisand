@@ -8,11 +8,21 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAdminUser
+from .serializers import InviteSerializer
+
 from www.forms import RegistrationForm
 from www.views import RegistrationView
 
 from .models import Invite
 from .forms import InviteForm
+
+
+class InviteViewSet(ModelViewSet):
+    permission_classes = [IsAdminUser]
+    serializer_class = InviteSerializer
+    queryset = Invite.objects.all()
 
 
 class InviteView(View):

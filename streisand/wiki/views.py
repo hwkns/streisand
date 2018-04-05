@@ -5,9 +5,10 @@ from django.views.generic import View
 from django.db.models import Q
 
 from rest_framework.filters import (
-        SearchFilter,
-        OrderingFilter,
-    )
+    SearchFilter,
+    OrderingFilter,
+)
+from rest_framework.response import Response
 
 from rest_framework import mixins
 from .forms import WikiArticleForm
@@ -15,14 +16,14 @@ from .models import WikiArticle
 from www.pagination import WikiPageNumberPagination
 
 from rest_framework.permissions import IsAdminUser
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from .models import WikiArticle
+from rest_framework.viewsets import GenericViewSet
 from .serializers import WikiCreateUpdateDestroySerializer, WikiBodySerializer, WikiViewListOnlySerializer
 
 
 class WikiArticleCreateUpdateDestroyViewSet(mixins.CreateModelMixin,
-                                mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
-                                GenericViewSet):
+                                            mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
+                                            mixins.DestroyModelMixin,
+                                            GenericViewSet):
     """
     API endpoint that allows Wikis to be created, edited, or deleted only. Options are HEAD, POST, PATCH, DELETE.
     """
@@ -46,7 +47,7 @@ class WikiArticleCreateUpdateDestroyViewSet(mixins.CreateModelMixin,
                 Q(title__icontains=query) |
                 Q(created_by__username__icontains=query) |
                 Q(read_access_minimum_user_class__username__userclass__icontains=query)
-                ).distinct()
+            ).distinct()
         return queryset_list
 
 
@@ -73,29 +74,30 @@ class WikiArticleBodyViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
                 Q(body__icontains=query) | Q(id__icontains=query)).distinct()
         return queryset_list
 
+
 class WikiArticleViewListOnlyViewSet(mixins.ListModelMixin, GenericViewSet):
     """
     API endpoint that allows Wikis to be viewed only. Note: Body and Body_html is not shown.
     This Endpoint includes Searching for Title or users.
     """
     serializer_class = WikiViewListOnlySerializer
-    filter_backends= [SearchFilter, OrderingFilter]
+    filter_backends = [SearchFilter, OrderingFilter]
     permission_classes = [IsAdminUser]
     search_fields = ['title', 'created_by__username']
-    pagination_class = WikiPageNumberPagination #PageNumberPagination
+    pagination_class = WikiPageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
-        queryset_list = WikiArticle.objects.all() #filter(user=self.request.user)
+        queryset_list = WikiArticle.objects.all()
         query = self.request.GET.get("q")
         if query:
             queryset_list = queryset_list.filter(
-                    Q(title__icontains=query)|
-                    Q(created_by__username__icontains=query)
-                    ).distinct()
+                Q(title__icontains=query) |
+                Q(created_by__username__icontains=query)
+            ).distinct()
         return queryset_list
 
-def wiki_index(request):
 
+def wiki_index(request):
     wiki_articles = WikiArticle.objects.all()
 
     return render(
@@ -108,7 +110,6 @@ def wiki_index(request):
 
 
 def wiki_article_details(request, wiki_article_id):
-
     article = get_object_or_404(
         WikiArticle.objects.accessible_to_user(request.user),
         id=wiki_article_id,
@@ -209,7 +210,6 @@ class WikiArticleCreationView(View):
 
 
 def wiki_article_delete(request, wiki_article_id):
-
     article = get_object_or_404(
         WikiArticle,
         id=wiki_article_id,

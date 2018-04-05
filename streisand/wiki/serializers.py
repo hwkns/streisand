@@ -38,14 +38,13 @@ class WikiBodySerializer(ModelSerializer):
     url = HyperlinkedIdentityField(view_name="wiki-body-detail")
 
     class Meta:
-        model = WikiArticle                                                                            
-        fields = (                                                                                     
-            'id',                                                                                      
+        model = WikiArticle
+        fields = (
+            'id',
             'body',
             'body_html',
             'url',
         )
-
 
     @staticmethod
     def get_body_html(forum_post):

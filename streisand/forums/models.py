@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from django.db import models
 from django.urls import reverse
 
@@ -9,10 +8,8 @@ from .managers import ForumGroupQuerySet, ForumTopicQuerySet, ForumThreadQuerySe
 class ForumGroup(models.Model):
 
     old_id = models.PositiveIntegerField(null=True, db_index=True)
-
     sort_order = models.PositiveSmallIntegerField()
     name = models.CharField(max_length=256)
-
     objects = ForumGroupQuerySet.as_manager()
 
     class Meta:
@@ -67,6 +64,14 @@ class ForumTopic(models.Model):
             }
         )
 
+    @property
+    def threads(self):
+        return ForumThread.objects.filter(group__id=self.id)
+
+    @property
+    def thread_count(self):
+        return self.threads.count()
+
 
 class ForumThread(models.Model):
 
@@ -79,6 +84,14 @@ class ForumThread(models.Model):
     created_by = models.ForeignKey(
         to='users.User',
         related_name='forum_threads_created',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    modified = models.BooleanField(default=False)
+    modified_at = models.DateTimeField(auto_now=True)
+    modified_by = models.ForeignKey(
+        to='users.User',
+        related_name='modified_threads',
         null=True,
         on_delete=models.SET_NULL,
     )
@@ -101,10 +114,10 @@ class ForumThread(models.Model):
         related_name='forum_threads_subscribed',
     )
 
-    class Meta:
-        get_latest_by = 'created_at'
-
     objects = ForumThreadQuerySet.as_manager()
+
+    class Meta:
+        get_latest_by = '-created_at'
 
     def __str__(self):
         return '{title}'.format(title=self.title)
@@ -130,7 +143,14 @@ class ForumPost(models.Model):
     )
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    modified = models.BooleanField(default=False)
     modified_at = models.DateTimeField(auto_now=True)
+    modified_by = models.ForeignKey(
+        to='users.User',
+        related_name='modified_posts',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     thread = models.ForeignKey(
         to='forums.ForumThread',
         related_name='posts',
@@ -142,8 +162,6 @@ class ForumPost(models.Model):
     class Meta:
         get_latest_by = 'created_at'
 
-    objects = ForumPostQuerySet.as_manager()
-
     def __str__(self):
         return 'Forum post by {author} in thread {thread}'.format(
             author=self.author,
@@ -154,6 +172,46 @@ class ForumPost(models.Model):
         return '{thread_url}#{post_id}'.format(
             thread_url=self.thread.get_absolute_url(),
             post_id=self.id,
+        )
+
+
+class ForumReport(models.Model):
+    reporting_user = models.ForeignKey(
+        to='users.User',
+        related_name='reports',
+        null=True,
+        on_delete=models.PROTECT,
+    )
+    reported_at = models.DateTimeField(auto_now_add=True)
+    reason = models.TextField(max_length=1024, blank=False, null=False)
+    thread = models.ForeignKey(
+        ForumThread, blank=True, null=True, default=None, on_delete=models.CASCADE
+    )
+    post = models.ForeignKey(
+        ForumPost, blank=True, null=True, default=None, on_delete=models.CASCADE
+    )
+    resolved = models.BooleanField(default=False)
+    resolved_by = models.ForeignKey(
+        to='users.User',
+        related_name='report_resolved',
+        null=True,
+        on_delete=models.PROTECT,
+    )
+    date_resolved = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        ordering = ('-reported_at',)
+
+    def __str__(self):
+        return 'Report by {reporting_user} in thread {thread}'.format(
+            reporting_user=self.reporting_user,
+            thread=self.thread,
+        )
+
+    def get_absolute_url(self):
+        return '{thread_url}#{report_id}'.format(
+            thread_url=self.thread.get_absolute_url(),
+            report_id=self.id,
         )
 
 

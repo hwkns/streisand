@@ -1,8 +1,9 @@
 [
     {
         "pk": 1,
-        "model": "film_lists.filmlist",
+        "model": "films.collection",
         "fields": {
+            "creator": "1",
             "title": "Quentin Tarantino Films",
             "description": "Quentin Jerome Tarantino (born March 27, 1963) is an American film director, screenwriter, cinematographer, producer, and actor. His films are characterized by non-linear storylines, satirical subject matter, and an aestheticization of violence, as well as features of neo-noir film and spaghetti Westerns."
         }
@@ -51,18 +52,18 @@
     },
     {
         "pk": 1,
-        "model": "film_lists.filmlistitem",
+        "model": "films.collection.film",
         "fields": {
             "film": 1,
-            "film_list": 1
+            "collection": 1
         }
     },
     {
         "pk": 2,
-        "model": "film_lists.filmlistitem",
+        "model": "films.collection.film",
         "fields": {
             "film": 2,
-            "film_list": 1
+            "collection": 1
         }
     },
     {

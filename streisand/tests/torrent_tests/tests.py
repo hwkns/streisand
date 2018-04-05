@@ -9,7 +9,7 @@ from torrents.models import Torrent
 from torrent_stats.models import TorrentStats
 from users.models import User
 
-from .tasks import handle_announce
+from www.tasks import handle_announce
 
 
 class TorrentAnnounceTests(TestCase):

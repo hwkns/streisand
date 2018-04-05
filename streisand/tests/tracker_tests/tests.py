@@ -10,9 +10,9 @@ from django.test import TestCase, RequestFactory
 
 from users.models import User
 
-from .models import Swarm, TorrentClient
-from .views import AnnounceView
-from .utils import unquote_to_hex
+from tracker.models import Swarm, TorrentClient
+from tracker.views import AnnounceView
+from tracker.utils import unquote_to_hex
 
 
 @patch('tracker.views.handle_announce.delay')

@@ -29,7 +29,9 @@ class ForumThreadQuerySet(models.QuerySet):
         if user.is_superuser:
             return self.all()
         else:
-            return self.filter(topic__minimum_user_class__rank__lte=user.user_class.rank)
+            return self.filter(
+                topic__minimum_user_class__rank__lte=user.user_class.rank,
+            ).distinct()
 
 
 class ForumPostQuerySet(models.QuerySet):
@@ -38,4 +40,5 @@ class ForumPostQuerySet(models.QuerySet):
         if user.is_superuser:
             return self.all()
         else:
-            return self.filter(thread__topic__minimum_user_class__rank__lte=user.user_class.rank)
+            return self.filter(thread__topic__minimum_user_class__rank__lte=user.user_class.rank,
+                               ).distinct()

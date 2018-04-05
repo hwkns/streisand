@@ -13,9 +13,9 @@ INSTALLED_APPS += [
     'grappelli',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_framework_swagger',
     'corsheaders',
-    'drf_yasg',
+    'django_filters',
+    'docs',
 
     # Contrib apps
     'django.contrib.admin',
@@ -39,6 +39,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -46,8 +47,8 @@ MIDDLEWARE = [
     'www.middleware.CachedUserAuthenticationMiddleware',
     'www.middleware.LoginRequiredMiddleware',
     'www.middleware.IPHistoryMiddleware',
+
 ]
-from django.middleware.security import SecurityMiddleware
 
 if PRODUCTION or TESTING:
     INSTALLED_APPS.remove('debug_toolbar')
@@ -91,7 +92,9 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser',
-    ],
+    ], 'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     'PAGE_SIZE': 50,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -100,9 +103,12 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
+
     ),
     'DEFAULT_PARSER_CLASSES': (
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+        'rest_framework.parsers.JSONParser',
+
     ),
     'URL_FORMAT_OVERRIDE': None,
 }
@@ -111,16 +117,6 @@ if DEBUG:
     REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += (
         'rest_framework.authentication.SessionAuthentication',
     )
-
-SWAGGER_SETTINGS = {
-'LOGIN_URL': '/admin/login',
-    'LOGOUT_URL': '/admin//logout',
-
-    'DEFAULT_INFO': 'www.urls.swagger_info'
-
-}
-
-# Swagger https settings needed below. 
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -132,7 +128,6 @@ CORS_ORIGIN_WHITELIST = [
     in ('api', 'dev', 'static', 'www')
 ]
 
-
 RT_API_KEY = os.environ.get('RT_API_KEY', '')
 OLD_SITE_SECRET_KEY = os.environ.get('OLD_SITE_HASH', '')
 
@@ -142,7 +137,6 @@ AUTHENTICATION_BACKENDS = [
     # django-su
     'django_su.backends.SuBackend',
 ]
-
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
@@ -180,6 +174,8 @@ STATICFILES_FINDERS = [
 
 ITEMS_PER_PAGE = 50
 
+DOCS_ROOT = os.path.join(BASE_DIR, 'docs/build/html')
+DOCS_ACCESS = 'staff'
 
 LOGGING = {
     'version': 1,
@@ -233,7 +229,6 @@ LOGGING = {
 }
 
 if TESTING:
-
     # http://django-dynamic-fixture.readthedocs.org/en/latest/data_fixtures.html#custom-field-fixture
     DDF_FIELD_FIXTURES = {
         'picklefield.fields.PickledObjectField': {

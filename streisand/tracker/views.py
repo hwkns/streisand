@@ -6,13 +6,44 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.utils.timezone import now
 from django.views.generic import View
-
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAdminUser
 from users.models import User
 from www.tasks import handle_announce
-
+from .serializers import TorrentClientSerializer, SwarmSerializer, PeerSerializer
 from .bencoding import bencode
 from .models import Peer, Swarm, TorrentClient
 from .utils import unquote_to_hex
+
+
+class TorrentClientViewSet(ModelViewSet):
+    """
+    TorrentClient View 1
+    """
+
+    serializer_class = TorrentClientSerializer
+    permission_classes = [IsAdminUser]
+    queryset = TorrentClient.objects.all()
+
+
+class SwarmViewSet(ModelViewSet):
+    """
+    Swarm View 1
+    """
+
+    serializer_class = SwarmSerializer
+    permission_classes = [IsAdminUser]
+    queryset = Swarm.objects.all()
+
+
+class PeerViewSet(ModelViewSet):
+    """
+    Peer View 1
+    """
+
+    serializer_class = PeerSerializer
+    permission_classes = [IsAdminUser]
+    queryset = Peer.objects.all()
 
 
 class BencodedResponse(HttpResponse):
