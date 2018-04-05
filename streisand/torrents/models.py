@@ -6,8 +6,8 @@ from django.utils.timezone import now, timedelta
 
 from picklefield import PickledObjectField
 
+from profiles.models import UserProfile
 from tracker.bencoding import bencode
-from users.models import User
 
 
 class Torrent(models.Model):
@@ -15,37 +15,28 @@ class Torrent(models.Model):
     old_id = models.PositiveIntegerField(null=True, db_index=True)
 
     # Film information
-    film = models.ForeignKey(
-        to='films.Film',
-        null=False,
-        db_index=True,
-        related_name='torrents',
-        on_delete=models.PROTECT,
-    )
+    film = models.ForeignKey('films.Film', null=False, db_index=True, related_name='torrents')
     cut = models.CharField(max_length=128, default='Theatrical')
 
     # Site information
     uploaded_at = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey(
-        to='users.User',
+        to='profiles.UserProfile',
         null=True,
         blank=False,
         related_name='uploaded_torrents',
-        on_delete=models.PROTECT,
     )
     encoded_by = models.ForeignKey(
-        to='users.User',
+        to='profiles.UserProfile',
         null=True,
         blank=True,
         related_name='encodes',
-        on_delete=models.PROTECT,
     )
     moderated_by = models.ForeignKey(
-        to='users.User',
+        to='profiles.UserProfile',
         null=True,
         blank=True,
         related_name='moderated_torrents',
-        on_delete=models.PROTECT,
     )
     is_approved = models.NullBooleanField(
         choices=(
@@ -59,7 +50,6 @@ class Torrent(models.Model):
         to='torrents.ReseedRequest',
         null=True,
         related_name='active_on_torrent',
-        on_delete=models.SET_NULL,
     )
     snatch_count = models.IntegerField(default=0)
 
@@ -69,11 +59,7 @@ class Torrent(models.Model):
     is_scene = models.NullBooleanField(default=False)
     description = models.TextField()
     nfo = models.TextField()
-    mediainfo = models.OneToOneField(
-        to='mediainfo.Mediainfo',
-        null=True,
-        on_delete=models.PROTECT,
-    )
+    mediainfo = models.OneToOneField(to='mediainfo.Mediainfo', null=True)
 
     # Format information
     is_3d = models.BooleanField(default=False)
@@ -108,17 +94,8 @@ class Torrent(models.Model):
     )
 
     # BitTorrent information
-    swarm = models.OneToOneField(
-        to='tracker.Swarm',
-        related_name='torrent',
-        db_index=True,
-        on_delete=models.PROTECT,
-    )
-    metainfo = models.OneToOneField(
-        to='torrents.TorrentMetaInfo',
-        related_name='torrent',
-        on_delete=models.PROTECT,
-    )
+    swarm = models.OneToOneField('tracker.Swarm', related_name='torrent', db_index=True)
+    metainfo = models.OneToOneField('torrents.TorrentMetaInfo', related_name='torrent')
     file_list = PickledObjectField(null=False)
     size_in_bytes = models.BigIntegerField(null=False)
 
@@ -162,13 +139,13 @@ class Torrent(models.Model):
 
     @property
     def seeders(self):
-        return User.objects.filter(
+        return UserProfile.objects.filter(
             announce_key__in=self.swarm.peers.seeders().values_list('user_announce_key', flat=True)
         )
 
-    def request_reseed(self, user):
+    def request_reseed(self, user_profile):
         self.reseed_request = self.reseed_requests.create(
-            created_by=user,
+            created_by=user_profile,
         )
         self.save()
 
@@ -180,13 +157,13 @@ class TorrentMetaInfo(models.Model):
     def __str__(self):
         return str(self.torrent)
 
-    def for_user_download(self, user):
+    def for_user_download(self, user_profile):
 
         # Make sure the private flag is set
         self.dictionary['info']['private'] = 1
 
         # Set the announce url
-        self.dictionary['announce'] = user.announce_url
+        self.dictionary['announce'] = user_profile.announce_url
 
         # Return the bencoded version
         return bencode(self.dictionary)
@@ -199,13 +176,11 @@ class ReseedRequest(models.Model):
     torrent = models.ForeignKey(
         to='torrents.Torrent',
         related_name='reseed_requests',
-        on_delete=models.CASCADE,
     )
     created_by = models.ForeignKey(
-        to='users.User',
+        to='profiles.UserProfile',
         related_name='reseed_requests',
         null=True,
-        on_delete=models.CASCADE,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     fulfilled_at = models.DateTimeField(null=True)

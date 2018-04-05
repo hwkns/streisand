@@ -9,7 +9,7 @@ from django.utils.deprecation import MiddlewareMixin
 from django.utils.functional import SimpleLazyObject
 from django.utils.http import urlquote
 
-from users.models import User, UserIPAddress
+from profiles.models import UserProfile
 
 
 class ExtraExceptionInfoMiddleware(MiddlewareMixin):
@@ -35,19 +35,6 @@ class XForwardedForMiddleware(MiddlewareMixin):
             # HTTP_X_FORWARDED_FOR can be a comma-separated list of IPs.
             # Take just the first one.
             request.META['REMOTE_ADDR'] = real_ip.split(',')[0]
-
-
-class IPHistoryMiddleware(MiddlewareMixin):
-
-    @staticmethod
-    def process_request(request):
-        if request.user.is_authenticated:
-            # Update the user's IP history
-            UserIPAddress.objects.update_or_create(
-                user=request.user,
-                ip_address=request.META['REMOTE_ADDR'],
-                used_with='site',
-            )
 
 
 class LoginRequiredMiddleware(MiddlewareMixin):
@@ -96,7 +83,7 @@ class CachedUserAuthenticationMiddleware(MiddlewareMixin):
 
             try:
 
-                key = User.CACHE_KEY.format(
+                key = UserProfile.CACHE_KEY.format(
                     user_id=request.session[SESSION_KEY]
                 )
 
@@ -115,8 +102,8 @@ class CachedUserAuthenticationMiddleware(MiddlewareMixin):
                     user = get_user(request)
 
                     if user.is_authenticated:
-                        # Cache the permissions too
-                        user.user_class
+                        # Cache the profile and the permissions too
+                        user.profile.user_class
                         user.get_all_permissions()
                         cache.set(key, user)
 
@@ -126,6 +113,6 @@ class CachedUserAuthenticationMiddleware(MiddlewareMixin):
 
     @staticmethod
     def clear_all_cached_users():
-        for user_id in User.objects.values_list('id', flat=True).iterator():
-            key = User.CACHE_KEY.format(user_id=user_id)
+        for user_id in UserProfile.objects.values_list('user_id', flat=True).iterator():
+            key = UserProfile.CACHE_KEY.format(user_id=user_id)
             cache.delete(key)

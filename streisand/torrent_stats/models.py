@@ -15,17 +15,15 @@ class TorrentStats(models.Model):
     # we use an auto-generated UUIDField as the primary key.
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
 
-    user = models.ForeignKey(
-        to='users.User',
+    profile = models.ForeignKey(
+        'profiles.UserProfile',
         null=False,
         related_name='torrent_stats',
-        on_delete=models.CASCADE,
     )
     torrent = models.ForeignKey(
-        to='torrents.Torrent',
+        'torrents.Torrent',
         null=False,
         related_name='torrent_stats',
-        on_delete=models.CASCADE,
     )
 
     bytes_uploaded = models.BigIntegerField(default=0)
@@ -42,12 +40,12 @@ class TorrentStats(models.Model):
     is_hit_and_run = models.NullBooleanField()
 
     class Meta:
-        unique_together = ['user', 'torrent']
-        index_together = ['user', 'torrent']
+        unique_together = ['profile', 'torrent']
+        index_together = ['profile', 'torrent']
 
     def __str__(self):
         return 'Torrent stats for {user} on {torrent}'.format(
-            user=self.user,
+            user=self.profile,
             torrent=self.torrent,
         )
 

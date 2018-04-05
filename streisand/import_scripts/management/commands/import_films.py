@@ -11,11 +11,8 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM torrents_group
     """
-    COUNT_SQL = """
-        SELECT COUNT(*) FROM torrents_group
-    """
 
-    help = "Import films"
+    help = "Imports films from the MySQL db"
 
     def handle_row(self, row):
 
@@ -44,4 +41,6 @@ class Command(MySQLCommand):
             trailer_url='https://www.youtube.com/watch?v={id}'.format(id=yt_id) if yt_id else '',
         )
 
-        f.tags.set(tags)
+        f.tags = tags
+
+        print(f)

@@ -4,7 +4,7 @@ from pytz import UTC
 
 from import_scripts.management.commands import MySQLCommand
 from films.models import Film
-from users.models import User
+from profiles.models import UserProfile
 
 
 class Command(MySQLCommand):
@@ -12,11 +12,8 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM torrents_comments
     """
-    COUNT_SQL = """
-        SELECT COUNT(*) FROM torrents_comments
-    """
 
-    help = "Import film comments"
+    help = "Imports film comments from the MySQL db"
 
     def handle_row(self, row):
 
@@ -27,8 +24,8 @@ class Command(MySQLCommand):
         edit_date = row['EditedTime']
 
         try:
-            author = User.objects.get(old_id=author_id)
-        except User.DoesNotExist:
+            author = UserProfile.objects.get(old_id=author_id)
+        except UserProfile.DoesNotExist:
             return
         try:
             film = Film.objects.get(old_id=torrent_group_id)
@@ -45,3 +42,5 @@ class Command(MySQLCommand):
         else:
             comment.modified_at = comment.created_at
         comment.save()
+
+        print(comment)

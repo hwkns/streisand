@@ -3,7 +3,8 @@
 from import_scripts.management.commands import MySQLCommand
 
 from forums.models import ForumTopic, ForumThread
-from users.models import User, UserClass
+from profiles.models import UserProfile
+from user_classes.models import UserClass
 
 
 class Command(MySQLCommand):
@@ -11,11 +12,8 @@ class Command(MySQLCommand):
     SQL = """
         SELECT * FROM forums_topics
     """
-    COUNT_SQL = """
-        SELECT COUNT(*) FROM forums_topics
-    """
 
-    help = "Import forum threads"
+    help = "Imports forum threads from the MySQL db"
 
     def handle_row(self, row):
 
@@ -29,6 +27,7 @@ class Command(MySQLCommand):
         try:
             forum_topic = ForumTopic.objects.get(old_id=forum_topic_id)
         except ForumTopic.DoesNotExist:
+            print('Forum', forum_topic_id, 'does not exist!')
             forum_topic = ForumTopic.objects.create(
                 old_id=forum_topic_id,
                 sort_order=0,
@@ -40,11 +39,12 @@ class Command(MySQLCommand):
             )
 
         try:
-            author = User.objects.get(old_id=author_id)
-        except User.DoesNotExist:
+            author = UserProfile.objects.get(old_id=author_id)
+        except UserProfile.DoesNotExist:
+            # print('User', author_id, 'does not exist!!!!!!!!!!!!!!!!!!!!!!!!')
             author = None
 
-        ForumThread.objects.create(
+        forum_thread = ForumThread.objects.create(
             topic=forum_topic,
             old_id=old_id,
             title=title,
@@ -52,3 +52,5 @@ class Command(MySQLCommand):
             is_sticky=is_sticky,
             created_by=author,
         )
+
+        print(forum_thread)

@@ -34,13 +34,7 @@ class Peer(models.Model):
     # we use an auto-generated UUIDField as the primary key.
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
 
-    swarm = models.ForeignKey(
-        to=Swarm,
-        db_index=True,
-        related_name='peers',
-        null=False,
-        on_delete=models.CASCADE,
-    )
+    swarm = models.ForeignKey(Swarm, null=False, db_index=True, related_name='peers')
     user_announce_key = models.CharField(max_length=36, null=False, db_index=True)
     ip_address = models.GenericIPAddressField(null=False)
     port = models.IntegerField(null=False)

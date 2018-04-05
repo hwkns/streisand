@@ -7,16 +7,15 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import logout_then_login
 
-from rest_framework.documentation import include_docs_urls
 from invites.views import InviteRegistrationView
+
 from .decorators import https_required
 from .views import RegistrationView, LegacyURLView, template_viewer, home, login
 
 
 urlpatterns = [
+
     url(r'^api/v1/', include('api.v1.urls')),
-    url(r'^docs/', include_docs_urls(title='JumpCut API v1', public=False)),
-    url(r'^model-docs/', include('docs.urls')),
 
     url(
         regex=r'^$',
@@ -24,9 +23,10 @@ urlpatterns = [
         name='home'
     ),
     url(r'^films/', include('films.urls')),
+    url(r'^film-lists/', include('film_lists.urls')),
     url(r'^forums/', include('forums.urls')),
     url(r'^invites/', include('invites.urls')),
-    url(r'^users/', include('users.urls')),
+    url(r'^users/', include('profiles.urls')),
     url(r'^torrent-requests/', include('torrent_requests.urls')),
     url(r'^torrent-stats/', include('torrent_stats.urls')),
     url(r'^torrents/', include('torrents.urls')),
@@ -34,8 +34,7 @@ urlpatterns = [
 
     # Admin
     url(r'^grappelli/', include('grappelli.urls')),
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', include(admin.site.urls)),
 
     # Registration
     url(

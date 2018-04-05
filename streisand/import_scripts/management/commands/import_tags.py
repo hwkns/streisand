@@ -7,7 +7,7 @@ from films.models import Tag
 
 class Command(BaseCommand):
 
-    help = "Import tags"
+    help = "Imports tags from the MySQL db"
 
     def handle(self, *args, **options):
         tag_names = [

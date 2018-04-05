@@ -3,9 +3,8 @@
 from rest_framework.authtoken.models import Token
 from tqdm import tqdm
 
+from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
-
-from users.models import User
 
 
 class Command(BaseCommand):
