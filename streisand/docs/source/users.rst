@@ -19,6 +19,14 @@ users.admin module
     :undoc-members:
     :show-inheritance:
 
+users.filters module
+--------------------
+
+.. automodule:: users.filters
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 users.models module
 -------------------
 

@@ -78,22 +78,6 @@ www.pagination module
     :undoc-members:
     :show-inheritance:
 
-www.parsers module
-------------------
-
-.. automodule:: www.parsers
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-www.renderers module
---------------------
-
-.. automodule:: www.renderers
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 www.tasks module
 ----------------
 
@@ -106,14 +90,6 @@ www.urls module
 ---------------
 
 .. automodule:: www.urls
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-www.util module
----------------
-
-.. automodule:: www.util
     :members:
     :undoc-members:
     :show-inheritance:

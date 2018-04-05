@@ -20,10 +20,10 @@ torrent\_stats.migrations.0002\_torrentstats\_torrent module
     :undoc-members:
     :show-inheritance:
 
-torrent\_stats.migrations.0003\_auto\_20180331\_1851 module
+torrent\_stats.migrations.0003\_auto\_20180403\_1421 module
 -----------------------------------------------------------
 
-.. automodule:: torrent_stats.migrations.0003_auto_20180331_1851
+.. automodule:: torrent_stats.migrations.0003_auto_20180403_1421
     :members:
     :undoc-members:
     :show-inheritance:

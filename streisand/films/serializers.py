@@ -5,10 +5,25 @@ from rest_framework import serializers
 from .models import Film, Collection, CollectionComment, FilmComment
 
 
+# TODO: Add permissions for film and collection creation, and deletion.
+
 class FilmCommentSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
-    author_username = serializers.StringRelatedField(source='author', default=serializers.CurrentUserDefault(),
-                                                     read_only=True)
+    """
+    Serializer for Film Comments. author is the users foreign key to FIlm comments.
+    We are returning the author into a foreign key representation, and string representation.
+    """
+    author = serializers.PrimaryKeyRelatedField(
+        default=serializers.CurrentUserDefault(),
+        read_only=True,
+        help_text="The ID of the user that created this film comment; if none is provided, "
+        "defaults to the currently logged in user."
+    )
+    author_username = serializers.StringRelatedField(
+        source='author', default=serializers.CurrentUserDefault(),
+        read_only=True,
+        help_text="The string representation of the user that created this film comment; if none is provided, "
+        "defaults to the currently logged in user."
+    )
 
     class Meta:
         model = FilmComment
@@ -23,9 +38,22 @@ class FilmCommentSerializer(serializers.ModelSerializer):
 
 
 class CollectionCommentSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
-    author_username = serializers.StringRelatedField(source='author', default=serializers.CurrentUserDefault(),
-                                                     read_only=True)
+    """
+    Same as the Film Comment Serializer
+    """
+    author = serializers.PrimaryKeyRelatedField(
+        default=serializers.CurrentUserDefault(),
+        read_only=True,
+        help_text="The ID of the user that created this collection comment; if none is provided, "
+                  "defaults to the currently logged in user."
+    )
+    author_username = serializers.StringRelatedField(
+        source='author',
+        default=serializers.CurrentUserDefault(),
+        read_only=True,
+        help_text="The string representation of the user that created this collection comment; if none is provided, "
+        "defaults to the currently logged in user."
+    )
 
     class Meta:
         model = CollectionComment
@@ -40,9 +68,39 @@ class CollectionCommentSerializer(serializers.ModelSerializer):
 
 
 class AdminFilmSerializer(serializers.ModelSerializer):
-    film_comments = FilmCommentSerializer(read_only=True, many=True, source='comments')
+    """
+    Serializer for For Films. This is the serializer that Administrators/staff will have access to.
+    """
+    film_comments = FilmCommentSerializer(
+        read_only=True,
+        many=True,
+        source='comments',
+        help_text="Get all fields from the comment serializer and add them as a nested child."
+    )
+    """
+    Film Comments:
+    
+.. code-block:: python
+    
+    class FilmComment(Comment):
+        film = models.ForeignKey(
+            to='films.Film',
+            related_name='comments',
+            on_delete=models.CASCADE,
+    )
+    """
     imdb_id = serializers.SerializerMethodField()
 
+    """
+    Add in the fields from the film comment serializer as a nested meta field.
+    
+.. code-block:: python
+
+    eg: 'film',
+        'author',
+        'author_username',
+        ...
+    """
     class Meta(FilmCommentSerializer.Meta):
         model = Film
         fields = (
@@ -69,7 +127,10 @@ class AdminFilmSerializer(serializers.ModelSerializer):
 
 
 class PublicFilmSerializer(AdminFilmSerializer):
-
+    """
+    Remove Moderation Notes, and you have a serializer for everyone else.
+    """
+    # TODO: make this serializer more robust
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         remove_fields = (
@@ -80,18 +141,54 @@ class PublicFilmSerializer(AdminFilmSerializer):
 
 
 class CollectionSerializer(serializers.ModelSerializer):
-    creator_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(), read_only=True, source='creator')
-    creator_username = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True, source='creator')
+    """
+    Serializer for collections. We are adding some custom naming conventions here.
+    However, source='creator' would be the field that it references in the model.
+    """
+    creator_id = serializers.PrimaryKeyRelatedField(
+        default=serializers.CurrentUserDefault(),
+        read_only=True,
+        source='creator',
+        help_text="The ID of the user that created this collection object; if none is provided,"
+                  "defaults to the currently logged in user."
+    )
+    creator_username = serializers.StringRelatedField(
+        default=serializers.CurrentUserDefault(),
+        read_only=True,
+        source='creator',
+        help_text="The string representation of the user that created this collection object; if none is provided, "
+        "defaults to the currently logged in user."
+    )
     list_id = serializers.IntegerField(source='id', read_only=True)
     list_title = serializers.CharField(source='title')
     list_description = serializers.CharField(source='description')
-    film = serializers.PrimaryKeyRelatedField(many=True, queryset=Film.objects.all())
+    film = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Film.objects.all(),
+        help_text="Since we are not making this read_only, "
+                  "we have to give a queryset for the primary key related field"
+                  "We don't want this to be read only, since users need to add or remove a film from a coollection."
+    )
     film_title = serializers.StringRelatedField(many=True, read_only=True, source='film')
-    film_link = serializers.HyperlinkedRelatedField(many=True, read_only=True, source='film', view_name='film-detail')
+    film_link = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        source='film',
+        view_name='film-detail'
+    )
     url = serializers.HyperlinkedIdentityField(read_only=True, view_name='collection-detail')
     collection_comments = CollectionCommentSerializer(source='collections_comments', many=True, read_only=True)
 
     class Meta(CollectionCommentSerializer.Meta):
+
+        """
+        Add in the fields from the collections comment serializer as a nested meta field.
+        eg: 'collection',
+            'author',
+            'author_username',
+            ...
+        """
+
         model = Collection
         fields = (
             'creator_id',

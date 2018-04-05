@@ -43,6 +43,14 @@ invites.models module
     :undoc-members:
     :show-inheritance:
 
+invites.serializers module
+--------------------------
+
+.. automodule:: invites.serializers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 invites.urls module
 -------------------
 

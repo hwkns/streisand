@@ -6,7 +6,6 @@ Subpackages
 
 .. toctree::
 
-    tests.camelcase
     tests.drf
     tests.migrations
     tests.torrent_tests

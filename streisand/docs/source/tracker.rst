@@ -43,6 +43,14 @@ tracker.models module
     :undoc-members:
     :show-inheritance:
 
+tracker.serializers module
+--------------------------
+
+.. automodule:: tracker.serializers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 tracker.urls module
 -------------------
 
