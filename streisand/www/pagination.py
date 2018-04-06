@@ -44,3 +44,7 @@ class FilmPageNumberPagination(PageNumberPagination):
 
 class UserPageNumberPagination(PageNumberPagination):
     page_size = 25
+
+
+class TorrentPageNumberPagination(PageNumberPagination):
+    page_size = 35

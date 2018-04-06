@@ -3,6 +3,7 @@
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet
 
+from .filters import TorrentFilter
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
@@ -10,9 +11,11 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import View
+from django_filters import rest_framework as filters
 
 from users.models import User
 from www.utils import paginate
+from www.pagination import TorrentPageNumberPagination
 
 from .forms import TorrentUploadForm
 from .models import Torrent, ReseedRequest
@@ -20,15 +23,28 @@ from .serializers import AdminTorrentSerializer
 
 
 class TorrentViewSet(ModelViewSet):
-
+    """
+    API That currently only allows Torrents to be viewed, and searched.
+    Pagination is set at Page Number Pagination, for 35 Torrents at a time for now.
+    """
     permission_classes = [IsAdminUser]
     serializer_class = AdminTorrentSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = TorrentFilter
+    pagination_class = TorrentPageNumberPagination
     queryset = Torrent.objects.all().select_related(
         'film',
         'mediainfo',
+        'source_media',
         'uploaded_by',
         'moderated_by',
-    )
+    ).prefetch_related(
+        'film',
+        'uploaded_by',
+        'moderated_by',
+        'source_media',
+        'mediainfo',
+    ).order_by('id', 'source_media',).distinct('id', 'source_media',)
 
     def get_queryset(self):
 
