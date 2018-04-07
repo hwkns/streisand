@@ -44,7 +44,7 @@ class UserPageComponent extends React.Component<CombinedProps, void> {
 
     public render() {
         const user = this.props.user;
-        if (!user || this.props.loading) {
+        if (!user || !user.details || this.props.loading) {
             return <Empty loading={this.props.loading} />;
         }
 
