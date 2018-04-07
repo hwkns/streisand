@@ -12,5 +12,6 @@ export default function UserLink(props: IUserLinkProps) {
     if (!props.user || !props.user.id) {
         return (<span>{userName}</span>);
     }
+
     return (<Link to={'/users/' + props.user.id}>{userName}</Link>);
 }

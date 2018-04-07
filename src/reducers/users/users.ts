@@ -1,12 +1,13 @@
 import * as objectAssign from 'object-assign';
 
-import Store from '../store';
-import IUser from '../models/IUser';
-import ForumAction from '../actions/forums';
-import { combineReducers } from './helpers';
-import { IPage } from '../models/base/IPagedItemSet';
+import Store from '../../store';
+import IUser from '../../models/IUser';
+import { combineReducers } from '../helpers';
+import UserAction from '../../actions/users';
+import ForumAction from '../../actions/forums';
+import { IPage } from '../../models/base/IPagedItemSet';
 
-type Action = ForumAction;
+type Action = UserAction | ForumAction;
 
 type ItemMap = { [id: number]: IUser };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
@@ -19,6 +20,9 @@ function byId(state: ItemMap = {}, action: Action): ItemMap {
                 map[item.id] = item;
             }
             return objectAssign({}, state, map);
+        case 'RECEIVED_USER':
+        case 'RECEIVED_CURRENT_USER':
+            return objectAssign({}, state, { [action.user.id]: action.user });
         default:
             return state;
     }

@@ -16,6 +16,7 @@ namespace Store {
     export type Films = IPagedItemSet<IFilm>;
     export type Wikis = IPagedItemSet<IWiki>;
     export type News = { latest: INewsPost; loading: boolean; };
+    export type CurrentUser = { id: number; loading: boolean; };
 
     export type Errors = {
         authError: string;
@@ -24,6 +25,7 @@ namespace Store {
 
     export type All = {
         errors: Errors;
+        currentUser: CurrentUser;
         routing: RouterState;
         location: ILocationInfo;
         auth: IAuthInfo;
