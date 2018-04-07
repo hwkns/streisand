@@ -10,6 +10,7 @@ import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 
 import HomePage from './pages/HomePage';
+import UserPage from './pages/UserPage';
 
 import WikiPage from './pages/wikis/WikiPage';
 import WikisPage from './pages/wikis/WikisPage';
@@ -44,6 +45,9 @@ export function createRoutes(store: ReduxStore<Store.All>) {
                 <Route path="/themes" component={Themes} />
                 <Route onEnter={requireAuth}>
                     <Route path="/home" component={HomePage} />
+
+                    <Route path="/user/:userId" component={UserPage} />
+                    <Redirect from="/user" to="/home" />
 
                     <Route path="/films/:page" component={FilmsPage} />
                     <Redirect from="/films" to="/films/1" />

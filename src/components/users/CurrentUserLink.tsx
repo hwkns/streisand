@@ -42,7 +42,7 @@ class CurrentUserLinkComponent extends React.Component<CombinedProps> {
         const isAuthenticated = this.props.isAuthenticated;
 
         const title = user ? user.username : 'Settings';
-        const profile = user && <li role="presentation"><Link role="button" to={`/users/${user.id}`}>Profile</Link></li>;
+        const profile = user && <li role="presentation"><Link role="button" to={`/user/${user.id}`}>Profile</Link></li>;
         const logout = isAuthenticated && <MenuItem onClick={() => { this.props.logout(); }}>Logout</MenuItem>;
         return (
             <NavDropdown title={title} id="basic-nav-dropdown">
