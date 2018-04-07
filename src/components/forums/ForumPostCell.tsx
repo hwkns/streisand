@@ -41,9 +41,9 @@ class ForumPostCellComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const post = state.forums.posts.byId[ownProps.id] as IForumPost;
-    const author = post && state.users.byId[post.author] as IUser;
-    const thread = post && state.forums.threads.byId[post.thread];
+    const post = state.sealed.forums.posts.byId[ownProps.id] as IForumPost;
+    const author = post && state.sealed.users.byId[post.author] as IUser;
+    const thread = post && state.sealed.forums.threads.byId[post.thread];
     return {
         post: post,
         thread: thread as IForumThread,

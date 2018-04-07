@@ -55,8 +55,8 @@ class LatestNewsComponent extends React.Component<CombinedProps, void> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => ({
-    loading: state.news.loading,
-    latestNews: state.news.latest
+    loading: state.sealed.news.loading,
+    latestNews: state.sealed.news.latest
 });
 
 const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({

@@ -37,7 +37,7 @@ class ForumPage extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All): ConnectedState => ({
-    loading: state.forums.groups.loading
+    loading: state.sealed.forums.groups.loading
 });
 
 const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({

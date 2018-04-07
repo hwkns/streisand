@@ -56,9 +56,9 @@ class CurrentUserLinkComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All): ConnectedState => ({
-    loading: state.currentUser.loading,
-    isAuthenticated: state.auth.isAuthenticated,
-    currentUser: state.users.byId[state.currentUser.id] as IUser
+    loading: state.sealed.currentUser.loading,
+    isAuthenticated: state.sealed.auth.isAuthenticated,
+    currentUser: state.sealed.users.byId[state.sealed.currentUser.id] as IUser
 });
 
 const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({

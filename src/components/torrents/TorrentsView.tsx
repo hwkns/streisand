@@ -37,9 +37,9 @@ class TorrentsViewComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const page = state.torrents.pages[ownProps.page];
+    const page = state.sealed.torrents.pages[ownProps.page];
     return {
-        total: state.torrents.count,
+        total: state.sealed.torrents.count,
         loading: page ? page.loading : false,
         torrents: page ? page.items : []
     };

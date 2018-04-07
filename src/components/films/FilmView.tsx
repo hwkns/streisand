@@ -68,7 +68,7 @@ class FilmViewComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const page = state.torrents.byFilmId[ownProps.film.id];
+    const page = state.sealed.torrents.byFilmId[ownProps.film.id];
     return {
         torrents: page ? page.items || [] : [],
         loadingTorrents: page ? page.loading : false

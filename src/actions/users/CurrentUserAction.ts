@@ -34,7 +34,7 @@ export function getCurrentUser(): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(fetching());
-        return fetch(state.auth.token).then((response: IUser) => {
+        return fetch(state.sealed.auth.token).then((response: IUser) => {
             return dispatch(received(response));
         }, (error: IUnkownError) => {
             dispatch(failure());

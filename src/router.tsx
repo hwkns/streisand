@@ -24,13 +24,13 @@ import ForumThreadPage from './pages/forums/ForumThreadPage';
 
 export function createRoutes(store: ReduxStore<Store.All>) {
     function requireAuth(nextState: RouterState, replace: RedirectFunction) {
-        if (!store.getState().auth.isAuthenticated) {
+        if (!store.getState().sealed.auth.isAuthenticated) {
             replace('/login');
         }
     }
 
     function checkAuth(nextState: RouterState, replace: RedirectFunction) {
-        if (store.getState().auth.isAuthenticated) {
+        if (store.getState().sealed.auth.isAuthenticated) {
             replace('/');
         }
     }

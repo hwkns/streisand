@@ -51,7 +51,7 @@ class SiteNavComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All): ConnectedState => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.sealed.auth.isAuthenticated
 });
 
 const SiteNav: React.ComponentClass<Props> =

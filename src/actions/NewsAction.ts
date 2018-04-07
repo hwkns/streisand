@@ -31,7 +31,7 @@ export function getLatestNews(): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(fetching());
-        return fetch(state.auth.token).then((response: INewsPost) => {
+        return fetch(state.sealed.auth.token).then((response: INewsPost) => {
             return dispatch(received(response));
         }, (error: IUnkownError) => {
             dispatch(failure());

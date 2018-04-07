@@ -57,7 +57,7 @@ class WikiPageComponent extends React.Component<CombinedProps, void> {
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const wikiId = numericIdentifier(ownProps.params.wikiId);
-    const item = state.wikis.byId[wikiId];
+    const item = state.sealed.wikis.byId[wikiId];
 
     let wiki: IWiki;
     let loading = false;

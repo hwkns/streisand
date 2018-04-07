@@ -60,7 +60,7 @@ class FilmPageComponent extends React.Component<CombinedProps, void> {
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const filmId = numericIdentifier(ownProps.params.filmId);
-    const item = state.films.byId[filmId];
+    const item = state.sealed.films.byId[filmId];
 
     let film: IFilm;
     let loading = false;

@@ -39,7 +39,7 @@ export function getWiki(id: number): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(fetching(id));
-        return fetch(state.auth.token, id).then((response: IWiki) => {
+        return fetch(state.sealed.auth.token, id).then((response: IWiki) => {
             return dispatch(received(response));
         }, (error: IUnkownError) => {
             dispatch(failure(id));
@@ -51,7 +51,7 @@ export function getWiki(id: number): ThunkAction<Action> {
 export function removeWiki(id: number): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
-        return remove(state.auth.token, id).then(() => {
+        return remove(state.sealed.auth.token, id).then(() => {
             return dispatch(removed(id));
         }, (error: IUnkownError) => {
             dispatch(failure(id));
@@ -64,7 +64,7 @@ export function updateWiki(id: number, wiki: IWikiUpdate): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(fetching(id));
-        return update(state.auth.token, id, wiki).then((response: IWiki) => {
+        return update(state.sealed.auth.token, id, wiki).then((response: IWiki) => {
             return dispatch(received(response));
         }, (error: IUnkownError) => {
             dispatch(failure(id));

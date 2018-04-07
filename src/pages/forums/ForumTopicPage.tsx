@@ -57,9 +57,9 @@ class ForumTopicPageComponent extends React.Component<CombinedProps, void> {
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const pageNumber = Number((ownProps.params && ownProps.params.page) || 1);
     const topicId = numericIdentifier(ownProps.params.topicId);
-    const topicPages = state.forums.threads.byTopic[topicId];
+    const topicPages = state.sealed.forums.threads.byTopic[topicId];
     const page = topicPages && topicPages.pages[pageNumber];
-    const item = state.forums.topics.byId[topicId];
+    const item = state.sealed.forums.topics.byId[topicId];
     const topic = !isLoadingItem(item) && item;
 
     return {

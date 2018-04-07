@@ -23,19 +23,23 @@ namespace Store {
         unkownError: string;
     };
 
-    export type All = {
-        errors: Errors;
+    export type UserSealed = {
         currentUser: CurrentUser;
-        routing: RouterState;
-        location: ILocationInfo;
         auth: IAuthInfo;
         users: Users;
         films: Films;
         torrents: ITorrentItemSet;
-        deviceInfo: IDeviceInfo;
         wikis: Wikis;
         news: News;
         forums: IForumData;
+    };
+
+    export type All = {
+        errors: Errors;
+        routing: RouterState;
+        location: ILocationInfo;
+        deviceInfo: IDeviceInfo;
+        sealed: UserSealed;
     };
 }
 

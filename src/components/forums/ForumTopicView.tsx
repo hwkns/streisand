@@ -53,7 +53,7 @@ class ForumTopicViewComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const topicPages = state.forums.threads.byTopic[ownProps.topic.id];
+    const topicPages = state.sealed.forums.threads.byTopic[ownProps.topic.id];
     const page = topicPages && topicPages.pages[ownProps.page];
     return {
         total: topicPages ? topicPages.count : 0,

@@ -50,9 +50,9 @@ class FilmsViewComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const page = state.films.pages[ownProps.page];
+    const page = state.sealed.films.pages[ownProps.page];
     return {
-        total: state.films.count,
+        total: state.sealed.films.count,
         loading: page ? page.loading : false,
         films: page ? page.items : []
     };

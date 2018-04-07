@@ -36,7 +36,7 @@ export function getWikis(page: number = 1): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(fetching(page));
-        return fetch(state.auth.token, page).then((response: IPagedResponse<IWiki>) => {
+        return fetch(state.sealed.auth.token, page).then((response: IPagedResponse<IWiki>) => {
             return dispatch(received(page, response));
         }, (error: IUnkownError) => {
             dispatch(failure(page));

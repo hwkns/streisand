@@ -27,7 +27,7 @@ class ForumGroupsViewComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const page = state.forums.groups;
+    const page = state.sealed.forums.groups;
     return {
         forumGroups: page ? page.items : []
     };

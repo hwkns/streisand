@@ -41,7 +41,7 @@ export function getThreads(id: number, page: number = 1): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(fetching(id, page));
-        return fetch(state.auth.token, id, page).then((response: Response) => {
+        return fetch(state.sealed.auth.token, id, page).then((response: Response) => {
             return dispatch(received(id, page, response));
         }, (error: IUnkownError) => {
             dispatch(failure(id, page));

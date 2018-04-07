@@ -46,7 +46,7 @@ class ForumGroupComponent extends React.Component<CombinedProps> {
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const topics = ownProps.group.topics.map((topicId: number) => {
-        return state.forums.topics.byId[topicId];
+        return state.sealed.forums.topics.byId[topicId];
     });
     return {
         topics: topics as IForumTopic[]

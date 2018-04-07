@@ -37,7 +37,7 @@ export function getTorrents(filmId: number, page: number = 1): ThunkAction<Actio
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(fetching(filmId, page));
-        return fetch(state.auth.token, filmId, page).then((response: IPagedResponse<ITorrent>) => {
+        return fetch(state.sealed.auth.token, filmId, page).then((response: IPagedResponse<ITorrent>) => {
             return dispatch(received(filmId, page, response));
         }, (error: IUnkownError) => {
             dispatch(failure(filmId, page));

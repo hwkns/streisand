@@ -44,7 +44,7 @@ class FilmsPage extends React.Component<CombinedProps> {
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const pageNumber = Number((ownProps.params && ownProps.params.page) || 1);
-    const page = state.films.pages[pageNumber];
+    const page = state.sealed.films.pages[pageNumber];
     return {
         page: pageNumber,
         loading: page ? page.loading : false

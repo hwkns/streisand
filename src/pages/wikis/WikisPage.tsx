@@ -44,7 +44,7 @@ class WikisPage extends React.Component<CombinedProps> {
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const pageNumber = Number((ownProps.params && ownProps.params.page) || 1);
-    const page = state.wikis.pages[pageNumber];
+    const page = state.sealed.wikis.pages[pageNumber];
     return {
         page: pageNumber,
         loading: page ? page.loading : false

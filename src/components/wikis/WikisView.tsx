@@ -48,9 +48,9 @@ class WikisViewComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const page = state.wikis.pages[ownProps.page];
+    const page = state.sealed.wikis.pages[ownProps.page];
     return {
-        total: state.wikis.count,
+        total: state.sealed.wikis.count,
         loading: page ? page.loading : false,
         wikis: page ? page.items : []
     };
