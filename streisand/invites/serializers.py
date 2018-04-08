@@ -6,8 +6,18 @@ from .models import Invite
 
 
 class InviteSerializer(serializers.ModelSerializer):
-    offered_by = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
+    offered_by_id = serializers.PrimaryKeyRelatedField(
+        read_only=True,
+        default=serializers.CurrentUserDefault(),
+        source='offered_by'
+    )
+    offered_by_username = serializers.StringRelatedField(
+        read_only=True,
+        default=serializers.CurrentUserDefault(),
+        source='offered_by'
+    )
 
     class Meta:
         model = Invite
-        fields = ('offered_by', 'email', 'key', 'created_at', )
+        fields = ('email', 'key', 'created_at', 'offered_by_id', 'offered_by_username', )
+
