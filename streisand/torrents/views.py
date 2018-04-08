@@ -77,6 +77,8 @@ class TorrentViewSet(ModelViewSet):
         'moderated_by',
         'source_media',
         'mediainfo',
+        'comments',
+        'comments__author',
     ).order_by('id', 'source_media',).distinct('id', 'source_media',)
 
     def get_queryset(self):

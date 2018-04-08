@@ -46,6 +46,7 @@ class AdminTorrentSerializer(serializers.ModelSerializer):
             'nfo',
             'mediainfo',
             'description',
+            'comments',
         )
 
     @staticmethod
