@@ -6,11 +6,13 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from invites.views import InviteViewSet
 from films.views import FilmViewSet, CollectionViewSet, CollectionCommentViewSet, FilmCommentViewSet
-from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadIndexViewSet, ForumThreadWithAllPostsViewSet, \
-    ForumThreadItemViewSet, ForumPostViewSet, NewsPostViewSet, ForumThreadSubscriptionViewSet
-from torrents.views import TorrentViewSet
+from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadIndexViewSet, \
+    ForumThreadWithAllPostsViewSet, ForumThreadItemViewSet, ForumPostViewSet, NewsPostViewSet, \
+    ForumThreadSubscriptionViewSet
+from torrents.views import TorrentViewSet, TorrentCommentViewset
 from tracker.views import TorrentClientViewSet, SwarmViewSet, PeerViewSet
-from users.views import UserViewSet, GroupViewSet, CurrentUserView, PublicUserProfileViewSet, ChangePasswordView
+from users.views import UserViewSet, GroupViewSet, CurrentUserView, PublicUserProfileViewSet, \
+    ChangePasswordView
 from wiki.views import WikiArticleCreateUpdateDestroyViewSet, WikiArticleBodyViewSet, WikiArticleViewListOnlyViewSet
 
 router = routers.DefaultRouter()
@@ -23,6 +25,7 @@ router.register(r'film-comments', viewset=FilmCommentViewSet, base_name='film-co
 router.register(r'collections', viewset=CollectionViewSet, base_name='collection')
 router.register(r'collection-comments', viewset=CollectionCommentViewSet, base_name='collection-comment')
 router.register(r'torrents', viewset=TorrentViewSet, base_name='torrent')
+router.register(r'torrent-comments', viewset=TorrentCommentViewset, base_name='torrent-comment')
 router.register(r'torrent-clients', viewset=TorrentClientViewSet, base_name='torrent-client')
 router.register(r'tracker-swarm', viewset=SwarmViewSet, base_name='tracker-swarm')
 router.register(r'tracker-peers', viewset=PeerViewSet, base_name='tracker-peer')

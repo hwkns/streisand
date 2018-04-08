@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.password_validation import validate_password
-
+from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
-
+from django.conf import settings
+from rest_framework.validators import ValidationError
 from django.contrib.auth.models import Group
 
 from .models import User
+from invites.models import Invite
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -115,3 +117,56 @@ class DisplayUserProfileSerializer(PublicUserProfileSerializer):
             'custom_title',
             'avatar_url',
         )
+
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password2 = serializers.CharField(label='Confirm Password')
+    invite_key = serializers.CharField(source='invited_by.key', required=True)
+    invited_by = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password', 'password2', 'invite_key', 'invited_by')
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'password2': {'write_only': True},
+        }
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Email Already Exists")
+        return value
+
+    def validate_password(self, value):
+        data = self.get_initial()
+        password = data.get('password2')
+        password2 = value
+        if password != password2:
+            raise ValidationError('Passwords must match')
+        return value
+
+    def validate_password2(self, value):
+        data = self.get_initial()
+        password = data.get('password')
+        password2 = value
+        if password != password2:
+            raise ValidationError('Passwords must match')
+        return value
+
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("Email already exists.")
+        return value
+
+    def validate_invite_key(self, value):
+        data = self.get_initial()
+        email = data.get('email')
+        if value:
+            self.invite = Invite.objects.is_valid(email, value)
+            if not self.invite:
+                raise serializers.ValidationError("Invite code is not valid / expired. ")
+            self.invite_key = self.invite.invited_by.username.last()
+        return value
+
+    def create(self, validated_data):
+        return User.objects.create(**validated_data)

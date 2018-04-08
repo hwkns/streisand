@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from .filters import TorrentFilter
@@ -18,8 +18,41 @@ from www.utils import paginate
 from www.pagination import TorrentPageNumberPagination
 
 from .forms import TorrentUploadForm
-from .models import Torrent, ReseedRequest
-from .serializers import AdminTorrentSerializer
+from .models import Torrent, ReseedRequest, TorrentComment
+from .serializers import AdminTorrentSerializer, TorrentCommentSerializer
+
+
+class TorrentCommentViewset(ModelViewSet):
+    """
+    API That Allows Torrent Comments to be viewed, created, or deleted. If you delete the associated film or torrent,
+    The comment will be deleted as well.
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = TorrentCommentSerializer
+    queryset = TorrentComment.objects.all().select_related(
+        'torrent',
+        'torrent__film',
+        'author',
+    ).prefetch_related('torrent', 'author').order_by('id').distinct('id')
+    pagination_class = TorrentPageNumberPagination
+
+    """
+    This will automatically associate the comment author with the torrent comment on creation, 
+    since we already know that the comment author is the currently logged in user.
+    """
+    def perform_create(self, serializer):
+        serializer.validated_data['author'] = self.request.user
+        return super(TorrentCommentViewset, self).perform_create(serializer)
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+
+        film_id = self.request.query_params.get('film_id', None)
+        if film_id is not None:
+            queryset = queryset.filter(film_id=film_id)
+
+        return queryset
 
 
 class TorrentViewSet(ModelViewSet):

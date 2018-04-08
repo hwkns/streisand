@@ -8,7 +8,7 @@ from picklefield import PickledObjectField
 
 from tracker.bencoding import bencode
 from users.models import User
-
+from comments.models import Comment
 
 class Torrent(models.Model):
 
@@ -209,3 +209,12 @@ class ReseedRequest(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     fulfilled_at = models.DateTimeField(null=True)
+
+
+class TorrentComment(Comment):
+    torrent = models.ForeignKey(
+        Torrent,
+        related_name='comments',
+        on_delete=models.CASCADE,
+    )
+
