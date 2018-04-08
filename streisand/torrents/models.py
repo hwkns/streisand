@@ -10,6 +10,7 @@ from tracker.bencoding import bencode
 from users.models import User
 from comments.models import Comment
 
+
 class Torrent(models.Model):
 
     old_id = models.PositiveIntegerField(null=True, db_index=True)
@@ -217,4 +218,3 @@ class TorrentComment(Comment):
         related_name='comments',
         on_delete=models.CASCADE,
     )
-

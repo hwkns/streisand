@@ -37,7 +37,7 @@ class TorrentCommentViewset(ModelViewSet):
     pagination_class = TorrentPageNumberPagination
 
     """
-    This will automatically associate the comment author with the torrent comment on creation, 
+    This will automatically associate the comment author with the torrent comment on creation,
     since we already know that the comment author is the currently logged in user.
     """
     def perform_create(self, serializer):

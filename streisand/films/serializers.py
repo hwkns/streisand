@@ -77,30 +77,9 @@ class AdminFilmSerializer(serializers.ModelSerializer):
         source='comments',
         help_text="Get all fields from the comment serializer and add them as a nested child."
     )
-    """
-    Film Comments:
-    
-.. code-block:: python
-    
-    class FilmComment(Comment):
-        film = models.ForeignKey(
-            to='films.Film',
-            related_name='comments',
-            on_delete=models.CASCADE,
-    )
-    """
+
     imdb_id = serializers.SerializerMethodField()
 
-    """
-    Add in the fields from the film comment serializer as a nested meta field.
-    
-.. code-block:: python
-
-    eg: 'film',
-        'author',
-        'author_username',
-        ...
-    """
     class Meta(FilmCommentSerializer.Meta):
         model = Film
         fields = (

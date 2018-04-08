@@ -20,4 +20,3 @@ class InviteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invite
         fields = ('email', 'key', 'created_at', 'offered_by_id', 'offered_by_username', )
-

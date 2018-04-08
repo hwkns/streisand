@@ -30,15 +30,19 @@ PRODUCTION = not DEBUG
 TESTING = 'test' in sys.argv
 TEST_RUNNER = 'streisand.test_utils.CustomTestSuiteRunner'
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('STREISAND_SECRET_KEY', 'you_deserve_to_be_pwned')
-
 ALLOWED_HOSTS = [
     # Adding this for development
-    '*',
     'localhost',
     '.jumpcut.to',
 ]
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('STREISAND_SECRET_KEY', 'you_deserve_to_be_pwned')
+
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+
+
 HOST_DOMAIN = os.environ.get('HOST_DOMAIN', '')
 if HOST_DOMAIN:
     ALLOWED_HOSTS.append('.' + HOST_DOMAIN)

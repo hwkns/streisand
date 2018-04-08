@@ -128,6 +128,10 @@ CORS_ORIGIN_WHITELIST = [
     in ('api', 'dev', 'static', 'www')
 ]
 
+if DEBUG:
+    CORS_ORIGIN_ALLOW_ALL = True
+
+
 RT_API_KEY = os.environ.get('RT_API_KEY', '')
 OLD_SITE_SECRET_KEY = os.environ.get('OLD_SITE_HASH', '')
 

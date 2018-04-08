@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.password_validation import validate_password
-from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
-from django.conf import settings
-from rest_framework.validators import ValidationError
 from django.contrib.auth.models import Group
 
 from .models import User
-from invites.models import Invite
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -118,7 +114,8 @@ class DisplayUserProfileSerializer(PublicUserProfileSerializer):
             'avatar_url',
         )
 
-
+    """
+    Comment this out for the time being
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(label='Confirm Password')
     invite_key = serializers.CharField(source='invited_by.key', required=True)
@@ -170,3 +167,4 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return User.objects.create(**validated_data)
+        """
