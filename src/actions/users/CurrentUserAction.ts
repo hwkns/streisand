@@ -1,12 +1,11 @@
-import Store from '../../store';
+import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionTypes';
 
+import ErrorAction from '../ErrorAction';
 import { transformUser } from './transforms';
-import { IUnkownError } from '../../models/base/IError';
+import { simplefetchData } from '../ActionHelper';
 import IUser, { IUserResponse } from '../../models/IUser';
-import ErrorAction, { handleError } from '../ErrorAction';
 
 type UserAction =
     { type: 'FETCHING_CURRENT_USER' } |
@@ -31,16 +30,8 @@ function failure(): Action {
 }
 
 export function getCurrentUser(): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching());
-        return fetch(state.sealed.auth.token).then((response: IUserResponse) => {
-            return dispatch(received(response));
-        }, (error: IUnkownError) => {
-            dispatch(failure());
-            return dispatch(handleError(error));
-        });
-    };
+    const errorPrefix = 'Fetching current user information failed';
+    return simplefetchData({ fetch, fetching, received, failure, errorPrefix });
 }
 
 function fetch(token: string): Promise<IUserResponse> {

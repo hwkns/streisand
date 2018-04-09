@@ -1,13 +1,11 @@
-import Store from '../../store';
+import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionTypes';
 
-import { IUnkownError } from '../../models/base/IError';
-import ErrorAction, { handleError } from '../ErrorAction';
-
-import IUser, { IUserResponse } from '../../models/IUser';
+import ErrorAction from '../ErrorAction';
+import { fetchData } from '../ActionHelper';
 import { transformUser } from './transforms';
+import IUser, { IUserResponse } from '../../models/IUser';
 
 type WikiAction =
     { type: 'FETCHING_USER', id: number } |
@@ -20,7 +18,7 @@ function fetching(id: number): Action {
     return { type: 'FETCHING_USER', id };
 }
 
-function received(response: IUserResponse): Action {
+function received(id: number, response: IUserResponse): Action {
     return {
         type: 'RECEIVED_USER',
         user: transformUser(response)
@@ -32,16 +30,8 @@ function failure(id: number): Action {
 }
 
 export function getUser(id: number): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching(id));
-        return fetch(state.sealed.auth.token, id).then((response: IUserResponse) => {
-            return dispatch(received(response));
-        }, (error: IUnkownError) => {
-            dispatch(failure(id));
-            return dispatch(handleError(error));
-        });
-    };
+    const errorPrefix = `Fetching film (${id}) failed`;
+    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: id });
 }
 
 function fetch(token: string, id: number): Promise<IUserResponse> {

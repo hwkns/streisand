@@ -17,7 +17,7 @@ function fetching(id: number): Action {
     return { type: 'FETCHING_FILM', id };
 }
 
-function received(response: IFilm): Action {
+function received(id: number, response: IFilm): Action {
     return {
         type: 'RECEIVED_FILM',
         film: response
@@ -29,7 +29,7 @@ function failure(id: number): Action {
 }
 
 export function getFilm(id: number): ThunkAction<Action> {
-    const errorPrefix = 'Fetching latest news failed';
+    const errorPrefix = `Fetching film (${id}) failed`;
     return fetchData({ fetch, fetching, received, failure, errorPrefix, props: id });
 }
 

@@ -51,14 +51,14 @@ function byFilmId(state: Torrents = {}, action: Action): Torrents {
     let page: IPage<ITorrent>;
     switch (action.type) {
         case 'FETCHING_FILM_TORRENTS':
-            page = objectAssign({ items: [] }, state[action.filmId], { loading: true });
-            return objectAssign({}, state, { [action.filmId]: page });
+            page = objectAssign({ items: [] }, state[action.id], { loading: true });
+            return objectAssign({}, state, { [action.id]: page });
         case 'RECEIVED_FILM_TORRENTS':
             page = { loading: false, items: action.torrents };
-            return objectAssign({}, state, { [action.filmId]: page });
+            return objectAssign({}, state, { [action.id]: page });
         case 'TORRENTS_FILM_FAILURE':
-            page = objectAssign({ items: [] }, state[action.filmId], { loading: false });
-            return objectAssign({}, state, { [action.filmId]: page });
+            page = objectAssign({ items: [] }, state[action.id], { loading: false });
+            return objectAssign({}, state, { [action.id]: page });
         default:
             return state;
     }

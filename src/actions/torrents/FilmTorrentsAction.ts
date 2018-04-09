@@ -1,54 +1,50 @@
-import Store from '../../store';
+import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionTypes';
 
+import ErrorAction from '../ErrorAction';
+import { fetchData } from '../ActionHelper';
 import ITorrent from '../../models/ITorrent';
-import { IUnkownError } from '../../models/base/IError';
-import ErrorAction, { handleError } from '../ErrorAction';
 import IPagedResponse from '../../models/base/IPagedResponse';
 
 type FilmTorrentsAction =
-    { type: 'FETCHING_FILM_TORRENTS', filmId: number, page: number } |
-    { type: 'RECEIVED_FILM_TORRENTS', filmId: number, page: number, count: number, torrents: ITorrent[] } |
-    { type: 'TORRENTS_FILM_FAILURE', filmId: number, page: number };
+    { type: 'FETCHING_FILM_TORRENTS', id: number, page: number } |
+    { type: 'RECEIVED_FILM_TORRENTS', id: number, page: number, count: number, torrents: ITorrent[] } |
+    { type: 'TORRENTS_FILM_FAILURE', id: number, page: number };
 export default FilmTorrentsAction;
 type Action = FilmTorrentsAction | ErrorAction;
 
-function fetching(filmId: number, page: number): Action {
-    return { type: 'FETCHING_FILM_TORRENTS', filmId, page };
+type Props = {
+    id: number;
+    page: number;
+};
+
+function fetching(props: Props): Action {
+    return { type: 'FETCHING_FILM_TORRENTS', id: props.id, page: props.page };
 }
 
-function received(filmId: number, page: number, response: IPagedResponse<ITorrent>): Action {
+function received(props: Props, response: IPagedResponse<ITorrent>): Action {
     return {
-        page: page,
-        filmId: filmId,
+        page: props.page,
+        id: props.id,
         count: response.count,
         type: 'RECEIVED_FILM_TORRENTS',
         torrents: response.results
     };
 }
 
-function failure(filmId: number, page: number): Action {
-    return { type: 'TORRENTS_FILM_FAILURE', filmId, page };
+function failure(props: Props): Action {
+    return { type: 'TORRENTS_FILM_FAILURE', id: props.id, page: props.page };
 }
 
-export function getTorrents(filmId: number, page: number = 1): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching(filmId, page));
-        return fetch(state.sealed.auth.token, filmId, page).then((response: IPagedResponse<ITorrent>) => {
-            return dispatch(received(filmId, page, response));
-        }, (error: IUnkownError) => {
-            dispatch(failure(filmId, page));
-            return dispatch(handleError(error));
-        });
-    };
+export function getTorrents(id: number, page: number = 1): ThunkAction<Action> {
+    const errorPrefix = `Fetching page ${page} of the torrents (${id}) failed`;
+    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: { id, page } });
 }
 
-function fetch(token: string, filmId: number, page: number): Promise<IPagedResponse<ITorrent>> {
+function fetch(token: string, props: Props): Promise<IPagedResponse<ITorrent>> {
     return Requestor.makeRequest({
-        url: `${globals.apiUrl}/torrents/?film_id=${filmId}&page=${page}`,
+        url: `${globals.apiUrl}/torrents/?film_id=${props.id}&page=${props.page}`,
         headers: {
             'Authorization': 'token ' + token
         },

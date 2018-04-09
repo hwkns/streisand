@@ -3,8 +3,8 @@ import { ThunkAction } from './ActionTypes';
 import Requestor from '../utilities/Requestor';
 
 import ErrorAction from './ErrorAction';
-import { fetchData } from './ActionHelper';
 import INewsPost from '../models/INewsPost';
+import { simplefetchData } from './ActionHelper';
 
 type NewsAction =
     { type: 'FETCHING_NEWS_POST' } |
@@ -27,7 +27,7 @@ function failure(): Action {
 
 export function getLatestNews(): ThunkAction<Action> {
     const errorPrefix = 'Fetching latest news failed';
-    return fetchData({ fetch, fetching, received, failure, errorPrefix });
+    return simplefetchData({ fetch, fetching, received, failure, errorPrefix });
 }
 
 function fetch(token: string): Promise<INewsPost> {

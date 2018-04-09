@@ -1,11 +1,10 @@
-import Store from '../../store';
+import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionTypes';
 
+import ErrorAction from '../ErrorAction';
+import { fetchData } from '../ActionHelper';
 import ITorrent from '../../models/ITorrent';
-import { IUnkownError } from '../../models/base/IError';
-import ErrorAction, { handleError } from '../ErrorAction';
 
 type TorrentAction =
     { type: 'FETCHING_TORRENT', id: number } |
@@ -18,7 +17,7 @@ function fetching(id: number): Action {
     return { type: 'FETCHING_TORRENT', id };
 }
 
-function received(response: ITorrent): Action {
+function received(id: number, response: ITorrent): Action {
     return {
         type: 'RECEIVED_TORRENT',
         torrent: response
@@ -30,16 +29,8 @@ function failure(id: number): Action {
 }
 
 export function getTorrent(id: number): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching(id));
-        return fetch(state.sealed.auth.token, id).then((response: ITorrent) => {
-            return dispatch(received(response));
-        }, (error: IUnkownError) => {
-            dispatch(failure(id));
-            return dispatch(handleError(error));
-        });
-    };
+    const errorPrefix = `Fetching torrent (${id}) failed`;
+    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: id });
 }
 
 function fetch(token: string, id: number): Promise<ITorrent> {

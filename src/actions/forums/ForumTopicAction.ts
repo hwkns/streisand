@@ -1,11 +1,10 @@
-import Store from '../../store';
+import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionTypes';
 
+import ErrorAction from '../ErrorAction';
+import { fetchData } from '../ActionHelper';
 import { transformTopic } from './transforms';
-import { IUnkownError } from '../../models/base/IError';
-import ErrorAction, { handleError } from '../ErrorAction';
 import IPagedResponse from '../../models/base/IPagedResponse';
 import { IForumGroupData } from '../../models/forums/IForumGroup';
 import { IForumThreadResponse } from '../../models/forums/IForumThread';
@@ -19,40 +18,37 @@ type ForumTopicAction =
 export default ForumTopicAction;
 type Action = ForumTopicAction | ErrorAction;
 
-function fetching(id: number, page: number): Action {
-    return { type: 'FETCHING_FORUM_TOPIC', id, page };
+type Props = {
+    id: number;
+    page: number;
+};
+
+function fetching(props: Props): Action {
+    return { type: 'FETCHING_FORUM_TOPIC', id: props.id, page: props.page };
 }
 
-function received(id: number, page: number, response: Response): Action {
+function received(props: Props, response: Response): Action {
     return {
         type: 'RECEIVED_FORUM_TOPIC',
-        id: id,
-        page: page,
+        id: props.id,
+        page: props.page,
         count: response.count,
         data: transformTopic(response)
     };
 }
 
-function failure(id: number, page: number): Action {
-    return { type: 'FORUM_TOPIC_FAILURE', id, page };
+function failure(props: Props): Action {
+    return { type: 'FORUM_TOPIC_FAILURE', id: props.id, page: props.page };
 }
 
 export function getThreads(id: number, page: number = 1): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching(id, page));
-        return fetch(state.sealed.auth.token, id, page).then((response: Response) => {
-            return dispatch(received(id, page, response));
-        }, (error: IUnkownError) => {
-            dispatch(failure(id, page));
-            return dispatch(handleError(error));
-        });
-    };
+    const errorPrefix = `Fetching page ${page} of the forum topic (${id}) failed`;
+    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: { id, page } });
 }
 
-function fetch(token: string, id: number, page: number): Promise<Response> {
+function fetch(token: string, props: Props): Promise<Response> {
     return Requestor.makeRequest({
-        url: `${globals.apiUrl}/forum-thread-index/?topic_id=${id}&page=${page}`,
+        url: `${globals.apiUrl}/forum-thread-index/?topic_id=${props.id}&page=${props.page}`,
         headers: {
             'Authorization': 'token ' + token
         },

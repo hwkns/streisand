@@ -1,11 +1,10 @@
-import Store from '../../store';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionTypes';
+import { ThunkAction } from '../ActionTypes';
 
+import ErrorAction from '../ErrorAction';
 import { transformGroups } from './transforms';
-import { IUnkownError } from '../../models/base/IError';
-import ErrorAction, { handleError } from '../ErrorAction';
+import { simplefetchData } from '../ActionHelper';
 import IPagedResponse from '../../models/base/IPagedResponse';
 import { IForumGroupResponse, IForumGroupData } from '../../models/forums/IForumGroup';
 
@@ -32,16 +31,8 @@ function failure(): Action {
 }
 
 export function getForumGroups(): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching());
-        return fetch(state.sealed.auth.token).then((response: IPagedResponse<IForumGroupResponse>) => {
-            return dispatch(received(response));
-        }, (error: IUnkownError) => {
-            dispatch(failure());
-            return dispatch(handleError(error));
-        });
-    };
+    const errorPrefix = 'Fetching the list of forums failed';
+    return simplefetchData({ fetch, fetching, received, failure, errorPrefix });
 }
 
 function fetch(token: string): Promise<IPagedResponse<IForumGroupResponse>> {

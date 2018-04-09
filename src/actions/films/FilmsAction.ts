@@ -1,11 +1,10 @@
-import Store from '../../store';
+import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionTypes';
 
 import IFilm from '../../models/IFilm';
-import { IUnkownError } from '../../models/base/IError';
-import ErrorAction, { handleError } from '../ErrorAction';
+import ErrorAction from '../ErrorAction';
+import { fetchData } from '../ActionHelper';
 import IPagedResponse from '../../models/base/IPagedResponse';
 
 type FilmsAction =
@@ -33,16 +32,8 @@ function failure(page: number): Action {
 }
 
 export function getFilms(page: number = 1): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching(page));
-        return fetch(state.sealed.auth.token, page).then((response: IPagedResponse<IFilm>) => {
-            return dispatch(received(page, response));
-        }, (error: IUnkownError) => {
-            dispatch(failure(page));
-            return dispatch(handleError(error));
-        });
-    };
+    const errorPrefix = `Featching page ${page} of films failed`;
+    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: page });
 }
 
 function fetch(token: string, page: number): Promise<IPagedResponse<IFilm>> {

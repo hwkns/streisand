@@ -7,6 +7,7 @@ import { IUnkownError } from '../../models/base/IError';
 import ErrorAction, { handleError } from '../ErrorAction';
 
 import IWiki, { IWikiUpdate } from '../../models/IWiki';
+import { fetchData } from '../ActionHelper';
 
 type WikiAction =
     { type: 'FETCHING_WIKI', id: number } |
@@ -20,7 +21,7 @@ function fetching(id: number): Action {
     return { type: 'FETCHING_WIKI', id };
 }
 
-function received(response: IWiki): Action {
+function received(id: number, response: IWiki): Action {
     return {
         type: 'RECEIVED_WIKI',
         wiki: response
@@ -36,16 +37,8 @@ function failure(id: number): Action {
 }
 
 export function getWiki(id: number): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching(id));
-        return fetch(state.sealed.auth.token, id).then((response: IWiki) => {
-            return dispatch(received(response));
-        }, (error: IUnkownError) => {
-            dispatch(failure(id));
-            return dispatch(handleError(error));
-        });
-    };
+    const errorPrefix = `Fetching film (${id}) failed`;
+    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: id });
 }
 
 export function removeWiki(id: number): ThunkAction<Action> {
@@ -65,7 +58,7 @@ export function updateWiki(id: number, wiki: IWikiUpdate): ThunkAction<Action> {
         const state = getState();
         dispatch(fetching(id));
         return update(state.sealed.auth.token, id, wiki).then((response: IWiki) => {
-            return dispatch(received(response));
+            return dispatch(received(id, response));
         }, (error: IUnkownError) => {
             dispatch(failure(id));
             return dispatch(handleError(error));

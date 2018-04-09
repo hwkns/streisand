@@ -1,11 +1,10 @@
-import Store from '../../store';
+import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionTypes';
 
 import IWiki from '../../models/IWiki';
-import { IUnkownError } from '../../models/base/IError';
-import ErrorAction, { handleError } from '../ErrorAction';
+import ErrorAction from '../ErrorAction';
+import { fetchData } from '../ActionHelper';
 import IPagedResponse from '../../models/base/IPagedResponse';
 
 type WikiAction =
@@ -33,16 +32,8 @@ function failure(page: number): Action {
 }
 
 export function getWikis(page: number = 1): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching(page));
-        return fetch(state.sealed.auth.token, page).then((response: IPagedResponse<IWiki>) => {
-            return dispatch(received(page, response));
-        }, (error: IUnkownError) => {
-            dispatch(failure(page));
-            return dispatch(handleError(error));
-        });
-    };
+    const errorPrefix = `Fetching page ${page} of wikis failed`;
+    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: page });
 }
 
 function fetch(token: string, page: number): Promise<IPagedResponse<IWiki>> {
