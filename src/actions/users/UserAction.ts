@@ -1,7 +1,7 @@
 import Store from '../../store';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionHelper';
+import { ThunkAction, IDispatch } from '../ActionTypes';
 
 import { IUnkownError } from '../../models/base/IError';
 import ErrorAction, { handleError } from '../ErrorAction';
@@ -27,7 +27,7 @@ function received(response: IUserResponse): Action {
     };
 }
 
-function failure(id?: number): Action {
+function failure(id: number): Action {
     return { type: 'USER_FAILURE', id };
 }
 

@@ -6,10 +6,11 @@ import { combineReducers } from '../helpers';
 import UserAction from '../../actions/users';
 import ForumAction from '../../actions/forums';
 import { IPage } from '../../models/base/IPagedItemSet';
+import ILoadingItem from '../../models/base/ILoadingItem';
 
 type Action = UserAction | ForumAction;
 
-type ItemMap = { [id: number]: IUser };
+type ItemMap = { [id: number]: IUser | ILoadingItem };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
         case 'RECEIVED_FORUM_GROUPS':

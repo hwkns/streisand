@@ -5,8 +5,9 @@ import IFilm from '../models/IFilm';
 import Action from '../actions/films';
 import { combineReducers } from './helpers';
 import { IPage } from '../models/base/IPagedItemSet';
+import ILoadingItem from '../models/base/ILoadingItem';
 
-type ItemMap = { [id: number]: IFilm };
+type ItemMap = { [id: number]: IFilm | ILoadingItem };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
         case 'FETCHING_FILM':

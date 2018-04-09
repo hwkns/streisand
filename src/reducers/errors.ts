@@ -1,28 +1,21 @@
-import Store from '../store';
-import { combineReducers } from './helpers';
-import AuthAction from '../actions/AuthAction';
 import ErrorAction from '../actions/ErrorAction';
 
-type Action = AuthAction | ErrorAction;
+type Action = ErrorAction;
 
-function authError(state: string = '', action: Action): string {
+function errors(state: string[] = [], action: Action): string[] {
     switch (action.type) {
-        case 'AUTHENTICATION_FAILED':
-            return action.message;
-        case 'AUTHENTICATED':
-            return '';
+        case 'ADD_ERROR':
+            return [action.message, ...state.slice(0, 2)];
+        case 'REMOVE_ERROR':
+            switch (action.index) {
+                case 0: return state.slice(1, 3);
+                case 1: return [...state.slice(0, 1), ...state.slice(2, 3)];
+                case 2: return state.slice(0, 2);
+                default: return state;
+            }
         default:
             return state;
     }
 }
 
-function unkownError(state: string = '', action: Action): string {
-    switch (action.type) {
-        case 'UNKOWN_ERROR':
-            return action.message;
-        default:
-            return state;
-    }
-}
-
-export default combineReducers<Store.Errors>({ authError, unkownError });
+export default errors;

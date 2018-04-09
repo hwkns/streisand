@@ -1,12 +1,10 @@
-import Store from '../../store';
+import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionHelper';
-
-import { IUnkownError } from '../../models/base/IError';
-import ErrorAction, { handleError } from '../ErrorAction';
 
 import IFilm from '../../models/IFilm';
+import ErrorAction from '../ErrorAction';
+import { fetchData } from '../ActionHelper';
 
 type FilmAction =
     { type: 'FETCHING_FILM', id: number } |
@@ -31,16 +29,8 @@ function failure(id: number): Action {
 }
 
 export function getFilm(id: number): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching(id));
-        return fetch(state.sealed.auth.token, id).then((response: IFilm) => {
-            return dispatch(received(response));
-        }, (error: IUnkownError) => {
-            dispatch(failure(id));
-            return dispatch(handleError(error));
-        });
-    };
+    const errorPrefix = 'Fetching latest news failed';
+    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: id });
 }
 
 function fetch(token: string, id: number): Promise<IFilm> {

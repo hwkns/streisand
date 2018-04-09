@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import IUser from '../../models/IUser';
 
 export interface IUserLinkProps {
-    user: IUser;
+    user?: IUser;
 }
 
 export default function UserLink(props: IUserLinkProps) {

@@ -10,7 +10,7 @@ interface IOwnProps extends React.Props<Root> {
     history: any; // TODO: type
  }
 
-export default class Root extends React.Component<IOwnProps, null> {
+export default class Root extends React.Component<IOwnProps> {
     public render() {
         const { store, history } = this.props;
         return (

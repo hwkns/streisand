@@ -10,7 +10,7 @@ import IForumPost from '../../models/forums/IForumPost';
 import IForumThread from '../../models/forums/IForumThread';
 
 export type Props = {
-    id: number;
+    id?: number;
 };
 
 type ConnectedState = {
@@ -41,7 +41,8 @@ class ForumPostCellComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const post = state.sealed.forums.posts.byId[ownProps.id] as IForumPost;
+    const postId = ownProps.id || ownProps.id === 0 ? ownProps.id : -1;
+    const post = state.sealed.forums.posts.byId[postId] as IForumPost;
     const author = post && state.sealed.users.byId[post.author] as IUser;
     const thread = post && state.sealed.forums.threads.byId[post.thread];
     return {

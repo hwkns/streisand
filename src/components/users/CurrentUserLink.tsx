@@ -7,14 +7,14 @@ import { NavDropdown, MenuItem } from 'react-bootstrap';
 
 import Store from '../../store';
 import IUser from '../../models/IUser';
-import { logout } from '../../actions/AuthAction';
+import { logout } from '../../actions/auth/LogoutAction';
 import { getCurrentUser } from '../../actions/users/CurrentUserAction';
 
 export type Props = {};
 
 type ConnectedState = {
     loading: boolean;
-    currentUser: IUser;
+    currentUser?: IUser;
     isAuthenticated: boolean;
 };
 
@@ -46,10 +46,11 @@ class CurrentUserLinkComponent extends React.Component<CombinedProps> {
         const logout = isAuthenticated && <MenuItem onClick={() => { this.props.logout(); }}>Logout</MenuItem>;
         return (
             <NavDropdown title={title} id="basic-nav-dropdown">
-                { profile }
-                { user && <MenuItem divider /> }
+                {profile}
                 <li role="presentation"><Link role="menuitem" to="/themes">Themes</Link></li>
-                { logout }
+                {user && <MenuItem divider />}
+                {isAuthenticated && <li role="presentation"><Link role="menuitem" to="/changepassword">Change password</Link></li>}
+                {logout}
             </NavDropdown>
         );
     }
@@ -58,7 +59,7 @@ class CurrentUserLinkComponent extends React.Component<CombinedProps> {
 const mapStateToProps = (state: Store.All): ConnectedState => ({
     loading: state.sealed.currentUser.loading,
     isAuthenticated: state.sealed.auth.isAuthenticated,
-    currentUser: state.sealed.users.byId[state.sealed.currentUser.id] as IUser
+    currentUser: state.sealed.users.byId[state.sealed.currentUser.id as number] as IUser
 });
 
 const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({

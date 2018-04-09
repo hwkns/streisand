@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Store from '../store';
 import SiteNav from '../components/SiteNav';
 import { ScreenSize } from '../models/IDeviceInfo';
-import { clearError } from '../actions/ErrorAction';
+import { removeError } from '../actions/ErrorAction';
 import { watchScreenSize } from '../utilities/device';
 import Banner, { BannerType } from '../components/Banner';
 import { updateScreenSize } from '../actions/DeviceAction';
@@ -13,25 +13,24 @@ import { updateScreenSize } from '../actions/DeviceAction';
 export type Props = {};
 
 type ConnectedState = {
-    authError: string;
-    errorMessage: string;
+    errors: string[];
 };
 
 type ConnectedDispatch = {
-    clearError: () => void;
+    removeError: (index: number) => void;
     updateScreenSize: (screenSize: ScreenSize) => void;
 };
 
 type CombinedProps = Props & ConnectedState & ConnectedDispatch;
 class AppComponent extends React.Component<CombinedProps> {
-    private _screenSizeWatcher: () => void;
+    private _screenSizeWatcher?: () => void;
 
     public render() {
         return (
             <div style={{'paddingTop': '80px'}}>
                 <SiteNav />
                 <div className="container">
-                    {this._getErrorBanner()}
+                    {this._getErrorBanners()}
                     {this.props.children}
                 </div>
             </div>
@@ -52,25 +51,20 @@ class AppComponent extends React.Component<CombinedProps> {
         window.addEventListener('resize', this._screenSizeWatcher);
     }
 
-    private _getErrorBanner() {
-        if (this.props.authError) {
-            return <Banner type={BannerType.error}>{this.props.authError}</Banner>;
-        }
-
-        if (this.props.errorMessage) {
-            const onClose = () => { this.props.clearError(); };
-            return <Banner type={BannerType.error} onClose={onClose}>{this.props.errorMessage}</Banner>;
-        }
+    private _getErrorBanners() {
+        return this.props.errors.map((error: string, index: number) => {
+            const onClose = () => { this.props.removeError(index); };
+            return <Banner key={index} type={BannerType.error} onClose={onClose}>{error}</Banner>;
+        });
     }
 }
 
 const mapStateToProps = (state: Store.All): ConnectedState => ({
-    errorMessage: state.errors.unkownError,
-    authError: state.errors.authError
+    errors: state.errors
 });
 
 const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({
-    clearError: () => dispatch(clearError()),
+    removeError: (index: number) => dispatch(removeError(index)),
     updateScreenSize: (screenSize: ScreenSize) => dispatch(updateScreenSize(screenSize))
 });
 

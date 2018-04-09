@@ -53,10 +53,11 @@ class Themes extends React.Component<Props, State> {
         );
     }
 
-    // @autobind
     private _changeTheme(url: string) {
-        let link = document.querySelector('#theme');
-        link['href'] = url;
+        const link = document.querySelector('#theme');
+        if (link) {
+            link['href'] = url;
+        }
         this.setState({ theme: url });
         if (typeof localStorage !== 'undefined') {
             localStorage['jumpcut.theme.url'] = url;

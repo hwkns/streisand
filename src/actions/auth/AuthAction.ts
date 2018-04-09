@@ -1,25 +1,19 @@
 import { replace } from 'react-router-redux';
 
-import Store from '../store';
-import globals from '../utilities/globals';
-import Requestor from '../utilities/Requestor';
-import { IUnkownError } from '../models/base/IError';
-import { storeAuthToken } from '../utilities/storage';
-import ErrorAction, { authError } from './ErrorAction';
-import { ThunkAction, IDispatch } from './ActionHelper';
+import Store from '../../store';
+import globals from '../../utilities/globals';
+import Requestor from '../../utilities/Requestor';
+import { IUnkownError } from '../../models/base/IError';
+import { storeAuthToken } from '../../utilities/storage';
+import ErrorAction, { handleError } from '../ErrorAction';
+import { ThunkAction, IDispatch } from '../ActionTypes';
 
 type AuthAction =
-    { type: 'LOGOUT' } |
     { type: 'AUTHENTICATING' } |
     { type: 'AUTHENTICATED', token: string } |
     { type: 'AUTHENTICATION_FAILED', message: string };
 export default AuthAction;
 type Action = AuthAction | ErrorAction;
-
-export function logout(): Action {
-    storeAuthToken('');
-    return { type: 'LOGOUT' };
-}
 
 function authenticating(): Action {
     return { type: 'AUTHENTICATING' };
@@ -46,7 +40,7 @@ export function login(username: string, password: string): ThunkAction<Action> {
             }
             return action;
         }, (error: IUnkownError) => {
-            return dispatch(authError(error));
+            return dispatch(handleError(error, 'Login failed'));
         });
     };
 }

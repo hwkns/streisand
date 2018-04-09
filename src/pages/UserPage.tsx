@@ -18,7 +18,7 @@ export type Props = {
 
 type ConnectedState = {
     userId: number;
-    user: IUser;
+    user?: IUser;
     loading: boolean;
 };
 
@@ -58,7 +58,7 @@ const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const userId = numericIdentifier(ownProps.params.userId);
     const item = state.sealed.users.byId[userId];
 
-    let user: IUser;
+    let user: IUser | undefined;
     let loading = false;
     if (isLoadingItem(item)) {
         loading = item.loading;

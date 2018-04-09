@@ -4,9 +4,10 @@ import Action from '../actions/torrents';
 import ITorrent from '../models/ITorrent';
 import { combineReducers } from './helpers';
 import { IPage } from '../models/base/IPagedItemSet';
+import ILoadingItem from '../models/base/ILoadingItem';
 import ITorrentItemSet from '../models/ITorrentItemSet';
 
-type ItemMap = { [id: number]: ITorrent };
+type ItemMap = { [id: number]: ITorrent | ILoadingItem };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
         case 'FETCHING_TORRENT':

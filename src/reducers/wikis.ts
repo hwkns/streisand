@@ -5,8 +5,9 @@ import IWiki from '../models/IWiki';
 import Action from '../actions/wikis';
 import { combineReducers } from './helpers';
 import { IPage } from '../models/base/IPagedItemSet';
+import ILoadingItem from '../models/base/ILoadingItem';
 
-type ItemMap = { [id: number]: IWiki };
+type ItemMap = { [id: number]: IWiki | ILoadingItem };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
         case 'REMOVED_WIKI':

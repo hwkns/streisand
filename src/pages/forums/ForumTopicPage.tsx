@@ -21,7 +21,7 @@ type ConnectedState = {
     page: number;
     topicId: number;
     loading: boolean;
-    topic: IForumTopic;
+    topic?: IForumTopic;
 };
 
 type ConnectedDispatch = {
@@ -60,7 +60,7 @@ const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const topicPages = state.sealed.forums.threads.byTopic[topicId];
     const page = topicPages && topicPages.pages[pageNumber];
     const item = state.sealed.forums.topics.byId[topicId];
-    const topic = !isLoadingItem(item) && item;
+    const topic = !isLoadingItem(item) && item || undefined;
 
     return {
         topic: topic,

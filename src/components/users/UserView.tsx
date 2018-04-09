@@ -23,6 +23,10 @@ function InfoRow(props: IRowProps) {
 export default function UserView(props: Props) {
     const user = props.user;
     const details = user.details;
+    if (!details) {
+        return <div style={{ 'margin-top': '8px' }}>No information provided.</div>;
+    }
+
     const lastSeeded = getDateDiff({ past: details.lastSeeded });
     return (
         <div>

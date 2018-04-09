@@ -16,7 +16,7 @@ export function transformGroups(response: IPagedResponse<IForumGroupResponse>): 
         const transformedGroup = {
             id: group.id,
             title: group.name,
-            topics: []
+            topics: [] as number[]
         };
         result.groups.push(transformedGroup);
         for (const topic of group.topicsData) {

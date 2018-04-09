@@ -15,13 +15,8 @@ namespace Store {
     export type Users = IPagedItemSet<IUser>;
     export type Films = IPagedItemSet<IFilm>;
     export type Wikis = IPagedItemSet<IWiki>;
-    export type News = { latest: INewsPost; loading: boolean; };
-    export type CurrentUser = { id: number; loading: boolean; };
-
-    export type Errors = {
-        authError: string;
-        unkownError: string;
-    };
+    export type News = { latest: INewsPost | null; loading: boolean; };
+    export type CurrentUser = { id: number | null; loading: boolean; };
 
     export type UserSealed = {
         currentUser: CurrentUser;
@@ -35,7 +30,7 @@ namespace Store {
     };
 
     export type All = {
-        errors: Errors;
+        errors: string[];
         routing: RouterState;
         location: ILocationInfo;
         deviceInfo: IDeviceInfo;

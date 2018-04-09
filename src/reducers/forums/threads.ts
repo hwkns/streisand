@@ -2,11 +2,12 @@ import * as objectAssign from 'object-assign';
 
 import Action from '../../actions/forums';
 import { combineReducers } from '../helpers';
+import ILoadingItem from '../../models/base/ILoadingItem';
 import { INestedPages } from '../../models/base/IPagedItemSet';
 import { IForumThread } from '../../models/forums/IForumThread';
 import { ForumThreadData } from '../../models/forums/IForumData';
 
-type ItemMap = { [id: number]: IForumThread };
+type ItemMap = { [id: number]: IForumThread | ILoadingItem };
 function byId(state: ItemMap = {}, action: Action): ItemMap {
     switch (action.type) {
         case 'RECEIVED_FORUM_GROUPS':

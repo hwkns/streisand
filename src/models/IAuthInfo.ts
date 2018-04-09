@@ -2,7 +2,7 @@
 interface IAuthInfo {
     isAuthenticated: boolean;
     isAuthenticating: boolean;
-    token?: string;
+    token: string;
 }
 
 export default IAuthInfo;

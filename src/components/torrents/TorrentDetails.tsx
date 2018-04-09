@@ -57,6 +57,10 @@ function TorrentContent(props: { torrent: ITorrent }) {
 function MediaContent(props: { torrent: ITorrent }) {
     const torrent = props.torrent;
     const info = torrent.mediainfo;
+    if (!info) {
+        return <div style={{ 'margin-top': '8px' }}>No information provided.</div>;
+    }
+
     return (
         <ul className="list-group" style={{ 'margin-top': '8px' }}>
             <InfoRow label="Runtime" value={info.runtime} />

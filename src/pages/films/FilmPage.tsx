@@ -21,7 +21,7 @@ export type Props = {
 type ConnectedState = {
     filmId: number;
     torrentId: number;
-    film: IFilm;
+    film?: IFilm;
     loading: boolean;
 };
 
@@ -62,7 +62,7 @@ const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const filmId = numericIdentifier(ownProps.params.filmId);
     const item = state.sealed.films.byId[filmId];
 
-    let film: IFilm;
+    let film: IFilm | undefined;
     let loading = false;
     if (isLoadingItem(item)) {
         loading = item.loading;

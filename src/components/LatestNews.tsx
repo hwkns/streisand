@@ -13,7 +13,7 @@ import UserLink from './links/UserLink';
 export type Props = {};
 
 type ConnectedState = {
-    latestNews: INewsPost;
+    latestNews: INewsPost | null;
     loading: boolean;
 };
 

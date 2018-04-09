@@ -6,8 +6,8 @@ export interface IRequestOptions {
     data?: any;
 }
 
-function parseResponse<T>(request: XMLHttpRequest): T {
-    let result: T;
+function parseResponse<T>(request: XMLHttpRequest): T | undefined {
+    let result: T | undefined;
     if (request.responseText && typeof request.responseText === 'string') {
         try {
             result = JSON.parse(request.responseText);

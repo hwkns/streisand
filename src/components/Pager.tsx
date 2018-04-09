@@ -42,7 +42,7 @@ class PagerComponent extends React.Component<CombinedProps> {
         let right = Math.min(pageCount, page + pagesToShow - 1 - (page - left));
         left = Math.max(1, page - pagesToShow + 1 + (right - page));
 
-        let pages = [];
+        let pages: JSX.Element[] = [];
         for (let i = left; i <= right; i++) {
             const start = PAGE_SIZE * (i - 1) + 1;
             const end = Math.min(start + PAGE_SIZE - 1, total);

@@ -34,7 +34,7 @@ class ForumThreadRowComponent extends React.Component<CombinedProps> {
                             <img src="https://i.imgur.com/2Gi9kAm.png" width="150" />
                         </div>
                         <div style={{ flex: 'auto', 'margin-left': '8px' }}>
-                            <TextView content={post.body} />
+                            <TextView content={post.body || ''} />
                         </div>
                     </div>
                 </div>

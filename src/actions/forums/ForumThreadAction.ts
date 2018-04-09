@@ -1,7 +1,7 @@
 import Store from '../../store';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionHelper';
+import { ThunkAction, IDispatch } from '../ActionTypes';
 
 import { transformThread } from './transforms';
 import { IUnkownError } from '../../models/base/IError';

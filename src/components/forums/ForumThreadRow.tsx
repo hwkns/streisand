@@ -12,7 +12,7 @@ export type Props = {
 };
 
 type ConnectedState = {
-    author: IUser;
+    author?: IUser;
 };
 type ConnectedDispatch = {};
 
@@ -31,7 +31,8 @@ class ForumThreadRowComponent extends React.Component<CombinedProps> {
 }
 
 const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const author = ownProps.thread && state.sealed.users.byId[ownProps.thread.createdBy] as IUser;
+    const createdBy = ownProps.thread && ownProps.thread.createdBy;
+    const author = createdBy && state.sealed.users.byId[createdBy] as IUser || undefined;
     return {
         author: author
     };

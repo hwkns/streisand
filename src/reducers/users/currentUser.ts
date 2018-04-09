@@ -3,7 +3,7 @@ import Store from '../../store';
 import { combineReducers } from '../helpers';
 import Action from '../../actions/users/CurrentUserAction';
 
-function id(state: number = null, action: Action): number {
+function id(state: number | null = null, action: Action): number | null {
     switch (action.type) {
         case 'RECEIVED_CURRENT_USER':
             return action.user.id;

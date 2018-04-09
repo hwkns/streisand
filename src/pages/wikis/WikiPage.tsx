@@ -18,7 +18,7 @@ export type Props = {
 
 type ConnectedState = {
     wikiId: number;
-    wiki: IWiki;
+    wiki?: IWiki;
     loading: boolean;
 };
 
@@ -44,8 +44,7 @@ class WikiPageComponent extends React.Component<CombinedProps, void> {
 
     public render() {
         const wiki = this.props.wiki;
-        const hasContent = wiki && wiki.body;
-        if (this.props.loading || !hasContent) {
+        if (!wiki || !wiki.body || this.props.loading) {
             return <Empty loading={this.props.loading} />;
         }
 
@@ -59,7 +58,7 @@ const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const wikiId = numericIdentifier(ownProps.params.wikiId);
     const item = state.sealed.wikis.byId[wikiId];
 
-    let wiki: IWiki;
+    let wiki: IWiki | undefined;
     let loading = false;
     if (isLoadingItem(item)) {
         loading = item.loading;

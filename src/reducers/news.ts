@@ -3,7 +3,7 @@ import Action from '../actions/NewsAction';
 import INewsPost from '../models/INewsPost';
 import { combineReducers } from './helpers';
 
-function latest(state: INewsPost = null, action: Action): INewsPost {
+function latest(state: INewsPost | null = null, action: Action): INewsPost | null {
     switch (action.type) {
         case 'RECEIVED_NEWS_POST':
             return action.post;

@@ -1,6 +1,6 @@
 import { RouterAction, LocationActionPayload, LOCATION_CHANGE } from 'react-router-redux';
 
-import AuthAction from '../actions/AuthAction';
+import AuthAction from '../actions/auth/AuthAction';
 import ILocationInfo, { ILocation } from '../models/ILocationInfo';
 
 interface IPayload extends LocationActionPayload, ILocation {
@@ -22,7 +22,7 @@ const defaultValue: ILocationInfo = {
 function _location(state: ILocationInfo = defaultValue, action: IRouterAction): ILocationInfo {
     const payload = action.payload;
     if (payload) {
-        if (action.payload.action === 'POP') {
+        if (payload.action === 'POP') {
             return {
                 referred: false,
                 previous: {
@@ -32,7 +32,7 @@ function _location(state: ILocationInfo = defaultValue, action: IRouterAction): 
                     search: payload.search
                 }
             };
-        } else if (state.previous && action.payload.action === 'REPLACE' && payload.pathname === '/login') {
+        } else if (state.previous && payload.action === 'REPLACE' && payload.pathname === '/login') {
             return {
                 referred: false,
                 referrer: state.previous

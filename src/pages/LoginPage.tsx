@@ -3,7 +3,7 @@ import * as redux from 'redux';
 import { connect } from 'react-redux';
 
 import Store from '../store';
-import { login } from '../actions/AuthAction';
+import { login } from '../actions/auth/AuthAction';
 
 export type Props = {};
 
@@ -58,8 +58,8 @@ class LoginComponent extends React.Component<CombinedProps, State> {
                         <div className="form-group">
                             <label htmlFor="inputPassword" className="col-lg-2 control-label">Password</label>
                             <div className="col-lg-10">
-                                <input type="password" className="form-control" id="inputPassword" placeholder="Password"
-                                    value={this.state.password} onChange={(event) => this.handlePasswordChange(event)} />
+                                <input type="password" className="form-control" id="inputPassword" autoComplete="current-password"
+                                    placeholder="Password" value={this.state.password} onChange={(event) => this.handlePasswordChange(event)} />
                             </div>
                         </div>
                     </fieldset>

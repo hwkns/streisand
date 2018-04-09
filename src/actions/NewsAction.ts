@@ -1,11 +1,9 @@
-import Store from '../store';
 import globals from '../utilities/globals';
+import { ThunkAction } from './ActionTypes';
 import Requestor from '../utilities/Requestor';
-import { ThunkAction, IDispatch } from './ActionHelper';
 
-import { IUnkownError } from '../models/base/IError';
-import ErrorAction, { handleError } from './ErrorAction';
-
+import ErrorAction from './ErrorAction';
+import { fetchData } from './ActionHelper';
 import INewsPost from '../models/INewsPost';
 
 type NewsAction =
@@ -28,16 +26,8 @@ function failure(): Action {
 }
 
 export function getLatestNews(): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching());
-        return fetch(state.sealed.auth.token).then((response: INewsPost) => {
-            return dispatch(received(response));
-        }, (error: IUnkownError) => {
-            dispatch(failure());
-            return dispatch(handleError(error));
-        });
-    };
+    const errorPrefix = 'Fetching latest news failed';
+    return fetchData({ fetch, fetching, received, failure, errorPrefix });
 }
 
 function fetch(token: string): Promise<INewsPost> {

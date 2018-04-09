@@ -1,7 +1,7 @@
 import * as assign from 'object-assign';
 
+import Action from '../actions/auth';
 import IAuthInfo from '../models/IAuthInfo';
-import Action from '../actions/AuthAction';
 import { getAuthToken } from '../utilities/storage';
 
 const authToken = getAuthToken();
@@ -18,7 +18,7 @@ function auth(state: IAuthInfo = defaultValue, action: Action): IAuthInfo {
             return {
                 isAuthenticated: false,
                 isAuthenticating: false,
-                token: undefined
+                token: ''
             };
         case 'AUTHENTICATING':
             return assign({}, state, { isAuthenticating: true });
