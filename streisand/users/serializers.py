@@ -27,15 +27,20 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class AdminUserProfileSerializer(serializers.ModelSerializer):
 
+    user_class_rank = serializers.PrimaryKeyRelatedField(source='user_class', read_only=True)
+    user_class = serializers.StringRelatedField()
+
     class Meta:
         model = User
         fields = (
             'id',
+            'user_class',
+            'user_class_rank',
             'last_login',
-            'is_superuser',
             'username',
-            'password',
             'email',
+            'is_superuser',
+            'password',
             'is_staff',
             'is_active',
             'date_joined',
@@ -52,7 +57,6 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
             'bytes_downloaded',
             'last_seeded',
             'average_seeding_size',
-            'user_class',
             'announce_key',
             'invited_by',
             'watch_queue',
