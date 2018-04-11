@@ -10,7 +10,6 @@ INSTALLED_APPS += [
 
     # Third party apps
     'django_su',
-    'grappelli',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
