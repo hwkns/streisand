@@ -12,6 +12,7 @@ INSTALLED_APPS += [
     'django_su',
     'rest_framework',
     'corsheaders',
+    'rest_framework.authtoken'
     'django_filters',
     'rest_framework_filters',
     'docs',
@@ -108,7 +109,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
         'rest_framework.parsers.JSONParser',
-        'rest_framework.parsers.MultiPartParser',
+        # 'rest_framework.parsers.MultiPartParser',
     ),
     'URL_FORMAT_OVERRIDE': None,
 }
