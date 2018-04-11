@@ -12,7 +12,7 @@ INSTALLED_APPS += [
     'django_su',
     'rest_framework',
     'corsheaders',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
     'django_filters',
     'rest_framework_filters',
     'docs',
