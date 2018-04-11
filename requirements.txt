@@ -40,3 +40,6 @@ git+https://github.com/TheSaltman/django-docs.git
 sphinx_rtd_theme==0.2.5b2
 djangorestframework-camel-case>=1.0b1
 django-guardian==1.4.9
+git+https://github.com/philipn/django-rest-framework-filters.git
+# djangorestframework-filters
+git+https://github.com/darklow/django-suit/tarball/v2

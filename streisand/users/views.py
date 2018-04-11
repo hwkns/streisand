@@ -13,7 +13,8 @@ from .filters import UserFilter, PublicUserFilter
 from www.utils import paginate
 from www.pagination import UserPageNumberPagination
 from .models import User
-from .serializers import GroupSerializer, AdminUserProfileSerializer, OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer
+from .serializers import GroupSerializer, AdminUserProfileSerializer, \
+    OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer
 
 
 class ChangePasswordView(UpdateAPIView):
@@ -69,7 +70,7 @@ class PublicUserProfileViewSet(ModelViewSet):
     )
 
 
-class UserViewSet(ModelViewSet):
+class AdminUserViewSet(ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited, by administrators.
     """
@@ -81,11 +82,19 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.all().select_related(
         'user_class',
         'invited_by',
+        'auth_token',
+        'announce_key',
     ).prefetch_related(
         'groups',
+        'torrents',
+        'user_class',
+        'user_permissions',
+        'user_class__permissions',
+        'auth_token',
+        'announce_key',
     ).order_by(
-        '-date_joined',
-    )
+        '-date_joined', 'id',
+    ).distinct('date_joined', 'id')
 
 
 class GroupViewSet(ModelViewSet):

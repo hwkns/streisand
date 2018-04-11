@@ -27,34 +27,43 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class AdminUserProfileSerializer(serializers.ModelSerializer):
 
-    user_class = serializers.StringRelatedField()
-
     class Meta:
         model = User
         fields = (
             'id',
+            'last_login',
+            'is_superuser',
             'username',
+            'password',
             'email',
-            'url',
-            'account_status',
-            'user_class',
-            'groups',
+            'is_staff',
+            'is_active',
+            'date_joined',
             'is_donor',
-            'custom_title',
+            'account_status',
+            'failed_login_attempts',
             'avatar_url',
+            'custom_title',
             'profile_description',
-            'average_seeding_size',
             'staff_notes',
             'irc_key',
             'invite_count',
             'bytes_uploaded',
             'bytes_downloaded',
             'last_seeded',
+            'average_seeding_size',
+            'user_class',
+            'announce_key',
+            'invited_by',
+            'watch_queue',
+            'user_permissions',
+            'torrents',
         )
+
+        extra_kwargs = {'password': {'write_only': True,}}
 
 
 class OwnedUserProfileSerializer(AdminUserProfileSerializer):
-    username = serializers.StringRelatedField()
 
     class Meta(AdminUserProfileSerializer.Meta):
         fields = (
@@ -69,6 +78,7 @@ class OwnedUserProfileSerializer(AdminUserProfileSerializer):
             'profile_description',
             'average_seeding_size',
             'irc_key',
+            'announce_key',
             'invite_count',
             'bytes_uploaded',
             'bytes_downloaded',

@@ -15,13 +15,14 @@ INSTALLED_APPS += [
     'rest_framework.authtoken',
     'corsheaders',
     'django_filters',
+    'rest_framework_filters',
     'docs',
 
     # Contrib apps
-    'django.contrib.admin',
     'django.contrib.humanize',
-    'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'django.contrib.admin',
+    'django.contrib.sessions',
     'django.contrib.messages',
 
     # Debug Toolbar
@@ -94,6 +95,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAdminUser',
     ], 'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework_filters.backends.RestFrameworkFilterBackend',
     ),
     'PAGE_SIZE': 50,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

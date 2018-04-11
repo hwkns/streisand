@@ -11,12 +11,12 @@ from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadIndexV
     ForumThreadSubscriptionViewSet
 from torrents.views import TorrentViewSet, TorrentCommentViewset
 from tracker.views import TorrentClientViewSet, SwarmViewSet, PeerViewSet
-from users.views import UserViewSet, GroupViewSet, CurrentUserView, PublicUserProfileViewSet, \
+from users.views import AdminUserViewSet, GroupViewSet, CurrentUserView, PublicUserProfileViewSet, \
     ChangePasswordView
 from wiki.views import WikiArticleCreateUpdateDestroyViewSet, WikiArticleBodyViewSet, WikiArticleViewListOnlyViewSet
 
 router = routers.DefaultRouter()
-router.register(r'users', viewset=UserViewSet, base_name='user')
+router.register(r'users', viewset=AdminUserViewSet, base_name='user')
 router.register(r'user-profiles', viewset=PublicUserProfileViewSet, base_name='user-profile')
 router.register(r'invites', viewset=InviteViewSet, base_name='invite')
 router.register(r'groups', viewset=GroupViewSet, base_name='group')

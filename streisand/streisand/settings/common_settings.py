@@ -18,7 +18,6 @@ import dj_database_url
 
 from django.utils.timezone import timedelta
 
-
 AUTH_USER_MODEL = 'users.User'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -40,9 +39,6 @@ ALLOWED_HOSTS = [
     '.jumpcut.to',
 ]
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('STREISAND_SECRET_KEY', 'you_deserve_to_be_pwned')
-
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 
@@ -56,6 +52,7 @@ INSTALLED_APPS = [
     # Default apps
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'www.apps.SuitConfig',
 
     # Local apps
     'comments',
