@@ -42,4 +42,4 @@ djangorestframework-camel-case>=1.0b1
 django-guardian==1.4.9
 git+https://github.com/philipn/django-rest-framework-filters.git
 # djangorestframework-filters
-git+https://github.com/darklow/django-suit/tarball/v2
+https://github.com/darklow/django-suit/tarball/v2
