@@ -3,9 +3,18 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.contrib.auth.models import Group
+from invites.models import Invite
 
 from .models import User
-
+from invites.serializers import InviteSerializer
+from rest_framework.serializers import (
+    CharField,
+    EmailField,
+    HyperlinkedIdentityField,
+    ModelSerializer,
+    SerializerMethodField,
+    ValidationError
+    )
 
 class ChangePasswordSerializer(serializers.Serializer):
     """
@@ -128,57 +137,95 @@ class DisplayUserProfileSerializer(PublicUserProfileSerializer):
             'avatar_url',
         )
 
-    """
-    Comment this out for the time being
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    password2 = serializers.CharField(label='Confirm Password')
-    invite_key = serializers.CharField(source='invited_by.key', required=True)
-    invited_by = serializers.PrimaryKeyRelatedField(read_only=True)
+    email = EmailField(label='Email Address')
+    email2 = EmailField(label='Confirm Email')
+
+    invite_key = serializers.PrimaryKeyRelatedField(source='invited_by.key', queryset=Invite.objects.all())
+
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password2', 'invite_key', 'invited_by')
-        extra_kwargs = {
-            'password': {'write_only': True},
-            'password2': {'write_only': True},
-        }
+        fields = [
+            'username',
+            'email',
+            'email2',
+            'password',
+            'invite_key',
+
+
+        ]
+        extra_kwargs = {"password":
+                            {"write_only": True}
+                        }
+
+    def validate(self, data):
+        # email = data['email']
+        # user_qs = User.objects.filter(email=email)
+        # if user_qs.exists():
+        #     raise ValidationError("This user has already registered.")
+        return data
 
     def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Email Already Exists")
-        return value
-
-    def validate_password(self, value):
         data = self.get_initial()
-        password = data.get('password2')
-        password2 = value
-        if password != password2:
-            raise ValidationError('Passwords must match')
+        email1 = data.get("email2")
+        email2 = value
+        if email1 != email2:
+            raise ValidationError("Emails must match.")
+
+        user_qs = User.objects.filter(email=email2)
+        if user_qs.exists():
+            raise ValidationError("This user has already registered.")
+
         return value
 
-    def validate_password2(self, value):
+    def validate_email2(self, value):
         data = self.get_initial()
-        password = data.get('password')
-        password2 = value
-        if password != password2:
-            raise ValidationError('Passwords must match')
-        return value
-
-    def validate_username(self, value):
-        if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("Email already exists.")
+        email1 = data.get("email")
+        email2 = value
+        if email1 != email2:
+            raise ValidationError("Emails must match.")
         return value
 
     def validate_invite_key(self, value):
         data = self.get_initial()
-        email = data.get('email')
-        if value:
-            self.invite = Invite.objects.is_valid(email, value)
-            if not self.invite:
-                raise serializers.ValidationError("Invite code is not valid / expired. ")
-            self.invite_key = self.invite.invited_by.username.last()
+        self.invite_key = data.get("invite_key")
+        if not Invite.objects.is_valid(self.invite_key):
+            raise ValidationError("key must match.")
         return value
 
     def create(self, validated_data):
-        return User.objects.create(**validated_data)
-        """
+        username = validated_data['username']
+        email = validated_data['email']
+        password = validated_data['password']
+        user_obj = User(
+                username=username,
+                email=email
+            )
+        user_obj.set_password(password)
+        user_obj.save()
+        return validated_data
+
+
+class UserLoginSerializer(ModelSerializer):
+    username = CharField()
+    email = EmailField(label='Email Address')
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'email',
+            'password',
+
+        ]
+        extra_kwargs = {"password":
+                            {"write_only": True}
+                            }
+
+    def validate(self, data):
+        # email = data['email']
+        # user_qs = User.objects.filter(email=email)
+        # if user_qs.exists():
+        #     raise ValidationError("This user has already registered.")
+        return data

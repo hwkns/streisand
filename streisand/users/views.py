@@ -2,19 +2,41 @@
 
 from django.contrib.auth.models import Group
 from django.shortcuts import render, get_object_or_404
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from www.permissions import IsOwnerOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from django_filters import rest_framework as filters
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.generics import UpdateAPIView
+from rest_framework.generics import UpdateAPIView, CreateAPIView
 from .filters import UserFilter, PublicUserFilter
 from www.utils import paginate
 from www.pagination import UserPageNumberPagination
 from .models import User
 from .serializers import GroupSerializer, AdminUserProfileSerializer, \
-    OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer
+    OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer, UserRegistrationSerializer, \
+    UserLoginSerializer
+
+
+class UserLoginAPIView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = UserLoginSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            new_data = serializer.data
+            return Response(new_data, status=HTTP_200_OK)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+class UserRegisterView(CreateAPIView):
+    serializer_class = UserRegistrationSerializer
+    queryset = User.objects.all()
+    permission_classes = [AllowAny]
 
 
 class ChangePasswordView(UpdateAPIView):
@@ -23,7 +45,7 @@ class ChangePasswordView(UpdateAPIView):
     """
     serializer_class = ChangePasswordSerializer
     model = User
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
     def get_object(self, queryset=None):
         obj = self.request.user
@@ -82,7 +104,6 @@ class AdminUserViewSet(ModelViewSet):
     queryset = User.objects.all().select_related(
         'user_class',
         'invited_by',
-        'auth_token',
         'announce_key',
     ).prefetch_related(
         'groups',
@@ -90,7 +111,6 @@ class AdminUserViewSet(ModelViewSet):
         'user_class',
         'user_permissions',
         'user_class__permissions',
-        'auth_token',
         'announce_key',
     ).order_by(
         '-date_joined', 'id',

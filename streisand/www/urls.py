@@ -8,9 +8,8 @@ from django.contrib import admin
 from django.contrib.auth.views import logout_then_login
 
 from rest_framework.documentation import include_docs_urls
-from invites.views import InviteRegistrationView
 from .decorators import https_required
-from .views import RegistrationView, LegacyURLView, template_viewer, home, login
+from .views import LegacyURLView, template_viewer, home, login
 
 
 urlpatterns = [
@@ -25,7 +24,6 @@ urlpatterns = [
     ),
     url(r'^films/', include('films.urls')),
     url(r'^forums/', include('forums.urls')),
-    url(r'^invites/', include('invites.urls')),
     url(r'^users/', include('users.urls')),
     url(r'^torrent-requests/', include('torrent_requests.urls')),
     url(r'^torrent-stats/', include('torrent_stats.urls')),
@@ -33,20 +31,9 @@ urlpatterns = [
     url(r'^wiki/', include('wiki.urls')),
 
     # Admin
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Registration
-    url(
-        regex=r'^register/$',
-        view=RegistrationView.as_view(),
-        name='open_registration',
-    ),
-    url(
-        regex=r'^register/(?P<invite_key>[0-9a-f\-]{36})/$',
-        view=InviteRegistrationView.as_view(),
-        name='invite_registration',
-    ),
 
     # Authentication
     url(

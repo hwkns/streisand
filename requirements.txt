@@ -1,4 +1,4 @@
-Django[argon2]==2.0.1
+Django[argon2]==2.0.4
 Markdown==2.6.11
 Pillow==4.3.0
 Pygments==2.2.0
@@ -13,12 +13,11 @@ cffi==1.11.2
 dj-database-url==0.4.2
 django-debug-toolbar==1.9.1
 django-extensions==2.0.6
-django-grappelli==2.11.1
 django-picklefield==1.0.0
 django-ratelimit==1.1.0
 django-redis==4.8.0
 django-su==0.6.0
-djangorestframework==3.8.0
+djangorestframework==3.8.2
 kombu==4.1.0
 psycopg2==2.7.3.2
 pycparser==2.18
@@ -36,10 +35,9 @@ coreapi==2.3.3
 Sphinx==1.7.2
 # django-docs==0.2.1
 # Updated Version
-git+https://github.com/TheSaltman/django-docs.git
+https://github.com/TheSaltman/django-docs/archive/master.zip
 sphinx_rtd_theme==0.2.5b2
 djangorestframework-camel-case>=1.0b1
-django-guardian==1.4.9
-git+https://github.com/philipn/django-rest-framework-filters.git
+https://github.com/philipn/django-rest-framework-filters/archive/master.zip
 # djangorestframework-filters
 https://github.com/darklow/django-suit/tarball/v2

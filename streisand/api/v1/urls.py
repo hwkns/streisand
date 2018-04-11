@@ -12,7 +12,7 @@ from forums.views import ForumGroupViewSet, ForumTopicViewSet, ForumThreadIndexV
 from torrents.views import TorrentViewSet, TorrentCommentViewset
 from tracker.views import TorrentClientViewSet, SwarmViewSet, PeerViewSet
 from users.views import AdminUserViewSet, GroupViewSet, CurrentUserView, PublicUserProfileViewSet, \
-    ChangePasswordView
+    ChangePasswordView, UserRegisterView, UserLoginAPIView
 from wiki.views import WikiArticleCreateUpdateDestroyViewSet, WikiArticleBodyViewSet, WikiArticleViewListOnlyViewSet
 
 router = routers.DefaultRouter()
@@ -52,5 +52,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^current-user/', CurrentUserView.as_view()),
     url(r'^change-password/', ChangePasswordView.as_view()),
+    url(r'^login/$', UserLoginAPIView.as_view(), name='login'),
+    url(r'^register/$', UserRegisterView.as_view(), name='register'),
 
 ]

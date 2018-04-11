@@ -11,16 +11,16 @@ INSTALLED_APPS += [
     # Third party apps
     'django_su',
     'rest_framework',
-    'rest_framework.authtoken',
     'corsheaders',
     'django_filters',
     'rest_framework_filters',
     'docs',
 
+
     # Contrib apps
     'django.contrib.humanize',
-    'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.staticfiles',
     'django.contrib.sessions',
     'django.contrib.messages',
 
@@ -94,7 +94,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAdminUser',
     ], 'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework_filters.backends.RestFrameworkFilterBackend',
     ),
     'PAGE_SIZE': 50,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -109,7 +108,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
         'rest_framework.parsers.JSONParser',
-
+        'rest_framework.parsers.MultiPartParser',
     ),
     'URL_FORMAT_OVERRIDE': None,
 }
