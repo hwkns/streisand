@@ -41,6 +41,17 @@ class LatestNewsComponent extends React.Component<CombinedProps, void> {
             return <Empty loading={this.props.loading} />;
         }
 
+        if (post.id === undefined) {
+            return (
+                <div className="panel panel-default">
+                    <div className="panel-heading">Latest news</div>
+                    <div className="panel-body">
+                        <TextView content="Welcome! There are currently no news posts on the site yet." />
+                    </div>
+                </div>
+            );
+        }
+
         const posted = getDateDiff({ past: post.createdAt });
 
         return (

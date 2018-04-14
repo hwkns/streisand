@@ -23,6 +23,15 @@ class ForumGroupComponent extends React.Component<CombinedProps> {
         const rows = topics.map((topic: IForumTopic) => {
             return (<ForumTopicRow topic={topic} key={topic.id} />);
         });
+
+        if (!rows.length) {
+            return (
+                <div>
+                    <h2>{group.title}</h2>
+                    <div>There are currently no forum topics in this group.</div>
+                </div>
+            );
+        }
         return (
             <div>
                 <h2>{group.title}</h2>
