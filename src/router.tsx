@@ -6,7 +6,6 @@ import Store from './store';
 
 import App from './pages/App';
 import Themes from './components/Themes';
-import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 
@@ -42,7 +41,6 @@ export function createRoutes(store: ReduxStore<Store.All>) {
             <Redirect from="/" to="/home" />
             <Route path="/" component={App}>
                 <Route path="/login" component={LoginPage} onEnter={checkAuth} />
-                <Route path="/about" component={AboutPage} />
                 <Route path="/themes" component={Themes} />
                 <Route onEnter={requireAuth}>
                     <Route path="/home" component={HomePage} />

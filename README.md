@@ -1,5 +1,5 @@
 # Introduction
-The web front-end code for JumpCut.
+The web front-end code for JumpCut code named Phoenix for development purposes.
 
 The site is built with [webpack](https://webpack.github.io/). We are using [Typescript](https://www.typescriptlang.org/) to make collaboration and maintenance easier. The UI is built on top of the [React](https://facebook.github.io/react/) framework using [Redux](http://redux.js.org/) as our state container.
 

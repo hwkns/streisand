@@ -23,14 +23,13 @@ class SiteNavComponent extends React.Component<CombinedProps> {
             <Navbar fixedTop={true}>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <Link to="/">JumpCut</Link>
+                        <Link to="/">Phoenix</Link>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse>
                     { isAuthenticated && this._getLinks() }
                     <Nav pullRight>
-                        <li role="presentation"><Link role="button" to="/about">About</Link></li>
                         <CurrentUserLink />
                     </Nav>
                 </Navbar.Collapse>
