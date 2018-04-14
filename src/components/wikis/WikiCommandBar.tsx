@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Store from '../../store';
 import IWiki from '../../models/IWiki';
 import CommandBar, { ICommand } from '../CommandBar';
-import { removeWiki } from '../../actions/wikis/WikiAction';
+import { removeWiki } from '../../actions/wikis/RemoveWikiAction';
 
 export type Props = {
     wiki: IWiki;

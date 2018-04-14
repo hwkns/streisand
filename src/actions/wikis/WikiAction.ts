@@ -1,18 +1,14 @@
-import Store from '../../store';
+import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
-import { ThunkAction, IDispatch } from '../ActionTypes';
 
-import { IUnkownError } from '../../models/base/IError';
-import ErrorAction, { handleError } from '../ErrorAction';
-
-import IWiki, { IWikiUpdate } from '../../models/IWiki';
+import IWiki from '../../models/IWiki';
+import ErrorAction from '../ErrorAction';
 import { fetchData } from '../ActionHelper';
 
 type WikiAction =
     { type: 'FETCHING_WIKI', id: number } |
     { type: 'RECEIVED_WIKI', wiki: IWiki } |
-    { type: 'REMOVED_WIKI', id: number } |
     { type: 'WIKI_FAILURE', id: number };
 export default WikiAction;
 type Action = WikiAction | ErrorAction;
@@ -28,42 +24,13 @@ function received(id: number, response: IWiki): Action {
     };
 }
 
-function removed(id: number): Action {
-    return { type: 'REMOVED_WIKI', id };
-}
-
 function failure(id: number): Action {
     return { type: 'WIKI_FAILURE', id };
 }
 
 export function getWiki(id: number): ThunkAction<Action> {
-    const errorPrefix = `Fetching film (${id}) failed`;
+    const errorPrefix = `Fetching wiki (${id}) failed`;
     return fetchData({ fetch, fetching, received, failure, errorPrefix, props: id });
-}
-
-export function removeWiki(id: number): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        return remove(state.sealed.auth.token, id).then(() => {
-            return dispatch(removed(id));
-        }, (error: IUnkownError) => {
-            dispatch(failure(id));
-            return dispatch(handleError(error));
-        });
-    };
-}
-
-export function updateWiki(id: number, wiki: IWikiUpdate): ThunkAction<Action> {
-    return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
-        const state = getState();
-        dispatch(fetching(id));
-        return update(state.sealed.auth.token, id, wiki).then((response: IWiki) => {
-            return dispatch(received(id, response));
-        }, (error: IUnkownError) => {
-            dispatch(failure(id));
-            return dispatch(handleError(error));
-        });
-    };
 }
 
 function fetch(token: string, id: number): Promise<IWiki> {
@@ -73,27 +40,5 @@ function fetch(token: string, id: number): Promise<IWiki> {
             'Authorization': 'token ' + token
         },
         method: 'GET'
-    });
-}
-
-function remove(token: string, id: number): Promise<void> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/wikis/${id}/`,
-        headers: {
-            'Authorization': 'token ' + token
-        },
-        method: 'DELETE'
-    });
-}
-
-function update(token: string, id: number, wiki: IWikiUpdate): Promise<IWiki> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/wikis/${id}/`,
-        headers: {
-            'Authorization': 'token ' + token,
-            'Content-Type': 'application/json'
-        },
-        method: 'PUT',
-        data: JSON.stringify(wiki)
     });
 }

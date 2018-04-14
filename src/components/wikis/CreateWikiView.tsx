@@ -32,10 +32,6 @@ class CreateWikiViewComponent extends React.Component<CombinedProps, State> {
         };
     }
 
-    public handleTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({ title: event.target.value });
-    }
-
     public render() {
         const onHandle = (handle: IEditorHandle) => { this._editorHandle = handle; };
         const onSave = () => {
@@ -53,7 +49,7 @@ class CreateWikiViewComponent extends React.Component<CombinedProps, State> {
                 <CommandBar commands={[create]} />
                 <div className="form-group">
                     <input type="text" className="form-control" placeholder="Wiki title"
-                        value={this.state.title} onChange={(event) => this.handleTitleChange(event)} />
+                        value={this.state.title} onChange={(event) => this.setState({ title: event.target.value })} />
                 </div>
                 <Editor content="" receiveHandle={onHandle} size="large" />
             </div>

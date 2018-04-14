@@ -5,11 +5,10 @@ import globals from '../../utilities/globals';
 import Requestor from '../../utilities/Requestor';
 import { ThunkAction, IDispatch } from '../ActionTypes';
 
-import { IUnkownError } from '../../models/base/IError';
-import ErrorAction, { handleError } from '../ErrorAction';
-
 import WikiAction from './WikiAction';
 import IWiki, { IWikiUpdate } from '../../models/IWiki';
+import { IUnkownError } from '../../models/base/IError';
+import ErrorAction, { handleError } from '../ErrorAction';
 
 type CreateWikiAction =
     { type: 'CREATING_WIKI', wiki: IWikiUpdate } |

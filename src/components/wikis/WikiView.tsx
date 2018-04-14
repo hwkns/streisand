@@ -6,14 +6,15 @@ import Store from '../../store';
 import TextView from '../bbcode/TextView';
 import WikiCommandBar from './WikiCommandBar';
 import IWiki, { IWikiUpdate } from '../../models/IWiki';
-import { updateWiki } from '../../actions/wikis/WikiAction';
 import Editor, { IEditorHandle } from '../bbcode/Editor';
+import { updateWiki } from '../../actions/wikis/UpdateWikiAction';
 
 export type Props = {
     wiki: IWiki;
 };
 
 type State = {
+    title: string;
     editMode: boolean;
 };
 
@@ -31,7 +32,8 @@ class WikiViewComponent extends React.Component<CombinedProps, State> {
         super(props);
 
         this.state = {
-            editMode: false
+            editMode: false,
+            title: props.wiki ? props.wiki.title : ''
         };
     }
 
@@ -44,7 +46,7 @@ class WikiViewComponent extends React.Component<CombinedProps, State> {
             onSave: () => {
                 const content = this._editorHandle.getContent();
                 this.props.updateWiki(wiki.id, {
-                    title: wiki.title,
+                    title: this.state.title,
                     body: content
                 });
             }
@@ -55,7 +57,10 @@ class WikiViewComponent extends React.Component<CombinedProps, State> {
             return (
                 <div>
                     <WikiCommandBar wiki={wiki} editMode={editMode} operations={operations} />
-                    <h1>{wiki.title}</h1>
+                    <div className="form-group">
+                        <input type="text" className="form-control" placeholder="Wiki title"
+                            value={this.state.title} onChange={(event) => this.setState({ title: event.target.value })} />
+                    </div>
                     <Editor content={wiki.body} receiveHandle={onHandle} size="large" />
                 </div>
             );
