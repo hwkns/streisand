@@ -7,12 +7,12 @@ import ErrorAction from '../ErrorAction';
 import { fetchData } from '../ActionHelper';
 import IPagedResponse from '../../models/base/IPagedResponse';
 
-type WikiAction =
+type WikisAction =
     { type: 'FETCHING_WIKIS', page: number } |
     { type: 'RECEIVED_WIKIS', page: number, count: number, wikis: IWiki[] } |
     { type: 'WIKIS_FAILURE', page: number };
-export default WikiAction;
-type Action = WikiAction | ErrorAction;
+export default WikisAction;
+type Action = WikisAction | ErrorAction;
 
 function fetching(page: number): Action {
     return { type: 'FETCHING_WIKIS', page };

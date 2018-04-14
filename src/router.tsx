@@ -22,6 +22,7 @@ import TorrentsPage from './pages/TorrentsPage';
 import ForumPage from './pages/forums/ForumPage';
 import ForumTopicPage from './pages/forums/ForumTopicPage';
 import ForumThreadPage from './pages/forums/ForumThreadPage';
+import CreateWikiView from './components/wikis/CreateWikiView';
 
 export function createRoutes(store: ReduxStore<Store.All>) {
     function requireAuth(nextState: RouterState, replace: RedirectFunction) {
@@ -60,6 +61,7 @@ export function createRoutes(store: ReduxStore<Store.All>) {
 
                     <Route path="/wikis/:page" component={WikisPage} />
                     <Redirect from="/wikis" to="/wikis/1" />
+                    <Route path="/wiki/create" component={CreateWikiView} />
                     <Route path="/wiki/:wikiId" component={WikiPage} />
                     <Redirect from="/wiki" to="/wikis/1" />
 

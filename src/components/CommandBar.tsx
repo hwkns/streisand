@@ -2,8 +2,9 @@ import * as React from 'react';
 
 export interface ICommand {
     label: string;
+    disabled?: boolean;
     status?: 'primary' | 'success' | 'info' | 'warning' | 'danger';
-    onExecute: () => void;
+    onExecute?: () => void;
 }
 
 export type Props = {
@@ -12,7 +13,7 @@ export type Props = {
 
 function CommandBar(props: Props) {
     const commands = props.commands.map((command: ICommand) => {
-        const status = command.status ? `btn-${command.status}` : 'btn-default';
+        const status = command.disabled ? 'disabled' : command.status ? `btn-${command.status}` : 'btn-default';
         const classes = `btn btn-sm ${status}`;
         return <button type="button" className={classes} onClick={command.onExecute}>{command.label}</button>;
     });

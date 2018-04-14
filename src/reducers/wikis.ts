@@ -54,4 +54,16 @@ function count(state: number = 0, action: Action): number {
     }
 }
 
-export default combineReducers<Store.Wikis>({ byId, count, pages });
+function creating(state: boolean = false, action: Action): boolean {
+    switch (action.type) {
+        case 'CREATING_WIKI':
+            return true;
+        case 'CREATED_WIKI':
+        case 'WIKI_CREATION_FAILURE':
+            return false;
+        default:
+            return state;
+    }
+}
+
+export default combineReducers<Store.Wikis>({ byId, count, pages, creating });

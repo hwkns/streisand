@@ -7,12 +7,12 @@ import { fetchData } from '../ActionHelper';
 import { transformUser } from './transforms';
 import IUser, { IUserResponse } from '../../models/IUser';
 
-type WikiAction =
+type UserAction =
     { type: 'FETCHING_USER', id: number } |
     { type: 'RECEIVED_USER', user: IUser } |
     { type: 'USER_FAILURE', id: number };
-export default WikiAction;
-type Action = WikiAction | ErrorAction;
+export default UserAction;
+type Action = UserAction | ErrorAction;
 
 function fetching(id: number): Action {
     return { type: 'FETCHING_USER', id };

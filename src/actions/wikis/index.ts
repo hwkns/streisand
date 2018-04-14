@@ -1,5 +1,6 @@
 import WikiAction from './WikiAction';
 import WikisAction from './WikisAction';
+import CreateWikiAction from './CreateWikiAction';
 
-type Action = WikiAction | WikisAction;
+type Action = WikisAction | CreateWikiAction | WikiAction;
 export default Action;

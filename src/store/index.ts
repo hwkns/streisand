@@ -14,7 +14,9 @@ import IPagedItemSet from '../models/base/IPagedItemSet';
 namespace Store {
     export type Users = IPagedItemSet<IUser>;
     export type Films = IPagedItemSet<IFilm>;
-    export type Wikis = IPagedItemSet<IWiki>;
+    export type Wikis = IPagedItemSet<IWiki> & {
+        creating: boolean;
+    };
     export type News = { latest: INewsPost | null; loading: boolean; };
     export type CurrentUser = { id: number | null; loading: boolean; };
 

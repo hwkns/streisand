@@ -1,61 +1,40 @@
 import * as React from 'react';
+import * as redux from 'redux';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
-import Pager from '../Pager';
-import Empty from '../Empty';
 import Store from '../../store';
-import WikiRow from './WikiRow';
-import IWiki from '../../models/IWiki';
+import WikiList from './WikiList';
+import CommandBar, { ICommand } from '../CommandBar';
 
 export type Props = {
     page: number;
 };
 
-type ConnectedState = {
-    total: number;
-    wikis: IWiki[];
-    loading: boolean;
+type ConnectedState = {};
+type ConnectedDispatch = {
+    createWiki: () => void;
 };
-type ConnectedDispatch = {};
 
 type CombinedProps = Props & ConnectedDispatch & ConnectedState;
 class WikisViewComponent extends React.Component<CombinedProps> {
     public render() {
-        const wikis = this.props.wikis;
-        if (!wikis.length) {
-            return <Empty loading={this.props.loading} />;
-        }
-        const rows = wikis.map((wiki: IWiki) => {
-            return (<WikiRow wiki={wiki} key={wiki.id} />);
-        });
+        const commands: ICommand[] = [{
+            label: 'Create new wiki',
+            onExecute: () => { this.props.createWiki(); }
+        }];
         return (
             <div>
-                <Pager uri="/wikis" total={this.props.total} page={this.props.page} />
-                <table className="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {rows}
-                    </tbody>
-                </table>
-                <Pager uri="/wikis" total={this.props.total} page={this.props.page} />
+                <CommandBar commands={commands} />
+                <WikiList page={this.props.page} />
             </div>
         );
     }
 }
 
-const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
-    const page = state.sealed.wikis.pages[ownProps.page];
-    return {
-        total: state.sealed.wikis.count,
-        loading: page ? page.loading : false,
-        wikis: page ? page.items : []
-    };
-};
-
+const mapDispatchToProps = (dispatch: redux.Dispatch<Store.All>): ConnectedDispatch => ({
+    createWiki: () => dispatch(push('/wiki/create'))
+});
 const WikisView: React.ComponentClass<Props> =
-    connect(mapStateToProps)(WikisViewComponent);
+    connect(undefined, mapDispatchToProps)(WikisViewComponent);
 export default WikisView;
