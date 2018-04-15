@@ -97,70 +97,416 @@
         "model": "tracker.swarm",
         "fields": {}
     },
-        {
-        "pk": 1,
-        "model": "forums.ForumGroup",
+    {
+        "pk": "941d91da-d596-45f0-9a4a-5b561eda5cf9",
+        "model": "users.userannouncekey",
         "fields": {
-            "sort_order": 1,
-            "name": "Staff"
-        }
-    },
-        {
-        "pk": 2,
-        "model": "forums.ForumGroup",
-        "fields": {
-            "sort_order": 2,
-            "name": "General Discussions"
+            "user": 2,
+            "issued_at": "2014-09-18T14:52:58.484Z"
         }
     },
     {
-        "pk": 1,
-        "model": "forums.ForumTopic",
+        "pk": "8e5ec2ea-40cc-11e8-842f-0ed5f89f718b",
+        "model": "users.userannouncekey",
         "fields": {
-            "sort_order": 1,
-            "group": 1,
-            "name": "Staff Announcements",
-            "description": "JumpCut Announcements for Staff",
-            "minimum_user_class": 15,
-            "staff_only_thread_creation": true
+            "user": 3,
+            "issued_at": "2014-09-18T14:52:58.484Z"
         }
     },
 {
-        "pk": 2,
-        "model": "forums.ForumTopic",
-        "fields": {
-            "sort_order": 2,
-            "group": 2,
-            "name": "Announcements",
-            "description": "JumpCut Announcements",
-            "minimum_user_class": 1,
-            "staff_only_thread_creation": true
-        }
-    },
-{
-        "pk": 1,
-        "model": "forums.ForumThread",
-        "fields": {
-            "topic": 2,
-            "title": "News",
-            "is_locked": false,
-            "is_sticky": true,
-            "created_by": 1,
-            "created_at":"2018-04-13T14:52:58.484Z",
-            "modified_at":"2018-04-13T14:52:58.484Z"
-        }
-    },
-{
-        "pk": 1,
-        "model": "forums.ForumPost",
-        "fields": {
-            "thread":1,
-            "author": 1,
-            "body": "Nice",
-            "created_at":"2018-04-13T14:52:58.484Z",
-            "modified_at":"2018-04-13T14:52:58.484Z"
-        }
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VFBQeUthVjhpS0V4$FRsoZViqRKkw+TJp2uQ3vQ",
+        "last_login": "2018-04-15T16:24:25.327Z",
+        "is_superuser": true,
+        "username": "api",
+        "first_name": "",
+        "last_name": "",
+        "email": "api@gooby.pls",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2016-09-18T14:52:58.484Z",
+        "old_id": null,
+        "user_class": 18,
+        "is_donor": false,
+        "account_status": "enabled",
+        "failed_login_attempts": 0,
+        "announce_key": "941d91da-d596-45f0-9a4a-5b561eda5cf9",
+        "torrent_download_key": null,
+        "avatar_url": null,
+        "custom_title": null,
+        "profile_description": "api test user",
+        "staff_notes": null,
+        "irc_key": null,
+        "invited_by": null,
+        "invite_count": 0,
+        "bytes_uploaded": 0,
+        "bytes_downloaded": 0,
+        "log_successful_announces": true,
+        "last_seeded": null,
+        "average_seeding_size": 0,
+        "watch_queue": null,
+        "groups": [],
+        "user_permissions": []
     }
-
+},
+    {
+        "model": "users.user",
+        "pk": 3,
+        "fields": {
+            "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Rnl6cU9tRElNU1VN$FGo2IbyLzkcqnVz4qVsNYQ",
+            "last_login": "2018-04-15T16:24:25.327Z",
+            "is_superuser": false,
+            "username": "User1",
+            "first_name": "",
+            "last_name": "",
+            "email": "user1@gooby.pls",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2016-09-18T14:52:58.484Z",
+            "old_id": null,
+            "user_class": 1,
+            "is_donor": false,
+            "account_status": "enabled",
+            "failed_login_attempts": 0,
+            "announce_key": "8e5ec2ea-40cc-11e8-842f-0ed5f89f718b",
+            "torrent_download_key": null,
+            "avatar_url": null,
+            "custom_title": null,
+            "profile_description": "new test user",
+            "staff_notes": null,
+            "irc_key": null,
+            "invited_by": null,
+            "invite_count": 0,
+            "bytes_uploaded": 0,
+            "bytes_downloaded": 0,
+            "log_successful_announces": true,
+            "last_seeded": null,
+            "average_seeding_size": 0,
+            "watch_queue": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+{
+    "model": "forums.forumgroup",
+    "pk": 1,
+    "fields": {
+        "old_id": null,
+        "sort_order": 1,
+        "name": "Staff Topics"
+    }
+},
+{
+    "model": "forums.forumgroup",
+    "pk": 2,
+    "fields": {
+        "old_id": null,
+        "sort_order": 2,
+        "name": "General Discussions"
+    }
+},
+{
+    "model": "forums.forumgroup",
+    "pk": 3,
+    "fields": {
+        "old_id": null,
+        "sort_order": 3,
+        "name": "Special Access"
+    }
+},
+{
+    "model": "forums.forumgroup",
+    "pk": 4,
+    "fields": {
+        "old_id": null,
+        "sort_order": 4,
+        "name": "Support"
+    }
+},
+{
+    "model": "forums.forumgroup",
+    "pk": 5,
+    "fields": {
+        "old_id": null,
+        "sort_order": 5,
+        "name": "Archives"
+    }
+},
+{
+    "model": "forums.forumtopic",
+    "pk": 1,
+    "fields": {
+        "old_id": null,
+        "sort_order": 1,
+        "name": "Staff Announcements",
+        "description": "JumpCut Announcements for Staff",
+        "group": 1
+    }
+},
+    {
+    "model": "forums.forumtopic",
+    "pk": 2,
+    "fields": {
+        "old_id": null,
+        "sort_order": 2,
+        "name": "Staff Discussions",
+        "description": "JumpCut Discussions for Staff",
+        "group": 1
+    }
+},
+{
+    "model": "forums.forumtopic",
+    "pk": 3,
+    "fields": {
+        "old_id": null,
+        "sort_order": 1,
+        "name": "Announcements",
+        "description": "JumpCut Announcements",
+        "group": 2,
+        "number_of_threads": 1,
+        "number_of_posts": 1,
+        "latest_post": 1
+    }
+},
+    {
+    "model": "forums.forumtopic",
+    "pk": 4,
+    "fields": {
+        "old_id": null,
+        "sort_order": 2,
+        "name": "Introduce Yourself, and general chat.",
+        "description": "New Users, Come Say Hi, and post whatever.",
+        "group": 2
+    }
+},
+    {
+    "model": "forums.forumtopic",
+    "pk": 5,
+    "fields": {
+        "old_id": null,
+        "sort_order": 1,
+        "name": "Invites",
+        "description": "Invites Only",
+        "group": 3
+    }
+},
+    {
+    "model": "forums.forumtopic",
+    "pk": 6,
+    "fields": {
+        "old_id": null,
+        "sort_order": 1,
+        "name": "Bugs",
+        "description": "List the site bugs here",
+        "group": 4
+    }
+},
+    {
+    "model": "forums.forumtopic",
+    "pk": 7,
+    "fields": {
+        "old_id": null,
+        "sort_order": 2,
+        "name": "Help",
+        "description": "Ask for Help Here.",
+        "group": 4
+    }
+},
+    {
+    "model": "forums.forumtopic",
+    "pk": 8,
+    "fields": {
+        "old_id": null,
+        "sort_order": 3,
+        "name": "Tutorials",
+        "description": "Tutorials go here.",
+        "group": 4
+    }
+},
+        {
+    "model": "forums.forumtopic",
+    "pk": 9,
+    "fields": {
+        "old_id": null,
+        "sort_order": 1,
+        "name": "Thread Graveyard",
+        "description": "Put Threads you want hidden here.",
+        "group": 5
+    }
+},
+{
+    "model": "forums.forumthread",
+    "pk": 1,
+    "fields": {
+        "old_id": null,
+        "title": "Staff Announcements.",
+        "is_locked": false,
+        "is_sticky": true,
+        "created_at": "2018-04-13T14:52:58.484Z",
+        "created_by": 1,
+        "modified": false,
+        "modified_at": null,
+        "modified_by": null,
+        "topic": 1
+    }
+},
+    {
+    "model": "forums.forumthread",
+    "pk": 2,
+    "fields": {
+        "old_id": null,
+        "title": "Staff general posts go here.",
+        "is_locked": false,
+        "is_sticky": true,
+        "created_at": "2018-04-13T14:52:58.484Z",
+        "created_by": 1,
+        "modified": false,
+        "modified_at": null,
+        "modified_by": null,
+        "topic": 2
+    }
+},
+    {
+    "model": "forums.forumthread",
+    "pk": 3,
+    "fields": {
+        "old_id": null,
+        "title": "Welcome to The Site!!",
+        "is_locked": false,
+        "is_sticky": true,
+        "created_at": "2018-04-13T14:52:58.484Z",
+        "created_by": 1,
+        "modified": false,
+        "modified_at": null,
+        "modified_by": null,
+        "topic": 3
+    }
+},
+    {
+    "model": "forums.forumthread",
+    "pk": 4,
+    "fields": {
+        "old_id": null,
+        "title": "Introduce Yourself.",
+        "is_locked": false,
+        "is_sticky": true,
+        "created_at": "2018-04-13T14:52:58.484Z",
+        "created_by": 1,
+        "modified": false,
+        "modified_at": null,
+        "modified_by": null,
+        "topic": 4
+    }
+},
+    {
+    "model": "forums.forumthread",
+    "pk": 5,
+    "fields": {
+        "old_id": null,
+        "title": "You're invited!!",
+        "is_locked": false,
+        "is_sticky": true,
+        "created_at": "2018-04-13T14:52:58.484Z",
+        "created_by": 1,
+        "modified": false,
+        "modified_at": null,
+        "modified_by": null,
+        "topic": 5
+    }
+},
+    {
+    "model": "forums.forumthread",
+    "pk": 6,
+    "fields": {
+        "old_id": null,
+        "title": "Post bugs here.",
+        "is_locked": false,
+        "is_sticky": false,
+        "created_at": "2018-04-13T14:52:58.484Z",
+        "created_by": 1,
+        "modified": false,
+        "modified_at": null,
+        "modified_by": null,
+        "topic": 6
+    }
+},
+    {
+    "model": "forums.forumthread",
+    "pk": 7,
+    "fields": {
+        "old_id": null,
+        "title": "Ask for Help in here.",
+        "is_locked": false,
+        "is_sticky": true,
+        "created_at": "2018-04-13T14:52:58.484Z",
+        "created_by": 1,
+        "modified": false,
+        "modified_at": null,
+        "modified_by": null,
+        "topic": 7
+    }
+},
+    {
+    "model": "forums.forumthread",
+    "pk": 8,
+    "fields": {
+        "old_id": null,
+        "title": "Post tutorials here.",
+        "is_locked": false,
+        "is_sticky": true,
+        "created_at": "2018-04-13T14:52:58.484Z",
+        "created_by": 1,
+        "modified": false,
+        "modified_at": null,
+        "modified_by": null,
+        "topic": 8
+    }
+},
+        {
+    "model": "forums.forumthread",
+    "pk": 9,
+    "fields": {
+        "old_id": null,
+        "title": "Shit thread.",
+        "is_locked": false,
+        "is_sticky": true,
+        "created_at": "2018-04-13T14:52:58.484Z",
+        "created_by": 1,
+        "modified": false,
+        "modified_at": null,
+        "modified_by": null,
+        "topic": 9
+    }
+},
+    {
+    "model": "forums.forumpost",
+    "pk": 1,
+    "fields": {
+        "old_id": null,
+        "author": 1,
+        "body": "Welcome Everyone, we are so happy you have joined us!!",
+        "created_at": "2018-04-13T14:52:58.484Z",
+        "modified": false,
+        "modified_at": null,
+        "modified_by": null,
+        "thread": 3
+    }
+},
+        {
+    "model": "forums.forumpost",
+    "pk": 2,
+    "fields": {
+        "old_id": null,
+        "author": 1,
+        "body": "Please Delete me.",
+        "created_at": "2018-04-13T14:52:58.484Z",
+        "modified": false,
+        "modified_at": null,
+        "modified_by": null,
+        "thread": 9
+    }
+}
 
 ]

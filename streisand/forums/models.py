@@ -88,7 +88,7 @@ class ForumThread(models.Model):
         on_delete=models.SET_NULL,
     )
     modified = models.BooleanField(default=False)
-    modified_at = models.DateTimeField(auto_now=True)
+    modified_at = models.DateTimeField(auto_now=True, null=True)
     modified_by = models.ForeignKey(
         to='users.User',
         related_name='modified_threads',
@@ -144,7 +144,7 @@ class ForumPost(models.Model):
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     modified = models.BooleanField(default=False)
-    modified_at = models.DateTimeField(auto_now=True)
+    modified_at = models.DateTimeField(auto_now=True, null=True)
     modified_by = models.ForeignKey(
         to='users.User',
         related_name='modified_posts',

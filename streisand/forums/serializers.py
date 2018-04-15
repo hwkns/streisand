@@ -11,14 +11,11 @@ class ForumPostSerializer(ModelSerializer):
     topic_name = serializers.StringRelatedField(read_only=True, source='thread.topic')
     topic_id = serializers.PrimaryKeyRelatedField(read_only=True, source='thread.topic')
     thread_title = serializers.StringRelatedField(read_only=True, source='thread')
-    author_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
-    author_username = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True,
-                                                     source='author')
+    author_id = serializers.PrimaryKeyRelatedField(source='author', read_only=True)
+    author_username = serializers.StringRelatedField(source='author', read_only=True)
     body_html = serializers.SerializerMethodField()
-    modified_by_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(),
-                                                        read_only=True, source='modified_by')
-    modified_by_username = serializers.StringRelatedField(default=serializers.CurrentUserDefault(),
-                                                          read_only=True, source='modified_by')
+    modified_by_id = serializers.PrimaryKeyRelatedField(source='modified_by', read_only=True)
+    modified_by_username = serializers.StringRelatedField(source='modified_by', read_only=True)
 
     class Meta:
         model = ForumPost
@@ -45,7 +42,8 @@ class ForumPostSerializer(ModelSerializer):
 
 class ForumPostForThreadSerializer(ModelSerializer):
     body_bbcode_html = serializers.SerializerMethodField()
-    author_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
+    author_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(), read_only=True,
+                                                   source='author')
     author_username = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True,
                                                      source='author')
 
@@ -99,7 +97,7 @@ class ForumThreadSerializer(ModelSerializer):
 
 class ForumTopicSerializer(ModelSerializer):
     group_name = serializers.StringRelatedField(read_only=True, source='group')
-    latest_post = ForumPostSerializer()
+    latest_post = ForumPostSerializer(read_only=True)
     thread_link = serializers.HyperlinkedRelatedField(many=True, read_only=True,
                                                       source='threads', view_name='forum-thread-item-detail')
     thread_title = serializers.StringRelatedField(many=True, read_only=True, source='threads')
@@ -125,7 +123,7 @@ class ForumTopicSerializer(ModelSerializer):
         extra_kwargs = {
             'number_of_threads': {'read_only': True},
             'number_of_posts': {'read_only': True},
-            'latest_post':{'read_only': True}
+            'latest_post': {'read_only': True}
         }
 
 
@@ -159,10 +157,8 @@ class ForumTopicDataSerializer(ModelSerializer):
 class ForumThreadIndexSerializer(ModelSerializer):
     group_name = serializers.StringRelatedField(read_only=True, source='topic.group')
     group_id = serializers.PrimaryKeyRelatedField(read_only=True, source='topic.group')
-    created_by_id = serializers.PrimaryKeyRelatedField(default=serializers.CurrentUserDefault(),
-                                                       read_only=True, source='created_by')
-    created_by_username = serializers.StringRelatedField(
-        default=serializers.CurrentUserDefault(), source='created_by', read_only=True)
+    created_by_id = serializers.PrimaryKeyRelatedField(source='created_by', read_only=True)
+    created_by_username = serializers.StringRelatedField(source='created_by', read_only=True)
     topic_title = serializers.StringRelatedField(read_only=True, source='topic')
     latest_post_author_username = serializers.StringRelatedField(source='latest_post.author', read_only=True)
     latest_post_author_id = serializers.PrimaryKeyRelatedField(source='latest_post.author', read_only=True)
@@ -191,7 +187,7 @@ class ForumThreadIndexSerializer(ModelSerializer):
 
 
 class ForumGroupSerializer(ModelSerializer):
-    topic_count = serializers.IntegerField(source='topics.count')
+    topic_count = serializers.IntegerField(source='topics.count', read_only=True)
     topics_data = ForumTopicDataSerializer(many=True, source='topics', read_only=True)
 
     class Meta:
@@ -207,7 +203,7 @@ class ForumGroupSerializer(ModelSerializer):
 
 
 class ForumThreadSubscriptionSerializer(ModelSerializer):
-    user = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = ForumThreadSubscription

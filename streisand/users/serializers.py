@@ -6,15 +6,13 @@ from django.contrib.auth.models import Group
 from invites.models import Invite
 
 from .models import User
-from invites.serializers import InviteSerializer
 from rest_framework.serializers import (
     CharField,
     EmailField,
-    HyperlinkedIdentityField,
     ModelSerializer,
-    SerializerMethodField,
     ValidationError
-    )
+)
+
 
 class ChangePasswordSerializer(serializers.Serializer):
     """
@@ -35,7 +33,6 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class AdminUserProfileSerializer(serializers.ModelSerializer):
-
     user_class_rank = serializers.PrimaryKeyRelatedField(source='user_class', read_only=True)
     user_class = serializers.StringRelatedField()
 
@@ -73,11 +70,10 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
             'torrents',
         )
 
-        extra_kwargs = {'password': {'write_only': True,}}
+        extra_kwargs = {'password': {'write_only': True, }}
 
 
 class OwnedUserProfileSerializer(AdminUserProfileSerializer):
-
     class Meta(AdminUserProfileSerializer.Meta):
         fields = (
             'id',
@@ -125,7 +121,6 @@ class PublicUserProfileSerializer(OwnedUserProfileSerializer):
 
 
 class DisplayUserProfileSerializer(PublicUserProfileSerializer):
-
     class Meta(PublicUserProfileSerializer.Meta):
         fields = (
             'id',
@@ -137,12 +132,12 @@ class DisplayUserProfileSerializer(PublicUserProfileSerializer):
             'avatar_url',
         )
 
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     email = EmailField(label='Email Address')
     email2 = EmailField(label='Confirm Email')
 
     invite_key = serializers.PrimaryKeyRelatedField(source='invited_by.key', queryset=Invite.objects.all())
-
 
     class Meta:
         model = User
@@ -153,11 +148,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             'password',
             'invite_key',
 
-
         ]
-        extra_kwargs = {"password":
-                            {"write_only": True}
-                        }
+        extra_kwargs = {
+            "password": {
+                'write_only': True}
+        }
 
     def validate(self, data):
         # email = data['email']
@@ -199,9 +194,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         email = validated_data['email']
         password = validated_data['password']
         user_obj = User(
-                username=username,
-                email=email
-            )
+            username=username,
+            email=email
+        )
         user_obj.set_password(password)
         user_obj.save()
         return validated_data
@@ -221,7 +216,7 @@ class UserLoginSerializer(ModelSerializer):
         ]
         extra_kwargs = {"password":
                             {"write_only": True}
-                            }
+                        }
 
     def validate(self, data):
         # email = data['email']

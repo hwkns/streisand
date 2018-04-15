@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from www.utils import paginate
 from www.pagination import ForumsPageNumberPagination
+from www.permissions import IsOwnerOrReadOnly
 from .forms import ForumPostForm
 from .models import ForumGroup, ForumTopic, ForumThread, ForumPost, ForumThreadSubscription
 from .serializers import (
@@ -69,6 +70,9 @@ class ForumTopicViewSet(ModelViewSet):
             queryset = queryset.filter(group_id=group_id)
 
         return queryset
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class ForumThreadIndexViewSet(ModelViewSet):
@@ -152,7 +156,7 @@ class ForumThreadItemViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, m
 
     def partial_update(self, request, pk=None):
         serializer = ForumThreadSerializer(request.user, data=request.data, partial=True)
-        serializer.save()
+        serializer.save(modified_by=self.request.user)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
     serializer_class = ForumThreadSerializer
@@ -177,14 +181,20 @@ class ForumThreadItemViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, m
 
         return queryset
 
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save(modified_by=self.request.user)
+
 
 class ForumPostViewSet(ModelViewSet):
     """
     API endpoint that allows ForumPosts to be created, viewed, edited or deleted.
     Please Note: Pagination is set to Page Number Pagination.
     """
-    permission_classes = [IsAuthenticated]
     serializer_class = ForumPostSerializer
+    permission_classes = [IsAuthenticated]
     queryset = ForumPost.objects.all().prefetch_related(
         'thread',
         'thread__topic',
@@ -195,7 +205,9 @@ class ForumPostViewSet(ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumPostFilter
     pagination_class = ForumsPageNumberPagination
+    
 
+    
     def get_queryset(self):
 
         queryset = super().get_queryset().accessible_to_user(self.request.user)
@@ -205,6 +217,13 @@ class ForumPostViewSet(ModelViewSet):
             queryset = queryset.filter(thread_id=thread_id)
 
         return queryset
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user
+                        )
+
+    def perform_update(self, serializer):
+        serializer.save(modified_by=self.request.user)
 
 
 class ForumThreadSubscriptionViewSet(ModelViewSet):
@@ -219,6 +238,12 @@ class ForumThreadSubscriptionViewSet(ModelViewSet):
         'thread',
     ).order_by('-thread').distinct('thread')
     pagination_class = ForumsPageNumberPagination
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save(modified_by=self.request.user)
 
 
 class NewsPostViewSet(ModelViewSet):

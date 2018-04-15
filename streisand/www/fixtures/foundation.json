@@ -347,58 +347,42 @@
             "issued_at": "2014-09-18T14:52:58.484Z"
         }
     },
-    {
-        "pk": "16fd2706-8baf-433b-82eb-8c7fada847db",
-        "model": "users.userannouncekey",
-        "fields": {
-            "user": 2,
-            "issued_at": "2014-09-18T14:52:58.484Z"
-        }
-    },
-    {
-        "pk": 1,
-        "model": "users.user",
-        "fields": {
-            "username": "admin",
-            "email": "dolan@gooby.pls",
-            "password": "argon2$argon2i$v=19$m=512,t=2,p=2$d0xuUDRhaUtvdThJ$wr4ngN2Nmk9jV0hb860zAQ",
-            "is_active": true,
-            "is_staff": true,
-            "is_superuser": true,
-            "date_joined": "2014-09-18T14:52:58.484Z",
-            "last_login": "2014-09-18T14:53:14.260Z",
-            "groups": [],
-            "first_name": "",
-            "last_name": "",
-            "user_permissions": [],
-            "user_class": 18,
-            "announce_key": "16fd2706-8baf-433b-82eb-8c7fada847da",
-            "bytes_uploaded": 0,
-            "bytes_downloaded": 0,
-            "log_successful_announces": true
-        }
-    },
-        {
-        "pk": 2,
-        "model": "users.user",
-        "fields": {
-            "username": "api",
-            "email": "api@gooby.pls",
-            "password": "",
-            "is_active": true,
-            "is_staff": true,
-            "is_superuser": true,
-            "date_joined": "2016-09-18T14:52:58.484Z",
-            "last_login": "2016-09-18T14:53:14.260Z",
-            "groups": [],
-            "first_name": "",
-            "last_name": "",
-            "user_permissions": [],
-            "user_class": 18,
-            "announce_key": "16fd2706-8baf-433b-82eb-8c7fada847db",
-            "bytes_uploaded": 0,
-            "bytes_downloaded": 0,
-            "log_successful_announces": true
-        }
+{    "model": "users.user",
+    "pk": 1,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$R0VhZlE2ekdocUtq$gPpl0+Nk5+NRq6ni+YnXaw",
+        "last_login": "2018-04-15T12:58:23.736Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "dolan@gooby.pls",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2014-09-18T14:52:58.484Z",
+        "old_id": null,
+        "user_class": 18,
+        "is_donor": false,
+        "account_status": "enabled",
+        "failed_login_attempts": 0,
+        "announce_key": "16fd2706-8baf-433b-82eb-8c7fada847da",
+        "torrent_download_key": null,
+        "avatar_url": null,
+        "custom_title": null,
+        "profile_description": "Admin User",
+        "staff_notes": null,
+        "irc_key": null,
+        "invited_by": null,
+        "invite_count": 0,
+        "bytes_uploaded": 0,
+        "bytes_downloaded": 0,
+        "log_successful_announces": false,
+        "last_seeded": null,
+        "average_seeding_size": 0,
+        "watch_queue": null,
+        "groups": [],
+        "user_permissions": []
     }
+
+}
 ]
