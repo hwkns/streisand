@@ -1,15 +1,6 @@
 [
     {
         "pk": 1,
-        "model": "films.collection",
-        "fields": {
-            "creator": "1",
-            "title": "Quentin Tarantino Films",
-            "description": "Quentin Jerome Tarantino (born March 27, 1963) is an American film director, screenwriter, cinematographer, producer, and actor. His films are characterized by non-linear storylines, satirical subject matter, and an aestheticization of violence, as well as features of neo-noir film and spaghetti Westerns."
-        }
-    },
-    {
-        "pk": 1,
         "model": "films.film",
         "fields": {
             "title": "Pulp Fiction",
@@ -48,22 +39,6 @@
             "rating": 8.3,
             "rating_vote_count": 521392,
             "runtime_in_minutes": 153
-        }
-    },
-    {
-        "pk": 1,
-        "model": "films.collection.film",
-        "fields": {
-            "film": 1,
-            "collection": 1
-        }
-    },
-    {
-        "pk": 2,
-        "model": "films.collection.film",
-        "fields": {
-            "film": 2,
-            "collection": 1
         }
     },
     {
@@ -121,5 +96,71 @@
         "pk": "884985f97cc25c246e37a07cd7c785993982a7cb",
         "model": "tracker.swarm",
         "fields": {}
+    },
+        {
+        "pk": 1,
+        "model": "forums.ForumGroup",
+        "fields": {
+            "sort_order": 1,
+            "name": "Staff"
+        }
+    },
+        {
+        "pk": 2,
+        "model": "forums.ForumGroup",
+        "fields": {
+            "sort_order": 2,
+            "name": "General Discussions"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "forums.ForumTopic",
+        "fields": {
+            "sort_order": 1,
+            "group": 1,
+            "name": "Staff Announcements",
+            "description": "JumpCut Announcements for Staff",
+            "minimum_user_class": 15,
+            "staff_only_thread_creation": true
+        }
+    },
+{
+        "pk": 2,
+        "model": "forums.ForumTopic",
+        "fields": {
+            "sort_order": 2,
+            "group": 2,
+            "name": "Announcements",
+            "description": "JumpCut Announcements",
+            "minimum_user_class": 1,
+            "staff_only_thread_creation": true
+        }
+    },
+{
+        "pk": 1,
+        "model": "forums.ForumThread",
+        "fields": {
+            "topic": 2,
+            "title": "News",
+            "is_locked": false,
+            "is_sticky": true,
+            "created_by": 1,
+            "created_at":"2018-04-13T14:52:58.484Z",
+            "modified_at":"2018-04-13T14:52:58.484Z"
+        }
+    },
+{
+        "pk": 1,
+        "model": "forums.ForumPost",
+        "fields": {
+            "thread":1,
+            "author": 1,
+            "body": "Nice",
+            "created_at":"2018-04-13T14:52:58.484Z",
+            "modified_at":"2018-04-13T14:52:58.484Z"
+        }
     }
+
+
 ]

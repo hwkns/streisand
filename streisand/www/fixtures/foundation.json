@@ -348,6 +348,14 @@
         }
     },
     {
+        "pk": "16fd2706-8baf-433b-82eb-8c7fada847db",
+        "model": "users.userannouncekey",
+        "fields": {
+            "user": 2,
+            "issued_at": "2014-09-18T14:52:58.484Z"
+        }
+    },
+    {
         "pk": 1,
         "model": "users.user",
         "fields": {
@@ -365,6 +373,29 @@
             "user_permissions": [],
             "user_class": 18,
             "announce_key": "16fd2706-8baf-433b-82eb-8c7fada847da",
+            "bytes_uploaded": 0,
+            "bytes_downloaded": 0,
+            "log_successful_announces": true
+        }
+    },
+        {
+        "pk": 2,
+        "model": "users.user",
+        "fields": {
+            "username": "api",
+            "email": "api@gooby.pls",
+            "password": "",
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "date_joined": "2016-09-18T14:52:58.484Z",
+            "last_login": "2016-09-18T14:53:14.260Z",
+            "groups": [],
+            "first_name": "",
+            "last_name": "",
+            "user_permissions": [],
+            "user_class": 18,
+            "announce_key": "16fd2706-8baf-433b-82eb-8c7fada847db",
             "bytes_uploaded": 0,
             "bytes_downloaded": 0,
             "log_successful_announces": true
