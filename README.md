@@ -48,8 +48,23 @@ Cmnd_Alias VAGRANT_NFSD_APPLY = /usr/sbin/exportfs -ar
 
 - `clean_slate`
 
-As the name suggests, that command will always bring you back to that starting state.  Now, for
-tinkering, it's fine to use Django's built-in server to run the site and/or the tracker:
+As the name suggests, that command will always bring you back to that starting state.
+
+Currently the admin user password it creates is hashed and salted using argon2. I would recomment that you use the function:
+
+- `m changepassword admin`
+
+To enter a new password for testing. 
+
+You may also add in fixtures to add in dummy forums, and 2 more users.
+
+you can do this by entering:
+
+- `m loaddata dev`
+
+The users are api, and user1.
+
+Now, for tinkering, it's fine to use Django's built-in server to run the site and/or the tracker:
 
 - `runserver`
 - `runtracker`
