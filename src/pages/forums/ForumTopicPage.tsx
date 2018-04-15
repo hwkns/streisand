@@ -21,6 +21,7 @@ type ConnectedState = {
     page: number;
     topicId: number;
     loading: boolean;
+    loaded: boolean;
     topic?: IForumTopic;
 };
 
@@ -37,7 +38,7 @@ class ForumTopicPageComponent extends React.Component<CombinedProps, void> {
     }
 
     public componentWillReceiveProps(props: CombinedProps) {
-        if (!props.loading && (!props.topic || props.page !== this.props.page)) {
+        if (!props.loading && !props.loaded) {
             this.props.getThreads(props.topicId, props.page);
         }
     }
@@ -45,7 +46,7 @@ class ForumTopicPageComponent extends React.Component<CombinedProps, void> {
     public render() {
         const topic = this.props.topic;
         if (!topic) {
-            return <Empty loading={true} />;
+            return <Empty loading={this.props.loading} />;
         }
 
         return (
@@ -61,12 +62,14 @@ const mapStateToProps = (state: Store.All, ownProps: Props): ConnectedState => {
     const page = topicPages && topicPages.pages[pageNumber];
     const item = state.sealed.forums.topics.byId[topicId];
     const topic = !isLoadingItem(item) && item || undefined;
+    const loading = page ? page.loading : false;
 
     return {
         topic: topic,
         page: pageNumber,
         topicId: topicId,
-        loading: page ? page.loading : false
+        loading: loading,
+        loaded: !!(!loading && page && page.items)
     };
 };
 
