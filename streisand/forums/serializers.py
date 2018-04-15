@@ -122,6 +122,12 @@ class ForumTopicSerializer(ModelSerializer):
             'latest_post',
         )
 
+        extra_kwargs = {
+            'number_of_threads': {'read_only': True},
+            'number_of_posts': {'read_only': True},
+            'latest_post':{'read_only': True}
+        }
+
 
 class ForumTopicDataSerializer(ModelSerializer):
     latest_post_id = serializers.PrimaryKeyRelatedField(source='latest_post.id', read_only=True)
