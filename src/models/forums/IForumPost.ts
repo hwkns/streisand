@@ -5,11 +5,14 @@ export interface IForumPostResponse {
     threadTitle: string;
     topicId: number;
     topicName: string;
-    author: string;
+    authorId: number;
+    authorUsername: string;
     body: string;
     bodyHtml: string;
     createdAt: string; // Date
     modifiedAt: string; // Date
+    modifiedById: number;
+    modifiedByUsername: string;
 }
 
 export interface IForumPost {
@@ -19,6 +22,7 @@ export interface IForumPost {
     createdAt: string; // Date
     body?: string;
     modifiedAt?: string; // Date
+    modifiedBy?: number;
 }
 
 export default IForumPost;

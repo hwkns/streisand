@@ -3,7 +3,6 @@ import { RouterState } from 'react-router-redux';
 import IUser from '../models/IUser';
 import IFilm from '../models/IFilm';
 import IWiki from '../models/IWiki';
-import INewsPost from '../models/INewsPost';
 import IAuthInfo from '../models/IAuthInfo';
 import IDeviceInfo from '../models/IDeviceInfo';
 import ILocationInfo from '../models/ILocationInfo';
@@ -17,7 +16,7 @@ namespace Store {
     export type Wikis = IPagedItemSet<IWiki> & {
         creating: boolean;
     };
-    export type News = { latest: INewsPost | null; loading: boolean; };
+    export type News = { latest: number | null; loading: boolean; };
     export type CurrentUser = { id: number | null; loading: boolean; };
 
     export type UserSealed = {

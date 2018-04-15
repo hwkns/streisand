@@ -1,7 +1,7 @@
 import IPagedResponse from '../../models/base/IPagedResponse';
 import { IForumPostResponse } from '../../models/forums/IForumPost';
 import { IForumThreadResponse } from '../../models/forums/IForumThread';
-import { IForumGroupResponse, IForumGroupData} from '../../models/forums/IForumGroup';
+import { IForumGroupResponse, IForumGroupData } from '../../models/forums/IForumGroup';
 
 export function transformGroups(response: IPagedResponse<IForumGroupResponse>): IForumGroupData {
     const result: IForumGroupData = {
@@ -138,23 +138,67 @@ export function transformThread(response: IPagedResponse<IForumPostResponse>): I
         result.posts.push({
             id: post.id,
             thread: post.thread,
-            author: 10437, // TODO: fix this when the field gets added to the API
+            author: post.authorId,
             createdAt: post.createdAt,
             modifiedAt: post.modifiedAt,
-            body: post.body
+            body: post.body,
+            modifiedBy: post.modifiedById
         });
 
         // post creater
         result.users.push({
-            id: 10437, // TODO: fix this when the field gets added to the API
-            username: post.author
+            id: post.authorId,
+            username: post.authorUsername
         });
 
         // post modifier
-        // result.users.push({
-        //     id: 10437, // TODO: fix this when the field gets added to the API
-        //     username: 'neebs' // TODO: fix this when the field gets added to the API
-        // });
+        if (post.modifiedById) {
+            result.users.push({
+                id: post.modifiedById,
+                username: post.modifiedByUsername
+            });
+        }
+    }
+
+    return result;
+}
+
+export function transformPost(post: IForumPostResponse): IForumGroupData {
+    if (!post || !post.id) {
+        return { groups: [], topics: [], threads: [], posts: [], users: [] };
+    }
+    const result: IForumGroupData = {
+        groups: [],
+        topics: [{
+            id: post.topicId,
+            title: post.topicName
+        }],
+        threads: [{
+            id: post.thread,
+            title: post.threadTitle,
+            topic: post.topicId
+        }],
+        posts: [{
+            id: post.id,
+            thread: post.thread,
+            author: post.authorId,
+            createdAt: post.createdAt,
+            modifiedAt: post.modifiedAt,
+            body: post.body,
+            modifiedBy: post.modifiedById
+        }],
+        users: [{
+            id: post.authorId,
+            username: post.authorUsername
+        }]
+    };
+
+    // post modifier
+    if (post.modifiedById) {
+        result.users.push({
+            id: post.modifiedById,
+            username: post.modifiedByUsername
+        });
     }
 
     return result;

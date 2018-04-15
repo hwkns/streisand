@@ -1,12 +1,14 @@
 import Store from '../store';
 import Action from '../actions/NewsAction';
-import INewsPost from '../models/INewsPost';
 import { combineReducers } from './helpers';
 
-function latest(state: INewsPost | null = null, action: Action): INewsPost | null {
+function latest(state: number | null = null, action: Action): number | null {
     switch (action.type) {
         case 'RECEIVED_NEWS_POST':
-            return action.post;
+            if (action.data.posts.length) {
+                return action.data.posts[0].id;
+            }
+            return state;
         default:
             return state;
     }

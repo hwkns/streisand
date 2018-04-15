@@ -30,7 +30,7 @@ function failure(id: number): Action {
 }
 
 export function getUser(id: number): ThunkAction<Action> {
-    const errorPrefix = `Fetching film (${id}) failed`;
+    const errorPrefix = `Fetching user (${id}) failed`;
     return fetchData({ fetch, fetching, received, failure, errorPrefix, props: id });
 }
 
