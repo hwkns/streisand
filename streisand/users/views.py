@@ -2,7 +2,7 @@
 
 from django.contrib.auth.models import Group
 from django.shortcuts import render, get_object_or_404
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from www.permissions import IsOwnerOrReadOnly
 from rest_framework.response import Response
@@ -68,6 +68,7 @@ class ChangePasswordView(UpdateAPIView):
 
 
 class CurrentUserView(APIView):
+    # TODO: Add permissions for current userview to show for only the current user.
     def get(self, request):
         serializer = OwnedUserProfileSerializer(request.user)
         return Response(serializer.data)

@@ -11,7 +11,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from www.utils import paginate
 from www.pagination import ForumsPageNumberPagination
-from www.permissions import IsOwnerOrReadOnly
 from .forms import ForumPostForm
 from .models import ForumGroup, ForumTopic, ForumThread, ForumPost, ForumThreadSubscription
 from .serializers import (
@@ -205,9 +204,7 @@ class ForumPostViewSet(ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ForumPostFilter
     pagination_class = ForumsPageNumberPagination
-    
 
-    
     def get_queryset(self):
 
         queryset = super().get_queryset().accessible_to_user(self.request.user)

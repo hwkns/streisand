@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework.viewsets import ModelViewSet
-from django_filters import rest_framework as filters
-
 from rest_framework.permissions import IsAuthenticated
 from .serializers import InviteSerializer
-
 
 from .models import Invite
 

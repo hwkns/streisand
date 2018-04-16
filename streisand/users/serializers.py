@@ -134,6 +134,7 @@ class DisplayUserProfileSerializer(PublicUserProfileSerializer):
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    # TODO: Fix this.
     email = EmailField(label='Email Address')
     email2 = EmailField(label='Confirm Email')
 
@@ -214,8 +215,7 @@ class UserLoginSerializer(ModelSerializer):
             'password',
 
         ]
-        extra_kwargs = {"password":
-                            {"write_only": True}
+        extra_kwargs = {"password": {"write_only": True}
                         }
 
     def validate(self, data):
