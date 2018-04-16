@@ -17,7 +17,7 @@
       - postgresql-9.5
       - postgresql-contrib-9.5
       - libpq-dev                # Required for Ansible to interact with postgres
-      - python-psycopg2          # Required for creating postgres user
+      - python3-psycopg2          # Required for creating postgres user
 
 - name: allow password authentication for local socket users
   become: yes
