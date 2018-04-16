@@ -44,6 +44,7 @@ coverage.xml
 # Vagrant
 .vagrant/
 *.box
+provision/vagrant.retry
 
 # Redis
 dump.rdb
