@@ -65,11 +65,6 @@ class TorrentRequest(models.Model):
         on_delete=models.SET_NULL,
     )
 
-    class Meta:
-        permissions = (
-            ('can_request', "Can make new torrent requests"),
-        )
-
     def __str__(self):
         return 'Request for "{film_title}" ({year}) - {format}'.format(
             film_title=self.film_title,
