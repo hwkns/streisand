@@ -29,11 +29,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, host: 7070, guest: 7070
   config.vm.network :forwarded_port, host: 8000, guest: 8000
 
-  if os == :macosx || os == :linux
-    config.vm.synced_folder ".", "/var/www/streisand", :id => "vagrant-root", :nfs => true
-  else
-    config.vm.synced_folder ".", "/var/www/streisand", :id => "vagrant-root"
-  end
+  config.vm.synced_folder ".", "/var/www/streisand", :id => "vagrant-root"
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   config.vm.provider "virtualbox" do |v|
@@ -43,5 +39,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "ansible" do |ansible|
         ansible.playbook = "provision/vagrant.yml"
+        ansible.extra_vars = {
+          ansible_python_interpreter: "/usr/bin/python3"
+        }
   end
 end
