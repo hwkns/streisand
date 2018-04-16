@@ -33,15 +33,11 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class AdminUserProfileSerializer(serializers.ModelSerializer):
-    user_class_rank = serializers.PrimaryKeyRelatedField(source='user_class', read_only=True)
-    user_class = serializers.StringRelatedField()
-
     class Meta:
         model = User
         fields = (
             'id',
             'user_class',
-            'user_class_rank',
             'last_login',
             'username',
             'email',

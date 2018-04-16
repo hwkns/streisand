@@ -32,12 +32,13 @@ class ForumTopic(models.Model):
         null=False,
         on_delete=models.PROTECT,
     )
-    minimum_user_class = models.ForeignKey(
-        to='users.UserClass',
-        related_name='unlocked_forum_topics',
-        null=True,
-        on_delete=models.SET_NULL,
-    )
+    # TODO - find another way to encode this information with new system
+    # minimum_user_class = models.ForeignKey(
+    #     to='users.UserClass',
+    #     related_name='unlocked_forum_topics',
+    #     null=True,
+    #     on_delete=models.SET_NULL,
+    # )
     staff_only_thread_creation = models.BooleanField(default=False)
     number_of_threads = models.PositiveIntegerField(default=0)
     number_of_posts = models.PositiveIntegerField(default=0)

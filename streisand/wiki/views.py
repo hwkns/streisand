@@ -30,6 +30,7 @@ class WikiArticleCreateUpdateDestroyViewSet(mixins.CreateModelMixin,
     serializer_class = WikiCreateUpdateDestroySerializer
     filter_backends = [SearchFilter, OrderingFilter]
     permission_classes = [IsAdminUser]
+    # TODO user class rework
     search_fields = ['title', 'created_by__username', 'read_access_minimum_user_class__username__userclass']
     pagination_class = WikiPageNumberPagination  # PageNumberPagination
 

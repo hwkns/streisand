@@ -12,6 +12,8 @@ from django.utils.timezone import now
 from tracker.models import Peer
 from www.utils import ratio
 
+from . import user_classes
+
 
 class User(AbstractUser):
 
@@ -25,12 +27,7 @@ class User(AbstractUser):
 
     old_id = models.PositiveIntegerField(null=True, db_index=True)
 
-    user_class = models.ForeignKey(
-        to='users.UserClass',
-        related_name='users',
-        null=True,
-        on_delete=models.SET_NULL,
-    )
+    user_class = models.CharField(max_length=20, choices=user_classes.CLASSES_CHOICES)
     is_donor = models.BooleanField(default=False)
     account_status = models.CharField(
         max_length=32,
@@ -38,6 +35,7 @@ class User(AbstractUser):
         default='enabled',
         db_index=True,
     )
+
     failed_login_attempts = models.PositiveIntegerField(default=0)
     announce_key = models.OneToOneField(
         to='users.UserAnnounceKey',
@@ -90,15 +88,16 @@ class User(AbstractUser):
         on_delete=models.SET_NULL,
     )
 
-    class Meta:
-        permissions = (
-            ('can_invite', "Can invite new users"),
-            ('unlimited_invites', "Can invite unlimited new users"),
-            ('custom_title', "Can edit own custom title"),
-        )
+    # For predicates
+    invites_disabled = models.BooleanField(default=False, help_text="Disable invites, outside of "
+                                           "normal restrictions")
 
     def __str__(self):
         return self.username
+
+    @property
+    def user_class_title(self):
+        return dict(user_classes.CLASSES_CHOICES).get(self.user_class)
 
     @property
     def last_seen(self):
@@ -195,26 +194,6 @@ class User(AbstractUser):
             # Issue new key
             self.torrent_download_key = self.torrent_download_keys.create()
             self.save()
-
-
-class UserClass(models.Model):
-
-    old_id = models.PositiveIntegerField(null=True, db_index=True)
-
-    name = models.CharField(db_index=True, max_length=128)
-    rank = models.PositiveSmallIntegerField(db_index=True)
-    is_staff = models.BooleanField(default=False, db_index=True)
-    permissions = models.ManyToManyField(
-        to='auth.Permission',
-        related_name='user_classes',
-        blank=True,
-    )
-
-    class Meta:
-        ordering = ['rank']
-
-    def __str__(self):
-        return self.name
 
 
 class UserEmailAddress(models.Model):

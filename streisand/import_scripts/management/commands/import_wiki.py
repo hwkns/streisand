@@ -43,5 +43,6 @@ class Command(MySQLCommand):
 
         WikiArticle.objects.filter(id=article.id).update(modified_at=modified_at.replace(tzinfo=UTC))
 
+    # TODO user class rework before merge
     def pre_sql(self):
         self.moderator_user_class = UserClass.objects.get(name='Moderator')

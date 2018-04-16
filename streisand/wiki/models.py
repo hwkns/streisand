@@ -26,6 +26,7 @@ class WikiArticle(models.Model):
     )
     title = models.CharField(max_length=256)
     body = models.TextField()
+    # TODO user class rework
     read_access_minimum_user_class = models.ForeignKey(
         to='users.UserClass',
         related_name='wiki_articles_with_read_access',
