@@ -39,5 +39,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "ansible" do |ansible|
         ansible.playbook = "provision/vagrant.yml"
+        ansible.extra_vars = {
+          ansible_python_interpreter: "/usr/bin/python3"
+        }
   end
 end
