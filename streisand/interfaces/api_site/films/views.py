@@ -100,5 +100,3 @@ class FilmViewSet(ModelViewSet):
             queryset = queryset.filter(tags__name=self.request.query_params['tag'])
 
         return queryset
-
-
