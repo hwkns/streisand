@@ -2,7 +2,7 @@
 
 from django.conf.urls import url, include
 from rest_framework import routers
-from rest_framework.authtoken.views import obtain_auth_token
+from knox import views as knox_views
 
 from .invites import views as invites_views
 from .films import views as films_views
@@ -11,6 +11,7 @@ from .tracker import views as tracker_views
 from .users import views as users_views
 from .forums import views as forums_views
 from .wiki import views as wiki_views
+
 
 router = routers.DefaultRouter()
 
@@ -57,13 +58,15 @@ urlpatterns = [
 
     # Router URLs
     url(r'^', include(router.urls)),
-    url(r'^auth', obtain_auth_token),
+    url(r'api-obtain-token/', include('knox.urls')),
 
     # DRF browsable API
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^current-user/', users_views.CurrentUserView.as_view()),
     url(r'^change-password/', users_views.ChangePasswordView.as_view()),
-    url(r'^login/$', users_views.UserLoginAPIView.as_view(), name='login'),
+    url(r'login/', users_views.UserLoginAPIView.as_view(), name='knox_login'),
+    url(r'logout/', knox_views.LogoutView.as_view(), name='knox_logout'),
+    url(r'logoutall/', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
     url(r'^register/$', users_views.UserRegisterView.as_view(), name='register'),
 
 ]

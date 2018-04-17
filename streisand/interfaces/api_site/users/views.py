@@ -1,25 +1,28 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.models import Group
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from django.http import Http404, request
 from www.permissions import IsOwnerOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from django_filters import rest_framework as filters
-from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.generics import UpdateAPIView, CreateAPIView
+from rest_framework.generics import UpdateAPIView, CreateAPIView, RetrieveAPIView
 from .filters import UserFilter, PublicUserFilter
 from www.pagination import UserPageNumberPagination
 from users.models import User
 from .serializers import GroupSerializer, AdminUserProfileSerializer, \
     OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer, UserRegistrationSerializer, \
     UserLoginSerializer
+from knox.views import LoginView as KnoxLoginView
+from rest_framework.authentication import SessionAuthentication
 
 
-class UserLoginAPIView(APIView):
-    permission_classes = [AllowAny]
+class UserLoginAPIView(KnoxLoginView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = UserLoginSerializer
 
     def post(self, request, *args, **kwargs):
@@ -43,7 +46,7 @@ class ChangePasswordView(UpdateAPIView):
     """
     serializer_class = ChangePasswordSerializer
     model = User
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = [IsOwnerOrReadOnly]
 
     def get_object(self, queryset=None):
         obj = self.request.user
@@ -65,10 +68,29 @@ class ChangePasswordView(UpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CurrentUserView(APIView):
-    # TODO: Add permissions for current userview to show for only the current user.
-    def get(self, request):
-        serializer = OwnedUserProfileSerializer(request.user)
+class CurrentUserView(RetrieveAPIView):
+    serializer_class = OwnedUserProfileSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+
+    def get_queryset(self):
+        return User.objects.filter(user=self.request.user)
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+
+    def retrieve_last(self):
+
+        queryset = self.filter_queryset(self.get_queryset())
+
+        try:
+            obj = queryset.latest('salted_token_id_and_user')
+        except queryset.model.DoesNotExist:
+            raise Http404('No %s matches the given query.' % queryset.model._meta.object_name)
+
+        self.check_object_permissions(self.request, obj)
+
+        serializer = self.get_serialezer(request.user, obj)
         return Response(serializer.data)
 
 

@@ -6,12 +6,6 @@ from django.contrib.auth.models import Group
 from invites.models import Invite
 
 from users.models import User
-from rest_framework.serializers import (
-    CharField,
-    EmailField,
-    ModelSerializer,
-    ValidationError
-)
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -74,7 +68,10 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
 
 
 class OwnedUserProfileSerializer(AdminUserProfileSerializer):
-    class Meta(AdminUserProfileSerializer.Meta):
+    salted_token_id_and_user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User(AdminUserProfileSerializer.Meta)
         fields = (
             'id',
             'username',
@@ -92,9 +89,16 @@ class OwnedUserProfileSerializer(AdminUserProfileSerializer):
             'bytes_uploaded',
             'bytes_downloaded',
             'last_seeded',
+            'salted_token_id_and_user',
         )
 
-        extra_kwargs = {'username': {'read_only': True, 'required': True}}
+    extra_kwargs = {'username': {'read_only': True, 'required': True}}
+
+    # String representation of the DRF Knox salted token and user name.
+
+    @staticmethod
+    def get_salted_token_id_and_user(user):
+        return '%s' % (user.auth_token_set.last())
 
 
 class PublicUserProfileSerializer(OwnedUserProfileSerializer):
@@ -134,9 +138,7 @@ class DisplayUserProfileSerializer(PublicUserProfileSerializer):
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    # TODO: Fix this.
-    email = EmailField(label='Email Address')
-    email2 = EmailField(label='Confirm Email')
+    email = serializers.EmailField(label='Email Address')
 
     invite_key = serializers.PrimaryKeyRelatedField(source='invited_by.key', queryset=Invite.objects.all())
 
@@ -164,30 +166,17 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def validate_email(self, value):
         data = self.get_initial()
-        email1 = data.get("email2")
-        email2 = value
-        if email1 != email2:
-            raise ValidationError("Emails must match.")
-
-        user_qs = User.objects.filter(email=email2)
+        user_qs = User.objects.filter(email=value)
         if user_qs.exists():
-            raise ValidationError("This user has already registered.")
+            raise serializers.ValidationError("This email has already been used")
 
-        return value
-
-    def validate_email2(self, value):
-        data = self.get_initial()
-        email1 = data.get("email")
-        email2 = value
-        if email1 != email2:
-            raise ValidationError("Emails must match.")
         return value
 
     def validate_invite_key(self, value):
         data = self.get_initial()
         self.invite_key = data.get("invite_key")
         if not Invite.objects.is_valid(self.invite_key):
-            raise ValidationError("key must match.")
+            raise serializers.ValidationError("Invalid invite key")
         return value
 
     def create(self, validated_data):
@@ -203,9 +192,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return validated_data
 
 
-class UserLoginSerializer(ModelSerializer):
-    username = CharField()
-    email = EmailField(label='Email Address')
+class UserLoginSerializer(serializers.ModelSerializer):
+    username = serializers.CharField()
+    email = serializers.EmailField(label='Email Address')
 
     class Meta:
         model = User
@@ -215,8 +204,7 @@ class UserLoginSerializer(ModelSerializer):
             'password',
 
         ]
-        extra_kwargs = {"password": {"write_only": True}
-                        }
+        extra_kwargs = {"password": {"write_only": True}}
 
     def validate(self, data):
         # email = data['email']
