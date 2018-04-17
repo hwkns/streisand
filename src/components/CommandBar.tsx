@@ -19,7 +19,7 @@ function CommandBar(props: Props) {
     });
     return (
         <div className="well well-sm text-center">
-            <div className="btn-toolbar" style={{ 'justify-content': 'center', 'display': 'flex'}}>
+            <div className="btn-toolbar" style={{ justifyContent: 'center', display: 'flex'}}>
                 {commands}
             </div>
         </div>

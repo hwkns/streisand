@@ -5,7 +5,7 @@ import ICommandProps from './ICommandProps';
 
 function getIcon(type: string) {
     const className = `fa fa-${type}`;
-    return <i className={className} style={{ 'font-size': '14px' }} />;
+    return <i className={className} style={{ fontSize: '14px' }} />;
 }
 
 function getMenuItem(props: ICommandProps, includeBuffer: boolean) {
@@ -24,7 +24,7 @@ function getMenuItem(props: ICommandProps, includeBuffer: boolean) {
 function getCommand(props: ICommandProps) {
     if (props.children) {
         const contents = (
-            <span style={{ 'margin-right': '4px' }}>
+            <span style={{ marginRight: '4px' }}>
                 {props.icon && getIcon(props.icon)}
                 {props.label}
             </span>

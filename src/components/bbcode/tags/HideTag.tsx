@@ -11,7 +11,7 @@ export default class HideTag extends Tag {
             (a.target as HTMLSpanElement).style.color = 'black';
         };
         return (
-            <span style={{ 'background-color': 'black', color: 'black' }} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
+            <span style={{ backgroundColor: 'black', color: 'black' }} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
                 {this.getContent(true)}
             </span>
         );

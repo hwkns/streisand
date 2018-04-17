@@ -36,7 +36,7 @@ function InfoRow(props: IRowProps) {
 
 function GeneralContent(props: { torrent: ITorrent }) {
     return (
-        <div style={{ 'margin-top': '8px' }}>
+        <div style={{ marginTop: '8px' }}>
             <TextView content={props.torrent.description} />
         </div>
     );
@@ -45,7 +45,7 @@ function GeneralContent(props: { torrent: ITorrent }) {
 function TorrentContent(props: { torrent: ITorrent }) {
     const torrent = props.torrent;
     return (
-        <ul className="list-group" style={{ 'margin-top': '8px' }}>
+        <ul className="list-group" style={{ marginTop: '8px' }}>
             <InfoRow label="Release name" value={torrent.releaseName} />
             <InfoRow label="Release group" value={torrent.releaseGroup} />
             <InfoRow label="Uploaded at" value={torrent.uploadedAt} />
@@ -58,11 +58,11 @@ function MediaContent(props: { torrent: ITorrent }) {
     const torrent = props.torrent;
     const info = torrent.mediainfo;
     if (!info) {
-        return <div style={{ 'margin-top': '8px' }}>No information provided.</div>;
+        return <div style={{ marginTop: '8px' }}>No information provided.</div>;
     }
 
     return (
-        <ul className="list-group" style={{ 'margin-top': '8px' }}>
+        <ul className="list-group" style={{ marginTop: '8px' }}>
             <InfoRow label="Runtime" value={info.runtime} />
             <InfoRow label="Codec" value={torrent.codec} />
             <InfoRow label="Container" value={torrent.container} />

@@ -34,8 +34,8 @@ class EditorCommandBarComponent extends React.Component<CombinedProps> {
             </DropdownButton>
         );
         return (
-            <div style={{ display: 'flex', 'margin-bottom': '4px' }}>
-                <div className="btn-toolbar" style={{ 'margin-right': '20px' }}>
+            <div style={{ display: 'flex', marginBottom: '4px' }}>
+                <div className="btn-toolbar" style={{ marginRight: '20px' }}>
                     {primary}
                 </div>
                 <div className="btn-toolbar">
