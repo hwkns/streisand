@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from .models import Film, Collection
+from films.models import Film, Collection
 
 
 class FilmFilter(filters.FilterSet):

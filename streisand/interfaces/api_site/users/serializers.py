@@ -5,7 +5,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import Group
 from invites.models import Invite
 
-from .models import User
+from users.models import User
 from rest_framework.serializers import (
     CharField,
     EmailField,

@@ -7,7 +7,7 @@ INTERNAL_IPS = [
 ]
 
 INSTALLED_APPS += [
-
+    'interfaces.api_site',
     # Third party apps
     'django_su',
     'rest_framework',

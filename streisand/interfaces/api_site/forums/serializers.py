@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from www.templatetags.bbcode import bbcode as bbcode_to_html
-from .models import ForumGroup, ForumPost, ForumThread, ForumTopic, ForumThreadSubscription
+from forums.models import ForumGroup, ForumPost, ForumThread, ForumTopic, ForumThreadSubscription
 
 
 class ForumPostSerializer(ModelSerializer):

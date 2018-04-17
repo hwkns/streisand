@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from .models import User, UserClass
+from users.models import User, UserClass
 
 
 class PublicUserFilter(filters.FilterSet):
