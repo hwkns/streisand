@@ -42,3 +42,4 @@ def class_based_view_decorator(decorator):
 
     update_wrapper(_dec, decorator, assigned=available_attrs(decorator))
     return _dec
+

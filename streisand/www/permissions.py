@@ -48,3 +48,10 @@ class IsSameUserAllowEditionOrReadOnly(permissions.BasePermission):
 
         return request.user.is_staff or (request.method == 'PUT' and
                                          obj.id == request.user.id)
+
+
+class IsAccountOwner(permissions.BasePermission):
+    def has_object_permission(self, request, view, platformuser):
+        if request.user:
+            return platformuser == request.user
+        return False

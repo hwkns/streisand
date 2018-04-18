@@ -1,10 +1,44 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth import authenticate, user_logged_in
 from rest_framework import serializers
 from django.contrib.auth.models import Group
-
+from rest_framework_jwt.serializers import JSONWebTokenSerializer, jwt_payload_handler, jwt_encode_handler
+from rest_framework_jwt.settings import api_settings
+from invites.models import Invite
 from users.models import User
+
+
+class JWTSerializer(JSONWebTokenSerializer):
+    def validate(self, attrs):
+        credentials = {
+            self.username_field: attrs.get(self.username_field),
+            'password': attrs.get('password')
+        }
+
+        if all(credentials.values()):
+            user = authenticate(request=self.context['request'], **credentials)
+
+            if user:
+                if not user.is_active:
+                    msg = 'User account is disabled.'
+                    raise serializers.ValidationError(msg)
+
+                payload = jwt_payload_handler(user)
+                user_logged_in.send(sender=user.__class__, request=self.context['request'], user=user)
+
+                return {
+                    'token': jwt_encode_handler(payload),
+                    'user': user
+                }
+            else:
+                msg = 'Unable to log in with provided credentials.'
+                raise serializers.ValidationError(msg)
+        else:
+            msg = 'Must include "{username_field}" and "password".'
+            msg = msg.format(username_field=self.username_field)
+            raise serializers.ValidationError(msg)
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -128,71 +162,55 @@ class DisplayUserProfileSerializer(PublicUserProfileSerializer):
         )
 
 
-# class UserRegistrationSerializer(serializers.ModelSerializer):
-#     email = serializers.EmailField(label='Email Address')
-#
-#     invite_key = serializers.PrimaryKeyRelatedField(source='invited_by.key', queryset=Invite.objects.all())
-#
-#     class Meta:
-#         model = User
-#         fields = [
-#             'username',
-#             'email',
-#             'email2',
-#             'password',
-#             'invite_key',
-#
-#         ]
-#         extra_kwargs = {
-#             "password": {
-#                 'write_only': True}
-#         }
-#
-#     def validate(self, data):
-#         # email = data['email']
-#         # user_qs = User.objects.filter(email=email)
-#         # if user_qs.exists():
-#         #     raise ValidationError("This user has already registered.")
-#         return data
-#
-#     def validate_email(self, value):
-#         user_qs = User.objects.filter(email=value)
-#         if user_qs.exists():
-#             raise serializers.ValidationError("This email has already been used")
-#
-#         return value
-#
-#     def validate_invite_key(self, value):
-#         data = self.get_initial()
-#         self.invite_key = data.get("invite_key")
-#         if not Invite.objects.is_valid(self.invite_key):
-#             raise serializers.ValidationError("Invalid invite key")
-#         return value
-#
-#     def create(self, validated_data):
-#         username = validated_data['username']
-#         email = validated_data['email']
-#         password = validated_data['password']
-#         user_obj = User(
-#             username=username,
-#             email=email
-#         )
-#         user_obj.set_password(password)
-#         user_obj.save()
-#         return validated_data
-
-
-class UserLoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='request.user')
+class NewUserSerializer(serializers.ModelSerializer):
+    # TODO: add invite key
+    password = serializers.CharField(write_only=True, required=True)
+    confirm_password = serializers.CharField(write_only=True, required=True)
+    token = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = [
             'username',
+            'email',
             'password',
+            'confirm_password',
+            'token',
 
         ]
-        extra_kwargs = {"password": {"write_only": True}}
+
+    def get_token(self, obj):
+        jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+        jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+        payload = jwt_payload_handler(obj)
+        token = jwt_encode_handler(payload)
+        return token
+
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.email = validated_data.get('email', instance.email)
+        instance.username = validated_data.get('username', instance.username)
+        password = validated_data.get('password', None)
+        confirm_password = validated_data.get('confirm_password', None)
+
+        if password and password == confirm_password:
+            instance.set_password(password)
+
+        instance.save()
+        return instance
 
     def validate(self, data):
+        '''
+        Ensure the passwords are the same
+        '''
+
+        if data['password']:
+            print("Here")
+            if data['password'] != data['confirm_password']:
+                raise serializers.ValidationError(
+                    "The passwords have to be the same"
+                )
         return data
