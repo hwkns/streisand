@@ -1,6 +1,6 @@
 // This script is intended only to be used in development to proxy requests.
 // In production the website should be hosted on the server itself so no proxying should be needed.
-// Pass the url to the server as an argument to the script: `node proxj.js "http://my.domain.com:5000"`
+// Pass the url to the server as an argument to the script: `node proxj.js "http://my.domain.com:8000"`
 var express = require('express');
 var request = require('request');
 
@@ -10,7 +10,7 @@ if (!process.argv || process.argv.length < 3) {
 }
 
 var proxyUrl = process.argv[2];
-var port = process.argv.length >= 4 ? process.argv[3] : '5000';
+var port = process.argv.length >= 4 ? process.argv[3] : '8000';
 
 var app = express();
 app.use(function (req, res, next) {
