@@ -1,24 +1,18 @@
 # -*- coding: utf-8 -*-
-import six
-from django.contrib.auth.models import Group, auth
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
-from django.contrib.auth import login, authenticate
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from django.contrib.auth.models import Group
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, AllowAny
 from django.http import Http404, request
 from www.permissions import IsOwnerOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from django_filters import rest_framework as filters
 from rest_framework import status
-from djangorestframework_camel_case.render import CamelCaseJSONRenderer
 from rest_framework.generics import UpdateAPIView, RetrieveAPIView, CreateAPIView
-from rest_framework.views import APIView
 from .filters import UserFilter, PublicUserFilter
 from www.pagination import UserPageNumberPagination
 from users.models import User
 from .serializers import GroupSerializer, AdminUserProfileSerializer, \
     OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer, NewUserSerializer
-from rest_framework.authentication import SessionAuthentication
 from rest_framework_jwt.views import ObtainJSONWebToken
 from .serializers import JWTSerializer
 

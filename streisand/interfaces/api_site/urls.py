@@ -11,7 +11,7 @@ from .users import views as users_views
 from .forums import views as forums_views
 from .wiki import views as wiki_views
 
-from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
+from rest_framework_jwt.views import refresh_jwt_token, verify_jwt_token
 
 
 router = routers.DefaultRouter()

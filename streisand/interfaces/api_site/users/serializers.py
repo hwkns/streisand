@@ -6,7 +6,6 @@ from rest_framework import serializers
 from django.contrib.auth.models import Group
 from rest_framework_jwt.serializers import JSONWebTokenSerializer, jwt_payload_handler, jwt_encode_handler
 from rest_framework_jwt.settings import api_settings
-from invites.models import Invite
 from users.models import User
 
 

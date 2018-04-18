@@ -5,10 +5,8 @@ import debug_toolbar
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.contrib.auth.views import logout_then_login
 
 from rest_framework.documentation import include_docs_urls
-from .decorators import https_required
 from .views import LegacyURLView, template_viewer
 
 

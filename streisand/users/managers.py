@@ -1,5 +1,4 @@
 from django.contrib.auth.models import BaseUserManager
-from django.db import models
 
 
 class UserManager(BaseUserManager):
@@ -27,7 +26,7 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **kwargs):
         kwargs.setdefault('is_superuser', True)
 
-        if extra_fields.get('is_superuser') is not True:
+        if kwargs.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 
         user = self.create_user(email, password, **kwargs)
