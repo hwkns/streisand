@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from .models import Torrent
+from torrents.models import Torrent
 
 
 class TorrentFilter(filters.FilterSet):

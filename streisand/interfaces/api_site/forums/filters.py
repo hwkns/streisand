@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from .models import ForumTopic, ForumThread, ForumPost
+from forums.models import ForumTopic, ForumThread, ForumPost
 
 
 class ForumTopicFilter(filters.FilterSet):

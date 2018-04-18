@@ -7,12 +7,12 @@ INTERNAL_IPS = [
 ]
 
 INSTALLED_APPS += [
-
+    'interfaces.api_site',
     # Third party apps
     'django_su',
     'rest_framework',
+    'knox',
     'corsheaders',
-    'rest_framework.authtoken',
     'django_filters',
     'rest_framework_filters',
     'docs',
@@ -99,7 +99,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 50,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'knox.auth.TokenAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
@@ -112,6 +112,12 @@ REST_FRAMEWORK = {
         # 'rest_framework.parsers.MultiPartParser',
     ),
     'URL_FORMAT_OVERRIDE': None,
+}
+
+REST_KNOX = {
+    'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
+    'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+    'USER_SERIALIZER': 'interfaces.api_site.users.serializers.PublicUserProfileSerializer',
 }
 
 if DEBUG:
@@ -139,6 +145,7 @@ OLD_SITE_SECRET_KEY = os.environ.get('OLD_SITE_HASH', '')
 AUTHENTICATION_BACKENDS = [
     # Case insensitive authentication, custom permissions
     'www.auth.CustomAuthBackend',
+
     # django-su
     'django_su.backends.SuBackend',
 ]

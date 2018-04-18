@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from .models import Film, Collection, CollectionComment, FilmComment
+from films.models import Film, Collection, CollectionComment, FilmComment
 
 
 # TODO: Add permissions for film and collection creation, and deletion.

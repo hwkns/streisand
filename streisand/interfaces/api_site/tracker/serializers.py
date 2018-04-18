@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from .models import Swarm, Peer, TorrentClient
+from tracker.models import Swarm, Peer, TorrentClient
 
 
 class SwarmSerializer(serializers.ModelSerializer):

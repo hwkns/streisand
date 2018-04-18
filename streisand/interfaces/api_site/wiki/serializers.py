@@ -4,7 +4,7 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField, H
 
 
 from www.templatetags.bbcode import bbcode as bbcode_to_html
-from .models import WikiArticle
+from wiki.models import WikiArticle
 
 
 class WikiCreateUpdateDestroySerializer(ModelSerializer):

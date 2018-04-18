@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from rest_framework.authtoken.models import Token
+from knox.models import AuthToken
 
 from django.contrib.auth.models import Permission
 from django.core.cache import cache
@@ -27,7 +27,7 @@ def handle_new_user(**kwargs):
     if kwargs['created']:
         user = kwargs['instance']
 
-        Token.objects.create(user=user)
+        AuthToken.objects.create(user=user)
 
         can_leech = Permission.objects.get(codename='can_leech')
         user.user_permissions.add(can_leech)

@@ -6,7 +6,7 @@ from django.template.defaultfilters import filesizeformat
 
 from mediainfo.serializers import AdminMediainfoSerializer
 
-from .models import Torrent, TorrentComment
+from torrents.models import Torrent, TorrentComment
 # from mediainfo.models import Mediainfo
 
 
