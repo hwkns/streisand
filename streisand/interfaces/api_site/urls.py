@@ -58,15 +58,14 @@ urlpatterns = [
 
     # Router URLs
     url(r'^', include(router.urls)),
-    url(r'api-obtain-token/', include('knox.urls')),
+    url(r'api-token-auth/', include('knox.urls')),
 
     # DRF browsable API
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^current-user/', users_views.CurrentUserView.as_view()),
     url(r'^change-password/', users_views.ChangePasswordView.as_view()),
     url(r'login/', users_views.UserLoginAPIView.as_view(), name='knox_login'),
     url(r'logout/', knox_views.LogoutView.as_view(), name='knox_logout'),
     url(r'logoutall/', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
-    url(r'^register/$', users_views.UserRegisterView.as_view(), name='register'),
 
 ]

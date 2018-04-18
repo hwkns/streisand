@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.models import Group
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from django.http import Http404, request
 from www.permissions import IsOwnerOrReadOnly
@@ -9,21 +9,22 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from django_filters import rest_framework as filters
 from rest_framework import status
-from rest_framework.generics import UpdateAPIView, CreateAPIView, RetrieveAPIView
+from djangorestframework_camel_case.render import CamelCaseJSONRenderer
+from rest_framework.generics import UpdateAPIView, RetrieveAPIView
 from .filters import UserFilter, PublicUserFilter
 from www.pagination import UserPageNumberPagination
 from users.models import User
 from .serializers import GroupSerializer, AdminUserProfileSerializer, \
-    OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer, UserRegistrationSerializer, \
-    UserLoginSerializer
+    OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer, UserLoginSerializer
 from knox.views import LoginView as KnoxLoginView
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BasicAuthentication
 
 
 class UserLoginAPIView(KnoxLoginView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, TokenAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
     serializer_class = UserLoginSerializer
+    renderer_classes = (CamelCaseJSONRenderer,)
 
     def post(self, request, *args, **kwargs):
         data = request.data
@@ -34,10 +35,10 @@ class UserLoginAPIView(KnoxLoginView):
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
-class UserRegisterView(CreateAPIView):
-    serializer_class = UserRegistrationSerializer
-    queryset = User.objects.all()
-    permission_classes = [AllowAny]
+# class UserRegisterView(CreateAPIView):
+#     serializer_class = UserRegistrationSerializer
+#     queryset = User.objects.all()
+#     permission_classes = [AllowAny]
 
 
 class ChangePasswordView(UpdateAPIView):

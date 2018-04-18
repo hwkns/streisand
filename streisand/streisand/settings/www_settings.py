@@ -117,7 +117,7 @@ REST_FRAMEWORK = {
 REST_KNOX = {
     'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
     'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-    'USER_SERIALIZER': 'users.serializers.PublicUserProfileSerializer',
+    'USER_SERIALIZER': 'interfaces.api_site.users.serializers.PublicUserProfileSerializer',
 }
 
 if DEBUG:
