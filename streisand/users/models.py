@@ -8,6 +8,7 @@ from django.db import models, transaction
 from django.db.models import Sum
 from django.urls import reverse
 from django.utils.timezone import now
+from .managers import UserManager
 
 from tracker.models import Peer
 from www.utils import ratio
@@ -89,6 +90,8 @@ class User(AbstractUser):
         editable=False,
         on_delete=models.SET_NULL,
     )
+
+    objects = UserManager()
 
     class Meta:
         permissions = (
@@ -228,7 +231,7 @@ class UserEmailAddress(models.Model):
         related_name='email_addresses',
         on_delete=models.CASCADE,
     )
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     first_used = models.DateTimeField(auto_now_add=True)
     last_used = models.DateTimeField(auto_now=True)
 

@@ -1,38 +1,61 @@
 # -*- coding: utf-8 -*-
-
 from django.contrib.auth.models import Group
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, AllowAny
 from django.http import Http404, request
 from www.permissions import IsOwnerOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from django_filters import rest_framework as filters
 from rest_framework import status
-from djangorestframework_camel_case.render import CamelCaseJSONRenderer
-from rest_framework.generics import UpdateAPIView, RetrieveAPIView
+from rest_framework.generics import UpdateAPIView, RetrieveAPIView, CreateAPIView
 from .filters import UserFilter, PublicUserFilter
 from www.pagination import UserPageNumberPagination
 from users.models import User
 from .serializers import GroupSerializer, AdminUserProfileSerializer, \
-    OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer, UserLoginSerializer
-from knox.views import LoginView as KnoxLoginView
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+    OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer, NewUserSerializer
+from rest_framework_jwt.views import ObtainJSONWebToken
+from .serializers import JWTSerializer
 
 
-class UserLoginAPIView(KnoxLoginView):
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
-    permission_classes = (IsAuthenticated,)
-    serializer_class = UserLoginSerializer
-    renderer_classes = (CamelCaseJSONRenderer,)
+class UserRegisterView(CreateAPIView):
+    """
+    Register a new user.
+    """
+    serializer_class = NewUserSerializer
+    permission_classes = (AllowAny,)
 
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        serializer = UserLoginSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
-            new_data = serializer.data
-            return Response(new_data, status=HTTP_200_OK)
-        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserLoginView(ObtainJSONWebToken):
+    """
+    User Login View
+    """
+    serializer_class = JWTSerializer
+
+    # def post(self, request, format=None):
+    #     data = request.data
+    #     username = data.get('username', None)
+    #     password = data.get('password', None)
+    #
+    #     user = authenticate(username=username, password=password)
+    #     # Generate token and add it to the response object
+    #     if user is not None:
+    #         login(request, account)
+    #         return Response({
+    #             'status': 'Successful',
+    #             'message': 'You have successfully been logged into your account.'
+    #         }, status=status.HTTP_200_OK)
+    #
+    #     return Response({
+    #         'status': 'Unauthorized',
+    #         'message': 'Username/password combination invalid.'
+    #     }, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # class UserRegisterView(CreateAPIView):

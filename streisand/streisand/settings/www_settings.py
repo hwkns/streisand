@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from .common_settings import *
+import datetime
 
 INTERNAL_IPS = [
     '10.0.2.2',
@@ -11,7 +12,6 @@ INSTALLED_APPS += [
     # Third party apps
     'django_su',
     'rest_framework',
-    'knox',
     'corsheaders',
     'django_filters',
     'rest_framework_filters',
@@ -57,7 +57,7 @@ if PRODUCTION or TESTING:
 
 ROOT_URLCONF = 'www.urls'
 
-LOGIN_URL = '/login/'
+LOGIN_URL = '/api/v1/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_EXEMPT_URL_PREFIXES = (
     '/__debug__/',
@@ -99,7 +99,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 50,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'knox.auth.TokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
@@ -114,10 +115,36 @@ REST_FRAMEWORK = {
     'URL_FORMAT_OVERRIDE': None,
 }
 
-REST_KNOX = {
-    'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
-    'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-    'USER_SERIALIZER': 'interfaces.api_site.users.serializers.PublicUserProfileSerializer',
+# Default JWT preferences
+JWT_AUTH = {
+    'JWT_ENCODE_HANDLER':
+    'rest_framework_jwt.utils.jwt_encode_handler',
+
+    'JWT_DECODE_HANDLER':
+    'rest_framework_jwt.utils.jwt_decode_handler',
+
+    'JWT_PAYLOAD_HANDLER':
+    'rest_framework_jwt.utils.jwt_payload_handler',
+
+    'JWT_PAYLOAD_GET_USER_ID_HANDLER':
+    'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
+
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+    'rest_framework_jwt.utils.jwt_response_payload_handler',
+
+    'JWT_SECRET_KEY': SECRET_KEY,
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_VERIFY': True,
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_LEEWAY': 0,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3600),
+    'JWT_AUDIENCE': None,
+    'JWT_ISSUER': None,
+
+    'JWT_ALLOW_REFRESH': False,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
 
 if DEBUG:
