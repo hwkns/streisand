@@ -17,11 +17,11 @@ from users.models import User
 from .serializers import GroupSerializer, AdminUserProfileSerializer, \
     OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer, UserLoginSerializer
 from knox.views import LoginView as KnoxLoginView
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 
 class UserLoginAPIView(KnoxLoginView):
-    authentication_classes = (SessionAuthentication, TokenAuthentication, BasicAuthentication)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
     permission_classes = (IsAuthenticated,)
     serializer_class = UserLoginSerializer
     renderer_classes = (CamelCaseJSONRenderer,)
