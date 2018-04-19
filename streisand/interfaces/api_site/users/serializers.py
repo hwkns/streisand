@@ -1,43 +1,23 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.password_validation import validate_password
-from django.contrib.auth import authenticate, user_logged_in
 from rest_framework import serializers
 from django.contrib.auth.models import Group
-from rest_framework_jwt.serializers import JSONWebTokenSerializer, jwt_payload_handler, jwt_encode_handler
-from rest_framework_jwt.settings import api_settings
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from users.models import User
 
 
-class JWTSerializer(JSONWebTokenSerializer):
-    def validate(self, attrs):
-        credentials = {
-            self.username_field: attrs.get(self.username_field),
-            'password': attrs.get('password')
-        }
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
 
-        if all(credentials.values()):
-            user = authenticate(request=self.context['request'], **credentials)
+        # Add custom claims
+        token['name'] = user.username
+        token['id'] = user.id
+        # ...
 
-            if user:
-                if not user.is_active:
-                    msg = 'User account is disabled.'
-                    raise serializers.ValidationError(msg)
-
-                payload = jwt_payload_handler(user)
-                user_logged_in.send(sender=user.__class__, request=self.context['request'], user=user)
-
-                return {
-                    'token': jwt_encode_handler(payload),
-                    'user': user
-                }
-            else:
-                msg = 'Unable to log in with provided credentials.'
-                raise serializers.ValidationError(msg)
-        else:
-            msg = 'Must include "{username_field}" and "password".'
-            msg = msg.format(username_field=self.username_field)
-            raise serializers.ValidationError(msg)
+        return token
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -165,7 +145,6 @@ class NewUserSerializer(serializers.ModelSerializer):
     # TODO: add invite key
     password = serializers.CharField(write_only=True, required=True)
     confirm_password = serializers.CharField(write_only=True, required=True)
-    token = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -174,17 +153,8 @@ class NewUserSerializer(serializers.ModelSerializer):
             'email',
             'password',
             'confirm_password',
-            'token',
 
         ]
-
-    def get_token(self, obj):
-        jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-        jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
-
-        payload = jwt_payload_handler(obj)
-        token = jwt_encode_handler(payload)
-        return token
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)

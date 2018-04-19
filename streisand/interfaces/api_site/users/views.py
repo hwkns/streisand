@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import Group
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, AllowAny
-from django.http import Http404, request
-from www.permissions import IsOwnerOrReadOnly
+from djangorestframework_camel_case.render import CamelCaseJSONRenderer
+from rest_framework.renderers import BrowsableAPIRenderer
+from www.permissions import IsAccountOwner
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from django_filters import rest_framework as filters
@@ -12,9 +13,9 @@ from .filters import UserFilter, PublicUserFilter
 from www.pagination import UserPageNumberPagination
 from users.models import User
 from .serializers import GroupSerializer, AdminUserProfileSerializer, \
-    OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer, NewUserSerializer
-from rest_framework_jwt.views import ObtainJSONWebToken
-from .serializers import JWTSerializer
+    OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer, NewUserSerializer, \
+    MyTokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class UserRegisterView(CreateAPIView):
@@ -32,30 +33,13 @@ class UserRegisterView(CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserLoginView(ObtainJSONWebToken):
+class UserLoginView(TokenObtainPairView):
     """
-    User Login View
+    Takes a set of user credentials and returns an access and refresh JSON web token pair,
+    to prove the authentication of those credentials.
     """
-    serializer_class = JWTSerializer
-
-    # def post(self, request, format=None):
-    #     data = request.data
-    #     username = data.get('username', None)
-    #     password = data.get('password', None)
-    #
-    #     user = authenticate(username=username, password=password)
-    #     # Generate token and add it to the response object
-    #     if user is not None:
-    #         login(request, account)
-    #         return Response({
-    #             'status': 'Successful',
-    #             'message': 'You have successfully been logged into your account.'
-    #         }, status=status.HTTP_200_OK)
-    #
-    #     return Response({
-    #         'status': 'Unauthorized',
-    #         'message': 'Username/password combination invalid.'
-    #     }, status=status.HTTP_401_UNAUTHORIZED)
+    serializer_class = MyTokenObtainPairSerializer
+    renderer_classes = (CamelCaseJSONRenderer, BrowsableAPIRenderer)
 
 
 # class UserRegisterView(CreateAPIView):
@@ -70,7 +54,7 @@ class ChangePasswordView(UpdateAPIView):
     """
     serializer_class = ChangePasswordSerializer
     model = User
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAccountOwner]
 
     def get_object(self, queryset=None):
         obj = self.request.user
@@ -94,7 +78,7 @@ class ChangePasswordView(UpdateAPIView):
 
 class CurrentUserView(RetrieveAPIView):
     serializer_class = OwnedUserProfileSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAccountOwner]
 
     def get_queryset(self):
         return User.objects.filter(user=self.request.user)
@@ -102,20 +86,6 @@ class CurrentUserView(RetrieveAPIView):
     def get_object(self, queryset=None):
         obj = self.request.user
         return obj
-
-    def retrieve_last(self):
-
-        queryset = self.filter_queryset(self.get_queryset())
-
-        try:
-            obj = queryset.latest('salted_token_id_and_user')
-        except queryset.model.DoesNotExist:
-            raise Http404('No %s matches the given query.' % queryset.model._meta.object_name)
-
-        self.check_object_permissions(self.request, obj)
-
-        serializer = self.get_serialezer(request.user, obj)
-        return Response(serializer.data)
 
 
 class PublicUserProfileViewSet(ModelViewSet):
