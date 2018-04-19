@@ -1,6 +1,6 @@
 import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
-import Requestor from '../../utilities/Requestor';
+import { get } from '../../utilities/Requestor';
 
 import ErrorAction from '../ErrorAction';
 import { fetchData } from '../ActionHelper';
@@ -39,15 +39,9 @@ function failure(props: Props): Action {
 
 export function getTorrents(id: number, page: number = 1): ThunkAction<Action> {
     const errorPrefix = `Fetching page ${page} of the torrents (${id}) failed`;
-    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: { id, page } });
+    return fetchData({ request, fetching, received, failure, errorPrefix, props: { id, page } });
 }
 
-function fetch(token: string, props: Props): Promise<IPagedResponse<ITorrent>> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/torrents/?film_id=${props.id}&page=${props.page}`,
-        headers: {
-            'Authorization': 'token ' + token
-        },
-        method: 'GET'
-    });
+function request(token: string, props: Props): Promise<IPagedResponse<ITorrent>> {
+    return get({ token, url: `${globals.apiUrl}/torrents/?film_id=${props.id}&page=${props.page}` });
 }

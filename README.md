@@ -13,8 +13,8 @@ We are using [gulp](http://gulpjs.com/) as our task toolkit and since it is one 
 By default, the code is setup for developing. The project adds several helpful debugging tools including a development server that supports module hot loading. If you run `gulp dev` it will do an initial development build and startup up the web server. You can then navigate to `http://localhost:3000` and see the website. You will then be able to make changes to the code and the server will run incremental builds and update the site (usually) without you having to refresh the page.
 
 The following are links to various internal documentation pages that should be useful references while working on this project.
-- [API documenataion](https://dev.ronzertnert.me/docs)
-- [Server side model documentation](https://dev.ronzertnert.me/model-docs)
+- [API documenataion](https://api.ronzertnert.me/docs)
+- [Server side model documentation](https://api.ronzertnert.me/model-docs)
 
 ### Production
 In order to get the production ready files, all you need to do is run the default gulp command: `gulp build`. This will remove any remnants of a previous build and then build the project without any of the development tools. It will then compress and uglify everything into a handful of files. All built files will be dumped in the '/dist' directory. If you want to see the result of the build, you can start a simple webserver by running `gulp connect` and navigating to `http://localhost:4000`. You will want to make sure you do not already have a development server running because they will fight for resources.

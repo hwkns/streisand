@@ -5,7 +5,7 @@ import { ReduxAction, ThunkAction, IDispatch } from './ActionTypes';
 
 export interface ISimpleFetchDataProps<A extends ReduxAction, R> {
     errorPrefix: string;
-    fetch: (token: string) => Promise<R>;
+    request: (token: string) => Promise<R>;
     fetching: () => A;
     received: (response: R) => A;
     failure: () => A;
@@ -15,7 +15,7 @@ export function simplefetchData<A extends ReduxAction, R>(props: ISimpleFetchDat
     return (dispatch: IDispatch<A>, getState: () => Store.All) => {
         const state = getState();
         dispatch(props.fetching());
-        return props.fetch(state.sealed.auth.token).then((response: R) => {
+        return props.request(state.sealed.auth.token).then((response: R) => {
             return dispatch(props.received(response));
         }, (error: IUnkownError) => {
             dispatch(handleError(error, props.errorPrefix));
@@ -27,7 +27,7 @@ export function simplefetchData<A extends ReduxAction, R>(props: ISimpleFetchDat
 export interface IFetchDataProps<A extends ReduxAction, P, R> {
     props: P;
     errorPrefix: string;
-    fetch: (token: string, params: P) => Promise<R>;
+    request: (token: string, params: P) => Promise<R>;
     fetching: (params: P) => A;
     received: (params: P, response: R) => A;
     failure: (params: P) => A;
@@ -37,7 +37,7 @@ export function fetchData<A extends ReduxAction, P, R>(props: IFetchDataProps<A,
     return (dispatch: IDispatch<A>, getState: () => Store.All) => {
         const state = getState();
         dispatch(props.fetching(props.props));
-        return props.fetch(state.sealed.auth.token, props.props).then((response: R) => {
+        return props.request(state.sealed.auth.token, props.props).then((response: R) => {
             return dispatch(props.received(props.props, response));
         }, (error: IUnkownError) => {
             dispatch(handleError(error, props.errorPrefix));

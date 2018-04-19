@@ -2,7 +2,7 @@ import { push } from 'react-router-redux';
 
 import Store from '../../store';
 import globals from '../../utilities/globals';
-import Requestor from '../../utilities/Requestor';
+import { remove } from '../../utilities/Requestor';
 import { ThunkAction, IDispatch } from '../ActionTypes';
 
 import WikiAction from './WikiAction';
@@ -24,7 +24,7 @@ function failure(id: number): Action {
 export function removeWiki(id: number): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
-        return remove(state.sealed.auth.token, id).then(() => {
+        return request(state.sealed.auth.token, id).then(() => {
             dispatch(push('/wikis'));
             return dispatch(removed(id));
         }, (error: IUnkownError) => {
@@ -34,12 +34,6 @@ export function removeWiki(id: number): ThunkAction<Action> {
     };
 }
 
-function remove(token: string, id: number): Promise<void> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/wikis/${id}/`,
-        headers: {
-            'Authorization': 'token ' + token
-        },
-        method: 'DELETE'
-    });
+function request(token: string, id: number): Promise<void> {
+    return remove({ token, url: `${globals.apiUrl}/wikis/${id}/` });
 }

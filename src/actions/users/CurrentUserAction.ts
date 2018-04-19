@@ -1,6 +1,6 @@
 import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
-import Requestor from '../../utilities/Requestor';
+import { get } from '../../utilities/Requestor';
 
 import ErrorAction from '../ErrorAction';
 import { transformUser } from './transforms';
@@ -31,15 +31,9 @@ function failure(): Action {
 
 export function getCurrentUser(): ThunkAction<Action> {
     const errorPrefix = 'Fetching current user information failed';
-    return simplefetchData({ fetch, fetching, received, failure, errorPrefix });
+    return simplefetchData({ request, fetching, received, failure, errorPrefix });
 }
 
-function fetch(token: string): Promise<IUserResponse> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/current-user/`,
-        headers: {
-            'Authorization': 'token ' + token
-        },
-        method: 'GET'
-    });
+function request(token: string): Promise<IUserResponse> {
+    return get({ token, url: `${globals.apiUrl}/current-user/` });
 }

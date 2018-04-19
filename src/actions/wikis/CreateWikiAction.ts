@@ -2,7 +2,7 @@ import { push } from 'react-router-redux';
 
 import Store from '../../store';
 import globals from '../../utilities/globals';
-import Requestor from '../../utilities/Requestor';
+import { post } from '../../utilities/Requestor';
 import { ThunkAction, IDispatch } from '../ActionTypes';
 
 import WikiAction from './WikiAction';
@@ -40,7 +40,7 @@ export function createWiki(wiki: IWikiUpdate): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(creating(wiki));
-        return create(state.sealed.auth.token, wiki).then((response: IWiki) => {
+        return request(state.sealed.auth.token, wiki).then((response: IWiki) => {
             dispatch(received(response.id, response));
             const action = dispatch(created(response.id));
             dispatch(push(`/wiki/${response.id}`));
@@ -52,14 +52,6 @@ export function createWiki(wiki: IWikiUpdate): ThunkAction<Action> {
     };
 }
 
-function create(token: string, wiki: IWikiUpdate): Promise<IWiki> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/wikis/`,
-        headers: {
-            'Authorization': 'token ' + token,
-            'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        data: JSON.stringify(wiki)
-    });
+function request(token: string, data: IWikiUpdate): Promise<IWiki> {
+    return post({ token, data, url: `${globals.apiUrl}/wikis/` });
 }

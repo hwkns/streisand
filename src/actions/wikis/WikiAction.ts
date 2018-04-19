@@ -1,6 +1,6 @@
 import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
-import Requestor from '../../utilities/Requestor';
+import { get } from '../../utilities/Requestor';
 
 import IWiki from '../../models/IWiki';
 import ErrorAction from '../ErrorAction';
@@ -30,15 +30,9 @@ function failure(id: number): Action {
 
 export function getWiki(id: number): ThunkAction<Action> {
     const errorPrefix = `Fetching wiki (${id}) failed`;
-    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: id });
+    return fetchData({ request, fetching, received, failure, errorPrefix, props: id });
 }
 
-function fetch(token: string, id: number): Promise<IWiki> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/wikis/${id}/`,
-        headers: {
-            'Authorization': 'token ' + token
-        },
-        method: 'GET'
-    });
+function request(token: string, id: number): Promise<IWiki> {
+    return get({ token, url: `${globals.apiUrl}/wikis/${id}/` });
 }

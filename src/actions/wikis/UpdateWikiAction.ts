@@ -1,6 +1,6 @@
 import Store from '../../store';
 import globals from '../../utilities/globals';
-import Requestor from '../../utilities/Requestor';
+import { put } from '../../utilities/Requestor';
 import { ThunkAction, IDispatch } from '../ActionTypes';
 
 import WikiAction from './WikiAction';
@@ -31,7 +31,7 @@ export function updateWiki(id: number, wiki: IWikiUpdate): ThunkAction<Action> {
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(updating(id));
-        return update(state.sealed.auth.token, id, wiki).then((response: IWiki) => {
+        return request(state.sealed.auth.token, id, wiki).then((response: IWiki) => {
             return dispatch(received(id, response));
         }, (error: IUnkownError) => {
             dispatch(failure(id));
@@ -40,14 +40,6 @@ export function updateWiki(id: number, wiki: IWikiUpdate): ThunkAction<Action> {
     };
 }
 
-function update(token: string, id: number, wiki: IWikiUpdate): Promise<IWiki> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/wikis/${id}/`,
-        headers: {
-            'Authorization': 'token ' + token,
-            'Content-Type': 'application/json'
-        },
-        method: 'PUT',
-        data: JSON.stringify(wiki)
-    });
+function request(token: string, id: number, data: IWikiUpdate): Promise<IWiki> {
+    return put({ token, data, url: `${globals.apiUrl}/wikis/${id}/` });
 }

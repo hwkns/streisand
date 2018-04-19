@@ -1,6 +1,6 @@
 import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
-import Requestor from '../../utilities/Requestor';
+import { get } from '../../utilities/Requestor';
 
 import ErrorAction from '../ErrorAction';
 import { fetchData } from '../ActionHelper';
@@ -31,15 +31,9 @@ function failure(id: number): Action {
 
 export function getUser(id: number): ThunkAction<Action> {
     const errorPrefix = `Fetching user (${id}) failed`;
-    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: id });
+    return fetchData({ request, fetching, received, failure, errorPrefix, props: id });
 }
 
-function fetch(token: string, id: number): Promise<IUserResponse> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/users/${id}/`,
-        headers: {
-            'Authorization': 'token ' + token
-        },
-        method: 'GET'
-    });
+function request(token: string, id: number): Promise<IUserResponse> {
+    return get({ token, url: `${globals.apiUrl}/users/${id}/` });
 }

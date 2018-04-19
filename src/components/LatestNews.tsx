@@ -29,13 +29,13 @@ type ConnectedDispatch = {
 type CombinedProps = ConnectedState & ConnectedDispatch & Props;
 class LatestNewsComponent extends React.Component<CombinedProps, void> {
     public componentWillMount() {
-        if (!this.props.loaded) {
+        if (!this.props.loading && !this.props.loaded) {
             this.props.getLatestNews();
         }
     }
 
     public componentWillReceiveProps(props: CombinedProps) {
-        if (!props.loaded) {
+        if (!props.loading && !props.loaded) {
             this.props.getLatestNews();
         }
     }

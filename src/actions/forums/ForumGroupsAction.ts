@@ -1,6 +1,6 @@
-import globals from '../../utilities/globals';
-import Requestor from '../../utilities/Requestor';
 import { ThunkAction } from '../ActionTypes';
+import globals from '../../utilities/globals';
+import { get } from '../../utilities/Requestor';
 
 import ErrorAction from '../ErrorAction';
 import { transformGroups } from './transforms';
@@ -32,15 +32,9 @@ function failure(): Action {
 
 export function getForumGroups(): ThunkAction<Action> {
     const errorPrefix = 'Fetching the list of forums failed';
-    return simplefetchData({ fetch, fetching, received, failure, errorPrefix });
+    return simplefetchData({ request, fetching, received, failure, errorPrefix });
 }
 
-function fetch(token: string): Promise<IPagedResponse<IForumGroupResponse>> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/forum-groups/`,
-        headers: {
-            'Authorization': 'token ' + token
-        },
-        method: 'GET'
-    });
+function request(token: string): Promise<IPagedResponse<IForumGroupResponse>> {
+    return get({ token, url: `${globals.apiUrl}/forum-groups/` });
 }

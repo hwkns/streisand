@@ -1,6 +1,6 @@
 import { ThunkAction } from '../ActionTypes';
 import globals from '../../utilities/globals';
-import Requestor from '../../utilities/Requestor';
+import { get } from '../../utilities/Requestor';
 
 import ErrorAction from '../ErrorAction';
 import { fetchData } from '../ActionHelper';
@@ -43,15 +43,9 @@ function failure(props: Props): Action {
 
 export function getPosts(id: number, page: number = 1): ThunkAction<Action> {
     const errorPrefix = `Fetching page ${page} of the forum thread (${id}) failed`;
-    return fetchData({ fetch, fetching, received, failure, errorPrefix, props: { id, page } });
+    return fetchData({ request, fetching, received, failure, errorPrefix, props: { id, page } });
 }
 
-function fetch(token: string, props: Props): Promise<Response> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/forum-posts/?thread_id=${props.id}&page=${props.page}`,
-        headers: {
-            'Authorization': 'token ' + token
-        },
-        method: 'GET'
-    });
+function request(token: string, props: Props): Promise<Response> {
+    return get({ token, url: `${globals.apiUrl}/forum-posts/?thread_id=${props.id}&page=${props.page}` });
 }

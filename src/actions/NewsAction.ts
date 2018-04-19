@@ -1,6 +1,6 @@
 import globals from '../utilities/globals';
 import { ThunkAction } from './ActionTypes';
-import Requestor from '../utilities/Requestor';
+import { get } from '../utilities/Requestor';
 
 import ErrorAction from './ErrorAction';
 import { simplefetchData } from './ActionHelper';
@@ -29,15 +29,9 @@ function failure(): Action {
 
 export function getLatestNews(): ThunkAction<Action> {
     const errorPrefix = 'Fetching latest news failed';
-    return simplefetchData({ fetch, fetching, received, failure, errorPrefix });
+    return simplefetchData({ request, fetching, received, failure, errorPrefix });
 }
 
-function fetch(token: string): Promise<IForumPostResponse> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/news-posts/latest/`,
-        headers: {
-            'Authorization': 'token ' + token
-        },
-        method: 'GET'
-    });
+function request(token: string): Promise<IForumPostResponse> {
+    return get({ token, url: `${globals.apiUrl}/news-posts/latest/` });
 }

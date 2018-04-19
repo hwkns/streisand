@@ -2,7 +2,7 @@ import { replace } from 'react-router-redux';
 
 import Store from '../../store';
 import globals from '../../utilities/globals';
-import Requestor from '../../utilities/Requestor';
+import { put } from '../../utilities/Requestor';
 
 import { logout } from './LogoutAction';
 import { IUnkownError } from '../../models/base/IError';
@@ -32,7 +32,7 @@ export function changePassword(oldPassword: string, newPassword: string): ThunkA
     return (dispatch: IDispatch<Action>, getState: () => Store.All) => {
         const state = getState();
         dispatch(updating());
-        return update(state.sealed.auth.token, oldPassword, newPassword).then((result: { token: string }) => {
+        return request(state.sealed.auth.token, oldPassword, newPassword).then((result: { token: string }) => {
             const action = dispatch(updated());
             dispatch(logout());
             dispatch(replace('/login'));
@@ -44,14 +44,7 @@ export function changePassword(oldPassword: string, newPassword: string): ThunkA
     };
 }
 
-function update(token: string, oldPassword: string, newPassword: string): Promise<{ token: string }> {
-    return Requestor.makeRequest({
-        url: `${globals.apiUrl}/change-password/`,
-        method: 'PUT',
-        headers: {
-            'Authorization': 'token ' + token,
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify({ oldPassword, newPassword })
-    });
+function request(token: string, oldPassword: string, newPassword: string): Promise<{ token: string }> {
+    const data = { oldPassword, newPassword };
+    return put({ token, data, url: `${globals.apiUrl}/change-password/` });
 }
