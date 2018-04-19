@@ -2,6 +2,7 @@
 
 from django.conf.urls import url, include
 from rest_framework import routers
+
 from .invites import views as invites_views
 from .films import views as films_views
 from .torrents import views as torrents_views
@@ -9,10 +10,8 @@ from .tracker import views as tracker_views
 from .users import views as users_views
 from .forums import views as forums_views
 from .wiki import views as wiki_views
-from rest_framework_simplejwt.views import (
-    TokenRefreshView,
-    TokenVerifyView
-)
+
+from rest_framework_jwt.views import refresh_jwt_token, verify_jwt_token
 
 
 router = routers.DefaultRouter()
@@ -63,9 +62,9 @@ urlpatterns = [
 
     # DRF browsable API
     url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^login/', users_views.UserLoginView.as_view(), name='token_obtain_pair'),
-    url(r'^token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    url(r'^token-verify/', TokenVerifyView.as_view(), name='token_verify'),
+    url(r'^login/', users_views.UserLoginView.as_view()),
+    url(r'^token-refresh/', refresh_jwt_token),
+    url(r'^token-verify/', verify_jwt_token),
     url(r'^register/$', users_views.UserRegisterView.as_view()),
     url(r'^current-user/', users_views.CurrentUserView.as_view()),
     url(r'^change-password/', users_views.ChangePasswordView.as_view()),
