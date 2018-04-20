@@ -16,13 +16,13 @@ INSTALLED_APPS += [
     'django_filters',
     'rest_framework_filters',
     'docs',
-
+    'drf_yasg',
 
     # Contrib apps
-    'django.contrib.humanize',
     'django.contrib.admin',
-    'django.contrib.staticfiles',
     'django.contrib.sessions',
+    'django.contrib.humanize',
+    'django.contrib.staticfiles',
     'django.contrib.messages',
 
     # Debug Toolbar
@@ -104,13 +104,10 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
 
     ),
     'DEFAULT_PARSER_CLASSES': (
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
-        'rest_framework.parsers.JSONParser',
-        # 'rest_framework.parsers.MultiPartParser',
     ),
     'URL_FORMAT_OVERRIDE': None,
 }
@@ -145,6 +142,18 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
 
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
+}
+
+REDOC_SETTINGS = {
+   'LAZY_RENDERING': True,
 }
 
 if DEBUG:
