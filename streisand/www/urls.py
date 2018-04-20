@@ -13,7 +13,7 @@ from django.http import HttpResponseRedirect
 
 urlpatterns = [
     # Redirect to API
-    # url(r'^$', lambda r: HttpResponseRedirect('api/v1/')),
+    url(r'^home', lambda r: HttpResponseRedirect('/')),
 
     # API
     url(r'^api/v1/', include('interfaces.api_site.urls')),
