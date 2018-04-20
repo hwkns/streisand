@@ -8,12 +8,23 @@ from django.contrib import admin
 
 from rest_framework.documentation import include_docs_urls
 from .views import LegacyURLView, template_viewer
+from django.http import HttpResponseRedirect
 
 
 urlpatterns = [
+    # Redirect to API
+    url(r'^$', lambda r: HttpResponseRedirect('api/v1/')),
+
+    # API
     url(r'^api/v1/', include('interfaces.api_site.urls')),
+
+    # API Core-Schema Docs TODO: Update this when better Api Docs come out and work.
     url(r'^docs/', include_docs_urls(title='JumpCut API v1', public=False)),
+
+    # Docs that need updating. Made with Sphinx
     url(r'^model-docs/', include('docs.urls')),
+
+    # URLS that gotta go.
     url(r'^films/', include('films.urls')),
     url(r'^forums/', include('forums.urls')),
     url(r'^users/', include('users.urls')),
