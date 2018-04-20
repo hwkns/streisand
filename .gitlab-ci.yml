@@ -1,4 +1,4 @@
-build_react:
+build_and_deployreact:
   image: node:latest
   
 stages:
