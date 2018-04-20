@@ -29,6 +29,9 @@ def handle_new_user(**kwargs):
         if not user.user_class:
             user.user_class = UserClass.objects.get(name='User')
 
+        if user.is_superuser:
+            user.user_class = UserClass.objects.get(name='Administrator')
+
         user.reset_announce_key()
 
 
