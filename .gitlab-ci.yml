@@ -1,8 +1,12 @@
 build_react:
   image: node:latest
   
-stage:
+stages:
   - build
+  - deploy
+  
+build_react:
+  stage: build
 
   script:
     - echo "====== Install dependencies ======"
@@ -13,10 +17,10 @@ stage:
   artifacts:
     name: panel-build
     paths:
-      - jumpcut-web
+      - build
 
-deploy:
-  image: alpine:latest
+deploy_react:
+    image: alpine:latest
 
 before_script:
 - apk update
@@ -25,7 +29,7 @@ before_script:
 - apk add 
 - apk add openssh-client
 
-stages:
+stage:
   - deploy
 
 deploy to production:
@@ -34,4 +38,3 @@ deploy to production:
   only:
     - master
   script: rsync-script.sh saltman@ronzertnert.me:jumpcut-web /gulp/jumpcut-web
-
