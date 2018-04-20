@@ -1,11 +1,8 @@
-image: node:latest
-
-stages:
-  - build
-  - deploy
-
 build_react:
-  stage: build
+  image: node:latest
+  
+stage:
+  - build
 
   script:
     - echo "====== Install dependencies ======"
@@ -16,15 +13,25 @@ build_react:
   artifacts:
     name: panel-build
     paths:
-      - build
+      - jumpcut-web
 
 deploy:
-  image: alpine
+  image: alpine:latest
+
+before_script:
+- apk update
+- apk add doxygen
+- apk add ttf-freefont graphviz
+- apk add 
+- apk add openssh-client
+
+stages:
+  - deploy
+
+deploy to production:
   stage: deploy
-  script:
-    - apk add --no-cache rsync openssh
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_dsa
-    - chmod 600 ~/.ssh/id_dsa
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - rsync -rav --delete dist/ gitlab-runner@ronzertnert.me:/home/
+  environment: production
+  only:
+    - master
+  script: rsync-script.sh saltman@ronzertnert.me:jumpcut-web /gulp/jumpcut-web
+
