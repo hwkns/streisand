@@ -1,9 +1,10 @@
+image: node:latest
+
 stages:
   - build
   - deploy
 
 build_react:
-  image: node:alpine
   stage: build
 
   script:
@@ -18,12 +19,10 @@ build_react:
       - build
 
 deploy_react:
-  image: alpine
   stage: deploy
   script:
     - echo "====== Deploy to production server ======"
-    - apk update && apk upgrade
-    - apk add openssh bash rsync
+    - apt-get update && apt-get upgrade
     - echo "====== Add target servers secret key ======"
     - mkdir ~/.ssh
     - echo $TARGET_SERVER_SECRET_KEY_BASE64 | base64 -d > ~/.ssh/id_rsa
