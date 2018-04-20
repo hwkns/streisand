@@ -1,4 +1,4 @@
-build_and_deployreact:
+build_react:
   image: node:latest
   
 stages:
@@ -6,7 +6,8 @@ stages:
   - deploy
   
 build_react:
-  stage: build
+  stage: 
+     - build
 
   script:
     - echo "====== Install dependencies ======"
@@ -32,7 +33,7 @@ before_script:
 stage:
   - deploy
 
-deploy to production:
+deploy_react:
   stage: deploy
   environment: production
   only:
