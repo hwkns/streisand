@@ -64,7 +64,10 @@ LOGIN_EXEMPT_URL_PREFIXES = (
     '/register/',
     '/logout/',
     '/torrents/download/',
-    '/api/',
+    '/redoc/',
+    '/swagger/',
+    '/api/v1/',
+
 )
 
 PASSWORD_HASHERS = [
@@ -115,19 +118,19 @@ REST_FRAMEWORK = {
 # Default JWT preferences
 JWT_AUTH = {
     'JWT_ENCODE_HANDLER':
-    'rest_framework_jwt.utils.jwt_encode_handler',
+        'rest_framework_jwt.utils.jwt_encode_handler',
 
     'JWT_DECODE_HANDLER':
-    'rest_framework_jwt.utils.jwt_decode_handler',
+        'rest_framework_jwt.utils.jwt_decode_handler',
 
     'JWT_PAYLOAD_HANDLER':
-    'rest_framework_jwt.utils.jwt_payload_handler',
+        'rest_framework_jwt.utils.jwt_payload_handler',
 
     'JWT_PAYLOAD_GET_USER_ID_HANDLER':
-    'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
+        'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
 
     'JWT_RESPONSE_PAYLOAD_HANDLER':
-    'rest_framework_jwt.utils.jwt_response_payload_handler',
+        'rest_framework_jwt.utils.jwt_response_payload_handler',
 
     'JWT_SECRET_KEY': SECRET_KEY,
     'JWT_ALGORITHM': 'HS256',
@@ -145,15 +148,22 @@ JWT_AUTH = {
 }
 
 SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,
     'SECURITY_DEFINITIONS': {
-        'basic': {
-            'type': 'basic'
+        'JWT': {
+            'type': 'Token',
+            'in': 'header',
+            'name': 'Authorization'
         }
     },
+    'APIS_SORTER': 'alpha',
+    'SUPPORTED_SUBMIT_METHODS': ['get', 'post', 'put', 'delete', 'patch'],
+    'OPERATIONS_SORTER': 'alpha'
 }
 
+
 REDOC_SETTINGS = {
-   'LAZY_RENDERING': True,
+    'LAZY_RENDERING': True,
 }
 
 if DEBUG:
@@ -173,7 +183,6 @@ CORS_ORIGIN_WHITELIST = [
 
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
-
 
 RT_API_KEY = os.environ.get('RT_API_KEY', '')
 OLD_SITE_SECRET_KEY = os.environ.get('OLD_SITE_HASH', '')
