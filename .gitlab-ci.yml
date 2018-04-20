@@ -1,27 +1,4 @@
-build_react:
-  image: node:latest
-  
-stages:
-  - build
-  - deploy
-  
-build_react:
-  stage: 
-     - build
-
-  script:
-    - echo "====== Install dependencies ======"
-    - npm i
-    - echo "====== Build react ======"
-    - gulp
-
-  artifacts:
-    name: panel-build
-    paths:
-      - build
-
-deploy_react:
-    image: alpine:latest
+image: alpine
 
 before_script:
 - apk update
@@ -30,12 +7,12 @@ before_script:
 - apk add 
 - apk add openssh-client
 
-stage:
+stages:
   - deploy
 
-deploy_react:
+deploy to production:
   stage: deploy
   environment: production
   only:
     - master
-  script: rsync-script.sh saltman@ronzertnert.me:jumpcut-web /gulp/jumpcut-web
+  script: "rsync-script.sh saltman@ronzertnert.me:jumpcut-web /gulp/jumpcut-web"
