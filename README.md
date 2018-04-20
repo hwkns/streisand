@@ -14,6 +14,8 @@ By default, the code is setup for developing. The project adds several helpful d
 
 The following are links to various internal documentation pages that should be useful references while working on this project.
 - [API documenataion](https://api.ronzertnert.me/docs)
+- [API Swagger Schema documentation](https://api.ronzertnert.me/api/v1/swagger/)
+- [API Redoc Schema documentation](https://redoc.ronzertnert.me/)
 - [Server side model documentation](https://api.ronzertnert.me/model-docs)
 
 ### Production
