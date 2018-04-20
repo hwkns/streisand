@@ -57,7 +57,7 @@ if PRODUCTION or TESTING:
 
 ROOT_URLCONF = 'www.urls'
 
-LOGIN_URL = '/api/v1/login/'
+LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_EXEMPT_URL_PREFIXES = (
     '/__debug__/',
@@ -199,11 +199,12 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 WSGI_APPLICATION = 'streisand.www_wsgi.application'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            # insert your TEMPLATE_DIRS here
+            os.path.join(BASE_DIR, '/interfaces/frontend_site/static/app')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -222,8 +223,13 @@ TEMPLATES = [
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+    'streisand/interfaces/frontend_site/static',
+)
+
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',

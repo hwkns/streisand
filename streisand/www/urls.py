@@ -7,13 +7,13 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 from rest_framework.documentation import include_docs_urls
-from .views import LegacyURLView, template_viewer
+from .views import LegacyURLView, template_viewer, home
 from django.http import HttpResponseRedirect
 
 
 urlpatterns = [
     # Redirect to API
-    url(r'^$', lambda r: HttpResponseRedirect('api/v1/')),
+    # url(r'^$', lambda r: HttpResponseRedirect('api/v1/')),
 
     # API
     url(r'^api/v1/', include('interfaces.api_site.urls')),
@@ -46,6 +46,12 @@ urlpatterns = [
         regex=r'^templates/(?P<template_path>.*\.html)$',
         view=template_viewer,
         name='template_viewer',
+    ),
+
+    url(
+        regex=r'^$',
+        view=home,
+        name='home',
     ),
 
     # Legacy

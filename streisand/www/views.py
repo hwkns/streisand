@@ -27,20 +27,9 @@ from .signals.signals import successful_login, failed_login
 
 def home(request):
 
-    # Get the latest news post
-    try:
-        news_thread = ForumThread.objects.filter(topic__name='Announcements').latest()
-    except ForumThread.DoesNotExist:
-        news_post = None
-    else:
-        news_post = news_thread.posts.earliest()
-
     return render(
         request=request,
-        template_name='home.html',
-        context={
-            'news_post': news_post,
-        }
+        template_name='index.html',
     )
 
 
