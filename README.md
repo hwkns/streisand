@@ -11,26 +11,57 @@ A private BitTorrent tracker backend written in python, django, and redis
 
 
 - Install docker and docker-compose (TODO link)
-- Run `docker-compose run web invoke clean-slate`
-
+- Run `docker-compose run api invoke clean-slate` to load up the default db data
+- Run `docker-compose run api src/manage.py passwd admin` to set yourself a password for the admin
+  user
+- Run `docker-compose run api invoke fixtures` to load up the development fixtures (see bellow)
 
 The `docker-compose` builds all the containers and sets up the database with our core fixtures.
 This may take a while, but afterwards subsequant commands will be much faster
 
 It is highly recommended that you add the following lines or simillar to your `~/.bashrc`:
 
-    alias i="docker-compose run web invoke"
-    alias m="docker-compose run web backend/manage.py"
+    alias jc_i="docker-compose run api invoke"
+    alias jc_m="docker-compose run api src/manage.py"
+    alias jc_f="docker-compose run frontend"
 
-## Commands
+## Starting a dev server
 
-- `i clean-slate` or `docker-compose run web invoke clean-slate` without alias
+To start all the services and the development servers for the frontend and backend run:
+
+    docker-compose up
+
+This will bring up everything
+
+You can find the api/django-admin server on <localhost:8000>, the frontend server on
+<localhost:3000> and the tracker server on <localhost:7070>.
+
+## Rebuilding containers
+
+If you change 
+
+a) The python requirements file in backend
+b) Any frontend files not in frontend/src/ (this is because the place node_modules is installed
+means we cannot mount the whole frontend directory as a volume)
+
+you need to rebuild your local containers
+by running:
+
+    docker-compose build
+
+There is no need to do this if you just change the source code for either the frontend or backend
+(they are on docker volumes and changes should be loaded immediately)
+
+## Useful Commands
+
+- `jc_i clean-slate` or `docker-compose run web invoke clean-slate` without alias
 
 This command resets the db and loads the core fixtures to revert to a starting state.
 
-Currently the admin user password it creates is hashed and salted using argon2. I would recomment that you use the function:
+Currently the admin user password it creates is hashed and salted using argon2. It is reccomended 
+that you use the function:
 
-- `m change-password admin` or `docker-compose run web backend/manage.py changepassword ` without
+- `jc_m change-password admin` or `docker-compose run web backend/manage.py changepassword ` without
   alias
 
 To run the dev server, tracker and frontend and the services needed for it.
@@ -45,8 +76,8 @@ You may also add in fixtures to add in dummy forums, and 2 more users.
 
 you can do this by entering:
 
-- `m loaddata dev` or `docker-compose run web backend/manage.py loaddata dev` (you should see now
-  why the aliases are useful).
+- `jc_m loaddata dev` or `docker-compose run web backend/manage.py loaddata dev` (you should see
+  now why the aliases are useful).
 
 The users are api, and user1.
 
