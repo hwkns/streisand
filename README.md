@@ -16,19 +16,19 @@ The `docker-compose` step might take a little while, but now you have everything
 jumpcut!  In this environment, several alias commands are set up for your convenience.  To
 start with, run this command to generate and run migrations and import initial fixture data:
 
-- `docker-compose run web invoke clean-slate`
+- `./i clean-slate`
 
 As the name suggests, that command will always bring you back to that starting state.
 
+`./i` is a script which works like an alias for `docker-compose run web invoke` and `./m` is a script which works like an alias for `docker-compose run streisand/manage.py`
+
 Currently the admin user password it creates is hashed and salted using argon2. I would recomment that you use the function:
 
-- `docker-compose run web streisand/manage.py changepassword admin`
+- `./m changepassword admin`
 
 To run the dev server
 
 `docker-compose up`
-
-## Out of date - todo change
 
 To enter a new password for testing. 
 
@@ -36,25 +36,11 @@ You may also add in fixtures to add in dummy forums, and 2 more users.
 
 you can do this by entering:
 
-- `m loaddata dev`
+- `./m loaddata dev`
 
 The users are api, and user1.
 
-Now, for tinkering, it's fine to use Django's built-in server to run the site and/or the tracker:
-
-- `runserver`
-- `runtracker`
-
-But if you want to use a more production-like stack, you can run everything through uWSGI and
-nginx:
-
-- `start_tracker_uwsgi`
-- `start_www_uwsgi`
-
-If you do this, you will need to collect all the static files under one directory to be served
-by nginx:
-
-- `m collectstatic`
+## Out of date - todo change
 
 You will also need to start `celery` to coordinate background tasks (such as the handling of
 announces):
