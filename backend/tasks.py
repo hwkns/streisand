@@ -1,7 +1,6 @@
 import invoke
 
 
-VAGRANT_CODEBASE_PATH = '/var/www/streisand'
 MANAGE_PATH = 'streisand/manage.py'
 WWW_SETTINGS = 'streisand.settings.www_settings'
 TRACKER_SETTINGS = 'streisand.settings.tracker_settings'

@@ -6,6 +6,7 @@ WORKDIR /code
 
 COPY package*.json .
 RUN npm install
-ENV PATH="$(npm bin):$PATH"
+ENV PATH="/code/node_modules/.bin:$PATH"
 EXPOSE 3000
-CMD ["gulp" "dev"]
+COPY . .
+CMD ["gulp", "dev"]

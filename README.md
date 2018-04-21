@@ -20,7 +20,7 @@ This may take a while, but afterwards subsequant commands will be much faster
 It is highly recommended that you add the following lines or simillar to your `~/.bashrc`:
 
     alias i="docker-compose run web invoke"
-    alias m="docker-compose run web streisand/manage.py"
+    alias m="docker-compose run web backend/manage.py"
 
 ## Commands
 
@@ -30,7 +30,7 @@ This command resets the db and loads the core fixtures to revert to a starting s
 
 Currently the admin user password it creates is hashed and salted using argon2. I would recomment that you use the function:
 
-- `m change-password admin` or `docker-compose run web streisand/manage.py changepassword ` without
+- `m change-password admin` or `docker-compose run web backend/manage.py changepassword ` without
   alias
 
 To run the dev server, tracker and frontend and the services needed for it.
@@ -45,7 +45,7 @@ You may also add in fixtures to add in dummy forums, and 2 more users.
 
 you can do this by entering:
 
-- `m loaddata dev` or `docker-compose run web streisand/manage.py loaddata dev` (you should see now
+- `m loaddata dev` or `docker-compose run web backend/manage.py loaddata dev` (you should see now
   why the aliases are useful).
 
 The users are api, and user1.
