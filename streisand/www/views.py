@@ -16,7 +16,6 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View
 
 from films.models import Film, Collection
-from forums.models import ForumThread
 from torrents.models import Torrent
 from users.models import User
 from www.models import Feature
