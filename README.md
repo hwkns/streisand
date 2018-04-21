@@ -10,15 +10,14 @@ A private BitTorrent tracker backend written in python, django, and redis
 ## To get started
 
 - Install docker and docker-compose (TODO link)
-- Run `docker-compose run web invoke clean-slate`
+- Run `./i clean-slate`
 
-The `docker-compose` step might take a little while, but now you have everything you need to run
-jumpcut!  In this environment, several alias commands are set up for your convenience.  To
-start with, run this command to generate and run migrations and import initial fixture data:
+The `./i` step calls `docker-compose` and builds all the containers. This may take a while, but
+afterwards subsequant commands will be much faster
 
 - `./i clean-slate`
 
-As the name suggests, that command will always bring you back to that starting state.
+This command resets the db and loads the core fixtures to revert to a starting state.
 
 `./i` is a script which works like an alias for `docker-compose run web invoke` and `./m` is a script which works like an alias for `docker-compose run streisand/manage.py`
 
@@ -29,6 +28,8 @@ Currently the admin user password it creates is hashed and salted using argon2. 
 To run the dev server
 
 `docker-compose up`
+
+The site is accessible on `localhost:8000`
 
 To enter a new password for testing. 
 
