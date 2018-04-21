@@ -1,0 +1,20 @@
+image: node:latest
+
+cache:
+  paths:
+   - node_modules/
+
+before_script:
+  - cd $CI_PROJECT_DIR
+  - npm install
+
+stages:
+  - build_deploy
+
+build_&_deploy_app:
+  stage: build_deploy
+  script:
+   - gulp build
+   - sudo gulp
+   - sudo ls -lA
+   - sudo cp -r app $CI_TARGET_PROJECT_PATH
