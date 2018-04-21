@@ -11,9 +11,9 @@ RUN pip install -r requirements.txt
 COPY testing_requirements.txt ./
 RUN pip install -r testing_requirements.txt
 
-COPY streisand streisand
+COPY src src
 COPY tasks.py .
 
 EXPOSE 8000
 ENV STREISAND_DEBUG True
-CMD ["python", "streisand/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "src/manage.py", "runserver_plus", "0.0.0.0:8000"]
