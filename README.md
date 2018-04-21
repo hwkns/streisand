@@ -41,6 +41,7 @@ You can find the api/django-admin server on <localhost:8000>, the frontend serve
 If you change 
 
 a) The python requirements file in backend
+
 b) Any frontend files not in frontend/src/ (this is because the place node_modules is installed
 means we cannot mount the whole frontend directory as a volume)
 
