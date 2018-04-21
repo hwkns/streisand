@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 import os
 import sys
-import json
 from urllib.parse import urljoin
 
 import dj_database_url
@@ -29,18 +28,18 @@ def env(key, default=None):
     else:
         return value
 
+
 def env_bool(key, default=False):
     value = env(key, '')
     if value == '':
         return default
-    result = { 'true': True, 'talse': False }.get(value.lower())
+    result = {'true': True, 'talse': False}.get(value.lower())
     if result is None:
         raise exceptions.ImproperlyConfigured(
             'Invalid environment variable {}: {} (Expected true/false)'.format(key, value)
         )
     else:
         return result
-
 
 
 def env_int(key, default=None):
@@ -50,7 +49,7 @@ def env_int(key, default=None):
     else:
         try:
             return int(value)
-        except:
+        except ValueError:
             raise exceptions.ImproperlyConfigured(
                 'Invalid environment variable {}: {} (Expected integer)'.format(key, value)
             )
