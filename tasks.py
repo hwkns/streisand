@@ -9,7 +9,7 @@ TRACKER_SETTINGS = 'streisand.settings.tracker_settings'
 def _manage_run(ctx, command, settings=None):
     torun = f'{MANAGE_PATH} {command}'
     if settings is not None:
-        torun += ' -settings=' + settings
+        torun += ' --settings=' + settings
     ctx.run(torun)
 
 
@@ -35,10 +35,4 @@ def fixtures(ctx):
 
 @invoke.task
 def shell(ctx):
-    _manage_run(ctx, 'shell_plus', settings=WWW_SETTINGS)
-
-
-@invoke.task
-def runserver(ctx):
-    _manage_run(ctx, 'runserver', settings=WWW_SETTINGs)
-
+    _manage_run(ctx, 'shell_plus')

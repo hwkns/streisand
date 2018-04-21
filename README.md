@@ -9,27 +9,35 @@ A private BitTorrent tracker backend written in python, django, and redis
 
 ## To get started
 
+
 - Install docker and docker-compose (TODO link)
-- Run `./i clean-slate`
+- Run `docker-compose run web invoke clean-slate`
 
-The `./i` step calls `docker-compose` and builds all the containers. This may take a while, but
-afterwards subsequant commands will be much faster
 
-- `./i clean-slate`
+The `docker-compose` builds all the containers and sets up the database with our core fixtures.
+This may take a while, but afterwards subsequant commands will be much faster
+
+It is highly reccomended that you add the following lines or simillar to your `~/.bashrc`:
+
+    alias i=docker-compose run web invoke
+    alias m=docker-compose run web streisand/manage.py
+
+## Commands
+
+- `i clean-slate` or `docker-compose run web invoke clean-slate` without alias
 
 This command resets the db and loads the core fixtures to revert to a starting state.
 
-`./i` is a script which works like an alias for `docker-compose run web invoke` and `./m` is a script which works like an alias for `docker-compose run streisand/manage.py`
-
 Currently the admin user password it creates is hashed and salted using argon2. I would recomment that you use the function:
 
-- `./m changepassword admin`
+- `m change-password admin` or `docker-compose run web streisand/manage.py changepassword ` without
+  alias
 
-To run the dev server
+To run the dev server, tracker and frontend and the services needed for it.
 
 `docker-compose up`
 
-The site is accessible on `localhost:8000`
+The main backend site/api is accessible on `localhost:8000`.
 
 To enter a new password for testing. 
 
@@ -37,7 +45,8 @@ You may also add in fixtures to add in dummy forums, and 2 more users.
 
 you can do this by entering:
 
-- `./m loaddata dev`
+- `m loaddata dev` or `docker-compose run web streisand/manage.py loaddata dev` (you should see now
+  why the aliases are useful).
 
 The users are api, and user1.
 
