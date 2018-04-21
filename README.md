@@ -9,7 +9,6 @@ A private BitTorrent tracker backend written in python, django, and redis
 
 ## To get started
 
-
 - Install docker and docker-compose
   ([ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/),
   [mac](https://docs.docker.com/docker-for-mac/install/),
@@ -27,6 +26,14 @@ It is highly recommended that you add the following lines or simillar to your `~
     alias jc_i="docker-compose run api invoke"
     alias jc_m="docker-compose run api src/manage.py"
     alias jc_f="docker-compose run frontend"
+
+### Windows
+
+Install Docker for Windows and set it up to use linux containers. You will probably have to [share
+the drive](https://docs.docker.com/docker-for-windows/#shared-drives) where you have the git
+repository.
+
+From then on you can follow the instructions using your favourite command prompt.
 
 ## Starting a dev server
 
