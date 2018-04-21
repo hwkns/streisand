@@ -1,9 +1,10 @@
 import invoke
 
 
-MANAGE_PATH = 'streisand/manage.py'
+MANAGE_PATH = 'src/manage.py'
 WWW_SETTINGS = 'streisand.settings.www_settings'
 TRACKER_SETTINGS = 'streisand.settings.tracker_settings'
+
 
 def _manage_run(ctx, command, settings=None):
     torun = f'{MANAGE_PATH} {command}'
@@ -14,7 +15,7 @@ def _manage_run(ctx, command, settings=None):
 
 @invoke.task
 def delete_migrations(ctx):
-    ctx.run('rm -f streisand/*/migrations/[0-9]*.py')
+    ctx.run('rm -f src/*/migrations/[0-9]*.py')
 
 
 @invoke.task

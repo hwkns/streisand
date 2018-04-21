@@ -10,11 +10,14 @@ A private BitTorrent tracker backend written in python, django, and redis
 ## To get started
 
 
-- Install docker and docker-compose (TODO link)
+- Install docker and docker-compose
+  ([ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/),
+  [mac](https://docs.docker.com/docker-for-mac/install/),
+  [compose](https://docs.docker.com/compose/install/))
 - Run `docker-compose run api invoke clean-slate` to load up the default db data
 - Run `docker-compose run api src/manage.py passwd admin` to set yourself a password for the admin
   user
-- Run `docker-compose run api invoke fixtures` to load up the development fixtures (see bellow)
+- Run `docker-compose run api invoke fixtures` to load up the development fixtures (see below)
 
 The `docker-compose` builds all the containers and sets up the database with our core fixtures.
 This may take a while, but afterwards subsequant commands will be much faster
