@@ -17,10 +17,10 @@ A private BitTorrent tracker backend written in python, django, and redis
 The `docker-compose` builds all the containers and sets up the database with our core fixtures.
 This may take a while, but afterwards subsequant commands will be much faster
 
-It is highly reccomended that you add the following lines or simillar to your `~/.bashrc`:
+It is highly recommended that you add the following lines or simillar to your `~/.bashrc`:
 
-    alias i=docker-compose run web invoke
-    alias m=docker-compose run web streisand/manage.py
+    alias i="docker-compose run web invoke"
+    alias m="docker-compose run web streisand/manage.py"
 
 ## Commands
 
