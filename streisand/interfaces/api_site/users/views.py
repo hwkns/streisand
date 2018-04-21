@@ -15,18 +15,6 @@ from .serializers import GroupSerializer, AdminUserProfileSerializer, \
     OwnedUserProfileSerializer, PublicUserProfileSerializer, ChangePasswordSerializer, NewUserSerializer
 from rest_framework_jwt.views import ObtainJSONWebToken
 from .serializers import JWTSerializer
-from interfaces.api_site.utils import ThrottledViewSet
-from www.rest_exceptions import CustomThrottled
-from rest_framework import throttling
-
-
-class MyViewset(ThrottledViewSet):
-    throttle_classes = (throttling.UserRateThrottle)  # Add more here as you wish
-    throttled_exception_class = CustomThrottled  # This is the default already, but let's be specific anyway
-
-    def get_throttled_message(self, request):
-        """Add a custom message to the throttled error."""
-        return "request limit exceeded"
 
 
 class UserRegisterView(CreateAPIView):
@@ -49,7 +37,25 @@ class UserLoginView(ObtainJSONWebToken):
     User Login View
     """
     serializer_class = JWTSerializer
-    permission_classes = [AllowAny]
+
+    # def post(self, request, format=None):
+    #     data = request.data
+    #     username = data.get('username', None)
+    #     password = data.get('password', None)
+    #
+    #     user = authenticate(username=username, password=password)
+    #     # Generate token and add it to the response object
+    #     if user is not None:
+    #         login(request, account)
+    #         return Response({
+    #             'status': 'Successful',
+    #             'message': 'You have successfully been logged into your account.'
+    #         }, status=status.HTTP_200_OK)
+    #
+    #     return Response({
+    #         'status': 'Unauthorized',
+    #         'message': 'Username/password combination invalid.'
+    #     }, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # class UserRegisterView(CreateAPIView):
