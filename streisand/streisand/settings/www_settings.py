@@ -112,15 +112,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
     ),
-    'DEFAULT_THROTTLE_CLASSES': (
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
-    ),
-    'DEFAULT_THROTTLE_RATES': {
-        'users': '6/2 hr',
-    },
-    'EXCEPTION_HANDLER': 'www.utils.custom_exception_handler',
-
     'URL_FORMAT_OVERRIDE': None,
 }
 
@@ -181,7 +172,6 @@ if DEBUG:
     )
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_BROWSER_XSS_FILTER = True
 
 CORS_URL_REGEX = r'^/api/v1/.*$'
 
