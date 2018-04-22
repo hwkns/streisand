@@ -1,75 +1,65 @@
 image: docker:stable
 
+stages:
+ - build
+ - test
+ - deploy
+
 services:
  - postgres
  - docker:dind
 
-# variables:
-#  POSTGRES_DB: database_name
-
-# This folder is cached between builds
-# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
-cache:
-  paths:
-  - ~/.cache/pip/
-
-# This is a basic example for a gem or script which doesn't use
-# services such as redis or postgres
-before_script:
-  - pip install -r backend/requirements.txt
-  - pip install -r backend/testing_requirements.txt
-  - pip install coverage
-
-
-# To get Django tests to work you may need to create a settings file using
-# the following DATABASES:
-# 
-# DATABASES = {
-#     'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'ci',
-#        'USER': 'postgres',
-#        'PASSWORD': 'postgres',
-#        'HOST': 'postgres',
-#        'PORT': '5432',
-#    },
-# }
-#
-# and then adding `--settings app.settings.ci` (or similar) to the test command
+variables:
+  CONTAINER_BACKEND_IMAGE: registry.ronzertnert.me/JumpCut/JumpCut/backend-ci:$CI_COMMIT_REF_NAME
+  CONTAINER_FRNTEND_IMAGE: registry.ronzertnert.me/JumpCut/JumpCut/frontend-ci:$CI_COMMIT_REF_NAME
 
 before_script:
-  - docker build -t ci backend
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
 
-linter:
+build:
+  stage: build
   script:
-    - docker run ci invoke run-python-linter
+    - docker build --pull -t $CONTAINER_BACKEND_IMAGE backend
+    - docker push $CONTAINER_BACKEND_IMAGE
+    - docker build --pull -t $CONTAINER_FRONTEND_IMAGE frontend
+    - docker build $CONTAINER_FRONTEND_IMAGE frontend
+
+python_linter:
+  stage: test
+  script:
+    - docker pull $CONTAINER_BACKEND_IMAGE
+    - docker run $CONTAINER_BACKEND_IMAGE invoke run-python-linter
 
 migrations_and_fixtures:
+  stage: test
   script:
-      - docker run ci -e DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci invoke clean-slate 
+    - docker pull $CONTAINER_BACKEND_IMAGE
+    - docker run $CONTAINER_BACKEND_IMAGE -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke clean-slate 
 
 python_tests:
+  stage: test
   script:
-    - docker run ci -e DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci invoke run-python-tests --coverage
-  
-codequality:
-  image: docker:latest
-  before_script: []
-  services:
-    - docker:dind
-  variables:
-    SETUP_DB: "false"
-    DOCKER_DRIVER: overlay2
-    CODECLIMATE_FORMAT: json
-  cache: {}
-  dependencies: []
+    - docker pull $CONTAINER_BACKEND_IMAGE
+    - docker $CONTAINER_BACKEND_IMAGE ci -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke run-python-tests --coverage
+
+# TODO frontend linter/tests?
+
+deploy-develop:
+  stage: deploy
   script:
-    - apk update && apk add jq
-    - ./scripts/codequality analyze -f json > raw_codeclimate.json || true
-    # The following line keeps only the fields used in the MR widget, reducing the JSON artifact size
-    - jq -c 'map({check_name,description,fingerprint,location})' raw_codeclimate.json > codeclimate.json
-  artifacts:
-    paths: [codeclimate.json]
-    expire_in: 1 week
-  tags:
-    - codequality
+    - docker pull $CONTAINER_FRONTEND_IMAGE
+      # and then build frontend webpack, build up worker images etc.
+      # push all images to the registry with the develop tag
+      # then call dev_deploy script
+  only:
+    - develop
+
+deploy:
+  stage: deploy
+  script:
+    - docker pull $CONTAINER_FRONTEND_IMAGE
+      # and then build frontend webpack, build up worker images etc.
+      # push all images to the registry with the production tag
+      # then call production_deploy script
+  only:
+    - master

@@ -11,7 +11,7 @@ RUN pip install -r requirements.txt
 COPY testing_requirements.txt ./
 RUN pip install -r testing_requirements.txt
 
-COPY src src
+COPY . .
 COPY tasks.py .
 
 EXPOSE 8000
