@@ -37,11 +37,11 @@ services:
             DJANGO_SETTINGS_MODULE: streisand.settings.tracker_settings
         ports:
             - "7070:8000"
-#        frontend:
-#            build: frontend
-#            ports:
-#                - "3000:3000"
-#            volumes:
-#                - ./frontend/src:/code/src
+    frontend:
+        build: frontend
+        ports:
+            - "8080:3000"
+        volumes:
+            - ./frontend/src:/code/src
 volumes:
     dbdata:
