@@ -1,10 +1,8 @@
-image: python:3.6
+image: docker:stable
 
-# Pick zero or more services to be used on all builds.
-# Only needed when using a docker container to run your tests in.
-# Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
-# services:
-#  - postgres:9.5
+services:
+ - postgres
+ - docker:dind
 
 # variables:
 #  POSTGRES_DB: database_name
@@ -39,14 +37,20 @@ before_script:
 #
 # and then adding `--settings app.settings.ci` (or similar) to the test command
 
-test:
-  
+before_script:
+  - docker build -t ci backend
+
+linter:
   script:
-  - flake8 backend
-  - backend/src/manage.py makemigrations
-  - backend/src/manage.py migrate
-  - coverage run backend/src/manage.py test backend/src
-  - coverage report -m
+    - docker run ci invoke run-python-linter
+
+migrations_and_fixtures:
+  script:
+      - docker run ci -e DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci invoke clean-slate 
+
+python_tests:
+  script:
+    - docker run ci -e DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci invoke run-python-tests --coverage
   
 codequality:
   image: docker:latest
