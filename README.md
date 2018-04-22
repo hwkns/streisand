@@ -14,7 +14,7 @@ A private BitTorrent tracker backend written in python, django, and redis
   [mac](https://docs.docker.com/docker-for-mac/install/),
   [compose](https://docs.docker.com/compose/install/))
 - Run `docker-compose run api invoke clean-slate` to load up the default db data
-- Run `docker-compose run api src/manage.py passwd admin` to set yourself a password for the admin
+- Run `docker-compose run api python src/manage.py passwd admin` to set yourself a password for the admin
   user
 - Run `docker-compose run api invoke fixtures` to load up the development fixtures (see below)
 
@@ -34,6 +34,17 @@ the drive](https://docs.docker.com/docker-for-windows/#shared-drives) where you 
 repository.
 
 From then on you can follow the instructions using your favourite command prompt.
+
+Note that if you are using windows, due to the way the docker volume mounter handles file
+permissions, you will have to type
+
+    docker-compose run api python src/manage.py
+
+instead of
+
+    docker-compose run api src/manage.py
+
+in the following instructions.
 
 ## Starting a dev server
 

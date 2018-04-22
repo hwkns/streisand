@@ -11,7 +11,7 @@ services:
     redis:
         image: redis:3.2
     api:
-        command: ./src/manage.py runserver_plus 0.0.0.0:8000
+        command: python src/manage.py runserver_plus 0.0.0.0:8000
         build: backend
         volumes:
             - ./backend:/code
@@ -24,7 +24,7 @@ services:
         ports:
             - "8000:8000"
     tracker:
-        command: ./src/manage.py runserver_plus 0.0.0.0:8000
+        command: python src/manage.py runserver_plus 0.0.0.0:8000
         build: backend
         volumes:
             - ./backend:/code
