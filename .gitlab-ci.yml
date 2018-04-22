@@ -22,7 +22,7 @@ build:
   script:
     - docker build --pull -t $CI_REGISTRY backend
     - docker build --pull -t $CI_REGISTRY frontend
-    - docker push $CI_REGISTRY
+    - docker push registry.ronzertnert.me/JumpCut/JumpCut:$CI_COMMIT_REF_NAME
 
 python_linter:
   stage: test
