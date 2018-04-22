@@ -14,8 +14,8 @@ variables:
   CONTAINER_BACKEND_IMAGE: registry.ronzertnert.me/JumpCut/JumpCut:$CI_COMMIT_REF_NAME
 
 before_script:
-  -  echo "$CI_REGISTRY_USER"  "$CI_REGISTRY_PASSWORD"
-  -  docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.ronzertnert.me
+  -  echo CI_REGISTRY_USER  $CI_REGISTRY_PASSWORD
+  -  docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.ronzertnert.me
 
 build:
   stage: build
@@ -27,19 +27,19 @@ build:
 python_linter:
   stage: test
   script:
-    - docker pull $CI_REGISTRY backend
+    - docker pull $CI_REGISTRY
     - docker run $CI_REGISTRY invoke run-python-linter
 
 migrations_and_fixtures:
   stage: test
   script:
-    - docker pull $CI_REGISTRY backend
+    - docker pull $CI_REGISTRY
     - docker run $CI_REGISTRY -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke clean-slate 
 
 python_tests:
   stage: test
   script:
-    - docker pull $CI_REGISTRY backend
+    - docker pull $CI_REGISTRY
     - docker $CI_REGISTRY ci -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke run-python-tests --coverage
 
 # TODO frontend linter/tests?
