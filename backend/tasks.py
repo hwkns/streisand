@@ -1,7 +1,7 @@
 import invoke
 
 
-MANAGE_PATH = 'src/manage.py'
+MANAGE_PATH = 'python src/manage.py'
 WWW_SETTINGS = 'streisand.settings.www_settings'
 TRACKER_SETTINGS = 'streisand.settings.tracker_settings'
 
