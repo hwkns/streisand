@@ -36,3 +36,23 @@ def fixtures(ctx):
 @invoke.task
 def shell(ctx):
     _manage_run(ctx, 'shell_plus')
+
+@invoke.task
+def run_python_linter(ctx):
+    ctx.run('flake8')
+
+@invoke.task
+def run_python_tests(ctx, coverage=False):
+    if coverage:
+        ctx.run('coverage run {} test src'.format(MANAGE_PATH))
+        ctx.run('coverage report -m')
+    else:
+        ctx.run('{} test src'.format(MANAGE_PATH))
+
+@invoke.task
+def ci(ctx, coverage=False):
+    """
+    Run all the tests as they are done on circleci
+    """
+    run_python_linter(ctx)
+    run_python_tests(ctx, coverage)
