@@ -3,6 +3,7 @@ image: docker:stable
 stages:
  - build
  - test
+ - release
  - deploy
 
 services:
@@ -44,22 +45,34 @@ python_tests:
 
 # TODO frontend linter/tests?
 
-deploy-develop:
-  stage: deploy
+release-develop:
+  stage: release
   script:
     - docker pull $CONTAINER_FRONTEND_IMAGE
       # and then build frontend webpack, build up worker images etc.
       # push all images to the registry with the develop tag
-      # then call dev_deploy script
   only:
     - develop
 
-deploy:
-  stage: deploy
+release-production:
+  stage: release
   script:
     - docker pull $CONTAINER_FRONTEND_IMAGE
       # and then build frontend webpack, build up worker images etc.
       # push all images to the registry with the production tag
-      # then call production_deploy script
+  only:
+    - master
+
+deploy-develop:
+  stage: deploy
+  script:
+    - echo hi # will be the deploy script
+  only:
+    - develop
+
+deploy-production:
+  stage: deploy
+  script:
+    - echo hi # will be the deploy script
   only:
     - master
