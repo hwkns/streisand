@@ -14,7 +14,8 @@ variables:
   CONTAINER_BACKEND_IMAGE: registry.ronzertnert.me/JumpCut/JumpCut:$CI_COMMIT_REF_NAME
 
 before_script:
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
+  -  echo "$CI_REGISTRY_USER"  "$CI_REGISTRY_PASSWORD"
+  -  docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.ronzertnert.me
 
 build:
   stage: build
