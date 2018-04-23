@@ -20,7 +20,8 @@ build:
   stage: build
   script:
     - cd backend
-    - docker build -t registry.ronzertnert.me/jumpcut/jumpcut .
+    - docker build --pull -t $CONTAINER_BACKEND_IMAGE .
+    - docker push $CONTAINER_BACKEND_IMAGE
 
 python_linter:
   stage: test
@@ -32,13 +33,13 @@ migrations_and_fixtures:
   stage: test
   script:
     - docker pull $CONTAINER_BACKEND_IMAGE
-    - docker run $CONTAINER_BACKEND_IMAGE -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke clean-slate
+    - docker run -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" $CONTAINER_BACKEND_IMAGE invoke clean-slate
 
 python_tests:
   stage: test
   script:
     - docker pull $CONTAINER_BACKEND_IMAGE
-    - docker $CONTAINER_BACKEND_IMAGE ci -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke run-python-tests --coverage
+    - docker run -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" $CONTAINER_BACKEND_IMAGE invoke run-python-tests --coverage
 
 ## TODO frontend linter/tests?
 #
