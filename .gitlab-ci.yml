@@ -1,4 +1,7 @@
 image: docker:stable
+services:
+ - postgres
+ - docker:dind
 
 stages:
  - build
@@ -6,23 +9,18 @@ stages:
  - release
  - deploy
 
-services:
- - postgres
- - docker:dind
 
 variables:
-  CONTAINER_BACKEND_IMAGE: registry.ronzertnert.me/JumpCut/JumpCut:$CI_COMMIT_REF_NAME
+  CONTAINER_BACKEND_IMAGE: registry.ronzertnert.me/jumpcut/jumpcut:$CI_COMMIT_REF_NAME
 
 before_script:
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
 
 build:
   stage: build
   script:
-    - docker build --pull -t $CONTAINER_BACKEND_IMAGE backend
-    - docker push $CONTAINER_BACKEND_IMAGE
-    - docker build --pull -t $CONTAINER_FRONTEND_IMAGE frontend
-    - docker build $CONTAINER_FRONTEND_IMAGE frontend
+    - cd backend
+    - docker build -t registry.ronzertnert.me/jumpcut/jumpcut .
 
 python_linter:
   stage: test
@@ -34,7 +32,7 @@ migrations_and_fixtures:
   stage: test
   script:
     - docker pull $CONTAINER_BACKEND_IMAGE
-    - docker run $CONTAINER_BACKEND_IMAGE -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke clean-slate 
+    - docker run $CONTAINER_BACKEND_IMAGE -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke clean-slate
 
 python_tests:
   stage: test
@@ -42,21 +40,22 @@ python_tests:
     - docker pull $CONTAINER_BACKEND_IMAGE
     - docker $CONTAINER_BACKEND_IMAGE ci -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke run-python-tests --coverage
 
-# TODO frontend linter/tests?
-
-release-develop:
-  stage: release
-  script:
-    - docker pull $CONTAINER_FRONTEND_IMAGE
-      # and then build frontend webpack, build up worker images etc.
-      # push all images to the registry with the develop tag
-  only:
-    - develop
+## TODO frontend linter/tests?
+#
+#release-develop:
+#  stage: release
+#  script:
+#    - docker pull $CONTAINER_BACKEND_IMAGE
+#      # and then build frontend webpack, build up worker images etc.
+#      # push all images to the registry with the develop tag
+#  only:
+#    - develop
 
 release-production:
   stage: release
   script:
-    - docker pull $CONTAINER_FRONTEND_IMAGE
+    - docker pull $CONTAINER_BACKEND_IMAGE
+    - docker tag $CONTAINER_BACKEND_IMAGE
       # and then build frontend webpack, build up worker images etc.
       # push all images to the registry with the production tag
   only:
