@@ -6,14 +6,15 @@ services:
 
 stages:
  - test
- - release
- - deploy
+#  - release
+#  - deploy
 
 
 variables:
   CONTAINER_BACKEND_IMAGE: registry.ronzertnert.me/jumpcut/jumpcut:$CI_COMMIT_REF_NAME
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
   DATABASE_URL: "postgres://postgres:postgres@postgres:5432/ci"
+  STREISAND_DEBUG: "True"
 
 cache:
   paths:
@@ -56,33 +57,33 @@ python_tests:
 #      # push all images to the registry with the develop tag
 #  only:
 #    - develop
-
-release-production:
-  stage: release
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
-  script:
-    - docker pull $CONTAINER_BACKEND_IMAGE
-    - docker tag $CONTAINER_BACKEND_IMAGE
-      # and then build frontend webpack, build up worker images etc.
-      # push all images to the registry with the production tag
-  only:
-    - master
-
-deploy-develop:
-  stage: deploy
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
-  script:
-    - echo hi # will be the deploy script
-  only:
-    - develop
-
-deploy-production:
-  stage: deploy
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
-  script:
-    - echo hi # will be the deploy script
-  only:
-    - master
+# 
+# release-production:
+#   stage: release
+#   before_script:
+#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
+#   script:
+#     - docker pull $CONTAINER_BACKEND_IMAGE
+#     - docker tag $CONTAINER_BACKEND_IMAGE
+#       # and then build frontend webpack, build up worker images etc.
+#       # push all images to the registry with the production tag
+#   only:
+#     - master
+# 
+# deploy-develop:
+#   stage: deploy
+#   before_script:
+#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
+#   script:
+#     - echo hi # will be the deploy script
+#   only:
+#     - develop
+# 
+# deploy-production:
+#   stage: deploy
+#   before_script:
+#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
+#   script:
+#     - echo hi # will be the deploy script
+#   only:
+#     - master

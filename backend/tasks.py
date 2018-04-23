@@ -1,13 +1,13 @@
 import invoke
 
 
-MANAGE_PATH = 'python src/manage.py'
+MANAGE_PATH = 'src/manage.py'
 WWW_SETTINGS = 'streisand.settings.www_settings'
 TRACKER_SETTINGS = 'streisand.settings.tracker_settings'
 
 
 def _manage_run(ctx, command, settings=None):
-    torun = f'{MANAGE_PATH} {command}'
+    torun = f'python {MANAGE_PATH} {command}'
     if settings is not None:
         torun += ' --settings=' + settings
     ctx.run(torun)
@@ -37,9 +37,11 @@ def fixtures(ctx):
 def shell(ctx):
     _manage_run(ctx, 'shell_plus')
 
+
 @invoke.task
 def run_python_linter(ctx):
     ctx.run('flake8')
+
 
 @invoke.task
 def run_python_tests(ctx, coverage=False):
@@ -48,6 +50,7 @@ def run_python_tests(ctx, coverage=False):
         ctx.run('coverage report -m')
     else:
         ctx.run('{} test src'.format(MANAGE_PATH))
+
 
 @invoke.task
 def ci(ctx, coverage=False):
