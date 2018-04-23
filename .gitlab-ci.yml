@@ -19,7 +19,8 @@ before_script:
 build:
   stage: build
   script:
-    - docker build --pull -t $CONTAINER_BACKEND_IMAGE
+    - cd backend
+    - docker build -t registry.ronzertnert.me/jumpcut/jumpcut .
 
 python_linter:
   stage: test
