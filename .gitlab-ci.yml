@@ -19,8 +19,7 @@ before_script:
 build:
   stage: build
   script:
-    - docker build --pull -t $CONTAINER_BACKEND_IMAGE back .
-    - docker build --pull -t $CONTAINER_BACKEND_IMAGE front .
+    - docker build --pull -t $CONTAINER_BACKEND_IMAGE
 
 python_linter:
   stage: test
