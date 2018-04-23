@@ -3,6 +3,7 @@ image: python:3.6
 services:
  - postgres
  - docker:dind
+ - redis:3.2
 
 stages:
  - test
@@ -15,6 +16,7 @@ variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
   DATABASE_URL: "postgres://postgres:postgres@postgres:5432/ci"
   STREISAND_DEBUG: "True"
+  REDIS_URL: "redis://redis:6379"
 
 cache:
   paths:
@@ -34,16 +36,12 @@ python_linter:
   script:
     - invoke run-python-linter
 
-migrations_and_fixtures:
-  stage: test
-  script:
-    - invoke clean-slate
-    - invoke fixtures
-
 python_tests:
   stage: test
   script:
+    - invoke clean-slate
     - invoke run-python-tests --coverage
+    - invoke fixtures
 
 ## TODO frontend linter/tests?
 #
