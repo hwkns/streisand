@@ -1,7 +1,5 @@
 [![pipeline status](https://git.ronzertnert.me/JumpCut/JumpCut/badges/develop/pipeline.svg?private_token=ce7CRXw_YsYzvC_ZwNfQ)](https://git.ronzertnert.me/JumpCut/JumpCut/commits/develop)
-[![Build Status](https://travis-ci.com/TheSaltman/JumpCut.svg?token=omojFLEmKUq3bYx2FWE8&branch=develop)](https://travis-ci.com/TheSaltman/JumpCut)
 [![coverage Report](https://git.ronzertnert.me/JumpCut/JumpCut/badges/develop/coverage.svg?private_token=ce7CRXw_YsYzvC_ZwNfQ)](https://git.ronzertnert.me/JumpCut/JumpCut/commits/develop)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e01280e1514e22ae0497/maintainability)](https://codeclimate.com/github/TheSaltman/JumpCut/maintainability)
 
 # Jumpcut
 
