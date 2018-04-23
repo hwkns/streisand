@@ -89,7 +89,11 @@ gulp.task('cdn', () => {
 });
 
 gulp.task('copy:build', function() {
-    return gulp.src('./dist/**').pipe(gulp.dest('./app/dist'));
+    return gulp.src('./dist/**').pipe(gulp.dest('../backend/src/static/frontend/dist/'));
+});
+
+gulp.task('copy:index', function() {
+    return gulp.src('./index.html').pipe(gulp.dest('../backend/src/static/frontend/'));
 });
 
 gulp.task('build', (done) => {
