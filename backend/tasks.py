@@ -19,11 +19,16 @@ def delete_migrations(ctx):
 
 
 @invoke.task
+def make_migrations(ctx):
+    _manage_run(ctx, 'makemigrations users')
+    _manage_run(ctx, 'makemigrations')
+
+
+@invoke.task
 def clean_slate(ctx):
     _manage_run(ctx, 'reset_db --noinput')
     delete_migrations(ctx)
-    _manage_run(ctx, 'makemigrations users')
-    _manage_run(ctx, 'makemigrations')
+    make_migrations(ctx)
     _manage_run(ctx, 'migrate')
     _manage_run(ctx, 'loaddata foundation')
 
