@@ -20,26 +20,26 @@ before_script:
 build:
   stage: build
   script:
-    - docker build --pull -t $CI_REGISTRY backend
-    - docker build --pull -t $CI_REGISTRY frontend
+    - docker build --pull -t $CI_REGISTRY_BACK
+    - docker build --pull -t $CI_REGISTRY_FRONT
     - docker push registry.ronzertnert.me/jumpcut/jumpcut:$CI_COMMIT_REF_NAME
 
 python_linter:
   stage: test
   script:
-    - docker buildpull $CI_REGISTRY
-    - docker run $CI_REGISTRY invoke run-python-linter
+    - docker pull $CI_REGISTRY_BACK
+    - docker run $CI_REGISTRY_BACK invoke run-python-linter
 
 migrations_and_fixtures:
   stage: test
   script:
-    - docker build —-pull -t $CI_REGISTRY back
-    - docker run $CI_REGISTRY -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke clean-slate 
+    - docker pull $CI_REGISTRY_BACK
+    - docker run $CI_REGISTRY_BACK -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke clean-slate 
 
 python_tests:
   stage: test
   script:
-    - docker build —-pull -t $CI_REGISTRY back
+    - docker pull $CI_REGISTRY_BACK
     - docker $CI_REGISTRY ci -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" invoke run-python-tests --coverage
 
 # TODO frontend linter/tests?
@@ -47,7 +47,6 @@ python_tests:
 release-develop:
   stage: release
   script:
-    - docker build —-pull -t $CI_REGISTRY back
       # and then build frontend webpack, build up worker images etc.
       # push all images to the registry with the develop tag
   only:
