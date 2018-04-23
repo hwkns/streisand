@@ -1,76 +1,87 @@
-# This file is a template, and might need editing before it works on your project.
-# Official framework image. Look for the different tagged releases at:
-# https://hub.docker.com/r/library/python
-image: python:3.5
+image: python:3.6
 
-# Pick zero or more services to be used on all builds.
-# Only needed when using a docker container to run your tests in.
-# Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
-# services:
-#  - postgres:9.5
+services:
+ - postgres
+ - docker:dind
+ - redis:3.2
 
-# variables:
-#  POSTGRES_DB: database_name
+stages:
+ - test
+#  - release
+#  - deploy
 
-# This folder is cached between builds
-# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
+
+variables:
+  CONTAINER_BACKEND_IMAGE: registry.ronzertnert.me/jumpcut/jumpcut:$CI_COMMIT_REF_NAME
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
+  DATABASE_URL: "postgres://postgres:postgres@postgres:5432/ci"
+  STREISAND_DEBUG: "True"
+  REDIS_URL: "redis://redis:6379"
+
 cache:
   paths:
-  - ~/.cache/pip/
+    - .cache/
+    - venv/
 
-# This is a basic example for a gem or script which doesn't use
-# services such as redis or postgres
 before_script:
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  - cd backend
   - pip install -r requirements.txt
   - pip install -r testing_requirements.txt
-  - pip install coverage
 
+python_linter:
+  stage: test
+  script:
+    - invoke run-python-linter
 
-# To get Django tests to work you may need to create a settings file using
-# the following DATABASES:
-# 
-# DATABASES = {
-#     'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'ci',
-#        'USER': 'postgres',
-#        'PASSWORD': 'postgres',
-#        'HOST': 'postgres',
-#        'PORT': '5432',
-#    },
-# }
+python_tests:
+  stage: test
+  script:
+    - invoke clean-slate
+    - invoke run-python-tests --coverage
+    - invoke fixtures
+
+## TODO frontend linter/tests?
 #
-# and then adding `--settings app.settings.ci` (or similar) to the test command
-
-test:
-  
-  script:
-  - flake8 .
-  - ./streisand/manage.py makemigrations
-  - ./streisand/manage.py migrate
-  - coverage run ./streisand/manage.py test streisand
-  - coverage report -m
-  
-codequality:
-  image: docker:latest
-  before_script: []
-  services:
-    - docker:dind
-  variables:
-    SETUP_DB: "false"
-    DOCKER_DRIVER: overlay2
-    CODECLIMATE_FORMAT: json
-  cache: {}
-  dependencies: []
-  script:
-    - apk update && apk add jq
-    - ./scripts/codequality analyze -f json > raw_codeclimate.json || true
-    # The following line keeps only the fields used in the MR widget, reducing the JSON artifact size
-    - jq -c 'map({check_name,description,fingerprint,location})' raw_codeclimate.json > codeclimate.json
-  artifacts:
-    paths: [codeclimate.json]
-    expire_in: 1 week
-
-    
-  tags:
-    - codequality
+#release-develop:
+#  stage: release
+#  before_script:
+#    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
+#  script:
+#    - docker pull $CONTAINER_BACKEND_IMAGE
+#      # and then build frontend webpack, build up worker images etc.
+#      # push all images to the registry with the develop tag
+#  only:
+#    - develop
+# 
+# release-production:
+#   stage: release
+#   before_script:
+#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
+#   script:
+#     - docker pull $CONTAINER_BACKEND_IMAGE
+#     - docker tag $CONTAINER_BACKEND_IMAGE
+#       # and then build frontend webpack, build up worker images etc.
+#       # push all images to the registry with the production tag
+#   only:
+#     - master
+# 
+# deploy-develop:
+#   stage: deploy
+#   before_script:
+#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
+#   script:
+#     - echo hi # will be the deploy script
+#   only:
+#     - develop
+# 
+# deploy-production:
+#   stage: deploy
+#   before_script:
+#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
+#   script:
+#     - echo hi # will be the deploy script
+#   only:
+#     - master
