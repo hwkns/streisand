@@ -1,10 +1,10 @@
-image: docker:stable
+image: python:3.6
+
 services:
  - postgres
  - docker:dind
 
 stages:
- - build
  - test
  - release
  - deploy
@@ -12,39 +12,43 @@ stages:
 
 variables:
   CONTAINER_BACKEND_IMAGE: registry.ronzertnert.me/jumpcut/jumpcut:$CI_COMMIT_REF_NAME
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
+  DATABASE_URL: "postgres://postgres:postgres@postgres:5432/ci"
+
+cache:
+  paths:
+    - .cache/
+    - venv/
 
 before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
-
-build:
-  stage: build
-  script:
-    - cd backend
-    - docker build --pull -t $CONTAINER_BACKEND_IMAGE .
-    - docker push $CONTAINER_BACKEND_IMAGE
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  - pip install -r requirements.txt
+  - pip install -r testing_requirements.txt
 
 python_linter:
   stage: test
   script:
-    - docker pull $CONTAINER_BACKEND_IMAGE
-    - docker run $CONTAINER_BACKEND_IMAGE invoke run-python-linter
+    - invoke run-python-linter
 
 migrations_and_fixtures:
   stage: test
   script:
-    - docker pull $CONTAINER_BACKEND_IMAGE
-    - docker run -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" $CONTAINER_BACKEND_IMAGE invoke clean-slate
+    - invoke clean-slate
+    - invoke fixtures
 
 python_tests:
   stage: test
   script:
-    - docker pull $CONTAINER_BACKEND_IMAGE
-    - docker run -e "DATABASE_URL=postgres://postgres:postgres@postgres:5432/ci" $CONTAINER_BACKEND_IMAGE invoke run-python-tests --coverage
+    - invoke run-python-tests --coverage
 
 ## TODO frontend linter/tests?
 #
 #release-develop:
 #  stage: release
+#  before_script:
+#    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
 #  script:
 #    - docker pull $CONTAINER_BACKEND_IMAGE
 #      # and then build frontend webpack, build up worker images etc.
@@ -54,6 +58,8 @@ python_tests:
 
 release-production:
   stage: release
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
   script:
     - docker pull $CONTAINER_BACKEND_IMAGE
     - docker tag $CONTAINER_BACKEND_IMAGE
@@ -64,6 +70,8 @@ release-production:
 
 deploy-develop:
   stage: deploy
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
   script:
     - echo hi # will be the deploy script
   only:
@@ -71,6 +79,8 @@ deploy-develop:
 
 deploy-production:
   stage: deploy
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
   script:
     - echo hi # will be the deploy script
   only:
