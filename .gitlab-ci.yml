@@ -47,6 +47,7 @@ python_tests:
 release-develop:
   stage: release
   script:
+    - docker pull $CI_REGISTRY_BACK
       # and then build frontend webpack, build up worker images etc.
       # push all images to the registry with the develop tag
   only:
@@ -55,7 +56,7 @@ release-develop:
 release-production:
   stage: release
   script:
-    - docker build —-pull -t $CI_REGISTRY back
+    - docker pull $CI_REGISTRY_BACK
       # and then build frontend webpack, build up worker images etc.
       # push all images to the registry with the production tag
   only:
