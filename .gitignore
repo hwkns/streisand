@@ -64,6 +64,7 @@ dump.rdb
 *.pot
 streisand/db.sqlite3
 **/**/migrations
+wikis.json
 
 # Sockets
 *.sock
