@@ -67,7 +67,7 @@ TESTING = 'test' in sys.argv
 TEST_RUNNER = 'streisand.test_utils.CustomTestSuiteRunner'
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('STREISAND_SECRET_KEY', 'you_deserve_to_be_pwned')
+SECRET_KEY = env('STREISAND_SECRET_KEY', 'changeme')
 
 
 ALLOWED_HOSTS = [

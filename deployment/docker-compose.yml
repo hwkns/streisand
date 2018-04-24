@@ -6,7 +6,7 @@ services:
     db:
         image: postgres:9.5
         environment:
-            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_PASSWORD: password
             POSTGRES_DB: jumpcut
         volumes:
             - dbdata:/var/lib/postgresql/data
@@ -20,9 +20,9 @@ services:
             - db
             - redis
         environment:
-            - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/jumpcut
+            - DATABASE_URL=postgres://postgres:password@db:5432/jumpcut
             - REDIS_URL=redis://redis:6379
-            - SECRET_KEY=${SECRET_KEY}
+            - SECRET_KEY=changeme
         ports:
             - "8000:80"
         restart: always
