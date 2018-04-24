@@ -2,6 +2,7 @@
 
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
+from graphene_django.rest_framework.mutation import SerializerMutation
 
 from www.templatetags.bbcode import bbcode as bbcode_to_html
 from forums.models import ForumGroup, ForumPost, ForumThread, ForumTopic, ForumThreadSubscription
@@ -208,3 +209,8 @@ class ForumThreadSubscriptionSerializer(ModelSerializer):
     class Meta:
         model = ForumThreadSubscription
         fields = ('user', 'thread')
+
+
+class MyAwesomeMutation(SerializerMutation):
+    class Meta:
+        serializer_class = ForumPostSerializer
