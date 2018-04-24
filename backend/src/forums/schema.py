@@ -1,4 +1,3 @@
-# bookstore/schema.py
 import graphene
 from graphene_django.types import DjangoObjectType
 from graphene_django.debug import DjangoDebug
@@ -72,5 +71,3 @@ class Query(object):
         if id is not None:
             return ForumPost.objects.get(pk=id)
         return None
-
-
