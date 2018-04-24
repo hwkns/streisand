@@ -108,13 +108,15 @@ INSTALLED_APPS = [
     'users',
     'wiki',
     'www',
+    
+    # Third party
+    'django_extensions',
 
 ]
 
 if DEBUG and not TESTING:
     INSTALLED_APPS += [
         'bandit',
-        'django_extensions',
     ]
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     BANDIT_EMAIL = env('BANDIT_EMAIL', '')
