@@ -1,7 +1,4 @@
-#!/bin/bash
-
-set -eu -o pipefail
-set -x
+#!/bin/sh
 
 IMAGE=${1:-jumpcut}
 

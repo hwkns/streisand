@@ -50,7 +50,6 @@ release_develop:
   stage: release
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
-    - apk add bash
   script:
     - deployment/docker_build.sh $CONTAINER_DEVELOP_IMAGE
     - docker push $CONTAINER_DEVELOP_IMAGE
