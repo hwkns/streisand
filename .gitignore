@@ -1,3 +1,5 @@
+deployment/frontend_out
+backend/src/staticfiles
 # Byte-compiled / optimized / DLL files
 __pycache__/
 

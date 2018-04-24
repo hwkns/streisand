@@ -13,8 +13,8 @@ RUN pip install -r requirements.txt
 
 COPY deployment/uwsgi.ini .
 COPY backend .
-COPY deployment/frontend_out src/static/frontend/dist
-RUN src/manage.py collectstatic
+COPY deployment/frontend_out src/static/app/dist
+RUN src/manage.py collectstatic -c --noinput
 
 EXPOSE 80
 CMD ["/usr/local/bin/uwsgi", "--ini", "/code/uwsgi.ini", "--die-on-term"]
