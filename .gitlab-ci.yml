@@ -7,12 +7,12 @@ services:
 
 stages:
  - test
-#  - release
+ - release
 #  - deploy
 
 
 variables:
-  CONTAINER_BACKEND_IMAGE: registry.ronzertnert.me/jumpcut/jumpcut:$CI_COMMIT_REF_NAME
+  CONTAINER_DEVELOP_IMAGE: registry.ronzertnert.me/jumpcut/jumpcut:develop
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
   DATABASE_URL: "postgres://postgres:postgres@postgres:5432/ci"
   STREISAND_DEBUG: "True"
@@ -45,17 +45,16 @@ python_tests:
 
 ## TODO frontend linter/tests?
 #
-#release-develop:
-#  stage: release
-#  before_script:
-#    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
-#  script:
-#    - docker pull $CONTAINER_BACKEND_IMAGE
-#      # and then build frontend webpack, build up worker images etc.
-#      # push all images to the registry with the develop tag
-#  only:
-#    - develop
-# 
+release_develop:
+  stage: release
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
+  script:
+    - deployment/docker_build.sh $CONTAINER_DEVELOP_IMAGE
+    - docker push $CONTAINER_DEVELOP_IMAGE
+#   only:
+#     - develop
+ 
 # release-production:
 #   stage: release
 #   before_script:

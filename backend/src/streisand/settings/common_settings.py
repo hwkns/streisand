@@ -108,7 +108,7 @@ INSTALLED_APPS = [
     'users',
     'wiki',
     'www',
-    
+
     # Third party
     'django_extensions',
 
