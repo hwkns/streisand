@@ -13,6 +13,8 @@ from .wiki import views as wiki_views
 from rest_framework_jwt.views import refresh_jwt_token, verify_jwt_token
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from graphene_django.views import GraphQLView
+
 
 schema_view = get_schema_view(
 
@@ -86,5 +88,6 @@ urlpatterns = [
     url(r'^register/$', users_views.UserRegisterView.as_view()),
     url(r'^current-user/', users_views.CurrentUserView.as_view()),
     url(r'^change-password/', users_views.ChangePasswordView.as_view()),
+    url(r'^graphql', GraphQLView.as_view(graphiql=True)),
 
 ]

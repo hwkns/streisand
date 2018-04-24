@@ -12,6 +12,7 @@ INSTALLED_APPS += [
     # Third party apps
     'django_su',
     'rest_framework',
+    'graphene_django',
     'corsheaders',
     'django_filters',
     'rest_framework_filters',
@@ -32,6 +33,12 @@ INSTALLED_APPS += [
     'import_scripts',
 
 ]
+GRAPHENE = {
+    'MIDDLEWARE': [
+        'graphene_django.debug.DjangoDebugMiddleware',
+    ],
+    'SCHEMA': 'interfaces.api_site.schema.schema',
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
