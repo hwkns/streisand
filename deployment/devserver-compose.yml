@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+    db:
+        image: postgres:9.5
+        environment:
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - dbdata:/var/lib/postgresql/data
+    redis:
+        image: redis:3.2
+    www:
+        image: registry.ronzertnert.me/jumpcut/jumpcut:develop
+        depends_on:
+            - db
+            - redis
+        environment:
+            - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/jumpcut
+            - REDIS_URL=redis://redis:6379
+            - SECRET_KEY=${SECRET_KEY}
+        ports:
+            - "8000:80"
+    tracker:
+        image: registry.ronzertnert.me/jumpcut/jumpcut:develop
+        depends_on:
+            - db
+            - redis
+        environment:
+            - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/jumpcut
+            - REDIS_URL=redis://redis:6379
+            - SECRET_KEY=${SECRET_KEY}
+            - TRACKER
+        ports:
+            - "7070:80"
+volumes:
+    dbdata:

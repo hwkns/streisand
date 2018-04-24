@@ -88,20 +88,12 @@ gulp.task('cdn', () => {
     return stream.pipe(gulp.dest('./app'))
 });
 
-gulp.task('copy:build', function() {
-    return gulp.src('./dist/**').pipe(gulp.dest('../backend/src/static/frontend/dist/'));
-});
-
-gulp.task('copy:index', function() {
-    return gulp.src('./index.html').pipe(gulp.dest('../backend/src/static/frontend/'));
-});
-
 gulp.task('build', (done) => {
     sequence('clean:dist', 'prod-build', done);
 });
 
-gulp.task('deploy', ['clean:dist', 'clean:app'], (done) => {
-    sequence('prod-build', 'cdn', 'copy:build', 'clean:dist', done);
+gulp.task('deploy', ['clean:app'], (done) => {
+    sequence('prod-build', 'cdn', done);
 });
 
 gulp.task('dev', ['hot-load']);
