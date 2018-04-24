@@ -15,6 +15,8 @@ COPY deployment/uwsgi.ini .
 COPY backend .
 COPY deployment/frontend_out src/static/app/dist
 RUN src/manage.py collectstatic -c --noinput
+RUN src/manage.py makemigrations users
+RUN src/manage.py makemigrations
 
 EXPOSE 80
 CMD ["/usr/local/bin/uwsgi", "--ini", "/code/uwsgi.ini", "--die-on-term"]

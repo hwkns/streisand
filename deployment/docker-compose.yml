@@ -1,3 +1,5 @@
+# Docker compose for the dev server
+#
 version: '3'
 
 services:
@@ -5,10 +7,13 @@ services:
         image: postgres:9.5
         environment:
             POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: jumpcut
         volumes:
             - dbdata:/var/lib/postgresql/data
+        restart: always
     redis:
         image: redis:3.2
+        restart: always
     www:
         image: registry.ronzertnert.me/jumpcut/jumpcut:develop
         depends_on:
@@ -20,6 +25,7 @@ services:
             - SECRET_KEY=${SECRET_KEY}
         ports:
             - "8000:80"
+        restart: always
     tracker:
         image: registry.ronzertnert.me/jumpcut/jumpcut:develop
         depends_on:
@@ -32,5 +38,17 @@ services:
             - TRACKER
         ports:
             - "7070:80"
+        restart: always
+    celery:
+        image: registry.ronzertnert.me/jumpcut/jumpcut:develop
+        command: celery worker --workdir /code/src -A streisand -l info
+        depends_on:
+            - db
+            - redis
+        environment:
+            - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/jumpcut
+            - REDIS_URL=redis://redis:6379
+            - SECRET_KEY=${SECRET_KEY}
+        restart: always
 volumes:
     dbdata:

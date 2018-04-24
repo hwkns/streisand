@@ -15,4 +15,4 @@ mkdir -p deployment/frontend_out
 docker run --rm -v "$(pwd)/deployment/frontend_out:/code/dist" frontend gulp deploy
 
 # Build production image
-docker build --pull -t production -f deployment/Dockerfile .
+docker build --pull -t ${IMAGE} -f deployment/Dockerfile .
