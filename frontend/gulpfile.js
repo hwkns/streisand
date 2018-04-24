@@ -85,7 +85,7 @@ gulp.task('cdn', () => {
         const regx = new RegExp(`<script name="${data.name}".*`)
         stream = stream.pipe(replace(regx, script));
     }
-    return stream.pipe(gulp.dest('./app'))
+    return stream.pipe(gulp.dest('./dist'))
 });
 
 gulp.task('build', (done) => {
