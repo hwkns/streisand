@@ -46,6 +46,7 @@ python_tests:
 ## TODO frontend linter/tests?
 #
 release_develop:
+  image: docker:stable
   stage: release
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
@@ -55,18 +56,6 @@ release_develop:
 #   only:
 #     - develop
  
-# release-production:
-#   stage: release
-#   before_script:
-#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
-#   script:
-#     - docker pull $CONTAINER_BACKEND_IMAGE
-#     - docker tag $CONTAINER_BACKEND_IMAGE
-#       # and then build frontend webpack, build up worker images etc.
-#       # push all images to the registry with the production tag
-#   only:
-#     - master
-# 
 # deploy-develop:
 #   stage: deploy
 #   before_script:
@@ -75,12 +64,3 @@ release_develop:
 #     - echo hi # will be the deploy script
 #   only:
 #     - develop
-# 
-# deploy-production:
-#   stage: deploy
-#   before_script:
-#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
-#   script:
-#     - echo hi # will be the deploy script
-#   only:
-#     - master
