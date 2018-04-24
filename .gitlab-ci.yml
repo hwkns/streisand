@@ -51,7 +51,7 @@ release_develop:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.ronzertnert.me
   script:
-    - deployment/docker_build.sh $CONTAINER_DEVELOP_IMAGE
+    - bash deployment/docker_build.sh $CONTAINER_DEVELOP_IMAGE
     - docker push $CONTAINER_DEVELOP_IMAGE
 #   only:
 #     - develop
