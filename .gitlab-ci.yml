@@ -53,8 +53,8 @@ release_develop:
   script:
     - deployment/docker_build.sh $CONTAINER_DEVELOP_IMAGE
     - docker push $CONTAINER_DEVELOP_IMAGE
-#   only:
-#     - develop
+  only:
+    - develop
  
 # deploy-develop:
 #   stage: deploy
