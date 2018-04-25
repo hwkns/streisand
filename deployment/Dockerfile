@@ -22,4 +22,4 @@ RUN src/manage.py migrate
 
 EXPOSE 8000 7070
 CMD ["/usr/local/bin/uwsgi", "--ini", "/code/www_uwsgi.ini", "--die-on-term"]
-CMD ["/usr/local/bin/uwsgi", "--ini", "/code/tracker_uwsgi.ini", "--die-on-term"]
+# CMD ["/usr/local/bin/uwsgi", "--ini", "/code/tracker_uwsgi.ini", "--die-on-term"]
