@@ -11,7 +11,8 @@ WORKDIR /code
 COPY backend/requirements.txt ./
 RUN pip install -r requirements.txt
 
-COPY deployment/uwsgi.ini .
+COPY deployment/www_uwsgi.ini .
+COPY deployment/tracker_uwsgi.ini .
 COPY backend .
 COPY deployment/frontend_out src/static/app/dist
 RUN src/manage.py collectstatic -c --noinput
