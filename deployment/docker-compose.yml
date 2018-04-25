@@ -23,6 +23,7 @@ services:
             - DATABASE_URL=postgres://postgres:password@db:5432/jumpcut
             - REDIS_URL=redis://redis:6379
             - SECRET_KEY=changeme
+            - HOST_DOMAIN=ronzertnert.me
         ports:
             - "8000:8000"
             - "7070:7070"
