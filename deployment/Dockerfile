@@ -11,15 +11,12 @@ WORKDIR /code
 COPY backend/requirements.txt ./
 RUN pip install -r requirements.txt
 
-COPY deployment/www_uwsgi.ini .
-COPY deployment/tracker_uwsgi.ini .
+COPY deployment/uwsgi ./uwsgi
 COPY backend .
 COPY deployment/frontend_out src/static/app/dist
 RUN src/manage.py collectstatic -c --noinput
 RUN src/manage.py makemigrations users
 RUN src/manage.py makemigrations
-RUN src/manage.py migrate
 
 EXPOSE 8000 7070
-CMD ["/usr/local/bin/uwsgi", "--ini", "/code/www_uwsgi.ini", "--die-on-term"]
-# CMD ["/usr/local/bin/uwsgi", "--ini", "/code/tracker_uwsgi.ini", "--die-on-term"]
+CMD ["/usr/local/bin/uwsgi", "--emperor", "/code/uwsgi", "--die-on-term"]
