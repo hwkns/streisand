@@ -24,7 +24,7 @@ services:
             - REDIS_URL=redis://redis:6379
             - SECRET_KEY=changeme
         ports:
-            - "8000:80"
+            - "8000:8000"
         restart: always
     tracker:
         image: registry.ronzertnert.me/jumpcut/jumpcut:develop
@@ -32,12 +32,12 @@ services:
             - db
             - redis
         environment:
-            - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/jumpcut
+            - DATABASE_URL=postgres://postgres:password@db:5432/jumpcut
             - REDIS_URL=redis://redis:6379
-            - SECRET_KEY=${SECRET_KEY}
+            - SECRET_KEY=changeme
             - TRACKER
         ports:
-            - "7070:80"
+            - "7070:7070"
         restart: always
     celery:
         image: registry.ronzertnert.me/jumpcut/jumpcut:develop
@@ -46,9 +46,9 @@ services:
             - db
             - redis
         environment:
-            - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/jumpcut
+            - DATABASE_URL=postgres://postgres:password@db:5432/jumpcut
             - REDIS_URL=redis://redis:6379
-            - SECRET_KEY=${SECRET_KEY}
+            - SECRET_KEY=changeme
         restart: always
 volumes:
     dbdata:
