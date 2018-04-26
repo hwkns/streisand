@@ -21,10 +21,5 @@ RUN src/manage.py collectstatic -c --noinput
 RUN src/manage.py makemigrations users
 RUN src/manage.py makemigrations
 
-RUN export PYTHONPATH=$PYTHONPATH:/code/src
-RUN export DJANGO_SETTINGS_MODULE=streisand.settings.www_settings
-
 EXPOSE 8000 7070
-ENV       PYTHONPATH /code/src
-ENV       DJANGO_SETTINGS_MODULE streisand.settings.www_settings
 CMD ["/usr/local/bin/uwsgi", "--emperor", "/code/uwsgi", "--die-on-term"]
