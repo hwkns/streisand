@@ -2,8 +2,6 @@ sudo: false
 language: python
 cache: pip
 python:
-    - "3.4"
-    - "3.5"
     - "3.6"
 env:
   - DJANGO=2.0.4
@@ -19,5 +17,5 @@ script:
   - "coverage run backend/src/manage.py test backend/src"
 
 after_success:
-    - coverage report backend/src -m 
+    - coverage report --include=backend/*.*
  
