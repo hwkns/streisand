@@ -1,5 +1,8 @@
 #!/bin/sh
 
+set -eu -o pipefail
+set -x
+
 IMAGE=${1:-jumpcut}
 
 # Ensure we are in the right (root) directory

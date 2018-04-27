@@ -4,4 +4,4 @@ set -eu -o pipefail
 set -x
 
 docker-compose pull
-docker-compose up --no-deps -d www tracker celery
+docker-compose up --no-deps -d www celery
