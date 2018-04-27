@@ -213,7 +213,6 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'static'),
             os.path.join(BASE_DIR, 'static/frontend')
-            
         ],
         'APP_DIRS': True,
         'OPTIONS': {
