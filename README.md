@@ -1,53 +1,111 @@
-[![Build Status](https://travis-ci.org/streisand/streisand.svg?branch=develop)](https://travis-ci.org/streisand/streisand)
-[![Coverage Status](https://coveralls.io/repos/streisand/streisand/badge.svg?branch=develop&service=github)](https://coveralls.io/github/streisand/streisand?branch=develop)
-[![Code Climate](https://codeclimate.com/github/streisand/streisand/badges/gpa.svg)](https://codeclimate.com/github/streisand/streisand)
+[![pipeline status](https://git.ronzertnert.me/JumpCut/JumpCut/badges/develop/pipeline.svg?private_token=ce7CRXw_YsYzvC_ZwNfQ)](https://git.ronzertnert.me/JumpCut/JumpCut/commits/develop)
+[![coverage Report](https://git.ronzertnert.me/JumpCut/JumpCut/badges/develop/coverage.svg?private_token=ce7CRXw_YsYzvC_ZwNfQ)](https://git.ronzertnert.me/JumpCut/JumpCut/commits/develop)
+[![Python Dependency Status](https://www.versioneye.com/user/projects/5addfee20fb24f54307a448e/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5addfee20fb24f54307a448e)
+[![React Dependency Status](https://www.versioneye.com/user/projects/5addfeda0fb24f54332bee40/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5addfeda0fb24f54332bee40)
+[![Build Status](https://travis-ci.com/TheSaltman/JumpCut.svg?token=omojFLEmKUq3bYx2FWE8&branch=develop)](https://travis-ci.com/TheSaltman/JumpCut)
 
-Jumpcut
-=========
+
+# Jumpcut
 
 A private BitTorrent tracker backend written in python, django, and redis
 
-To get started
----------------
+## To get started
 
-- install [Vagrant](https://www.vagrantup.com/) and [Ansible](http://docs.ansible.com/intro_installation.html)
-- `cd` into the project root (next to Vagrantfile)
-- `vagrant up`
-- `vagrant ssh`
+- Install docker and docker-compose
+  ([ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/),
+  [mac](https://docs.docker.com/docker-for-mac/install/),
+  [compose](https://docs.docker.com/compose/install/))
+- Run `docker-compose run api invoke clean-slate` to load up the default db data
+- Run `docker-compose run api python src/manage.py passwd admin` to set yourself a password for the admin
+  user
+- Run `docker-compose run api invoke fixtures` to load up the development fixtures (see below)
 
-The `vagrant up` step might take a little while, but now you have everything you need to run
-jumpcut!  In this environment, several alias commands are set up for your convenience.  To
-start with, run this command to generate and run migrations and import initial fixture data:
+The `docker-compose` builds all the containers and sets up the database with our core fixtures.
+This may take a while, but afterwards subsequant commands will be much faster
 
-*If you come across any hanging issues in the Vagrant Up process, specifically during NFS mounting, you will need to make sure the Vagrant box has the necessary priveledges to log in.*
+It is highly recommended that you add the following lines or simillar to your `~/.bashrc`:
 
-- Per the [Vagrant Website](https://www.vagrantup.com/docs/synced-folders/nfs.html):
-> For *nix users, make sure to edit your /etc/sudoers file with visudo. It protects you against syntax errors which could leave you without the ability to gain elevated privileges.
-> **For Ubuntu Linux , sudoers should look like this:**
-Cmnd_Alias VAGRANT_EXPORTS_CHOWN = /bin/chown 0\:0 /tmp/*
-Cmnd_Alias VAGRANT_EXPORTS_MV = /bin/mv -f /tmp/* /etc/exports
-Cmnd_Alias VAGRANT_NFSD_CHECK = /etc/init.d/nfs-kernel-server >statusCmnd_Alias VAGRANT_NFSD_START = /etc/init.d/nfs-kernel-server start
-Cmnd_Alias VAGRANT_NFSD_APPLY = /usr/sbin/exportfs -ar
-%sudo ALL=(root) NOPASSWD: VAGRANT_EXPORTS_CHOWN, VAGRANT_EXPORTS_MV, VAGRANT_NFSD_CHECK, VAGRANT_NFSD_START, VAGRANT_NFSD_APPLY
+    alias jc_i="docker-compose run api invoke"
+    alias jc_m="docker-compose run api src/manage.py"
+    alias jc_f="docker-compose run frontend"
 
-- `clean_slate`
+### Windows
 
-As the name suggests, that command will always bring you back to that starting state.  Now, for
-tinkering, it's fine to use Django's built-in server to run the site and/or the tracker:
+Install Docker for Windows and set it up to use linux containers. You will probably have to [share
+the drive](https://docs.docker.com/docker-for-windows/#shared-drives) where you have the git
+repository.
 
-- `runserver`
-- `runtracker`
+From then on you can follow the instructions using your favourite command prompt.
 
-But if you want to use a more production-like stack, you can run everything through uWSGI and
-nginx:
+Note that if you are using windows, due to the way the docker volume mounter handles file
+permissions, you will have to type
 
-- `start_tracker_uwsgi`
-- `start_www_uwsgi`
+    docker-compose run api python src/manage.py
 
-If you do this, you will need to collect all the static files under one directory to be served
-by nginx:
+instead of
 
-- `m collectstatic`
+    docker-compose run api src/manage.py
+
+in the following instructions.
+
+## Starting a dev server
+
+To start all the services and the development servers for the frontend and backend run:
+
+    docker-compose up
+
+This will bring up everything
+
+You can find the api/django-admin server on <localhost:8000>, the frontend server on
+<localhost:8080> and the tracker server on <localhost:7070>.
+
+## Rebuilding containers
+
+If you change 
+
+a) The python requirements file in backend
+
+b) Any frontend files not in frontend/src/ (this is because the place node_modules is installed
+means we cannot mount the whole frontend directory as a volume)
+
+you need to rebuild your local containers
+by running:
+
+    docker-compose build
+
+There is no need to do this if you just change the source code for either the frontend or backend
+(they are on docker volumes and changes should be loaded immediately)
+
+## Useful Commands
+
+- `jc_i clean-slate` or `docker-compose run web invoke clean-slate` without alias
+
+This command resets the db and loads the core fixtures to revert to a starting state.
+
+Currently the admin user password it creates is hashed and salted using argon2. It is reccomended 
+that you use the function:
+
+- `jc_m change-password admin` or `docker-compose run web backend/manage.py changepassword ` without
+  alias
+
+To run the dev server, tracker and frontend and the services needed for it.
+
+`docker-compose up`
+
+The main backend site/api is accessible on `localhost:8000`.
+
+To enter a new password for testing. 
+
+You may also add in fixtures to add in dummy forums, and 2 more users.
+
+you can do this by entering:
+
+- `jc_m loaddata dev` or `docker-compose run web backend/manage.py loaddata dev` (you should see
+  now why the aliases are useful).
+
+The users are api, and user1.
+
+## Out of date - todo change
 
 You will also need to start `celery` to coordinate background tasks (such as the handling of
 announces):
