@@ -18,14 +18,6 @@ COPY backend .
 COPY deployment/frontend_out/*.js src/static/frontend/dist
 COPY deployment/frontend_out/index.html src/static/frontend/index.html
 
-<<<<<<< HEAD
-COPY deployment/frontend_out src/static/app/dist
-RUN src/manage.py collectstatic -c --noinput
-RUN src/manage.py makemigrations users
-RUN src/manage.py makemigrations
-
-EXPOSE 8000 7070
-=======
 RUN src/manage.py collectstatic -c --noinput \
  && src/manage.py makemigrations users \
  && src/manage.py makemigrations \
@@ -36,5 +28,4 @@ EXPOSE 8000 7070
 ENV PYTHONPATH /code/src
 ENV DJANGO_SETTINGS_MODULE streisand.settings.www_settings
 
->>>>>>> origin/develop
 CMD ["/usr/local/bin/uwsgi", "--emperor", "/code/uwsgi", "--die-on-term"]
