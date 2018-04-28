@@ -1,7 +1,6 @@
 [![pipeline status](https://git.ronzertnert.me/JumpCut/JumpCut/badges/develop/pipeline.svg?private_token=ce7CRXw_YsYzvC_ZwNfQ)](https://git.ronzertnert.me/JumpCut/JumpCut/commits/develop)
 [![coverage Report](https://git.ronzertnert.me/JumpCut/JumpCut/badges/develop/coverage.svg?private_token=ce7CRXw_YsYzvC_ZwNfQ)](https://git.ronzertnert.me/JumpCut/JumpCut/commits/develop)
-[![Python Dependency Status](https://www.versioneye.com/user/projects/5addfee20fb24f54307a448e/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5addfee20fb24f54307a448e)
-[![React Dependency Status](https://www.versioneye.com/user/projects/5addfeda0fb24f54332bee40/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5addfeda0fb24f54332bee40)
+[![codecov](https://codecov.io/gh/TheSaltman/JumpCut/branch/develop/graph/badge.svg?token=2iFWjpDJjw)](https://codecov.io/gh/TheSaltman/JumpCut)
 [![Build Status](https://travis-ci.com/TheSaltman/JumpCut.svg?token=omojFLEmKUq3bYx2FWE8&branch=develop)](https://travis-ci.com/TheSaltman/JumpCut)
 
 
