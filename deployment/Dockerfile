@@ -15,7 +15,9 @@ RUN pip install -r requirements.txt
 COPY deployment/uwsgi ./uwsgi
 COPY backend .
 
-COPY deployment/frontend_out/*.js src/static/frontend/dist
+COPY deployment/frontend_out/bundle.js src/static/frontend/dist/
+COPY deployment/frontend_out/bundle.js.map
+src/static/frontend/dist/
 COPY deployment/frontend_out/index.html src/static/frontend/index.html
 
 RUN src/manage.py collectstatic -c --noinput \
