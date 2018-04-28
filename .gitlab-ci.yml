@@ -12,7 +12,7 @@ stages:
 
 
 variables:
-  CONTAINER_DEVELOP_IMAGE: registry.ronzertnert.me/jumpcut/jumpcut:latest
+  CONTAINER_DEVELOP_IMAGE: registry.ronzertnert.me/jumpcut/jumpcut:$CI_COMMIT_REF_NAME
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
   DATABASE_URL: "postgres://postgres:postgres@postgres:5432/ci"
   STREISAND_DEBUG: "True"
