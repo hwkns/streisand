@@ -54,7 +54,7 @@ release_develop:
     - deployment/docker_build.sh $CONTAINER_DEVELOP_IMAGE
     - docker push $CONTAINER_DEVELOP_IMAGE
   only:
-    - develop
+    - master
  
 # deploy-develop:
 #   stage: deploy
