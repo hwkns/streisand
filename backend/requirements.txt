@@ -1,6 +1,6 @@
 Django[argon2]==2.0.4
 Markdown==2.6.11
-Pillow==5.1.0
+Pillow==6.2.1
 Pygments==2.2.0
 Werkzeug==0.14.1
 anyjson==0.3.3
