@@ -24,7 +24,7 @@ pycparser==2.18
 pytz==2017.2
 redis==2.10.6
 requests==2.18.4
-six==1.11.0
+six==1.14.0
 sqlparse==0.2.4
 tqdm==4.19.5
 uWSGI==2.0.17
