@@ -2,7 +2,7 @@ Django[argon2]==2.0.4
 Markdown==2.6.11
 Pillow==5.1.0
 Pygments==2.2.0
-Werkzeug==0.14.1
+Werkzeug==2.2.3
 anyjson==0.3.3
 amqp==2.2.2
 bbcode==1.0.31
