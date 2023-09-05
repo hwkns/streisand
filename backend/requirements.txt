@@ -21,7 +21,7 @@ djangorestframework==3.8.2
 kombu==4.1.0
 psycopg2>=2.7,<2.8 --no-binary psycopg2
 pycparser==2.18
-pytz==2017.2
+pytz==2023.3.post1
 redis==2.10.6
 requests==2.18.4
 six==1.11.0
